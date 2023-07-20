@@ -1,8 +1,5 @@
 <script setup lang="ts">
-type SectionWrapProps = {
-  loading?: boolean
-}
-const { loading = false } = defineProps<SectionWrapProps>()
+const { loading = false } = defineProps<{ loading?: boolean }>()
 </script>
 
 <template>

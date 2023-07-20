@@ -6,8 +6,8 @@
 
 <style lang="scss" scoped>
 .contents-card-body {
-  max-width: 56rem;
+  max-width: 54rem;
   margin: 0 auto;
-  padding: 2.5rem;
+  padding: 2.5rem 3rem;
 }
 </style>

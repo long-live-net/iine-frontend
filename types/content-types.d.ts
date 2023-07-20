@@ -1,3 +1,4 @@
+import { newsCategory2Label } from '@/composables/use-news-category'
 /**
  * Content Data Types
  */
@@ -8,7 +9,6 @@ export interface ContentType {
   subtitle?: string
   body?: string
   image?: ImageSetting
-  position?: number
   tags?: string[]
 }
 
@@ -30,9 +30,11 @@ export interface InformationType extends ContentType {}
 /**
  * News
  */
+export type NewsCategory2LabelType = keyof typeof newsCategory2Label
+
 export interface NewsType extends ContentType {
   body: string
-  category: string
+  category: NewsCategory2LabelType
   publishOn: Date
 }
 

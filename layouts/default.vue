@@ -14,7 +14,7 @@ useHead({
 <template>
   <div id="application-base-body">
     <header>
-      <LayoutsHeaderMenu />
+      <ScreensNavHeaderMenu />
     </header>
     <main>
       <slot />

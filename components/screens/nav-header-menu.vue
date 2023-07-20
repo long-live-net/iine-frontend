@@ -9,7 +9,7 @@ const closeSidebar = () => {
 </script>
 
 <template>
-  <nav class="header-menu g-theme-header">
+  <nav class="nav-header-menu g-theme-header">
     <div>
       <p>ロングリブネット</p>
       <!-- <component :is="titleTemplateName" /> -->
@@ -43,7 +43,7 @@ const closeSidebar = () => {
 </template>
 
 <style lang="scss" scoped>
-.header-menu {
+.nav-header-menu {
   height: $nav-header-height;
   display: flex;
   justify-content: space-between;
