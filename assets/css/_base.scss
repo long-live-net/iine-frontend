@@ -1,0 +1,85 @@
+@import '_variables.scss';
+
+html {
+  margin: 0;
+  padding: 0;
+  font-size: 100%; // 16px
+  // font-size: 62.5%; // 16 * 62.5 = 10px
+  font-family: Ubuntu, 'Noto Sans JP', sans-serif;
+  background-color: $gray-lighten2;
+  color: $gray-darken2;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+}
+p {
+  margin: 0;
+  padding: 0;
+}
+div {
+  margin: 0;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+li {
+  margin: 0;
+}
+a {
+  text-decoration: none;
+}
+// a:link {
+//   text-decoration: none;
+// }
+// a:hover {
+//   text-decoration: none;
+// }
+// a:active {
+//   text-decoration: none;
+// }
+
+// 画面サイズに応じて表示したり非表示にしたりする
+// sm
+.g-block-sm,
+.g-inline-block-sm {
+  display: none;
+}
+
+// lg
+.g-block-lg {
+  display: block;
+}
+.g-inline-block-lg {
+  display: inline-block;
+}
+
+// 画面サイズに応じて text align を変更する
+.g-text-cl {
+  text-align: center;
+}
+
+@media only screen and (max-width: $grid-breakpoint-md) {
+  .g-block-lg,
+  .g-inline-block-lg {
+    display: none;
+  }
+  .g-block-sm {
+    display: block;
+  }
+  .g-inline-block-sm {
+    display: inline-block;
+  }
+  .g-text-cl {
+    text-align: left;
+  }
+}
+
+// wysiwyg-editor テーマ対応
+.g-theme-wysiwyg-editor {
+  --theme-wysiwyg-editor-toolbar-color: currentColor;
+  --theme-wysiwyg-editor-toolbar-active-color: currentColor;
+}

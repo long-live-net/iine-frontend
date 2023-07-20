@@ -1,0 +1,49 @@
+
+## eslint
+
+https://zenn.dev/yukikaoru/articles/nuxt3-eslint
+https://qiita.com/kurararara/items/ebe561016e4b486b7673
+
+```
+% yarn add --dev eslint eslint-plugin-vue @vue/eslint-config-typescript @typescript-eslint/parser @typescript-eslint/eslint-plugin
+
+% npx eslint --init
+You can also run this command directly using 'npm init @eslint/config'.
+✔ How would you like to use ESLint? · problems
+✔ What type of modules does your project use? · esm
+✔ Which framework does your project use? · vue
+✔ Does your project use TypeScript? · Yes
+✔ Where does your code run? · browser
+✔ What format do you want your config file to be in? · JavaScript
+✔ Would you like to install them now? · Yes
+✔ Which package manager do you want to use? · yarn
+```
+
+## prettier
+
+https://qiita.com/kurararara/items/ebe561016e4b486b7673
+
+```
+% yarn add --dev prettier eslint-plugin-prettier @vue/eslint-config-prettier
+```
+
+.prettierrc
+```
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "endOfLine": "lf"
+}
+```
+
+## SCSS
+
+https://nuxt.com/docs/getting-started/styling#using-preprocessors
+
+```
+% yarn add sass
+```
+
+
