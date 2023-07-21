@@ -1,27 +1,28 @@
 <script setup lang="ts">
 import type { EyecatchType } from '@/types/content-types'
 
-type TopEyeCatcherProps = {
-  udata: EyecatchType
-}
-defineProps<TopEyeCatcherProps>()
+defineProps<{ eyecatchData: EyecatchType }>()
 </script>
 
 <template>
   <GuiSectionWrap :loading="false" class="type1-eyecatcher">
-    <GuiEyecatchImage :image="udata.image" class="eyecatcher">
+    <GuiEyecatchImage
+      :url="eyecatchData.image.url"
+      :settings="eyecatchData.image.settings"
+      class="eyecatcher"
+    >
       <GuiEyecatchTitles
         place="top"
-        :title="udata.title"
-        :subtitle="udata.subtitle"
+        :title="eyecatchData.title"
+        :subtitle="eyecatchData.subtitle"
         class="titles"
       />
     </GuiEyecatchImage>
-    <div class="image-settings">
-      <div>イメージセッティグ</div>
-    </div>
     <div class="edit-activator">
       <div>編集ボタン</div>
+    </div>
+    <div class="image-settings">
+      <div>イメージセッティグ</div>
     </div>
   </GuiSectionWrap>
 </template>
@@ -39,15 +40,15 @@ defineProps<TopEyeCatcherProps>()
       left: 50%;
     }
   }
-  .image-settings {
-    position: absolute;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: rgba(255, 255, 255, 0.5);
-  }
   .edit-activator {
     position: absolute;
     top: 10rem;
+    right: 2rem;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  .image-settings {
+    position: absolute;
+    bottom: 2rem;
     right: 2rem;
     background-color: rgba(255, 255, 255, 0.5);
   }

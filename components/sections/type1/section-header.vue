@@ -3,9 +3,9 @@ const { headerString = '' } = defineProps<{ headerString?: string }>()
 </script>
 
 <template>
-  <h4 class="section-title">
+  <h3 class="section-title">
     <span>{{ headerString }}</span>
-  </h4>
+  </h3>
 </template>
 
 <style scoped lang="scss">

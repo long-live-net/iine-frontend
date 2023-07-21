@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const { loading = false } = defineProps<{ loading?: boolean }>()
+</script>
+
 <template>
   <div class="contents-card g-theme-contents-card">
     <slot />
@@ -8,7 +12,6 @@
 $contents-card-lg-max-width: 1140px;
 
 .contents-card {
-  position: relative;
   width: 100%;
   min-width: 18rem;
   max-width: $contents-card-lg-max-width;

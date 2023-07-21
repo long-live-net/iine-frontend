@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import type { ImageSetting } from '@/types/image-settings'
+import type { ImageSettings } from '@/types/image-settings'
 
 type EyeCatchImageProps = {
-  image?: ImageSetting
+  url: string
+  settings?: ImageSettings
+  circle?: boolean
+  round?: boolean
 }
 const {
-  image = {
-    url: '',
+  settings = {
     lgSize: 'cover',
     smSize: 'cover',
     lgPosition: 'center',
@@ -14,20 +16,23 @@ const {
     lgParallax: 'scroll',
     smParallax: 'scroll',
   },
+  circle = false,
+  round = false,
 } = defineProps<EyeCatchImageProps>()
 </script>
 
 <template>
   <div
     class="eyecatch-image"
+    :class="{ circle: circle, round: round }"
     :style="{
-      '--background-image': `url(${image.url})`,
-      '--background-size-lg': image.lgSize,
-      '--background-size-sm': image.smSize,
-      '--background-position-lg': image.lgPosition,
-      '--background-position-sm': image.smPosition,
-      '--background-parallax-lg': image.lgParallax,
-      '--background-parallax-sm': image.smParallax,
+      '--background-image': `url(${url})`,
+      '--background-size-lg': settings.lgSize,
+      '--background-size-sm': settings.smSize,
+      '--background-position-lg': settings.lgPosition,
+      '--background-position-sm': settings.smPosition,
+      '--background-parallax-lg': settings.lgParallax,
+      '--background-parallax-sm': settings.smParallax,
     }"
   >
     <slot />
@@ -36,12 +41,19 @@ const {
 
 <style lang="scss" scoped>
 .eyecatch-image {
-  height: 100%;
   background-repeat: no-repeat;
   background-image: var(--background-image);
   background-size: var(--background-size-lg);
   background-position: var(--background-position-lg);
   background-attachment: var(--background-parallax-lg);
+}
+.circle {
+  border-radius: 50%;
+  overflow: hidden;
+}
+.round {
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 @media only screen and (max-width: $grid-breakpoint-md) {
