@@ -6,7 +6,12 @@ defineProps<{ informationData: InformationType }>()
 
 <template>
   <GuiContentCard :loading="false" class="type1-information">
-    <GuiEyecatchImage :image="informationData.image" class="eyecatcher">
+    <GuiEyecatchImage
+      v-if="informationData.image"
+      :url="informationData.image.url"
+      :settings="informationData.image.settings"
+      class="eyecatcher"
+    >
       <GuiEyecatchTitles
         place="section"
         :title="informationData.title"

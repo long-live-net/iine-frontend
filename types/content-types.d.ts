@@ -1,4 +1,6 @@
 import { newsCategory2Label } from '@/composables/use-news-category'
+import type { ImageData } from '@/types/image-settings'
+
 /**
  * Content Data Types
  */
@@ -8,7 +10,7 @@ export interface ContentType {
   title: string
   subtitle?: string
   body?: string
-  image?: ImageSetting
+  image?: ImageData
   tags?: string[]
 }
 
@@ -43,7 +45,7 @@ export interface NewsType extends ContentType {
  */
 export interface ServiceType extends ContentType {
   body: string
-  image: ImageSetting
+  image: ImageData
   position: number
 }
 
@@ -67,7 +69,7 @@ export interface ContactType extends ContentType {}
  * Eyecatcher
  */
 export interface EyecatchType extends ContentType {
-  image: ImageSetting
+  image: ImageData
 }
 
 /**

@@ -6,7 +6,12 @@ defineProps<{ contactData: ContactType }>()
 
 <template>
   <GuiContentCard :loading="false" class="type1-contact">
-    <GuiEyecatchImage :image="contactData.image" class="eyecatcher">
+    <GuiEyecatchImage
+      v-if="contactData.image"
+      :url="contactData.image.url"
+      :settings="contactData.image.settings"
+      class="eyecatcher"
+    >
       <GuiEyecatchTitles
         place="section"
         :title="contactData.title"

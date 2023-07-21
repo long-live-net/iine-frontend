@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type { NewsType } from '@/types/content-types'
 
-defineProps<{ newsList: NewsType[] }>()
+defineProps<{ newses: NewsType[] }>()
 const jstDateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
 </script>
 
 <template>
   <GuiContentCard :loading="false" class="type1-news-list">
     <GuiContentCardBody>
-      <GuiContentList :contents="newsList">
+      <GuiContentList :contents="newses">
         <template #default="{ content }">
           <div class="news-item">
             <div class="news-item__header g-theme-contets-item__header">

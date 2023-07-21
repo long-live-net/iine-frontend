@@ -5,6 +5,7 @@ import type {
   EyecatchType,
   InformationType,
   NewsType,
+  ServiceType,
   ContactType,
 } from '@/types/content-types'
 
@@ -15,12 +16,14 @@ const eyecatch = computed<EyecatchType>(() => ({
   subtitle: 'サブタイトル',
   image: {
     url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
-    lgSize: 'cover',
-    smSize: 'cover',
-    lgPosition: 'center',
-    smPosition: 'center',
-    lgParallax: 'scroll',
-    smParallax: 'scroll',
+    settings: {
+      lgSize: 'cover',
+      smSize: 'cover',
+      lgPosition: 'center',
+      smPosition: 'center',
+      lgParallax: 'scroll',
+      smParallax: 'scroll',
+    },
   },
 }))
 
@@ -31,12 +34,14 @@ const information = computed<InformationType>(() => ({
   subtitle: 'サブタイトル',
   image: {
     url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
-    lgSize: 'cover',
-    smSize: 'cover',
-    lgPosition: 'center',
-    smPosition: 'center',
-    lgParallax: 'scroll',
-    smParallax: 'scroll',
+    settings: {
+      lgSize: 'cover',
+      smSize: 'cover',
+      lgPosition: 'center',
+      smPosition: 'center',
+      lgParallax: 'scroll',
+      smParallax: 'scroll',
+    },
   },
   body: `
     多くの方よりこのような悩みをご相談をいただいております。
@@ -55,12 +60,14 @@ const newses = computed<NewsType[]>((): NewsType[] => [
     title: 'ロングリブネットを開業いたしました。',
     image: {
       url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
-      lgSize: 'cover',
-      smSize: 'cover',
-      lgPosition: 'center',
-      smPosition: 'center',
-      lgParallax: 'scroll',
-      smParallax: 'scroll',
+      settings: {
+        lgSize: 'cover',
+        smSize: 'cover',
+        lgPosition: 'center',
+        smPosition: 'center',
+        lgParallax: 'scroll',
+        smParallax: 'scroll',
+      },
     },
     body: `おかげさまを持ちまして、2020年2月10日にロングリブネットを開業いたしました。
     当面は次の業務を中心としてご要望を承ります。
@@ -75,12 +82,14 @@ const newses = computed<NewsType[]>((): NewsType[] => [
     title: '当事業所のホームページを作成いたしました',
     image: {
       url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
-      lgSize: 'cover',
-      smSize: 'cover',
-      lgPosition: 'center',
-      smPosition: 'center',
-      lgParallax: 'scroll',
-      smParallax: 'scroll',
+      settings: {
+        lgSize: 'cover',
+        smSize: 'cover',
+        lgPosition: 'center',
+        smPosition: 'center',
+        lgParallax: 'scroll',
+        smParallax: 'scroll',
+      },
     },
     body: `
     ご覧いただいておりますとおり、ロングリブネットのホームページを作成いたしました。
@@ -97,12 +106,14 @@ const newses = computed<NewsType[]>((): NewsType[] => [
     title: '初仕事で開発したサイトがリリースされました',
     image: {
       url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
-      lgSize: 'cover',
-      smSize: 'cover',
-      lgPosition: 'center',
-      smPosition: 'center',
-      lgParallax: 'scroll',
-      smParallax: 'scroll',
+      settings: {
+        lgSize: 'cover',
+        smSize: 'cover',
+        lgPosition: 'center',
+        smPosition: 'center',
+        lgParallax: 'scroll',
+        smParallax: 'scroll',
+      },
     },
     body: `
     初めて頂いた仕事で開発していた Web サイト がリリースされました。
@@ -113,6 +124,69 @@ const newses = computed<NewsType[]>((): NewsType[] => [
   },
 ])
 
+const services = computed<ServiceType[]>((): ServiceType[] => [
+  {
+    id: 1,
+    customerId: 1,
+    title: 'ホームページ作成',
+    image: {
+      url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
+      settings: {
+        lgSize: 'cover',
+        smSize: 'cover',
+        lgPosition: 'center',
+        smPosition: 'center',
+        lgParallax: 'scroll',
+        smParallax: 'scroll',
+      },
+    },
+    body: `PC からスマホまでレスポンシブなデザインのホームページを作成いたします。
+    またお客様とのやりとりをインタラクティブに行える Web サイトの開発についてもぜひご相談ください。。
+    `,
+    position: 1,
+  },
+  {
+    id: 2,
+    customerId: 1,
+    title: 'ソフトウェア開発',
+    image: {
+      url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
+      settings: {
+        lgSize: 'cover',
+        smSize: 'cover',
+        lgPosition: 'center',
+        smPosition: 'center',
+        lgParallax: 'scroll',
+        smParallax: 'scroll',
+      },
+    },
+    body: `お客様のWebアプリケーションなど各種ソフトウェア開発を行います。
+    上流工程から下流工程まで、また、PM や PMO 業務などの開発管理につきましてもお気軽にご相談ください。
+    `,
+    position: 2,
+  },
+  {
+    id: 3,
+    customerId: 1,
+    title: 'AWSクラウド導入',
+    image: {
+      url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
+      settings: {
+        lgSize: 'cover',
+        smSize: 'cover',
+        lgPosition: 'center',
+        smPosition: 'center',
+        lgParallax: 'scroll',
+        smParallax: 'scroll',
+      },
+    },
+    body: ` 代表ナガズミはアマゾンウェブサービスジャパン (AWS) のエンジニアとしての経歴がございます。
+    そのキャリアによる技術知見を元に適切なサポートをご提供いたします。
+    `,
+    position: 3,
+  },
+])
+
 const contact = computed<ContactType>(() => ({
   id: 1,
   customerId: 1,
@@ -120,12 +194,14 @@ const contact = computed<ContactType>(() => ({
   subtitle: 'サブタイトル',
   image: {
     url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
-    lgSize: 'cover',
-    smSize: 'cover',
-    lgPosition: 'center',
-    smPosition: 'center',
-    lgParallax: 'scroll',
-    smParallax: 'scroll',
+    settings: {
+      lgSize: 'cover',
+      smSize: 'cover',
+      lgPosition: 'center',
+      smPosition: 'center',
+      lgParallax: 'scroll',
+      smParallax: 'scroll',
+    },
   },
   body: `
     〒210-0007
@@ -155,12 +231,12 @@ const pageSections: DefinePageSections[] = [
     order: 2,
     header: "What's New",
   },
-  // {
-  //   kind: 'services',
-  //   order: 3,
-  //   component: 'Type1Services',
-  //   title: 'Services',
-  // },
+  {
+    type: 'type1',
+    kind: 'services',
+    order: 3,
+    header: 'Services',
+  },
   {
     type: 'type1',
     kind: 'contact',
@@ -190,9 +266,10 @@ const pageSections: DefinePageSections[] = [
           v-if="section.kind === 'infomation'"
           :information-data="information"
         />
-        <SectionsType1NewsList
-          v-if="section.kind === 'news'"
-          :news-list="newses"
+        <SectionsType1Newses v-if="section.kind === 'news'" :newses="newses" />
+        <SectionsType1Services
+          v-if="section.kind === 'services'"
+          :services="services"
         />
         <SectionsType1Contact
           v-if="section.kind === 'contact'"

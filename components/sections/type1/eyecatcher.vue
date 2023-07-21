@@ -6,7 +6,11 @@ defineProps<{ eyecatchData: EyecatchType }>()
 
 <template>
   <GuiSectionWrap :loading="false" class="type1-eyecatcher">
-    <GuiEyecatchImage :image="eyecatchData.image" class="eyecatcher">
+    <GuiEyecatchImage
+      :url="eyecatchData.image.url"
+      :settings="eyecatchData.image.settings"
+      class="eyecatcher"
+    >
       <GuiEyecatchTitles
         place="top"
         :title="eyecatchData.title"
