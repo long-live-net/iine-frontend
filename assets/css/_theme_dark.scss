@@ -1,11 +1,11 @@
-@import '_variables.scss';
+@use 'variables.scss';
 
 $dark-theme-link-normal: lightskyblue;
 $dark-theme-link-active: gold;
 
 .g-theme-dark {
-  background-color: $black;
-  color: $white;
+  background-color: variables.$black;
+  color: variables.$white;
 
   a {
     color: $dark-theme-link-normal;
@@ -17,40 +17,40 @@ $dark-theme-link-active: gold;
     color: $dark-theme-link-active;
   }
   small {
-    color: $silver;
+    color: variables.$silver;
   }
 
   .g-theme-header {
     background-color: rgba(128, 128, 128, 0.5);
-    color: $white;
+    color: variables.$white;
   }
   .g-theme-footer {
     background-color: #393939;
-    color: $white;
+    color: variables.$white;
   }
   .g-theme-contents-card {
     background-color: #393939;
-    color: $white;
+    color: variables.$white;
   }
   .g-theme-contets-item {
     &__header {
-      background-color: $black;
+      background-color: variables.$black;
     }
     &__draggable {
       background-color: midnightblue;
       box-shadow: 0 0 8px lightsteelblue;
       &--notion {
-        color: $white;
+        color: variables.$white;
       }
     }
   }
   .g-theme-edit-contents {
-    color: $black;
+    color: variables.$black;
   }
   .g-theme-wysiwyg-editor {
     background-color: #747474;
-    color: $white;
-    --theme-wysiwyg-editor-toolbar-color: $white;
+    color: variables.$white;
+    --theme-wysiwyg-editor-toolbar-color: variables.$white;
     --theme-wysiwyg-editor-toolbar-active-color: lightskyblue;
   }
 }

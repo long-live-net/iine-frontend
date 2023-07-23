@@ -1,4 +1,4 @@
-@import '_variables.scss';
+@use 'variables.scss';
 
 html {
   margin: 0;
@@ -6,8 +6,8 @@ html {
   font-size: 100%;
   // font-size: 62.5%; // 16 * 62.5 = 10px
   font-family: Ubuntu, 'Noto Sans JP', sans-serif;
-  background-color: $gray-lighten2;
-  color: $gray-darken2;
+  background-color: variables.$gray-lighten2;
+  color: variables.$gray-darken2;
 }
 body {
   margin: 0;
@@ -61,7 +61,7 @@ a {
   text-align: center;
 }
 
-@media only screen and (max-width: $grid-breakpoint-md) {
+@media only screen and (max-width: variables.$grid-breakpoint-md) {
   .g-block-lg,
   .g-inline-block-lg {
     display: none;

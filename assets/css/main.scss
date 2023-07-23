@@ -1,3 +1,6 @@
-@import '_base.scss';
-@import '_theme_default.scss';
-@import '_theme_dark.scss';
+@use 'base.scss';
+@use 'theme_default.scss';
+@use 'theme_dark.scss';
+
+// vuetify
+@use 'vuetify/styles';

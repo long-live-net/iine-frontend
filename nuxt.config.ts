@@ -1,14 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  css: ['~/assets/css/main.scss'],
   vite: {
+    ssr: {
+      noExternal: ['vuetify'],
+    },
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@import "@/assets/css/_variables.scss";',
+          additionalData: '@use "@/assets/css/variables.scss" as *;',
         },
       },
     },
   },
+  css: ['~/assets/css/main.scss'],
 })
