@@ -5,7 +5,7 @@ defineProps<{ eyecatchData: EyecatchType }>()
 </script>
 
 <template>
-  <GuiSectionWrap :loading="false" class="type1-eyecatcher">
+  <GuiContentWrap :loading="false" class="type1-eyecatcher">
     <GuiEyecatchImage
       :url="eyecatchData.image.url"
       :settings="eyecatchData.image.settings"
@@ -19,12 +19,16 @@ defineProps<{ eyecatchData: EyecatchType }>()
       />
     </GuiEyecatchImage>
     <div class="edit-activator">
-      <div>編集ボタン</div>
+      <SectionsEditEyecatcher
+        :content-id="1"
+        :eyecatch-data="eyecatchData"
+        :loading="false"
+      />
     </div>
     <div class="image-settings">
       <div>イメージセッティグ</div>
     </div>
-  </GuiSectionWrap>
+  </GuiContentWrap>
 </template>
 
 <style lang="scss" scoped>
@@ -42,9 +46,8 @@ defineProps<{ eyecatchData: EyecatchType }>()
   }
   .edit-activator {
     position: absolute;
-    top: 10rem;
+    top: 8.5rem;
     right: 2rem;
-    background-color: rgba(255, 255, 255, 0.5);
   }
   .image-settings {
     position: absolute;

@@ -5,7 +5,7 @@ defineProps<{ services: ServiceType[] }>()
 </script>
 
 <template>
-  <GuiSectionWrap :loading="false" class="type1-services">
+  <GuiContentWrap :loading="false" class="type1-services">
     <GuiContentGrid :contents="services" class="type1-services__grid">
       <template #default="{ content }">
         <div class="service-item">
@@ -31,7 +31,7 @@ defineProps<{ services: ServiceType[] }>()
     <div class="create-activator">
       <div>追加ボタン</div>
     </div>
-  </GuiSectionWrap>
+  </GuiContentWrap>
 </template>
 
 <style lang="scss" scoped>
