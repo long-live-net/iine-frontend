@@ -3,13 +3,13 @@ const { loading = false } = defineProps<{ loading?: boolean }>()
 </script>
 
 <template>
-  <div class="section-wrap">
+  <div class="content-wrap">
     <slot />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.section-wrap {
+.content-wrap {
   width: 100%;
   min-width: 18rem;
 }
