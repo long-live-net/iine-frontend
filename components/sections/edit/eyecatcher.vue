@@ -32,6 +32,9 @@ const eyecatcherFormRule = {
     (v: string) => noBlank(v) || 'トップ背景画像ファイルを設定してください',
   ],
 }
+const modal = ref(false)
+const contentFormComponent = ref<GlobalComponents['VForm'] | null>(null)
+const fileInputComponent = ref<typeof GuiBaseFileInput | null>(null)
 
 const resetEyeCatcherForm = () => {
   eyecatcherForm.title = eyecatchData.title
@@ -39,11 +42,6 @@ const resetEyeCatcherForm = () => {
   eyecatcherForm.image = eyecatchData.image.url
   eyecatcherForm.imageFile = null
 }
-
-const modal = ref(false)
-const contentFormComponent = ref<GlobalComponents['VForm'] | null>(null)
-const fileInputComponent = ref<typeof GuiBaseFileInput | null>(null)
-
 watch(
   () => eyecatchData,
   () => {
@@ -58,11 +56,9 @@ watch(modal, (current) => {
   }
 })
 
-const { compressing, compress } = useImageCompression()
-const onChangeImageFile = async (imageFile: File) => {
-  const { compressedImageFile, compressedImageUrl } = await compress(imageFile)
-  eyecatcherForm.imageFile = compressedImageFile
-  eyecatcherForm.image = compressedImageUrl
+const onChangeImageFile = async (params: { file: File; url: string }) => {
+  eyecatcherForm.image = params.url
+  eyecatcherForm.imageFile = params.file
 }
 
 const onSubmit = () => {
@@ -70,7 +66,7 @@ const onSubmit = () => {
   fileInputComponent.value?.validate()
   if (
     contentFormComponent.value?.isValid &&
-    fileInputComponent.value?.isImageValid
+    fileInputComponent.value?.isValid
   ) {
     modal.value = false
   }
@@ -94,11 +90,10 @@ const onCancel = () => {
         <div>
           <label for="eyecatcher-form-input-image">トップ背景画像</label>
           <GuiBaseFileInput
-            ref="fileInputComponent"
             id="eyecatcher-form-input-image"
+            ref="fileInputComponent"
             :image-url="eyecatcherForm.image"
             :rules="eyecatcherFormRule.image"
-            :buzy="compressing"
             @change-image-file="onChangeImageFile"
           />
         </div>

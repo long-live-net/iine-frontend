@@ -3,21 +3,23 @@ const props = withDefaults(
   defineProps<{
     imageUrl: string
     rules?: ((v: string) => boolean | string)[]
-    buzy?: boolean
   }>(),
   {
     imageUrl: '',
     rules: () => [],
-    buzy: false,
   }
 )
 const emit = defineEmits<{
-  'change-image-file': [file: File]
+  'change-image-file': [
+    {
+      file: File
+      url: string
+    },
+  ]
   touch: []
 }>()
 
 const isDragEnter = ref(false)
-const imageFile = ref<File | null>(null)
 const fileInputInput = ref<HTMLInputElement | null>(null)
 const touchStateImage = ref(false)
 
@@ -33,20 +35,32 @@ const onDragOver = () => {
 const onClick = () => {
   fileInputInput.value && fileInputInput.value.click()
 }
-const onDropFile = (e: DragEvent) => {
+
+const { compressing, compress } = useImageCompression()
+const onDropFile = async (ev: DragEvent) => {
   isDragEnter.value = false
-  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
-    imageFile.value = e.dataTransfer.files[0]
-    emit('change-image-file', imageFile.value)
+  if (ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0]) {
+    const { compressedImageFile, compressedImageUrl } = await compress(
+      ev.dataTransfer.files[0]
+    )
+    emit('change-image-file', {
+      file: compressedImageFile,
+      url: compressedImageUrl,
+    })
     emit('touch')
     touchStateImage.value = true
   }
 }
-const onChangeFile = (e: Event) => {
+const onChangeFile = async (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target && target.files && target.files[0]) {
-    imageFile.value = target.files[0]
-    emit('change-image-file', imageFile.value)
+    const { compressedImageFile, compressedImageUrl } = await compress(
+      target.files[0]
+    )
+    emit('change-image-file', {
+      file: compressedImageFile,
+      url: compressedImageUrl,
+    })
     emit('touch')
     touchStateImage.value = true
   }
@@ -55,8 +69,8 @@ const onChangeFile = (e: Event) => {
 const validate = () => {
   touchStateImage.value = true
 }
-const isImageValid = computed(() => {
-  if (props.buzy) {
+const isValid = computed(() => {
+  if (compressing.value) {
     return
   }
   if (!touchStateImage.value) {
@@ -65,7 +79,7 @@ const isImageValid = computed(() => {
   return props.rules.every((rule) => rule(props.imageUrl) === true)
 })
 const invalidMessages = computed(() => {
-  if (props.buzy) {
+  if (compressing.value) {
     return
   }
   if (!touchStateImage.value) {
@@ -83,7 +97,7 @@ const invalidMessages = computed(() => {
 
 defineExpose({
   validate,
-  isImageValid,
+  isValid,
 })
 </script>
 
@@ -94,8 +108,8 @@ defineExpose({
         class="file-input__drag-drop"
         :class="{
           'darg-enter': isDragEnter,
-          'ok-state': isImageValid === true,
-          'error-state': isImageValid === false,
+          'ok-state': isValid === true,
+          'error-state': isValid === false,
         }"
         @dragenter="onDragEnter"
         @dragleave="onDragLeave"
@@ -103,7 +117,7 @@ defineExpose({
         @drop.prevent="onDropFile"
       >
         <div class="file-input__drag-drop--img">
-          <div :overlay="buzy">
+          <div :overlay="compressing">
             <img v-if="imageUrl.length" :src="imageUrl" :alt="imageUrl" />
             <img v-else src="~/assets/image/no-image.jpg" alt="no-image" />
           </div>
@@ -125,7 +139,7 @@ defineExpose({
       <input ref="fileInputInput" type="file" hidden @change="onChangeFile" />
     </div>
     <div
-      v-if="isImageValid === false && invalidMessages?.length"
+      v-if="isValid === false && invalidMessages?.length"
       class="error-messages"
     >
       <span v-for="(err, inx) in invalidMessages" :key="inx">
