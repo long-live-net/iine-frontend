@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ContentType } from '@/types/content-types'
+import { ContentType } from '@/types/content'
 
 defineProps<{ contents: ContentType[] }>()
 </script>

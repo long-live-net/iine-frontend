@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { InformationType } from '@/types/content-types'
+import type { InformationType } from '@/types/content'
 
 defineProps<{ informationData: InformationType }>()
 </script>

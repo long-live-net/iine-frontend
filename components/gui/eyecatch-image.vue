@@ -1,24 +1,25 @@
 <script setup lang="ts">
-import type { ImageSettings } from '@/types/image-settings'
+import type { ImageSettings } from '@/types/content'
 
 type EyeCatchImageProps = {
-  url: string
+  url?: string
   settings?: ImageSettings
   circle?: boolean
   round?: boolean
 }
-const {
-  settings = {
+withDefaults(defineProps<EyeCatchImageProps>(), {
+  url: '',
+  settings: () => ({
     lgSize: 'cover',
     smSize: 'cover',
     lgPosition: 'center',
     smPosition: 'center',
     lgParallax: 'scroll',
     smParallax: 'scroll',
-  },
-  circle = false,
-  round = false,
-} = defineProps<EyeCatchImageProps>()
+  }),
+  circle: false,
+  round: false,
+})
 </script>
 
 <template>

@@ -7,25 +7,7 @@ import type {
   NewsType,
   ServiceType,
   ContactType,
-} from '@/types/content-types'
-
-const eyecatch = computed<EyecatchType>(() => ({
-  id: 1,
-  customerId: 1,
-  title: 'テストタイトル',
-  subtitle: 'サブタイトル',
-  image: {
-    url: 'https://iine-bucket.s3.ap-northeast-1.amazonaws.com/uploads/000001/20220526-090500-234.jpg',
-    settings: {
-      lgSize: 'cover',
-      smSize: 'cover',
-      lgPosition: 'center',
-      smPosition: 'center',
-      lgParallax: 'scroll',
-      smParallax: 'scroll',
-    },
-  },
-}))
+} from '@/types/content'
 
 const information = computed<InformationType>(() => ({
   id: 1,
@@ -249,7 +231,7 @@ const pageSections: DefinePageSections[] = [
 <template>
   <article>
     <div id="index-position-top">
-      <SectionsType1Eyecatcher :eyecatch-data="eyecatch" />
+      <SectionsType1Eyecatcher />
     </div>
 
     <section

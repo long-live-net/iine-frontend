@@ -1,26 +1,30 @@
 <script setup lang="ts">
 import type { GlobalComponents } from '@vue/runtime-core'
-import type { EyecatchType } from '@/types/content-types'
+import type { EyecatchType } from '@/types/content'
+import type { EyecatchInputType } from '@/types/content-input'
 import GuiBaseFileInput from '@/components/gui/base/file-input.vue'
 
-const { eyecatchData, loading = false } = defineProps<{
-  contentId: number
-  eyecatchData: EyecatchType
-  loading: boolean
+const props = defineProps<{
+  eyecatchData?: EyecatchType | null
 }>()
 
-type EyecatchFormType = {
+const eyecatcherForm = reactive<{
   title: string
   subtitle: string
   image: string
   imageFile: File | null
-}
-const eyecatcherForm = reactive<EyecatchFormType>({
+}>({
   title: '',
   subtitle: '',
   image: '',
   imageFile: null,
 })
+
+const emit = defineEmits<{
+  create: [inputData: EyecatchInputType]
+  update: [inputData: EyecatchInputType]
+}>()
+
 const { noBlank, maxLength } = useValidateRules()
 const eyecatcherFormRule = {
   title: [
@@ -37,13 +41,13 @@ const contentFormComponent = ref<GlobalComponents['VForm'] | null>(null)
 const fileInputComponent = ref<typeof GuiBaseFileInput | null>(null)
 
 const resetEyeCatcherForm = () => {
-  eyecatcherForm.title = eyecatchData.title
-  eyecatcherForm.subtitle = eyecatchData.subtitle ?? ''
-  eyecatcherForm.image = eyecatchData.image.url
+  eyecatcherForm.title = props.eyecatchData?.title ?? ''
+  eyecatcherForm.subtitle = props.eyecatchData?.subtitle ?? ''
+  eyecatcherForm.image = props.eyecatchData?.image?.url ?? ''
   eyecatcherForm.imageFile = null
 }
 watch(
-  () => eyecatchData,
+  () => props.eyecatchData,
   () => {
     resetEyeCatcherForm()
   },
@@ -61,16 +65,46 @@ const onChangeImageFile = async (params: { file: File; url: string }) => {
   eyecatcherForm.imageFile = params.file
 }
 
-const onSubmit = () => {
+const customerId = 1 // TODO: 適当！！
+
+const onCreate = async () => {
   contentFormComponent.value?.validate()
   fileInputComponent.value?.validate()
   if (
     contentFormComponent.value?.isValid &&
     fileInputComponent.value?.isValid
   ) {
+    const inputData: EyecatchInputType = {
+      customerId,
+      title: eyecatcherForm.title,
+      subtitle: eyecatcherForm.subtitle,
+      imageFile: eyecatcherForm.imageFile,
+    }
+    emit('create', inputData)
     modal.value = false
   }
 }
+
+const onUpdate = async () => {
+  contentFormComponent.value?.validate()
+  fileInputComponent.value?.validate()
+  if (
+    props.eyecatchData?.id !== null &&
+    props.eyecatchData?.id !== undefined &&
+    contentFormComponent.value?.isValid &&
+    fileInputComponent.value?.isValid
+  ) {
+    const inputData: EyecatchInputType = {
+      customerId,
+      title: eyecatcherForm.title,
+      subtitle: eyecatcherForm.subtitle,
+      imageFile: eyecatcherForm.imageFile,
+    }
+    emit('update', inputData)
+    modal.value = false
+  }
+}
+
 const onCancel = () => {
   modal.value = false
 }
@@ -117,13 +151,24 @@ const onCancel = () => {
         </div>
         <div class="mt-4 mb-2 text-right">
           <v-btn
+            v-if="eyecatchData?.id"
             prepend-icon="mdi-content-save"
             color="success"
             variant="flat"
             width="8rem"
-            @click="onSubmit"
+            @click="onUpdate"
           >
-            保存する
+            更新する
+          </v-btn>
+          <v-btn
+            v-else
+            prepend-icon="mdi-content-save"
+            color="info"
+            variant="flat"
+            width="8rem"
+            @click="onCreate"
+          >
+            作成する
           </v-btn>
           <v-btn
             prepend-icon="mdi-cancel"

@@ -1,28 +1,53 @@
 <script setup lang="ts">
-import type { EyecatchType } from '@/types/content-types'
+import type { EyecatchType } from '@/types/content'
+import type { EyecatchInputType } from '@/types/content-input'
 
-defineProps<{ eyecatchData: EyecatchType }>()
+const customerId = 1 // TODO: 適当！！
+const {
+  get,
+  contentDataRef: eyecatchData,
+  loading,
+} = useContentRead<EyecatchType>(customerId, '/eyecatches')
+
+const { create, update } = useContentWrite<EyecatchType, EyecatchInputType>(
+  customerId,
+  '/eyecatches'
+)
+
+const onCreate = async (inputData: EyecatchInputType) => {
+  const data = await create(inputData)
+  get()
+}
+
+const onUpdate = async (inputData: EyecatchInputType) => {
+  if (eyecatchData.value === null) return
+
+  const data = await update(eyecatchData.value.id, inputData)
+  get()
+}
+
+get()
 </script>
 
 <template>
-  <GuiContentWrap :loading="false" class="type1-eyecatcher">
+  <GuiContentWrap :loading="loading" class="type1-eyecatcher">
     <GuiEyecatchImage
-      :url="eyecatchData.image.url"
-      :settings="eyecatchData.image.settings"
+      :url="eyecatchData?.image?.url"
+      :settings="eyecatchData?.image?.settings"
       class="eyecatcher"
     >
       <GuiEyecatchTitles
         place="top"
-        :title="eyecatchData.title"
-        :subtitle="eyecatchData.subtitle"
+        :title="eyecatchData?.title"
+        :subtitle="eyecatchData?.subtitle"
         class="titles"
       />
     </GuiEyecatchImage>
     <div class="edit-activator">
       <SectionsEditEyecatcher
-        :content-id="1"
         :eyecatch-data="eyecatchData"
-        :loading="false"
+        @create="onCreate"
+        @update="onUpdate"
       />
     </div>
     <div class="image-settings">
