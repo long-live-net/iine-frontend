@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ContactType } from '@/types/content-types'
+import type { ContactType } from '@/types/content'
 
 defineProps<{ contactData: ContactType }>()
 </script>

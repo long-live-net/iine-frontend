@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { NewsType } from '@/types/content-types'
+import type { NewsType } from '@/types/content'
 
 defineProps<{ newses: NewsType[] }>()
 const jstDateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')

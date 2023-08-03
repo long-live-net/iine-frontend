@@ -1,21 +1,27 @@
 <script setup lang="ts">
-const {
-  imageUrl = '',
-  state = null,
-  buzy = false,
-} = defineProps<{
-  imageUrl: string
-  state?: boolean | null
-  buzy?: boolean
-}>()
-
+const props = withDefaults(
+  defineProps<{
+    imageUrl: string
+    rules?: ((v: string) => boolean | string)[]
+  }>(),
+  {
+    imageUrl: '',
+    rules: () => [],
+  }
+)
 const emit = defineEmits<{
-  'change-image-file': [file: File]
+  'change-image-file': [
+    {
+      file: File
+      url: string
+    },
+  ]
+  touch: []
 }>()
 
 const isDragEnter = ref(false)
-const imageFile = ref<File | null>(null)
 const fileInputInput = ref<HTMLInputElement | null>(null)
+const touchStateImage = ref(false)
 
 const onDragEnter = () => {
   isDragEnter.value = true
@@ -29,58 +35,117 @@ const onDragOver = () => {
 const onClick = () => {
   fileInputInput.value && fileInputInput.value.click()
 }
-const onDropFile = (e: DragEvent) => {
+
+const { compressing, compress } = useImageCompression()
+const onDropFile = async (ev: DragEvent) => {
   isDragEnter.value = false
-  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
-    imageFile.value = e.dataTransfer.files[0]
-    emit('change-image-file', imageFile.value)
+  if (ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0]) {
+    const { compressedImageFile, compressedImageUrl } = await compress(
+      ev.dataTransfer.files[0]
+    )
+    emit('change-image-file', {
+      file: compressedImageFile,
+      url: compressedImageUrl,
+    })
+    emit('touch')
+    touchStateImage.value = true
   }
 }
-const onChangeFile = (e: Event) => {
+const onChangeFile = async (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target && target.files && target.files[0]) {
-    imageFile.value = target.files[0]
-    emit('change-image-file', imageFile.value)
+    const { compressedImageFile, compressedImageUrl } = await compress(
+      target.files[0]
+    )
+    emit('change-image-file', {
+      file: compressedImageFile,
+      url: compressedImageUrl,
+    })
+    emit('touch')
+    touchStateImage.value = true
   }
 }
+
+const validate = () => {
+  touchStateImage.value = true
+}
+const isValid = computed(() => {
+  if (compressing.value) {
+    return
+  }
+  if (!touchStateImage.value) {
+    return null
+  }
+  return props.rules.every((rule) => rule(props.imageUrl) === true)
+})
+const invalidMessages = computed(() => {
+  if (compressing.value) {
+    return
+  }
+  if (!touchStateImage.value) {
+    return null
+  }
+  const messages: string[] = []
+  props.rules.forEach((rule) => {
+    const ret = rule(props.imageUrl)
+    if (typeof ret === 'string' && ret.length) {
+      messages.push(ret)
+    }
+  })
+  return messages
+})
+
+defineExpose({
+  validate,
+  isValid,
+})
 </script>
 
 <template>
   <div class="file-input">
-    <div
-      class="file-input__drag-drop"
-      :class="{
-        'darg-enter': isDragEnter,
-        'ok-state': state === true,
-        'error-state': state === false,
-      }"
-      @dragenter="onDragEnter"
-      @dragleave="onDragLeave"
-      @dragover.prevent="onDragOver"
-      @drop.prevent="onDropFile"
-    >
-      <div class="file-input__drag-drop--img">
-        <overlay-wrapper :overlay="buzy">
-          <img v-if="imageUrl.length" :src="imageUrl" :alt="imageUrl" />
-          <img v-else src="~/assets/image/no-image.jpg" alt="no-image" />
-        </overlay-wrapper>
-      </div>
-      <div class="file-input__drag-drop--nav">
-        <p>ここに画像ファイルを<br />ドラッグ＆ドロップできます</p>
-        <div class="file-input__drag-drop--nav-action">
-          <v-btn
-            prepend-icon="mdi-image"
-            color="primary"
-            variant="flat"
-            :disabled="buzy"
-            @click="onClick"
-          >
-            背景画像ファイルを選択
-          </v-btn>
+    <div>
+      <div
+        class="file-input__drag-drop"
+        :class="{
+          'darg-enter': isDragEnter,
+          'ok-state': isValid === true,
+          'error-state': isValid === false,
+        }"
+        @dragenter="onDragEnter"
+        @dragleave="onDragLeave"
+        @dragover.prevent="onDragOver"
+        @drop.prevent="onDropFile"
+      >
+        <div class="file-input__drag-drop--img">
+          <div :overlay="compressing">
+            <img v-if="imageUrl.length" :src="imageUrl" :alt="imageUrl" />
+            <img v-else src="~/assets/image/no-image.jpg" alt="no-image" />
+          </div>
+        </div>
+        <div class="file-input__drag-drop--nav">
+          <p>ここに画像ファイルを<br />ドラッグ＆ドロップできます</p>
+          <div class="file-input__drag-drop--nav-action">
+            <v-btn
+              prepend-icon="mdi-image"
+              color="primary"
+              variant="flat"
+              @click="onClick"
+            >
+              背景画像ファイルを選択
+            </v-btn>
+          </div>
         </div>
       </div>
+      <input ref="fileInputInput" type="file" hidden @change="onChangeFile" />
     </div>
-    <input ref="fileInputInput" type="file" hidden @change="onChangeFile" />
+    <div
+      v-if="isValid === false && invalidMessages?.length"
+      class="error-messages"
+    >
+      <span v-for="(err, inx) in invalidMessages" :key="inx">
+        {{ err }}<br />
+      </span>
+    </div>
   </div>
 </template>
 
@@ -125,10 +190,15 @@ const onChangeFile = (e: Event) => {
     cursor: copy;
   }
   .ok-state {
-    border-color: $green;
+    border-color: $gray;
   }
   .error-state {
     border-color: $red;
+  }
+  .error-messages {
+    padding: 0.25rem 1rem;
+    font-size: small;
+    color: $red;
   }
 }
 </style>

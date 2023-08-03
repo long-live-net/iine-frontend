@@ -4,7 +4,10 @@ type EyeCatchTitlesProps = {
   title?: string
   subtitle?: string
 }
-const { title = '', subtitle = '' } = defineProps<EyeCatchTitlesProps>()
+withDefaults(defineProps<EyeCatchTitlesProps>(), {
+  title: '',
+  subtitle: '',
+})
 </script>
 
 <template>
