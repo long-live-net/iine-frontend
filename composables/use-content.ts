@@ -1,12 +1,11 @@
-import type { ContentType, ImageSettings } from '@/types/content'
-import type { ContentInputType } from '@/types/content-input'
+import type { ImageSettings } from '@/types/content'
+import type { ContentGetApi, ContentSaveApi } from '@/types/content-api'
 
-export const useContentRead = <T extends ContentType>(
+export const useContentRead = <T extends ContentGetApi>(
   customerId: number,
   apiPath: string
 ) => {
   const contentDataRef = ref<T | null>(null) as Ref<T | null>
-  const loading = ref(false)
 
   /**
    * get content data
@@ -19,35 +18,26 @@ export const useContentRead = <T extends ContentType>(
         ? `${apiPath}/recent`
         : `${apiPath}/${contentId}`
 
-    try {
-      loading.value = true
-      const { data, error } = await useAsyncData<T>(key, () =>
-        apiFetch(url, {
-          method: 'GET',
-          params: { customerId },
-        })
-      )
-      if (error.value) {
-        throw error.value
-      }
-      if (data.value) {
-        contentDataRef.value = data.value as T
-      }
-    } finally {
-      loading.value = false
+    const { data, error } = await useAsyncData<T>(key, () =>
+      apiFetch(url, {
+        method: 'GET',
+        params: { customerId },
+      })
+    )
+    if (error.value) {
+      throw error.value
+    }
+    if (data.value) {
+      contentDataRef.value = data.value as T
     }
   }
   return {
     get,
     contentDataRef,
-    loading,
   }
 }
 
-export const useContentWrite = <
-  T extends ContentType,
-  F extends ContentInputType,
->(
+export const useContentWrite = <F extends ContentSaveApi>(
   customerId: number,
   apiPath: string
 ) => {
@@ -58,6 +48,7 @@ export const useContentWrite = <
   const create = async (newData: F) => {
     const { imageFile, ...sendData } = newData
     const formData = new FormData()
+
     if (imageFile) {
       formData.append('imagefile', imageFile)
       const { data, error } = await useAsyncData(() =>
@@ -67,8 +58,9 @@ export const useContentWrite = <
           body: formData,
         })
       )
-      if (error.value) throw error.value
-
+      if (error.value) {
+        throw error.value
+      }
       const imageUrl = data.value as { fileUrl: string }
       sendData.image = {
         url: imageUrl.fileUrl,
@@ -81,8 +73,9 @@ export const useContentWrite = <
         body: sendData,
       })
     )
-    if (error.value) throw error.value
-
+    if (error.value) {
+      throw error.value
+    }
     return { data }
   }
 
@@ -103,8 +96,9 @@ export const useContentWrite = <
           body: formData,
         })
       )
-      if (error.value) throw error
-
+      if (error.value) {
+        throw error
+      }
       const imageUrl = data.value as { fileUrl: string }
       sendData.image = {
         url: imageUrl.fileUrl,
@@ -114,27 +108,26 @@ export const useContentWrite = <
     const { data, error } = await useAsyncData(() =>
       apiFetch(`${apiPath}/${contentId}`, {
         method: 'PUT',
-        params: { customerId },
         body: sendData,
       })
     )
-    if (error.value) throw error
-
+    if (error.value) {
+      throw error
+    }
     return { data }
   }
-
-  const getDefaultImageSettings = (): ImageSettings => ({
-    lgSize: 'cover',
-    smSize: 'cover',
-    lgPosition: 'center',
-    smPosition: 'center',
-    lgParallax: 'scroll' as 'fixed' | 'scroll',
-    smParallax: 'scroll' as 'fixed' | 'scroll',
-  })
 
   return {
     create,
     update,
-    getDefaultImageSettings,
   }
 }
+
+const getDefaultImageSettings = (): ImageSettings => ({
+  lgSize: 'cover',
+  smSize: 'cover',
+  lgPosition: 'center',
+  smPosition: 'center',
+  lgParallax: 'scroll' as 'fixed' | 'scroll',
+  smParallax: 'scroll' as 'fixed' | 'scroll',
+})

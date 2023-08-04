@@ -1,31 +1,24 @@
 <script setup lang="ts">
 import type { GlobalComponents } from '@vue/runtime-core'
-import type { EyecatchType } from '@/types/content'
-import type { EyecatchInputType } from '@/types/content-input'
+import type { EyecatchType, EyecatchForm } from '@/types/content'
 import GuiBaseFileInput from '@/components/gui/base/file-input.vue'
 
 const props = defineProps<{
   eyecatchData?: EyecatchType | null
 }>()
 
-const eyecatcherForm = reactive<{
-  title: string
-  subtitle: string
-  image: string
-  imageFile: File | null
-}>({
+const emit = defineEmits<{
+  create: [inputData: EyecatchForm]
+  update: [inputData: EyecatchForm]
+}>()
+
+const { noBlank, maxLength } = useValidateRules()
+const eyecatcherForm = reactive<EyecatchForm>({
   title: '',
   subtitle: '',
   image: '',
   imageFile: null,
 })
-
-const emit = defineEmits<{
-  create: [inputData: EyecatchInputType]
-  update: [inputData: EyecatchInputType]
-}>()
-
-const { noBlank, maxLength } = useValidateRules()
 const eyecatcherFormRule = {
   title: [
     (v: string) => noBlank(v) || 'トップタイトルを入力してください',
@@ -65,8 +58,6 @@ const onChangeImageFile = async (params: { file: File; url: string }) => {
   eyecatcherForm.imageFile = params.file
 }
 
-const customerId = 1 // TODO: 適当！！
-
 const onCreate = async () => {
   contentFormComponent.value?.validate()
   fileInputComponent.value?.validate()
@@ -74,13 +65,7 @@ const onCreate = async () => {
     contentFormComponent.value?.isValid &&
     fileInputComponent.value?.isValid
   ) {
-    const inputData: EyecatchInputType = {
-      customerId,
-      title: eyecatcherForm.title,
-      subtitle: eyecatcherForm.subtitle,
-      imageFile: eyecatcherForm.imageFile,
-    }
-    emit('create', inputData)
+    emit('create', eyecatcherForm)
     modal.value = false
   }
 }
@@ -94,13 +79,7 @@ const onUpdate = async () => {
     contentFormComponent.value?.isValid &&
     fileInputComponent.value?.isValid
   ) {
-    const inputData: EyecatchInputType = {
-      customerId,
-      title: eyecatcherForm.title,
-      subtitle: eyecatcherForm.subtitle,
-      imageFile: eyecatcherForm.imageFile,
-    }
-    emit('update', inputData)
+    emit('update', eyecatcherForm)
     modal.value = false
   }
 }
