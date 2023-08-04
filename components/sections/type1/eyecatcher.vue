@@ -1,51 +1,61 @@
 <script setup lang="ts">
-import type { EyecatchType } from '@/types/content'
-import type { EyecatchInputType } from '@/types/content-input'
+import type { EyecatchForm } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
 const {
-  get,
-  contentDataRef: eyecatchData,
-  loading,
-} = useContentRead<EyecatchType>(customerId, '/eyecatches')
+  nextKey,
+  getEyecatch,
+  eyecatchRef,
+  loading: readLoading,
+} = useEyecatchRead(customerId)
 
-const { create, update } = useContentWrite<EyecatchType, EyecatchInputType>(
-  customerId,
-  '/eyecatches'
-)
+const {
+  createEyecatch,
+  updateEyecatch,
+  loading: writeLoading,
+} = useEyecatchWrite(customerId)
 
-const onCreate = async (inputData: EyecatchInputType) => {
-  const data = await create(inputData)
-  get()
+const onCreate = async (formData: EyecatchForm) => {
+  await createEyecatch(formData)
+  nextKey()
+  getEyecatch()
 }
 
-const onUpdate = async (inputData: EyecatchInputType) => {
-  if (eyecatchData.value === null) return
+const onUpdate = async (formData: EyecatchForm) => {
+  if (eyecatchRef.value === null) return
 
-  const data = await update(eyecatchData.value.id, inputData)
-  get()
+  await updateEyecatch(eyecatchRef.value.id, formData)
+  nextKey()
+  getEyecatch()
 }
 
-get()
+const loading = computed(() => readLoading.value || writeLoading.value)
+
+getEyecatch()
 </script>
 
 <template>
-  <GuiContentWrap :loading="loading" class="type1-eyecatcher">
+  <GuiContentWrap
+    :loading="loading"
+    :loading-size="150"
+    :loading-width="20"
+    class="type1-eyecatcher"
+  >
     <GuiEyecatchImage
-      :url="eyecatchData?.image?.url"
-      :settings="eyecatchData?.image?.settings"
+      :url="eyecatchRef?.image?.url"
+      :settings="eyecatchRef?.image?.settings"
       class="eyecatcher"
     >
       <GuiEyecatchTitles
         place="top"
-        :title="eyecatchData?.title"
-        :subtitle="eyecatchData?.subtitle"
+        :title="eyecatchRef?.title"
+        :subtitle="eyecatchRef?.subtitle"
         class="titles"
       />
     </GuiEyecatchImage>
     <div class="edit-activator">
       <SectionsEditEyecatcher
-        :eyecatch-data="eyecatchData"
+        :eyecatch-data="eyecatchRef"
         @create="onCreate"
         @update="onUpdate"
       />

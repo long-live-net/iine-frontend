@@ -1,5 +1,8 @@
 import { newsCategory2Label } from '@/composables/use-news-category'
 
+/**
+ * Image Data Types
+ */
 export interface ImageSettings {
   lgSize: string | 'cover'
   smSize: string | 'cover'
@@ -13,19 +16,10 @@ export interface ImageData {
   url: string
   settings: ImageSettings
 }
+
 /**
  * Content Data Types
  */
-export interface ContentType {
-  id: number
-  customerId?: number
-  title: string
-  subtitle?: string
-  body?: string
-  image?: ImageData
-  tags?: string[]
-}
-
 export type ContentKind =
   | 'infomation'
   | 'news'
@@ -36,52 +30,57 @@ export type ContentKind =
   | 'menu'
   | 'reason'
 
-/**
- * Information
- */
-export interface InformationType extends ContentType {}
+export interface ContentType {
+  id: number
+  customerId?: number
+  title: string
+  subtitle?: string
+  body?: string
+  image?: ImageData
+  tags?: string[]
+}
 
-/**
- * News
- */
+export interface InformationType extends ContentType {
+  body: string
+}
 export type NewsCategory2LabelType = keyof typeof newsCategory2Label
-
 export interface NewsType extends ContentType {
   body: string
   category: NewsCategory2LabelType
   publishOn: Date
 }
-
-/**
- * Service
- */
 export interface ServiceType extends ContentType {
   body: string
   image: ImageData
   position: number
 }
-
-/**
- * Work
- */
 export interface WorkType extends ContentType {
   category?: string
 }
-
 export interface AboutType extends ContentType {}
-
 export interface ReasonType extends ContentType {}
-
-/**
- * Contact
- */
 export interface ContactType extends ContentType {}
-
-/**
- * Eyecatcher
- */
 export interface EyecatchType extends ContentType {
   image: ImageData
+}
+
+/**
+ * Content Form Data Types
+ */
+export interface ContentForm {
+  title: string
+  subtitle?: string
+  body?: string
+  image?: string
+  imageFile?: File | null
+}
+export interface EyecatchForm extends ContentForm {
+  subtitle: string
+  image: string
+  imageFile: File | null
+}
+export interface InformationForm extends ContentForm {
+  body: string
 }
 
 /**

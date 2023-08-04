@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    imageUrl: string
+    imageUrl?: string
     rules?: ((v: string) => boolean | string)[]
   }>(),
   {
@@ -117,10 +117,10 @@ defineExpose({
         @drop.prevent="onDropFile"
       >
         <div class="file-input__drag-drop--img">
-          <div :overlay="compressing">
+          <GuiBaseOverlayLinerWrap :overlay="compressing">
             <img v-if="imageUrl.length" :src="imageUrl" :alt="imageUrl" />
             <img v-else src="~/assets/image/no-image.jpg" alt="no-image" />
-          </div>
+          </GuiBaseOverlayLinerWrap>
         </div>
         <div class="file-input__drag-drop--nav">
           <p>ここに画像ファイルを<br />ドラッグ＆ドロップできます</p>

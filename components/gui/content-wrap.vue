@@ -1,10 +1,27 @@
 <script setup lang="ts">
-const { loading = false } = defineProps<{ loading?: boolean }>()
+withDefaults(
+  defineProps<{
+    loading?: boolean
+    loadingColor?: string
+    loadingSize?: string | number
+    loadingWidth?: number
+  }>(),
+  {
+    loading: false,
+  }
+)
 </script>
 
 <template>
   <div class="content-wrap">
-    <slot />
+    <GuiBaseOverlayCircleWrap
+      :overlay="loading"
+      :color="loadingColor"
+      :size="loadingSize"
+      :width="loadingWidth"
+    >
+      <slot />
+    </GuiBaseOverlayCircleWrap>
   </div>
 </template>
 

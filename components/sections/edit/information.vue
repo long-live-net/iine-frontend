@@ -1,32 +1,34 @@
 <script setup lang="ts">
 import type { GlobalComponents } from '@vue/runtime-core'
-import type { EyecatchType, EyecatchForm } from '@/types/content'
+import type { InformationType, InformationForm } from '@/types/content'
 import GuiBaseFileInput from '@/components/gui/base/file-input.vue'
 
 const props = defineProps<{
-  eyecatchData?: EyecatchType | null
+  informationData?: InformationType | null
 }>()
 
 const emit = defineEmits<{
-  create: [inputData: EyecatchForm]
-  update: [inputData: EyecatchForm]
+  create: [inputData: InformationForm]
+  update: [inputData: InformationForm]
 }>()
 
 const { noBlank, maxLength } = useValidateRules()
-const eyecatcherForm = reactive<EyecatchForm>({
+const informationerForm = reactive<InformationForm>({
   title: '',
   subtitle: '',
+  body: '',
   image: '',
   imageFile: null,
 })
-const eyecatcherFormRule = {
+const informationerFormRule = {
   title: [
-    (v: string) => noBlank(v) || 'トップタイトルを入力してください',
+    (v: string) => noBlank(v) || 'タイトルを入力してください',
     (v: string) => maxLength(v, 40) || '40文字以内で入力してください',
   ],
   subtitle: [(v: string) => maxLength(v, 50) || '50文字以内で入力してください'],
-  image: [
-    (v: string) => noBlank(v) || 'トップ背景画像ファイルを設定してください',
+  body: [
+    (v: string) => noBlank(v) || '本文を入力してください',
+    (v: string) => maxLength(v, 1000) || '1000文字以内で入力してください',
   ],
 }
 const modal = ref(false)
@@ -34,13 +36,14 @@ const contentFormComponent = ref<GlobalComponents['VForm'] | null>(null)
 const fileInputComponent = ref<typeof GuiBaseFileInput | null>(null)
 
 const resetEyeCatcherForm = () => {
-  eyecatcherForm.title = props.eyecatchData?.title ?? ''
-  eyecatcherForm.subtitle = props.eyecatchData?.subtitle ?? ''
-  eyecatcherForm.image = props.eyecatchData?.image?.url ?? ''
-  eyecatcherForm.imageFile = null
+  informationerForm.title = props.informationData?.title ?? ''
+  informationerForm.subtitle = props.informationData?.subtitle ?? ''
+  informationerForm.body = props.informationData?.body ?? ''
+  informationerForm.image = props.informationData?.image?.url ?? ''
+  informationerForm.imageFile = null
 }
 watch(
-  () => props.eyecatchData,
+  () => props.informationData,
   () => {
     resetEyeCatcherForm()
   },
@@ -54,8 +57,8 @@ watch(modal, (current) => {
 })
 
 const onChangeImageFile = async (params: { file: File; url: string }) => {
-  eyecatcherForm.image = params.url
-  eyecatcherForm.imageFile = params.file
+  informationerForm.image = params.url
+  informationerForm.imageFile = params.file
 }
 
 const onCreate = async () => {
@@ -65,7 +68,7 @@ const onCreate = async () => {
     contentFormComponent.value?.isValid &&
     fileInputComponent.value?.isValid
   ) {
-    emit('create', eyecatcherForm)
+    emit('create', informationerForm)
     modal.value = false
   }
 }
@@ -74,12 +77,12 @@ const onUpdate = async () => {
   contentFormComponent.value?.validate()
   fileInputComponent.value?.validate()
   if (
-    props.eyecatchData?.id !== null &&
-    props.eyecatchData?.id !== undefined &&
+    props.informationData?.id !== null &&
+    props.informationData?.id !== undefined &&
     contentFormComponent.value?.isValid &&
     fileInputComponent.value?.isValid
   ) {
-    emit('update', eyecatcherForm)
+    emit('update', informationerForm)
     modal.value = false
   }
 }
@@ -92,49 +95,60 @@ const onCancel = () => {
 <template>
   <GuiContentFormDialogActivator
     v-model:modal="modal"
-    :content="eyecatchData"
+    :content="informationData"
   />
   <GuiContentFormDialog v-model:modal="modal">
     <template #header>
       <p class="mr-1">
         <v-icon icon="mdi-pencil-circle" color="success" size="x-large" />
       </p>
-      <h3 v-if="eyecatchData?.id">コンテンツの更新</h3>
-      <h3 v-else="eyecatchData?.id">コンテンツの登録</h3>
+      <h3 v-if="informationData?.id">コンテンツの更新</h3>
+      <h3 v-else="informationData?.id">コンテンツの登録</h3>
     </template>
     <template #default>
       <v-form ref="contentFormComponent">
         <div>
-          <label for="eyecatcher-form-input-image">トップ背景画像</label>
+          <label for="informationer-form-input-image">タイトル背景画像</label>
           <GuiBaseFileInput
-            id="eyecatcher-form-input-image"
+            id="informationer-form-input-image"
             ref="fileInputComponent"
-            :image-url="eyecatcherForm.image"
-            :rules="eyecatcherFormRule.image"
+            :image-url="informationerForm?.image"
             @change-image-file="onChangeImageFile"
           />
         </div>
         <div class="mt-8">
-          <label for="eyecatcher-form-input-title">トップタイトル</label>
+          <label for="informationer-form-input-title">タイトル</label>
           <v-text-field
-            v-model="eyecatcherForm.title"
-            :rules="eyecatcherFormRule.title"
+            id="informationer-form-input-title"
+            v-model="informationerForm.title"
+            :rules="informationerFormRule.title"
             clearable
-            placeholder="トップタイトルを入力してください"
+            placeholder="タイトルを入力してください"
           />
         </div>
         <div class="mt-4">
-          <label for="eyecatcher-form-input-subtitle">サブタイトル</label>
+          <label for="informationer-form-input-subtitle">サブタイトル</label>
           <v-text-field
-            v-model="eyecatcherForm.subtitle"
-            :rules="eyecatcherFormRule.subtitle"
+            id="informationer-form-input-subtitle"
+            v-model="informationerForm.subtitle"
+            :rules="informationerFormRule.subtitle"
             clearable
             placeholder="サブタイトルを入力してください"
           />
         </div>
+        <div class="mt-4">
+          <label for="informationer-form-input-body">本文</label>
+          <v-textarea
+            id="informationer-form-input-body"
+            v-model="informationerForm.body"
+            :rules="informationerFormRule.body"
+            clearable
+            placeholder="本文を入力してください"
+          />
+        </div>
         <div class="mt-4 mb-2 text-right">
           <v-btn
-            v-if="eyecatchData?.id"
+            v-if="informationData?.id"
             prepend-icon="mdi-content-save"
             color="success"
             variant="flat"
