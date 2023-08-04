@@ -1,17 +1,17 @@
 import { useContentRead, useContentWrite } from '@/composables/use-content'
-import type { EyecatchType, EyecatchForm } from '@/types/content'
-import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/content-api'
+import type { InformationType, InformationForm } from '@/types/content'
+import type { InformationGetApi, InformationSaveApi } from '@/types/content-api'
 
-const apiUrl = '/eyecatches'
+const apiUrl = '/informations'
 
-export const useEyecatchRead = (customerId: number) => {
-  const { get, nextKey, contentDataRef } = useContentRead<EyecatchGetApi>(
+export const useInformationRead = (customerId: number) => {
+  const { get, nextKey, contentDataRef } = useContentRead<InformationGetApi>(
     customerId,
     apiUrl
   )
   const loading = ref(false)
 
-  const getEyecatch = async () => {
+  const getInformation = async (keyNext: boolean = false) => {
     try {
       loading.value = true
       await get()
@@ -20,7 +20,7 @@ export const useEyecatchRead = (customerId: number) => {
     }
   }
 
-  const eyecatchRef = computed<EyecatchType | null>(() => {
+  const informationRef = computed<InformationType | null>(() => {
     if (!contentDataRef.value) {
       return null
     }
@@ -29,30 +29,32 @@ export const useEyecatchRead = (customerId: number) => {
       customerId: contentDataRef.value.customerId,
       title: contentDataRef.value.title,
       subtitle: contentDataRef.value.subtitle,
+      body: contentDataRef.value.body,
       image: contentDataRef.value.image,
     }
   })
 
   return {
     nextKey,
-    getEyecatch,
-    eyecatchRef,
+    getInformation,
+    informationRef,
     loading,
   }
 }
 
-export const useEyecatchWrite = (customerId: number) => {
-  const { create, update } = useContentWrite<EyecatchSaveApi>(
+export const useInformationWrite = (customerId: number) => {
+  const { create, update } = useContentWrite<InformationSaveApi>(
     customerId,
     apiUrl
   )
   const loading = ref(false)
 
-  const createEyecatch = async (formData: EyecatchForm) => {
-    const inputData: EyecatchSaveApi = {
+  const createInformation = async (formData: InformationForm) => {
+    const inputData: InformationSaveApi = {
       customerId,
       title: formData.title,
       subtitle: formData.subtitle,
+      body: formData.body,
       imageFile: formData.imageFile,
     }
     try {
@@ -63,11 +65,15 @@ export const useEyecatchWrite = (customerId: number) => {
     }
   }
 
-  const updateEyecatch = async (contentId: number, formData: EyecatchForm) => {
-    const inputData: EyecatchSaveApi = {
+  const updateInformation = async (
+    contentId: number,
+    formData: InformationForm
+  ) => {
+    const inputData: InformationSaveApi = {
       customerId,
       title: formData.title,
       subtitle: formData.subtitle,
+      body: formData.body,
       imageFile: formData.imageFile,
     }
     try {
@@ -79,8 +85,8 @@ export const useEyecatchWrite = (customerId: number) => {
   }
 
   return {
-    createEyecatch,
-    updateEyecatch,
+    createInformation,
+    updateInformation,
     loading,
   }
 }

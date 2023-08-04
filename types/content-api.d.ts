@@ -17,6 +17,9 @@ export interface EyecatchGetApi extends ContentGetApi {
   subtitle: string
   image: ImageData
 }
+export interface InformationGetApi extends ContentGetApi {
+  body: string
+}
 
 /**
  * POST, PUT API で保存するデータ型
@@ -34,17 +37,6 @@ export interface EyecatchSaveApi extends ContentSaveApi {
   subtitle: string
   imageFile: File | null
 }
-
-export type ContentInputType = {
-  customerId: number
-  title: string
-  subtitle?: string
-  body?: string
-  image?: ImageData
-  imageFile?: File | null
-}
-
-export interface EyecatchInputType extends ContentInputType {
-  subtitle: string
-  imageFile: File | null
+export interface InformationSaveApi extends ContentSaveApi {
+  body: string
 }

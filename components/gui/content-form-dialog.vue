@@ -1,11 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
-  modal: boolean
-  activatorIcon?: string
-  activatorSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
-  activatorColor?: string
-  activatorText?: string
-}>()
+const props = defineProps<{ modal: boolean }>()
 const emit = defineEmits<{
   'update:modal': [modal: boolean]
 }>()
@@ -19,7 +13,7 @@ const dialog = computed({
 </script>
 
 <template>
-  <v-dialog v-model="dialog" max-width="800">
+  <GuiBaseDialog v-model:modal="dialog">
     <div class="content-form-dialog">
       <header v-if="$slots.header" class="content-form-dialog__header">
         <slot name="header" />
@@ -28,7 +22,7 @@ const dialog = computed({
         <slot />
       </div>
     </div>
-  </v-dialog>
+  </GuiBaseDialog>
 </template>
 
 <style lang="scss" scoped>

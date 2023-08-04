@@ -1,27 +1,24 @@
 <script setup lang="ts">
-type EyeCatchTitlesProps = {
+defineProps<{
   place: 'top' | 'section'
   title?: string
   subtitle?: string
-}
-withDefaults(defineProps<EyeCatchTitlesProps>(), {
-  title: '',
-  subtitle: '',
-})
+}>()
 </script>
 
 <template>
   <div
+    v-if="title?.length || subtitle?.length"
     class="eyecatch-title"
     :class="{
       'top-title': place === 'top',
       'section-title': place === 'section',
     }"
   >
-    <h2 v-show="title.length" class="maintitle">
+    <h2 v-show="title?.length" class="maintitle">
       {{ title }}
     </h2>
-    <p v-show="subtitle.length" class="subtitle">
+    <p v-show="subtitle?.length" class="subtitle">
       {{ subtitle }}
     </p>
   </div>

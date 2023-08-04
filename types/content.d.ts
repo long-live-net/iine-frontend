@@ -40,7 +40,9 @@ export interface ContentType {
   tags?: string[]
 }
 
-export interface InformationType extends ContentType {}
+export interface InformationType extends ContentType {
+  body: string
+}
 export type NewsCategory2LabelType = keyof typeof newsCategory2Label
 export interface NewsType extends ContentType {
   body: string
@@ -76,6 +78,9 @@ export interface EyecatchForm extends ContentForm {
   subtitle: string
   image: string
   imageFile: File | null
+}
+export interface InformationForm extends ContentForm {
+  body: string
 }
 
 /**

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    imageUrl: string
+    imageUrl?: string
     rules?: ((v: string) => boolean | string)[]
   }>(),
   {

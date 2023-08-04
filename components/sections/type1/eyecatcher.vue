@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { EyecatchType, EyecatchForm } from '@/types/content'
+import type { EyecatchForm } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
 const {
+  nextKey,
   getEyecatch,
   eyecatchRef,
   loading: readLoading,
@@ -15,14 +16,16 @@ const {
 } = useEyecatchWrite(customerId)
 
 const onCreate = async (formData: EyecatchForm) => {
-  const data = await createEyecatch(formData)
+  await createEyecatch(formData)
+  nextKey()
   getEyecatch()
 }
 
 const onUpdate = async (formData: EyecatchForm) => {
   if (eyecatchRef.value === null) return
 
-  const data = await updateEyecatch(eyecatchRef.value.id, formData)
+  await updateEyecatch(eyecatchRef.value.id, formData)
+  nextKey()
   getEyecatch()
 }
 

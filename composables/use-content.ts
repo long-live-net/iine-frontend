@@ -1,3 +1,4 @@
+import type { ApiError } from '@/utils/api-fetch'
 import type { ImageSettings } from '@/types/content'
 import type { ContentGetApi, ContentSaveApi } from '@/types/content-api'
 
@@ -6,32 +7,50 @@ export const useContentRead = <T extends ContentGetApi>(
   apiPath: string
 ) => {
   const contentDataRef = ref<T | null>(null) as Ref<T | null>
+  const keyExt = ref(1)
+  const nextKey = () => keyExt.value++
 
   /**
    * get content data
    * @param contentId 未設定時は最新データを取得する
    */
   const get = async (contentId?: number) => {
-    const key = 'create_content'
+    const key = `create_content_${apiPath}_${keyExt.value}`
+
+    // TODO: Debugg
+    console.log('key =', key)
+
     const url =
       contentId === undefined || contentId === null
         ? `${apiPath}/recent`
         : `${apiPath}/${contentId}`
 
     const { data, error } = await useAsyncData<T>(key, () =>
-      apiFetch(url, {
+      $fetch(url, {
+        baseURL: backendBaseUrl,
         method: 'GET',
         params: { customerId },
       })
     )
     if (error.value) {
-      throw error.value
+      const apiError: ApiError = error.value
+
+      // TODO: Debugg
+      console.log('error.value.statusCode', apiError.statusCode)
+      console.log('error.value.message', apiError.message)
+      console.log('error.value.data.message', apiError.data?.message)
+
+      if (apiError.statusCode === 404) {
+        return
+      }
+      throw apiError
     }
     if (data.value) {
       contentDataRef.value = data.value as T
     }
   }
   return {
+    nextKey,
     get,
     contentDataRef,
   }
@@ -52,7 +71,8 @@ export const useContentWrite = <F extends ContentSaveApi>(
     if (imageFile) {
       formData.append('imagefile', imageFile)
       const { data, error } = await useAsyncData(() =>
-        apiFetch('/uploads/image', {
+        $fetch('/uploads/image', {
+          baseURL: backendBaseUrl,
           method: 'POST',
           params: { customerId },
           body: formData,
@@ -68,7 +88,8 @@ export const useContentWrite = <F extends ContentSaveApi>(
       }
     }
     const { data, error } = await useAsyncData(() =>
-      apiFetch(apiPath, {
+      $fetch(apiPath, {
+        baseURL: backendBaseUrl,
         method: 'POST',
         body: sendData,
       })
@@ -90,14 +111,15 @@ export const useContentWrite = <F extends ContentSaveApi>(
     if (imageFile) {
       formData.append('imagefile', imageFile)
       const { data, error } = await useAsyncData(() =>
-        apiFetch('/uploads/image', {
+        $fetch('/uploads/image', {
+          baseURL: backendBaseUrl,
           method: 'POST',
           params: { customerId },
           body: formData,
         })
       )
       if (error.value) {
-        throw error
+        throw error.value
       }
       const imageUrl = data.value as { fileUrl: string }
       sendData.image = {
@@ -106,13 +128,14 @@ export const useContentWrite = <F extends ContentSaveApi>(
       }
     }
     const { data, error } = await useAsyncData(() =>
-      apiFetch(`${apiPath}/${contentId}`, {
+      $fetch(`${apiPath}/${contentId}`, {
+        baseURL: backendBaseUrl,
         method: 'PUT',
         body: sendData,
       })
     )
     if (error.value) {
-      throw error
+      throw error.value
     }
     return { data }
   }

@@ -1,32 +1,71 @@
 <script setup lang="ts">
-import type { InformationType } from '@/types/content'
+import type { InformationForm } from '@/types/content'
 
-defineProps<{ informationData: InformationType }>()
+const customerId = 1 // TODO: 適当！！
+
+const {
+  nextKey,
+  getInformation,
+  informationRef,
+  loading: readLoading,
+} = useInformationRead(customerId)
+
+const {
+  createInformation,
+  updateInformation,
+  loading: writeLoading,
+} = useInformationWrite(customerId)
+
+const onCreate = async (formData: InformationForm) => {
+  await createInformation(formData)
+  nextKey()
+  getInformation()
+}
+
+const onUpdate = async (formData: InformationForm) => {
+  if (informationRef.value === null) return
+
+  await updateInformation(informationRef.value.id, formData)
+  nextKey()
+  getInformation()
+}
+
+const loading = computed(() => readLoading.value || writeLoading.value)
+
+getInformation()
 </script>
 
 <template>
-  <GuiContentCard :loading="false" class="type1-information">
+  <GuiContentCard
+    :loading="loading"
+    :loading-size="100"
+    :loading-width="10"
+    class="type1-information"
+  >
     <GuiEyecatchImage
-      v-if="informationData.image"
-      :url="informationData.image.url"
-      :settings="informationData.image.settings"
+      :url="informationRef?.image?.url"
+      :settings="informationRef?.image?.settings"
       class="eyecatcher"
     >
       <GuiEyecatchTitles
         place="section"
-        :title="informationData.title"
-        :subtitle="informationData.subtitle"
+        :title="informationRef?.title"
+        :subtitle="informationRef?.subtitle"
         class="eyecatcher__titles"
       />
       <div class="image-settings">
         <div>イメージセッティグ</div>
       </div>
     </GuiEyecatchImage>
-    <GuiContentCardBody v-if="informationData.body?.length">
-      {{ informationData.body }}
+    <GuiContentCardBody class="body">
+      {{ informationRef?.body ?? '' }}
     </GuiContentCardBody>
     <div class="edit-activator">
-      <div>編集ボタン</div>
+      <SectionsEditInformation
+        :information-data="informationRef"
+        @create="onCreate"
+        @update="onUpdate"
+      />
     </div>
   </GuiContentCard>
 </template>
@@ -41,26 +80,27 @@ $eyecatcher-height-sm: 600px;
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background-color: rgba(255, 255, 255, 0.5);
   }
-}
-
-.eyecatcher {
-  position: relative;
-  height: 30vh;
-  min-height: 400px;
-  max-height: $eyecatcher-height;
-  min-height: calc($eyecatcher-height * 0.5);
-  &__titles {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+  .eyecatcher {
+    position: relative;
+    height: 30vh;
+    min-height: 400px;
+    max-height: $eyecatcher-height;
+    min-height: calc($eyecatcher-height * 0.5);
+    &__titles {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+    .image-settings {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      background-color: rgba(255, 255, 255, 0.5);
+    }
   }
-  .image-settings {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    background-color: rgba(255, 255, 255, 0.5);
+  .body {
+    min-height: calc($eyecatcher-height * 0.3);
   }
 }
 
