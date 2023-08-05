@@ -39,6 +39,7 @@ getInformation()
   <GuiContentWrap :loading="loading">
     <GuiContentCard class="type1-information">
       <GuiEyecatchImage
+        v-if="informationRef?.image"
         :url="informationRef?.image?.url"
         :settings="informationRef?.image?.settings"
         class="eyecatcher"

@@ -32,7 +32,7 @@ const activatorText = computed(() =>
 </script>
 
 <template>
-  <GuiBaseActivator
+  <BaseActivator
     v-model:modal="dialog"
     :activatorIcon="activatorIcon"
     :activator-color="activatorColor"

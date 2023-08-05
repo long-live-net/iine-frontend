@@ -119,7 +119,7 @@ defineExpose({
         <div class="file-input__drag-drop--img">
           <img v-if="imageUrl.length" :src="imageUrl" :alt="imageUrl" />
           <img v-else src="~/assets/image/no-image.jpg" alt="no-image" />
-          <GuiBaseOverlayLiner :overlay="compressing" />
+          <BaseOverlayLiner :overlay="compressing" />
         </div>
         <div class="file-input__drag-drop--nav">
           <p>ここに画像ファイルを<br />ドラッグ＆ドロップできます</p>

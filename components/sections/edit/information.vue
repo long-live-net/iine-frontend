@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GlobalComponents } from '@vue/runtime-core'
 import type { InformationType, InformationForm } from '@/types/content'
-import GuiBaseFileInput from '@/components/gui/base/file-input.vue'
+import type { BaseFileInputType } from '@/components/base/base-types'
 
 const props = defineProps<{
   informationData?: InformationType | null
@@ -33,7 +33,7 @@ const informationerFormRule = {
 }
 const modal = ref(false)
 const contentFormComponent = ref<GlobalComponents['VForm'] | null>(null)
-const fileInputComponent = ref<typeof GuiBaseFileInput | null>(null)
+const fileInputComponent = ref<BaseFileInputType | null>(null)
 
 const resetEyeCatcherForm = () => {
   informationerForm.title = props.informationData?.title ?? ''
@@ -109,10 +109,10 @@ const onCancel = () => {
       <v-form ref="contentFormComponent">
         <div>
           <label for="informationer-form-input-image">タイトル背景画像</label>
-          <GuiBaseFileInput
+          <BaseFileInput
             id="informationer-form-input-image"
             ref="fileInputComponent"
-            :image-url="informationerForm?.image"
+            :image-url="informationerForm.image"
             @change-image-file="onChangeImageFile"
           />
         </div>

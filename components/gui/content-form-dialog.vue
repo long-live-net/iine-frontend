@@ -13,7 +13,7 @@ const dialog = computed({
 </script>
 
 <template>
-  <GuiBaseDialog v-model:modal="dialog">
+  <BaseDialog v-model:modal="dialog">
     <div class="content-form-dialog">
       <header v-if="$slots.header" class="content-form-dialog__header">
         <slot name="header" />
@@ -22,7 +22,7 @@ const dialog = computed({
         <slot />
       </div>
     </div>
-  </GuiBaseDialog>
+  </BaseDialog>
 </template>
 
 <style lang="scss" scoped>

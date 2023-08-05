@@ -5,11 +5,13 @@
 </template>
 
 <style lang="scss" scoped>
-$contents-card-lg-max-width: 1140px;
+$contents-card-max-width: 1140px;
+$contents-card-min-height: 240px;
 
 .contents-card {
   width: 100%;
-  max-width: $contents-card-lg-max-width;
+  max-width: $contents-card-max-width;
+  min-height: $contents-card-min-height;
   margin: 0 auto;
   overflow: hidden;
 }

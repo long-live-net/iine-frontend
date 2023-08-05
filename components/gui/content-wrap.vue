@@ -17,7 +17,7 @@ const overlayWidth =
 <template>
   <div class="content-wrap">
     <slot />
-    <GuiBaseOverlay
+    <BaseOverlay
       :overlay="loading"
       :color="overlayColor"
       :size="overlaySize"
