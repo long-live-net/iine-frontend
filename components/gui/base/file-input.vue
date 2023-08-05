@@ -117,10 +117,9 @@ defineExpose({
         @drop.prevent="onDropFile"
       >
         <div class="file-input__drag-drop--img">
-          <GuiBaseOverlayLinerWrap :overlay="compressing">
-            <img v-if="imageUrl.length" :src="imageUrl" :alt="imageUrl" />
-            <img v-else src="~/assets/image/no-image.jpg" alt="no-image" />
-          </GuiBaseOverlayLinerWrap>
+          <img v-if="imageUrl.length" :src="imageUrl" :alt="imageUrl" />
+          <img v-else src="~/assets/image/no-image.jpg" alt="no-image" />
+          <GuiBaseOverlayLiner :overlay="compressing" />
         </div>
         <div class="file-input__drag-drop--nav">
           <p>ここに画像ファイルを<br />ドラッグ＆ドロップできます</p>
@@ -160,6 +159,7 @@ defineExpose({
     background-color: lightgray;
     border: 1px solid gray;
     &--img {
+      position: relative;
       padding: 1rem;
       img {
         width: 240px;

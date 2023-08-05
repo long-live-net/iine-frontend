@@ -36,38 +36,35 @@ getInformation()
 </script>
 
 <template>
-  <GuiContentCard
-    :loading="loading"
-    :loading-size="100"
-    :loading-width="10"
-    class="type1-information"
-  >
-    <GuiEyecatchImage
-      :url="informationRef?.image?.url"
-      :settings="informationRef?.image?.settings"
-      class="eyecatcher"
-    >
-      <GuiEyecatchTitles
-        place="section"
-        :title="informationRef?.title"
-        :subtitle="informationRef?.subtitle"
-        class="eyecatcher__titles"
-      />
-      <div class="image-settings">
-        <div>イメージセッティグ</div>
+  <GuiContentWrap :loading="loading">
+    <GuiContentCard class="type1-information">
+      <GuiEyecatchImage
+        :url="informationRef?.image?.url"
+        :settings="informationRef?.image?.settings"
+        class="eyecatcher"
+      >
+        <GuiEyecatchTitles
+          place="section"
+          :title="informationRef?.title"
+          :subtitle="informationRef?.subtitle"
+          class="eyecatcher__titles"
+        />
+        <div class="image-settings">
+          <div>イメージセッティグ</div>
+        </div>
+      </GuiEyecatchImage>
+      <GuiContentCardBody class="body">
+        {{ informationRef?.body ?? '' }}
+      </GuiContentCardBody>
+      <div class="edit-activator">
+        <SectionsEditInformation
+          :information-data="informationRef"
+          @create="onCreate"
+          @update="onUpdate"
+        />
       </div>
-    </GuiEyecatchImage>
-    <GuiContentCardBody class="body">
-      {{ informationRef?.body ?? '' }}
-    </GuiContentCardBody>
-    <div class="edit-activator">
-      <SectionsEditInformation
-        :information-data="informationRef"
-        @create="onCreate"
-        @update="onUpdate"
-      />
-    </div>
-  </GuiContentCard>
+    </GuiContentCard>
+  </GuiContentWrap>
 </template>
 
 <style scoped lang="scss">

@@ -1,27 +1,6 @@
-<script setup lang="ts">
-withDefaults(
-  defineProps<{
-    loading?: boolean
-    loadingColor?: string
-    loadingSize?: string | number
-    loadingWidth?: number
-  }>(),
-  {
-    loading: false,
-  }
-)
-</script>
-
 <template>
   <div class="contents-card g-theme-contents-card">
-    <GuiBaseOverlayCircleWrap
-      :overlay="loading"
-      :color="loadingColor"
-      :size="loadingSize"
-      :width="loadingWidth"
-    >
-      <slot />
-    </GuiBaseOverlayCircleWrap>
+    <slot />
   </div>
 </template>
 
@@ -30,7 +9,6 @@ $contents-card-lg-max-width: 1140px;
 
 .contents-card {
   width: 100%;
-  min-width: 18rem;
   max-width: $contents-card-lg-max-width;
   margin: 0 auto;
   overflow: hidden;
