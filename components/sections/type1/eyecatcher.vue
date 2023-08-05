@@ -36,10 +36,9 @@ getEyecatch()
 
 <template>
   <GuiContentWrap
-    :loading="loading"
-    :loading-size="150"
-    :loading-width="20"
     class="type1-eyecatcher"
+    :loading="loading"
+    loadingSize="large"
   >
     <GuiEyecatchImage
       :url="eyecatchRef?.image?.url"
@@ -68,7 +67,6 @@ getEyecatch()
 
 <style lang="scss" scoped>
 .type1-eyecatcher {
-  position: relative;
   .eyecatcher {
     position: relative;
     height: 100vh;

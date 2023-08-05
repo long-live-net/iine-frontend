@@ -59,7 +59,9 @@ export interface WorkType extends ContentType {
 }
 export interface AboutType extends ContentType {}
 export interface ReasonType extends ContentType {}
-export interface ContactType extends ContentType {}
+export interface ContactType extends ContentType {
+  body: string
+}
 export interface EyecatchType extends ContentType {
   image: ImageData
 }
@@ -80,6 +82,9 @@ export interface EyecatchForm extends ContentForm {
   imageFile: File | null
 }
 export interface InformationForm extends ContentForm {
+  body: string
+}
+export interface ContactForm extends ContentForm {
   body: string
 }
 

@@ -20,6 +20,9 @@ export interface EyecatchGetApi extends ContentGetApi {
 export interface InformationGetApi extends ContentGetApi {
   body: string
 }
+export interface ContactGetApi extends ContentGetApi {
+  body: string
+}
 
 /**
  * POST, PUT API で保存するデータ型
@@ -38,5 +41,8 @@ export interface EyecatchSaveApi extends ContentSaveApi {
   imageFile: File | null
 }
 export interface InformationSaveApi extends ContentSaveApi {
+  body: string
+}
+export interface ContactSaveApi extends ContentSaveApi {
   body: string
 }

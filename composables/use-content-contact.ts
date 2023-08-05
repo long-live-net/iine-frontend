@@ -1,17 +1,17 @@
 import { useContentRead, useContentWrite } from '@/composables/use-content'
-import type { InformationType, InformationForm } from '@/types/content'
-import type { InformationGetApi, InformationSaveApi } from '@/types/content-api'
+import type { ContactType, ContactForm } from '@/types/content'
+import type { ContactGetApi, ContactSaveApi } from '@/types/content-api'
 
-const apiUrl = '/informations'
+const apiUrl = '/contacts'
 
-export const useInformationRead = (customerId: number) => {
-  const { get, nextKey, contentDataRef } = useContentRead<InformationGetApi>(
+export const useContactRead = (customerId: number) => {
+  const { get, nextKey, contentDataRef } = useContentRead<ContactGetApi>(
     customerId,
     apiUrl
   )
   const loading = ref(false)
 
-  const getInformation = async () => {
+  const getContact = async () => {
     try {
       loading.value = true
       await get()
@@ -20,7 +20,7 @@ export const useInformationRead = (customerId: number) => {
     }
   }
 
-  const informationRef = computed<InformationType | null>(() => {
+  const contactRef = computed<ContactType | null>(() => {
     if (!contentDataRef.value) {
       return null
     }
@@ -36,21 +36,18 @@ export const useInformationRead = (customerId: number) => {
 
   return {
     nextKey,
-    getInformation,
-    informationRef,
+    getContact,
+    contactRef,
     loading,
   }
 }
 
-export const useInformationWrite = (customerId: number) => {
-  const { create, update } = useContentWrite<InformationSaveApi>(
-    customerId,
-    apiUrl
-  )
+export const useContactWrite = (customerId: number) => {
+  const { create, update } = useContentWrite<ContactSaveApi>(customerId, apiUrl)
   const loading = ref(false)
 
-  const createInformation = async (formData: InformationForm) => {
-    const inputData: InformationSaveApi = {
+  const createContact = async (formData: ContactForm) => {
+    const inputData: ContactSaveApi = {
       customerId,
       title: formData.title,
       subtitle: formData.subtitle,
@@ -65,11 +62,8 @@ export const useInformationWrite = (customerId: number) => {
     }
   }
 
-  const updateInformation = async (
-    contentId: number,
-    formData: InformationForm
-  ) => {
-    const inputData: InformationSaveApi = {
+  const updateContact = async (contentId: number, formData: ContactForm) => {
+    const inputData: ContactSaveApi = {
       customerId,
       title: formData.title,
       subtitle: formData.subtitle,
@@ -85,8 +79,8 @@ export const useInformationWrite = (customerId: number) => {
   }
 
   return {
-    createInformation,
-    updateInformation,
+    createContact,
+    updateContact,
     loading,
   }
 }

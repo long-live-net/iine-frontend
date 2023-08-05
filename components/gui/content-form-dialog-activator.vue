@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { ContentType } from '@/types/content'
 
-const props = defineProps<{ modal: boolean; content?: ContentType | null }>()
+const props = defineProps<{
+  modal: boolean
+  content?: ContentType | ContentType[] | null
+}>()
 const emit = defineEmits<{
   'update:modal': [modal: boolean]
 }>()
@@ -12,17 +15,24 @@ const dialog = computed({
     emit('update:modal', modal)
   },
 })
-const activatorIcon = computed(() =>
-  props.content?.id ? 'mdi-pencil' : 'mdi-plus'
+
+const isExists = computed(() =>
+  Array.isArray(props.content) ? !!props.content[0]?.id : !!props.content?.id
 )
-const activatorColor = computed(() => (props.content?.id ? 'success' : 'info'))
+const isUpdate = computed(() =>
+  Array.isArray(props.content) ? false : !!props.content?.id
+)
+const activatorIcon = computed(() =>
+  isUpdate.value ? 'mdi-pencil' : 'mdi-plus'
+)
+const activatorColor = computed(() => (isUpdate.value ? 'success' : 'info'))
 const activatorText = computed(() =>
-  props.content?.id ? '' : 'コンテンツを登録してください'
+  isExists.value ? '' : 'コンテンツを登録してください'
 )
 </script>
 
 <template>
-  <GuiBaseActivator
+  <BaseActivator
     v-model:modal="dialog"
     :activatorIcon="activatorIcon"
     :activator-color="activatorColor"

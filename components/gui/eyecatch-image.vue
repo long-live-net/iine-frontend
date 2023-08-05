@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ImageSettings } from '@/types/content'
-import noImage from '~/assets/image/no-image.jpg'
+import noImage from '@/assets/image/no-image-g.png'
 
 type EyeCatchImageProps = {
   url?: string
