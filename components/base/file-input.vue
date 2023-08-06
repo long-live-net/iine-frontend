@@ -16,7 +16,6 @@ const emit = defineEmits<{
       url: string
     },
   ]
-  touch: []
 }>()
 
 const isDragEnter = ref(false)
@@ -47,7 +46,6 @@ const onDropFile = async (ev: DragEvent) => {
       file: compressedImageFile,
       url: compressedImageUrl,
     })
-    emit('touch')
     touchStateImage.value = true
   }
 }
@@ -61,7 +59,6 @@ const onChangeFile = async (e: Event) => {
       file: compressedImageFile,
       url: compressedImageUrl,
     })
-    emit('touch')
     touchStateImage.value = true
   }
 }
