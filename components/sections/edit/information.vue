@@ -138,11 +138,10 @@ const onCancel = () => {
         </div>
         <div class="mt-4">
           <label for="informationer-form-input-body">本文</label>
-          <v-textarea
+          <BaseWysiwsgEditor
             id="informationer-form-input-body"
             v-model="informationerForm.body"
             :rules="informationerFormRule.body"
-            clearable
             placeholder="本文を入力してください"
           />
         </div>
