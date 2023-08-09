@@ -32,27 +32,62 @@ const wysiwygToolbar = [
   ['blockquote', { color: [] }, 'link', 'clean'],
 ] as const
 
-type QuillEditorType = typeof QuillEditor
-const wysiwygEditor = ref<QuillEditorType | null>(null)
-
-const valueText = computed({
+const touchValueData = ref(false)
+const quillEditorRef = ref<typeof QuillEditor | null>(null)
+const valueText = ref('')
+const valueData = computed({
   get: () => props.modelValue,
   set: (value: string) => {
-    console.log('modelValue', value)
-
-    const html = wysiwygEditor.value?.getHTML()
-    console.log('html', html)
+    touchValueData.value = true
+    valueText.value = quillEditorRef.value?.getText().trim()
     emit('update:modelValue', value)
   },
 })
-const onTextChange = (value: string) => {
-  console.log('onTextChange', value)
+
+const validate = () => {
+  touchValueData.value = true
 }
+const isValid = computed(() => {
+  if (!touchValueData.value) {
+    return null
+  }
+  return props.rules.every((rule) => rule(valueText.value) === true)
+})
+const invalidMessages = computed(() => {
+  if (!touchValueData.value) {
+    return null
+  }
+  const messages: string[] = []
+  props.rules.forEach((rule) => {
+    const ret = rule(valueText.value)
+    if (typeof ret === 'string' && ret.length) {
+      messages.push(ret)
+    }
+  })
+  return messages
+})
 
 const isFocus = ref(false)
+const isHover = ref(false)
+const editorClasses = computed(() => {
+  if (isValid.value === false) {
+    return isFocus.value
+      ? ['focused-error-state']
+      : isHover.value
+      ? ['hovered', 'error-state']
+      : ['error-state']
+  } else {
+    return isFocus.value ? ['focused'] : isHover.value ? ['hovered'] : []
+  }
+})
 
-const classByFocus = computed(() => {
-  return isFocus.value ? 'focused' : ''
+const onClear = () => {
+  quillEditorRef.value?.setText('')
+}
+
+defineExpose({
+  validate,
+  isValid,
 })
 </script>
 
@@ -60,12 +95,15 @@ const classByFocus = computed(() => {
   <client-only>
     <div
       class="wysiwyg-editor g-theme-wysiwyg-editor"
-      :class="{ focused: classByFocus }"
+      :class="editorClasses"
+      @mouseover="isHover = true"
+      @mouseleave="isHover = false"
     >
       <div class="wysiwyg-editor__editor">
         <QuillEditor
-          ref="wysiwygEditor"
-          v-model:content="valueText"
+          ref="quillEditorRef"
+          v-model:content="valueData"
+          contentType="html"
           theme="snow"
           :toolbar="wysiwygToolbar"
           :placeholder="placeholder"
@@ -73,14 +111,30 @@ const classByFocus = computed(() => {
           @blur="isFocus = false"
         />
       </div>
-      <div class="wysiwyg-editor__icon">
-        <b-icon
-          v-show="isFocus === false"
-          icon="exclamation-circle"
-          variant="danger"
-          font-scale="1.5"
+      <div
+        v-if="isHover === true || isFocus === true"
+        class="wysiwyg-editor__icon"
+      >
+        <v-btn
+          color="grey-darken-1"
+          icon="mdi-close"
+          size="small"
+          density="compact"
+          flat
+          @click="onClear"
         />
       </div>
+    </div>
+    <div
+      v-if="isValid === false && invalidMessages?.length"
+      class="error-messages"
+    >
+      <span v-for="(err, inx) in invalidMessages" :key="inx">
+        {{ err }}<br />
+      </span>
+    </div>
+    <div v-else class="error-messages">
+      <span><br /></span>
     </div>
   </client-only>
 </template>
@@ -92,23 +146,35 @@ const classByFocus = computed(() => {
   border-radius: 4px;
   position: relative;
   &__icon {
+    position: absolute;
+    top: 64px;
+    right: 18px;
     padding-left: 0.5rem;
     min-width: 1.5rem;
   }
 }
 
+.hovered {
+  background-color: $gray-lighten3;
+}
 .focused {
   border-bottom: 2px solid $gray-darken1;
   background-color: $gray-lighten2;
 }
 
 .error-state {
-  border-color: $red;
+  border-bottom: 1px solid $red;
 }
 
 .focused-error-state {
-  border-color: $red;
-  box-shadow: 0 0 5px 1px $red;
+  border-bottom: 2px solid $red;
+  background-color: $gray-lighten2;
+}
+
+.error-messages {
+  padding: 0.25rem 1rem;
+  font-size: small;
+  color: $red;
 }
 </style>
 
@@ -124,7 +190,7 @@ const classByFocus = computed(() => {
   border: none !important;
   padding-right: 2rem;
   .ql-editor {
-    min-height: 6rem;
+    min-height: 7rem;
   }
 }
 </style>

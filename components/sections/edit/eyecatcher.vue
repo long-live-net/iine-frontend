@@ -114,7 +114,7 @@ const onCancel = () => {
             @change-image-file="onChangeImageFile"
           />
         </div>
-        <div class="mt-8">
+        <div class="mt-4">
           <label for="eyecatcher-form-input-title">トップタイトル</label>
           <v-text-field
             v-model="eyecatcherForm.title"

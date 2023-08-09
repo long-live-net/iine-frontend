@@ -1,4 +1,4 @@
-import { newsCategory2Label } from '@/composables/use-news-category'
+import type { NewsCategory2LabelType } from '@/composables/use-news-category'
 
 /**
  * Image Data Types
@@ -43,7 +43,6 @@ export interface ContentType {
 export interface InformationType extends ContentType {
   body: string
 }
-export type NewsCategory2LabelType = keyof typeof newsCategory2Label
 export interface NewsType extends ContentType {
   body: string
   category: NewsCategory2LabelType
