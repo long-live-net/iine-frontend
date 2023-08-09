@@ -38,13 +38,14 @@ const valueText = ref('')
 const valueData = computed({
   get: () => props.modelValue,
   set: (value: string) => {
-    touchValueData.value = true
     valueText.value = quillEditorRef.value?.getText().trim()
+    touchValueData.value = true
     emit('update:modelValue', value)
   },
 })
 
 const validate = () => {
+  valueText.value = quillEditorRef.value?.getText().trim()
   touchValueData.value = true
 }
 const isValid = computed(() => {
