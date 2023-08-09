@@ -28,6 +28,7 @@ const dialog = computed({
 <style lang="scss" scoped>
 .content-form-dialog {
   background-color: $white;
+  overflow-y: auto;
   &__header {
     display: flex;
     align-items: center;

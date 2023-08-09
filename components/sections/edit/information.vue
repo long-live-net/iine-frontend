@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { GlobalComponents } from '@vue/runtime-core'
 import type { InformationType, InformationForm } from '@/types/content'
-import type { BaseFileInputType } from '@/components/base/base-types'
+import type {
+  BaseFileInputType,
+  BaseWysiwsgEditorType,
+} from '@/components/base/base-types'
 
 const props = defineProps<{
   informationData?: InformationType | null
@@ -34,6 +37,7 @@ const informationerFormRule = {
 const modal = ref(false)
 const contentFormComponent = ref<GlobalComponents['VForm'] | null>(null)
 const fileInputComponent = ref<BaseFileInputType | null>(null)
+const wysiwygEditorComponent = ref<BaseWysiwsgEditorType | null>(null)
 
 const resetEyeCatcherForm = () => {
   informationerForm.title = props.informationData?.title ?? ''
@@ -61,27 +65,29 @@ const onChangeImageFile = async (params: { file: File; url: string }) => {
   informationerForm.imageFile = params.file
 }
 
-const onCreate = async () => {
+const validate = () => {
   contentFormComponent.value?.validate()
   fileInputComponent.value?.validate()
-  if (
+  wysiwygEditorComponent.value?.validate()
+}
+const isValid = computed(
+  () =>
     contentFormComponent.value?.isValid &&
-    fileInputComponent.value?.isValid
-  ) {
+    fileInputComponent.value?.isValid &&
+    wysiwygEditorComponent.value?.isValid
+)
+
+const onCreate = async () => {
+  validate()
+  if (isValid.value) {
     emit('create', informationerForm)
     modal.value = false
   }
 }
 
 const onUpdate = async () => {
-  contentFormComponent.value?.validate()
-  fileInputComponent.value?.validate()
-  if (
-    props.informationData?.id !== null &&
-    props.informationData?.id !== undefined &&
-    contentFormComponent.value?.isValid &&
-    fileInputComponent.value?.isValid
-  ) {
+  validate()
+  if (isValid.value) {
     emit('update', informationerForm)
     modal.value = false
   }
@@ -116,7 +122,7 @@ const onCancel = () => {
             @change-image-file="onChangeImageFile"
           />
         </div>
-        <div class="mt-8">
+        <div class="mt-4">
           <label for="informationer-form-input-title">タイトル</label>
           <v-text-field
             id="informationer-form-input-title"
@@ -140,6 +146,7 @@ const onCancel = () => {
           <label for="informationer-form-input-body">本文</label>
           <BaseWysiwsgEditor
             id="informationer-form-input-body"
+            ref="wysiwygEditorComponent"
             v-model="informationerForm.body"
             :rules="informationerFormRule.body"
             placeholder="本文を入力してください"

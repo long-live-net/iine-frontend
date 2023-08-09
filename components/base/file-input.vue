@@ -142,6 +142,9 @@ defineExpose({
         {{ err }}<br />
       </span>
     </div>
+    <div v-else class="error-messages">
+      <span><br /></span>
+    </div>
   </div>
 </template>
 
@@ -153,8 +156,8 @@ defineExpose({
     justify-content: center;
     align-items: center;
     align-content: center;
-    background-color: lightgray;
-    border: 1px solid gray;
+    background-color: $gray-lighten2;
+    border: 1px solid $gray;
     &--img {
       position: relative;
       padding: 1rem;
@@ -166,7 +169,7 @@ defineExpose({
       .on-buzy {
         width: 240px;
         height: 200px;
-        background-color: white;
+        background-color: $white;
         display: flex;
         justify-content: center;
         align-items: center;
