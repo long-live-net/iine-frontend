@@ -8,4 +8,4 @@ export const newsCategory2Label = {
   T: { label: 'TECH', variant: 'danger' },
 }
 
-export type NewsCategory2LabelType = keyof typeof newsCategory2Label
+export type NewsCategory2Label = keyof typeof newsCategory2Label

@@ -1,4 +1,5 @@
-import type { NewsCategory2LabelType } from '@/composables/use-news-category'
+import type { NewsCategory2Label } from '@/composables/use-news-category'
+export type NewsCategory2LabelType = NewsCategory2Label
 
 /**
  * Image Data Types

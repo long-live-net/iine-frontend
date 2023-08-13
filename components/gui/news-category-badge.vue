@@ -17,9 +17,9 @@ const categoryVariant = computed(() =>
 </script>
 
 <template>
-  <b-badge :variant="categoryVariant" class="news-badge">
+  <span :variant="categoryVariant" class="news-badge">
     <span>{{ categoryLabel }}</span>
-  </b-badge>
+  </span>
 </template>
 
 <style lang="scss" scoped>

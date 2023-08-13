@@ -33,7 +33,7 @@ const jstDateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
       </GuiContentList>
     </GuiContentCardBody>
     <div class="type1-news-list__action">
-      <b-link to="/news">and more ...</b-link>
+      <NuxtLink to="/news">and more ...</NuxtLink>
     </div>
     <div class="create-activator">
       <div>追加ボタン</div>

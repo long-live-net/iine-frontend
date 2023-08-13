@@ -32,6 +32,11 @@ export const useContentRead = <T extends ContentGetApi>(
         params: { customerId },
       })
     )
+
+    // TODO: Debugg
+    console.log('data.value', data.value)
+    console.log('error.value', error.value)
+
     if (error.value) {
       const apiError: ApiError = error.value
 

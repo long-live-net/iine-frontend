@@ -31,7 +31,7 @@ const onUpdate = async (formData: EyecatchForm) => {
 
 const loading = computed(() => readLoading.value || writeLoading.value)
 
-getEyecatch()
+await getEyecatch()
 </script>
 
 <template>

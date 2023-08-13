@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { QuillEditor } from '@vueup/vue-quill'
+import debounce from 'lodash/debounce'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 const props = withDefaults(
@@ -37,11 +38,11 @@ const quillEditorRef = ref<typeof QuillEditor | null>(null)
 const valueText = ref('')
 const valueData = computed({
   get: () => props.modelValue,
-  set: (value: string) => {
+  set: debounce((value: string) => {
     valueText.value = quillEditorRef.value?.getText().trim()
     touchValueData.value = true
     emit('update:modelValue', value)
-  },
+  }, 500),
 })
 
 const validate = () => {

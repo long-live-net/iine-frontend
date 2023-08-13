@@ -32,7 +32,7 @@ const onUpdate = async (formData: InformationForm) => {
 
 const loading = computed(() => readLoading.value || writeLoading.value)
 
-getInformation()
+await getInformation()
 </script>
 
 <template>
