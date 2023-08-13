@@ -24,9 +24,6 @@ export const useInformationRead = (customerId: number) => {
     if (!contentDataRef.value) {
       return null
     }
-
-    console.log('contentDataRef.value.body', contentDataRef.value.body)
-
     return {
       id: contentDataRef.value?.id,
       customerId: contentDataRef.value.customerId,

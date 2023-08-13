@@ -32,7 +32,7 @@ const onUpdate = async (formData: ContactForm) => {
 
 const loading = computed(() => readLoading.value || writeLoading.value)
 
-getContact()
+await getContact()
 </script>
 
 <template>
