@@ -84,7 +84,6 @@ const onCreate = async () => {
     modal.value = false
   }
 }
-
 const onUpdate = async () => {
   validate()
   if (isValid.value) {
@@ -92,7 +91,6 @@ const onUpdate = async () => {
     modal.value = false
   }
 }
-
 const onCancel = () => {
   modal.value = false
 }
@@ -149,6 +147,7 @@ const onCancel = () => {
             ref="wysiwygEditorComponent"
             v-model="informationerForm.body"
             :rules="informationerFormRule.body"
+            clearable
             placeholder="本文を入力してください"
           />
         </div>
