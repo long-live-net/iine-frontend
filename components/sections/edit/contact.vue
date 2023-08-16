@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { GlobalComponents } from '@vue/runtime-core'
 import type { ContactType, ContactForm } from '@/types/content'
-import type { BaseFileInputType } from '@/components/base/base-types'
+import type {
+  BaseFileInputType,
+  BaseWysiwsgEditorType,
+} from '@/components/base/base-types'
 
 const props = defineProps<{
   contactData?: ContactType | null
@@ -34,6 +37,7 @@ const contacterFormRule = {
 const modal = ref(false)
 const contentFormComponent = ref<GlobalComponents['VForm'] | null>(null)
 const fileInputComponent = ref<BaseFileInputType | null>(null)
+const wysiwygEditorComponent = ref<BaseWysiwsgEditorType | null>(null)
 
 const resetEyeCatcherForm = () => {
   contacterForm.title = props.contactData?.title ?? ''
@@ -61,32 +65,32 @@ const onChangeImageFile = async (params: { file: File; url: string }) => {
   contacterForm.imageFile = params.file
 }
 
-const onCreate = async () => {
+const validate = () => {
   contentFormComponent.value?.validate()
   fileInputComponent.value?.validate()
-  if (
+  wysiwygEditorComponent.value?.validate()
+}
+const isValid = computed(
+  () =>
     contentFormComponent.value?.isValid &&
-    fileInputComponent.value?.isValid
-  ) {
+    fileInputComponent.value?.isValid &&
+    wysiwygEditorComponent.value?.isValid
+)
+
+const onCreate = async () => {
+  validate()
+  if (isValid.value) {
     emit('create', contacterForm)
     modal.value = false
   }
 }
-
 const onUpdate = async () => {
-  contentFormComponent.value?.validate()
-  fileInputComponent.value?.validate()
-  if (
-    props.contactData?.id !== null &&
-    props.contactData?.id !== undefined &&
-    contentFormComponent.value?.isValid &&
-    fileInputComponent.value?.isValid
-  ) {
+  validate()
+  if (isValid.value) {
     emit('update', contacterForm)
     modal.value = false
   }
 }
-
 const onCancel = () => {
   modal.value = false
 }
@@ -135,8 +139,9 @@ const onCancel = () => {
         </div>
         <div class="mt-4">
           <label for="contacter-form-input-body">本文</label>
-          <v-textarea
+          <BaseWysiwsgEditor
             id="contacter-form-input-body"
+            ref="wysiwygEditorComponent"
             v-model="contacterForm.body"
             :rules="contacterFormRule.body"
             clearable

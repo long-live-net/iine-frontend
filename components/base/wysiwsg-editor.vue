@@ -8,11 +8,13 @@ const props = withDefaults(
     modelValue?: string
     rules?: ((v: string) => boolean | string)[]
     placeholder?: string
+    clearable?: boolean
   }>(),
   {
     modelValue: '',
     rules: () => [],
     placeholder: '',
+    clearable: false,
   }
 )
 const emit = defineEmits<{
@@ -114,7 +116,7 @@ defineExpose({
         />
       </div>
       <div
-        v-if="isHover === true || isFocus === true"
+        v-if="clearable && (isHover || isFocus)"
         class="wysiwyg-editor__icon"
       >
         <v-btn
