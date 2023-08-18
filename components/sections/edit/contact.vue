@@ -16,14 +16,14 @@ const emit = defineEmits<{
 }>()
 
 const { noBlank, maxLength } = useValidateRules()
-const contacterForm = reactive<ContactForm>({
+const contactForm = reactive<ContactForm>({
   title: '',
   subtitle: '',
   body: '',
   image: '',
   imageFile: null,
 })
-const contacterFormRule = {
+const contactFormRule = {
   title: [
     (v: string) => noBlank(v) || 'タイトルを入力してください',
     (v: string) => maxLength(v, 40) || '40文字以内で入力してください',
@@ -39,30 +39,30 @@ const contentFormComponent = ref<GlobalComponents['VForm'] | null>(null)
 const fileInputComponent = ref<BaseFileInputType | null>(null)
 const wysiwygEditorComponent = ref<BaseWysiwsgEditorType | null>(null)
 
-const resetEyeCatcherForm = () => {
-  contacterForm.title = props.contactData?.title ?? ''
-  contacterForm.subtitle = props.contactData?.subtitle ?? ''
-  contacterForm.body = props.contactData?.body ?? ''
-  contacterForm.image = props.contactData?.image?.url ?? ''
-  contacterForm.imageFile = null
+const resetContactForm = () => {
+  contactForm.title = props.contactData?.title ?? ''
+  contactForm.subtitle = props.contactData?.subtitle ?? ''
+  contactForm.body = props.contactData?.body ?? ''
+  contactForm.image = props.contactData?.image?.url ?? ''
+  contactForm.imageFile = null
 }
 watch(
   () => props.contactData,
   () => {
-    resetEyeCatcherForm()
+    resetContactForm()
   },
   { immediate: true }
 )
 watch(modal, (current) => {
   if (current) {
-    resetEyeCatcherForm()
+    resetContactForm()
     contentFormComponent.value?.reset()
   }
 })
 
 const onChangeImageFile = async (params: { file: File; url: string }) => {
-  contacterForm.image = params.url
-  contacterForm.imageFile = params.file
+  contactForm.image = params.url
+  contactForm.imageFile = params.file
 }
 
 const validate = () => {
@@ -80,14 +80,14 @@ const isValid = computed(
 const onCreate = async () => {
   validate()
   if (isValid.value) {
-    emit('create', contacterForm)
+    emit('create', contactForm)
     modal.value = false
   }
 }
 const onUpdate = async () => {
   validate()
   if (isValid.value) {
-    emit('update', contacterForm)
+    emit('update', contactForm)
     modal.value = false
   }
 }
@@ -109,41 +109,41 @@ const onCancel = () => {
     <template #default>
       <v-form ref="contentFormComponent">
         <div>
-          <label for="contacter-form-input-image">タイトル背景画像</label>
+          <label for="contact-form-input-image">タイトル背景画像</label>
           <BaseFileInput
-            id="contacter-form-input-image"
+            id="contact-form-input-image"
             ref="fileInputComponent"
-            :image-url="contacterForm.image"
+            :image-url="contactForm.image"
             @change-image-file="onChangeImageFile"
           />
         </div>
         <div class="mt-8">
-          <label for="contacter-form-input-title">タイトル</label>
+          <label for="contact-form-input-title">タイトル</label>
           <v-text-field
-            id="contacter-form-input-title"
-            v-model="contacterForm.title"
-            :rules="contacterFormRule.title"
+            id="contact-form-input-title"
+            v-model="contactForm.title"
+            :rules="contactFormRule.title"
             clearable
             placeholder="タイトルを入力してください"
           />
         </div>
         <div class="mt-4">
-          <label for="contacter-form-input-subtitle">サブタイトル</label>
+          <label for="contact-form-input-subtitle">サブタイトル</label>
           <v-text-field
-            id="contacter-form-input-subtitle"
-            v-model="contacterForm.subtitle"
-            :rules="contacterFormRule.subtitle"
+            id="contact-form-input-subtitle"
+            v-model="contactForm.subtitle"
+            :rules="contactFormRule.subtitle"
             clearable
             placeholder="サブタイトルを入力してください"
           />
         </div>
         <div class="mt-4">
-          <label for="contacter-form-input-body">本文</label>
+          <label for="contact-form-input-body">本文</label>
           <BaseWysiwsgEditor
-            id="contacter-form-input-body"
+            id="contact-form-input-body"
             ref="wysiwygEditorComponent"
-            v-model="contacterForm.body"
-            :rules="contacterFormRule.body"
+            v-model="contactForm.body"
+            :rules="contactFormRule.body"
             clearable
             placeholder="本文を入力してください"
           />

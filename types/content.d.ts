@@ -1,5 +1,4 @@
 import type { NewsCategory2Label } from '@/composables/use-news-category'
-export type NewsCategory2LabelType = NewsCategory2Label
 
 /**
  * Image Data Types
@@ -83,6 +82,11 @@ export interface EyecatchForm extends ContentForm {
 }
 export interface InformationForm extends ContentForm {
   body: string
+}
+export interface NewsForm extends ContentForm {
+  body: string
+  category: NewsCategory2LabelType | null
+  publishOn: Date | null
 }
 export interface ContactForm extends ContentForm {
   body: string

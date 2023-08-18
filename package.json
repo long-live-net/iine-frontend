@@ -12,6 +12,7 @@
     "@mdi/font": "^7.2.96",
     "@nuxt/devtools": "latest",
     "@types/node": "^18",
+    "@types/sanitize-html": "^2.9.0",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "@vue/eslint-config-prettier": "^7.1.0",
@@ -28,6 +29,7 @@
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.9",
     "lodash": "^4.17.21",
+    "sanitize-html": "^2.11.0",
     "sass": "^1.63.6",
     "vuetify": "^3.3.9"
   }

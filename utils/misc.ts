@@ -26,8 +26,8 @@ export const formatLocalDate = (
  * @param   Datestring - ISO Date 形式
  * @returns Date
  */
-export const localDate = (dateString: string) => {
-  return dayjs(dateString).tz().toDate()
+export const localDate = (dateString?: string) => {
+  return dateString ? dayjs(dateString).tz().toDate() : dayjs().tz().toDate()
 }
 
 /**
@@ -43,16 +43,3 @@ export const sleep = (sleepms: number) => {
     }, sleepms)
   )
 }
-
-/**
- * HTML を Sanitize する
- */
-/*/
-export const sanitizer = (htmlText: string | undefined) =>
-  sanitizeHtml(htmlText || '', {
-    allowedAttributes: {
-      '*': ['class', 'style'],
-      a: ['href', 'name', 'target', 'rel'],
-    },
-  })
-*/

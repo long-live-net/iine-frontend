@@ -46,3 +46,15 @@ export interface InformationSaveApi extends ContentSaveApi {
 export interface ContactSaveApi extends ContentSaveApi {
   body: string
 }
+
+/**
+ * リストデータ取得時のクエリパラメータ
+ */
+export type ListFilter = { [key: string]: string | number | boolean }
+export type ListSort = { [key: string]: 1 | -1 }
+export type ListPager = { page: number; limit: number }
+
+/**
+ * リストデータ取得時のレスポンスデータ
+ */
+export type ContentListResponse<T> = { list: T[]; total: number }
