@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import { newsCategory2Label } from '@/composables/use-news-category'
-import type { NewsCategory2LabelType } from '@/types/content'
+import type { NewsCategory2Label } from '@/composables/use-news-category'
 
-const props = defineProps<{ category: NewsCategory2LabelType }>()
+const props = defineProps<{ category: NewsCategory2Label }>()
 
-const categoryLabel = computed(() =>
-  newsCategory2Label[props.category]
-    ? newsCategory2Label[props.category].label
-    : 'OTHER'
+const categoryLabel = computed(
+  () => newsCategory2Label[props.category] ?? 'OTHER'
 )
-const categoryVariant = computed(() =>
-  newsCategory2Label[props.category]
-    ? newsCategory2Label[props.category].variant
-    : 'dark'
-)
+const categoryColor = computed(() => {
+  const category2Color = {
+    I: 'info',
+    S: 'success',
+    W: 'warning',
+    T: 'danger',
+  }
+  return category2Color[props.category] ?? 'dark'
+})
 </script>
 
 <template>
-  <span :variant="categoryVariant" class="news-badge">
+  <span :variant="categoryColor" class="news-badge">
     <span>{{ categoryLabel }}</span>
   </span>
 </template>

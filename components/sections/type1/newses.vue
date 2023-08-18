@@ -36,7 +36,7 @@ const jstDateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
       <NuxtLink to="/news">and more ...</NuxtLink>
     </div>
     <div class="create-activator">
-      <div>追加ボタン</div>
+      <SectionsEditNews @create="" />
     </div>
   </GuiContentCard>
 </template>

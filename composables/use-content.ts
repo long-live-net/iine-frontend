@@ -1,12 +1,21 @@
 import type { ApiError } from '@/utils/api-fetch'
 import type { ImageSettings } from '@/types/content'
-import type { ContentGetApi, ContentSaveApi } from '@/types/content-api'
+import type {
+  ContentGetApi,
+  ContentSaveApi,
+  ListFilter,
+  ListSort,
+  ListPager,
+  ContentListResponse,
+} from '@/types/content-api'
 
 export const useContentRead = <T extends ContentGetApi>(
   customerId: number,
   apiPath: string
 ) => {
-  const contentDataRef = ref<T | null>(null) as Ref<T | null>
+  const contentDataRef: Ref<T | null> = ref(null)
+  const contentListRef: Ref<ContentListResponse<T> | null> = ref(null)
+
   const keyExt = ref(1)
   const nextKey = () => keyExt.value++
 
@@ -15,11 +24,7 @@ export const useContentRead = <T extends ContentGetApi>(
    * @param contentId 未設定時は最新データを取得する
    */
   const get = async (contentId?: number) => {
-    const key = `create_content_${apiPath}_${keyExt.value}`
-
-    // TODO: Debugg
-    console.log('key =', key)
-
+    const key = `get_content_${apiPath}_${keyExt.value}`
     const url =
       contentId === undefined || contentId === null
         ? `${apiPath}/recent`
@@ -32,19 +37,8 @@ export const useContentRead = <T extends ContentGetApi>(
         params: { customerId },
       })
     )
-
-    // TODO: Debugg
-    console.log('data.value', data.value)
-    console.log('error.value', error.value)
-
     if (error.value) {
       const apiError: ApiError = error.value
-
-      // TODO: Debugg
-      console.log('error.value.statusCode', apiError.statusCode)
-      console.log('error.value.message', apiError.message)
-      console.log('error.value.data.message', apiError.data?.message)
-
       if (apiError.statusCode === 404) {
         return
       }
@@ -54,10 +48,49 @@ export const useContentRead = <T extends ContentGetApi>(
       contentDataRef.value = data.value as T
     }
   }
+
+  /**
+   * get contents list
+   * @param filter 検索フィルタ
+   * @param sort ソートキー
+   * @param pager ページとページあたり件数
+   */
+  const getList = async (
+    filter: ListFilter = {},
+    sort: ListSort = {},
+    pager: ListPager = { page: 1, limit: 20 }
+  ) => {
+    const key = `get_list_content_${apiPath}_${keyExt.value}`
+    const { data, error } = await useAsyncData(key, () =>
+      $fetch(apiPath, {
+        baseURL: backendBaseUrl,
+        method: 'GET',
+        params: {
+          customerId,
+          filter: JSON.stringify(filter),
+          sort: JSON.stringify(sort),
+          pager: JSON.stringify(pager),
+        },
+      })
+    )
+    if (error.value) {
+      const apiError: ApiError = error.value
+      if (apiError.statusCode === 404) {
+        return
+      }
+      throw apiError
+    }
+    if (data.value) {
+      contentListRef.value = data.value as ContentListResponse<T>
+    }
+  }
+
   return {
     nextKey,
     get,
+    getList,
     contentDataRef,
+    contentListRef,
   }
 }
 

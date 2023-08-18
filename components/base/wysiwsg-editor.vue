@@ -1,25 +1,24 @@
 <script setup lang="ts">
 import { QuillEditor } from '@vueup/vue-quill'
-import debounce from 'lodash/debounce'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import debounce from 'lodash/debounce'
 
 const props = withDefaults(
   defineProps<{
     modelValue?: string
     rules?: ((v: string) => boolean | string)[]
+    label?: string
     placeholder?: string
     clearable?: boolean
   }>(),
   {
     modelValue: '',
     rules: () => [],
-    placeholder: '',
     clearable: false,
   }
 )
 const emit = defineEmits<{
   'update:modelValue': [value: string]
-  touch: []
 }>()
 
 const wysiwygToolbar = [
@@ -103,6 +102,16 @@ defineExpose({
       @mouseover="isHover = true"
       @mouseleave="isHover = false"
     >
+      <p
+        v-if="label?.length"
+        class="wysiwyg-editor__label"
+        :class="{
+          'wysiwyg-editor__label--error': isValid === false,
+          'wysiwyg-editor__label--focused': isValid !== false && isFocus,
+        }"
+      >
+        {{ label }}
+      </p>
       <div class="wysiwyg-editor__editor">
         <QuillEditor
           ref="quillEditorRef"
@@ -129,16 +138,17 @@ defineExpose({
         />
       </div>
     </div>
-    <div
-      v-if="isValid === false && invalidMessages?.length"
-      class="error-messages"
-    >
-      <span v-for="(err, inx) in invalidMessages" :key="inx">
-        {{ err }}<br />
-      </span>
-    </div>
-    <div v-else class="error-messages">
-      <span><br /></span>
+    <div class="error-messages-wrap">
+      <transition name="error">
+        <div
+          v-show="isValid === false && invalidMessages?.length"
+          class="error-messages"
+        >
+          <span v-for="(err, inx) in invalidMessages" :key="inx">
+            {{ err }}<br />
+          </span>
+        </div>
+      </transition>
     </div>
   </client-only>
 </template>
@@ -149,9 +159,19 @@ defineExpose({
   border: 1px solid #ccc;
   border-radius: 4px;
   position: relative;
+  &__label {
+    padding: 0 9px 6px 9px;
+    color: #7e7e7e;
+    &--focused {
+      color: $gray-darken1;
+    }
+    &--error {
+      color: $error;
+    }
+  }
   &__icon {
     position: absolute;
-    top: 64px;
+    top: 94px;
     right: 18px;
     padding-left: 0.5rem;
     min-width: 1.5rem;
@@ -167,18 +187,38 @@ defineExpose({
 }
 
 .error-state {
-  border-bottom: 1px solid $red;
+  border-bottom: 1px solid $error;
 }
 
 .focused-error-state {
-  border-bottom: 2px solid $red;
+  border-bottom: 2px solid $error;
   background-color: $gray-lighten2;
 }
 
-.error-messages {
-  padding: 0.25rem 1rem;
-  font-size: small;
-  color: $red;
+.error-messages-wrap {
+  min-height: 1.8rem;
+  .error-messages {
+    padding: 0.25rem 1rem;
+    font-size: small;
+    color: $error;
+  }
+}
+.error-enter-active,
+.error-leave-active {
+  transition: transform 0.25s ease-out;
+}
+.error-enter-from {
+  transform: translateY(-10px);
+}
+.error-enter-to {
+  transform: translateY(0px);
+}
+
+.error-leave-from {
+  transform: translateY(0px);
+}
+.error-leave-to {
+  transform: translateY(-10px);
 }
 </style>
 

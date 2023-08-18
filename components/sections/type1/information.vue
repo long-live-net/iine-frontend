@@ -55,7 +55,11 @@ await getInformation()
         </div>
       </GuiEyecatchImage>
       <GuiContentCardBody class="body">
-        {{ informationRef?.body ?? '' }}
+        <div
+          v-if="informationRef?.body"
+          v-html="htmlSanitizer(informationRef?.body)"
+        />
+        <div v-else>コンテンツが登録されていません</div>
       </GuiContentCardBody>
       <div class="edit-activator">
         <SectionsEditInformation

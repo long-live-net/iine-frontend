@@ -55,13 +55,8 @@ await getContact()
         </div>
       </GuiEyecatchImage>
       <GuiContentCardBody>
-        {{
-          contactRef
-            ? contactRef.body
-              ? contactRef.body
-              : ''
-            : 'コンテンツが登録されていません'
-        }}
+        <div v-if="contactRef?.body" v-html="htmlSanitizer(contactRef?.body)" />
+        <div v-else>コンテンツが登録されていません</div>
       </GuiContentCardBody>
       <div class="edit-activator">
         <SectionsEditContact
