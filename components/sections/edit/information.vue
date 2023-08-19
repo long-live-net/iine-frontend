@@ -52,8 +52,7 @@ const onCancel = () => {
       <p class="mr-1">
         <v-icon icon="mdi-pencil-circle" color="success" size="x-large" />
       </p>
-      <h3 v-if="informationData?.id">コンテンツの更新</h3>
-      <h3 v-else="informationData?.id">コンテンツの登録</h3>
+      <h3>コンテンツの{{ informationData?.id ? '更新' : '登録' }}</h3>
     </template>
     <template #default>
       <v-form ref="contentFormComponent">
@@ -85,7 +84,6 @@ const onCancel = () => {
         </div>
         <div class="mt-3">
           <BaseWysiwsgEditor
-            ref="wysiwygEditorComponent"
             v-model="formData.body.value.value"
             :error-messages="formData.body.errorMessage.value"
             clearable

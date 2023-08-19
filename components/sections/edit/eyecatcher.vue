@@ -54,8 +54,7 @@ const onCancel = () => {
       <p class="mr-1">
         <v-icon icon="mdi-pencil-circle" color="success" size="x-large" />
       </p>
-      <h3 v-if="eyecatchData?.id">コンテンツの更新</h3>
-      <h3 v-else="eyecatchData?.id">コンテンツの登録</h3>
+      <h3>コンテンツの{{ eyecatchData?.id ? '更新' : '登録' }}</h3>
     </template>
     <template #default>
       <v-form>

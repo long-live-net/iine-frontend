@@ -1,4 +1,3 @@
-import { useContentRead, useContentWrite } from '@/composables/use-content'
 import { useForm, useField } from 'vee-validate'
 import type { EyecatchType, EyecatchForm } from '@/types/content'
 import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/content-api'

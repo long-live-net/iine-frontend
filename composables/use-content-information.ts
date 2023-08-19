@@ -1,4 +1,3 @@
-import { useContentRead, useContentWrite } from '@/composables/use-content'
 import { useForm, useField } from 'vee-validate'
 import type { InformationType, InformationForm } from '@/types/content'
 import type { InformationGetApi, InformationSaveApi } from '@/types/content-api'
@@ -97,7 +96,7 @@ export const useInformationForm = () => {
 
   const informationFormSchema = {
     title: (v: string | undefined) => {
-      if (!noBlank(v)) return 'トップタイトルを入力してください'
+      if (!noBlank(v)) return 'タイトルを入力してください'
       if (!maxLength(v, 40)) return '40文字以内で入力してください'
       return true
     },
