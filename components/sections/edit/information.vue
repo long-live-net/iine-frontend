@@ -1,96 +1,42 @@
 <script setup lang="ts">
-import type { GlobalComponents } from '@vue/runtime-core'
 import type { InformationType, InformationForm } from '@/types/content'
-import type {
-  BaseFileInputType,
-  BaseWysiwsgEditorType,
-} from '@/components/base/base-types'
 
 const props = defineProps<{
   informationData?: InformationType | null
 }>()
-
 const emit = defineEmits<{
   create: [inputData: InformationForm]
   update: [inputData: InformationForm]
 }>()
 
-const { noBlank, maxLength } = useValidateRules()
-const informationForm = reactive<InformationForm>({
-  title: '',
-  subtitle: '',
-  body: '',
-  image: '',
-  imageFile: null,
-})
-const informationFormRule = {
-  title: [
-    (v: string) => noBlank(v) || 'タイトルを入力してください',
-    (v: string) => maxLength(v, 40) || '40文字以内で入力してください',
-  ],
-  subtitle: [(v: string) => maxLength(v, 50) || '50文字以内で入力してください'],
-  body: [
-    (v: string) => noBlank(v) || '本文を入力してください',
-    (v: string) => maxLength(v, 1000) || '1000文字以内で入力してください',
-  ],
-}
 const modal = ref(false)
-const contentFormComponent = ref<GlobalComponents['VForm'] | null>(null)
-const fileInputComponent = ref<BaseFileInputType | null>(null)
-const wysiwygEditorComponent = ref<BaseWysiwsgEditorType | null>(null)
+const { handleSubmit, handleReset, formData, resetInformationForm } =
+  useInformationForm()
 
-const resetInformationForm = () => {
-  informationForm.title = props.informationData?.title ?? ''
-  informationForm.subtitle = props.informationData?.subtitle ?? ''
-  informationForm.body = props.informationData?.body ?? ''
-  informationForm.image = props.informationData?.image?.url ?? ''
-  informationForm.imageFile = null
-}
-watch(
-  () => props.informationData,
-  () => {
-    resetInformationForm()
-  },
-  { immediate: true }
-)
 watch(modal, (current) => {
   if (current) {
-    resetInformationForm()
-    contentFormComponent.value?.reset()
+    handleReset()
+    resetInformationForm(props.informationData)
   }
 })
 
 const onChangeImageFile = async (params: { file: File; url: string }) => {
-  informationForm.image = params.url
-  informationForm.imageFile = params.file
+  formData.image.value.value = params.url
+  formData.imageFile.value.value = params.file
 }
 
-const validate = () => {
-  contentFormComponent.value?.validate()
-  fileInputComponent.value?.validate()
-  wysiwygEditorComponent.value?.validate()
-}
-const isValid = computed(
-  () =>
-    contentFormComponent.value?.isValid &&
-    fileInputComponent.value?.isValid &&
-    wysiwygEditorComponent.value?.isValid
-)
+const onCreate = handleSubmit((informationForm) => {
+  console.log('informationForm', informationForm)
+  emit('create', informationForm)
+  modal.value = false
+})
 
-const onCreate = async () => {
-  validate()
-  if (isValid.value) {
-    emit('create', informationForm)
-    modal.value = false
-  }
-}
-const onUpdate = async () => {
-  validate()
-  if (isValid.value) {
-    emit('update', informationForm)
-    modal.value = false
-  }
-}
+const onUpdate = handleSubmit((informationForm) => {
+  console.log('informationForm', informationForm)
+  emit('update', informationForm)
+  modal.value = false
+})
+
 const onCancel = () => {
   modal.value = false
 }
@@ -112,46 +58,42 @@ const onCancel = () => {
     <template #default>
       <v-form ref="contentFormComponent">
         <div>
-          <label for="information-form-input-image">タイトル背景画像</label>
           <BaseFileInput
-            id="information-form-input-image"
-            ref="fileInputComponent"
-            :image-url="informationForm.image"
+            :image-url="formData.image.value.value"
+            :error-messages="formData.image.errorMessage.value"
+            label="タイトル画像"
             @change-image-file="onChangeImageFile"
           />
         </div>
-        <div class="mt-4">
-          <label for="information-form-input-title">タイトル</label>
+        <div class="mt-3">
           <v-text-field
-            id="information-form-input-title"
-            v-model="informationForm.title"
-            :rules="informationFormRule.title"
+            v-model="formData.title.value.value"
+            :error-messages="formData.title.errorMessage.value"
             clearable
+            label="タイトル"
             placeholder="タイトルを入力してください"
           />
         </div>
-        <div class="mt-4">
-          <label for="information-form-input-subtitle">サブタイトル</label>
+        <div class="mt-3">
           <v-text-field
-            id="information-form-input-subtitle"
-            v-model="informationForm.subtitle"
-            :rules="informationFormRule.subtitle"
+            v-model="formData.subtitle.value.value"
+            :error-messages="formData.subtitle.errorMessage.value"
             clearable
+            label="サブタイトル"
             placeholder="サブタイトルを入力してください"
           />
         </div>
-        <div class="mt-4">
-          <label for="information-form-input-body">本文</label>
+        <div class="mt-3">
           <BaseWysiwsgEditor
-            id="information-form-input-body"
             ref="wysiwygEditorComponent"
-            v-model="informationForm.body"
-            :rules="informationFormRule.body"
+            v-model="formData.body.value.value"
+            :error-messages="formData.body.errorMessage.value"
             clearable
+            label="本文"
             placeholder="本文を入力してください"
           />
         </div>
-        <div class="mt-4 mb-2 text-right">
+        <div class="mt-2 mb-2 text-right">
           <v-btn
             v-if="informationData?.id"
             prepend-icon="mdi-content-save"

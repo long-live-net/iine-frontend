@@ -16,6 +16,22 @@ export const useValidateRules = () => {
   const noBlank = (v: ValidateValueType): boolean => !!v?.length
 
   /**
+   * WYSIWYG Editor 用 noBlank チェック
+   */
+  const noBlankForWysiwyg = (v: ValidateValueType) => {
+    // データが設定されていない場合は false
+    if (!v?.length) return false
+
+    // 事前チェック 経験則から128文字以上であれば
+    // さすがに blank にはならないはずなので OK とする
+    if (v.length > 128) return true
+
+    // HTMLタグを排除した結果の文字列で no blank を判定する
+    const plainString = v.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '')
+    return plainString.length > 0
+  }
+
+  /**
    * 文字数 MIN 以上であることチェック
    */
   const minLength = (v: ValidateValueType, min: number): boolean => {
@@ -83,6 +99,7 @@ export const useValidateRules = () => {
   return {
     required,
     noBlank,
+    noBlankForWysiwyg,
     minLength,
     maxLength,
     validateEmail,
