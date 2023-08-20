@@ -89,8 +89,8 @@ export const useContentRead = <T extends ContentGetApi>(
     nextKey,
     get,
     getList,
-    contentDataRef,
-    contentListRef,
+    contentDataRef: readonly(contentDataRef),
+    contentListRef: readonly(contentListRef),
   }
 }
 

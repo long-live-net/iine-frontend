@@ -45,7 +45,7 @@ export interface InformationType extends ContentType {
 }
 export interface NewsType extends ContentType {
   body: string
-  category: NewsCategory2LabelType
+  category: NewsCategory2Label
   publishOn: Date
 }
 export interface ServiceType extends ContentType {
@@ -69,6 +69,7 @@ export interface EyecatchType extends ContentType {
  * Content Form Data Types
  */
 export interface ContentForm {
+  id?: number
   title: string
   subtitle?: string
   body?: string
@@ -85,7 +86,7 @@ export interface InformationForm extends ContentForm {
 }
 export interface NewsForm extends ContentForm {
   body: string
-  category: NewsCategory2LabelType | null
+  category: NewsCategory2Label | null
   publishOn: Date | null
 }
 export interface ContactForm extends ContentForm {

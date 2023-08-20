@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{ modal: boolean }>()
+const props = defineProps<{ modal: boolean; isUpdate?: boolean }>()
 const emit = defineEmits<{
   'update:modal': [modal: boolean]
 }>()
@@ -15,8 +15,21 @@ const dialog = computed({
 <template>
   <BaseDialog v-model:modal="dialog">
     <div class="content-form-dialog">
-      <header v-if="$slots.header" class="content-form-dialog__header">
-        <slot name="header" />
+      <header class="content-form-dialog__header">
+        <slot name="header">
+          <template v-if="isUpdate">
+            <p class="mr-1">
+              <v-icon icon="mdi-pencil-circle" color="success" size="x-large" />
+            </p>
+            <h3>コンテンツの更新</h3>
+          </template>
+          <template v-else>
+            <p class="mr-1">
+              <v-icon icon="mdi-plus-circle" color="info" size="x-large" />
+            </p>
+            <h3>コンテンツの追加</h3>
+          </template>
+        </slot>
       </header>
       <div class="content-form-dialog__body">
         <slot />

@@ -1,4 +1,5 @@
-import type { ImageData } from '@/types/image-settings'
+import type { ImageData } from '@/types/content'
+import type { NewsCategory2Label } from '@/composables/use-news-category'
 
 /**
  * GET API で取得するデータ型
@@ -23,6 +24,11 @@ export interface InformationGetApi extends ContentGetApi {
 export interface ContactGetApi extends ContentGetApi {
   body: string
 }
+export interface NewsGetApi extends ContentGetApi {
+  body: string
+  category: NewsCategory2Label
+  publishOn: Date
+}
 
 /**
  * POST, PUT API で保存するデータ型
@@ -45,6 +51,11 @@ export interface InformationSaveApi extends ContentSaveApi {
 }
 export interface ContactSaveApi extends ContentSaveApi {
   body: string
+}
+export interface NewsSaveApi extends ContentSaveApi {
+  body: string
+  category: NewsCategory2Label
+  publishOn: Date
 }
 
 /**

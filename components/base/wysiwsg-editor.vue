@@ -5,20 +5,16 @@ import debounce from 'lodash/debounce'
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string
-    rules?: ((v: string) => boolean | string)[]
+    modelValue?: string | null
     label?: string
     placeholder?: string
     clearable?: boolean
+    errorMessages?: string | string[]
   }>(),
-  {
-    modelValue: '',
-    rules: () => [],
-    clearable: false,
-  }
+  { clearable: false }
 )
 const emit = defineEmits<{
-  'update:modelValue': [value: string]
+  'update:modelValue': [value: string | null]
 }>()
 
 const wysiwygToolbar = [
@@ -34,46 +30,25 @@ const wysiwygToolbar = [
   ['blockquote', { color: [] }, 'link', 'clean'],
 ] as const
 
-const touchValueData = ref(false)
-const quillEditorRef = ref<typeof QuillEditor | null>(null)
-const valueText = ref('')
 const valueData = computed({
-  get: () => props.modelValue,
-  set: debounce((value: string) => {
-    valueText.value = quillEditorRef.value?.getText().trim()
-    touchValueData.value = true
-    emit('update:modelValue', value)
-  }, 500),
-})
-
-const validate = () => {
-  valueText.value = quillEditorRef.value?.getText().trim()
-  touchValueData.value = true
-}
-const isValid = computed(() => {
-  if (!touchValueData.value) {
-    return null
-  }
-  return props.rules.every((rule) => rule(valueText.value) === true)
-})
-const invalidMessages = computed(() => {
-  if (!touchValueData.value) {
-    return null
-  }
-  const messages: string[] = []
-  props.rules.forEach((rule) => {
-    const ret = rule(valueText.value)
-    if (typeof ret === 'string' && ret.length) {
-      messages.push(ret)
-    }
-  })
-  return messages
+  get: () => props.modelValue ?? undefined,
+  set: debounce((value: string | undefined) => {
+    emit('update:modelValue', value ?? null)
+  }, 300),
 })
 
 const isFocus = ref(false)
 const isHover = ref(false)
+
+const invalidMessages = computed<string[] | null>(() =>
+  props.errorMessages
+    ? Array.isArray(props.errorMessages)
+      ? props.errorMessages
+      : [props.errorMessages]
+    : null
+)
 const editorClasses = computed(() => {
-  if (isValid.value === false) {
+  if (invalidMessages.value?.length) {
     return isFocus.value
       ? ['focused-error-state']
       : isHover.value
@@ -83,15 +58,23 @@ const editorClasses = computed(() => {
     return isFocus.value ? ['focused'] : isHover.value ? ['hovered'] : []
   }
 })
+const labelClass = computed(() =>
+  invalidMessages.value?.length
+    ? ['wysiwyg-editor__label--error']
+    : isFocus
+    ? ['wysiwyg-editor__label--focused']
+    : []
+)
 
+const quillEditorRef = ref<typeof QuillEditor | null>(null)
 const onClear = () => {
   quillEditorRef.value?.setText('')
 }
 
-defineExpose({
-  validate,
-  isValid,
-})
+// Note: とりあえず不要となりましたが、
+// また使用するかもしれないのでコメントアウトしておく
+// const getValueText = () => quillEditorRef.value?.getText().trim()
+// defineExpose({ getValueText })
 </script>
 
 <template>
@@ -102,14 +85,7 @@ defineExpose({
       @mouseover="isHover = true"
       @mouseleave="isHover = false"
     >
-      <p
-        v-if="label?.length"
-        class="wysiwyg-editor__label"
-        :class="{
-          'wysiwyg-editor__label--error': isValid === false,
-          'wysiwyg-editor__label--focused': isValid !== false && isFocus,
-        }"
-      >
+      <p v-if="label?.length" class="wysiwyg-editor__label" :class="labelClass">
         {{ label }}
       </p>
       <div class="wysiwyg-editor__editor">
@@ -140,10 +116,7 @@ defineExpose({
     </div>
     <div class="error-messages-wrap">
       <transition name="error">
-        <div
-          v-show="isValid === false && invalidMessages?.length"
-          class="error-messages"
-        >
+        <div v-show="invalidMessages?.length" class="error-messages">
           <span v-for="(err, inx) in invalidMessages" :key="inx">
             {{ err }}<br />
           </span>
@@ -202,23 +175,24 @@ defineExpose({
     font-size: small;
     color: $error;
   }
-}
-.error-enter-active,
-.error-leave-active {
-  transition: transform 0.25s ease-out;
-}
-.error-enter-from {
-  transform: translateY(-10px);
-}
-.error-enter-to {
-  transform: translateY(0px);
-}
 
-.error-leave-from {
-  transform: translateY(0px);
-}
-.error-leave-to {
-  transform: translateY(-10px);
+  .error-enter-active,
+  .error-leave-active {
+    transition: transform 0.25s ease-out;
+  }
+  .error-enter-from {
+    transform: translateY(-10px);
+  }
+  .error-enter-to {
+    transform: translateY(0px);
+  }
+
+  .error-leave-from {
+    transform: translateY(0px);
+  }
+  .error-leave-to {
+    transform: translateY(-10px);
+  }
 }
 </style>
 

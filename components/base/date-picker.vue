@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { VDatePicker } from 'vuetify/labs/VDatePicker'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue?: Date | null
-    rules?: ((v: string) => boolean | string)[]
-    label?: string
-    pickerTitle?: string
-    placeholder?: string
-  }>(),
-  { rules: () => [] }
-)
+const props = defineProps<{
+  modelValue?: Date | null
+  label?: string
+  pickerTitle?: string
+  placeholder?: string
+  errorMessages?: string | string[]
+}>()
 const emit = defineEmits<{
   'update:modelValue': [value: Date | null]
 }>()
@@ -22,7 +19,7 @@ watch(datepickerValue, () => {
 })
 
 const formattedDate = computed(() =>
-  props.modelValue ? formatLocalDate(props.modelValue, 'YYYY/MM/DD') : null
+  props.modelValue ? formatLocalDate(props.modelValue, 'YYYY/MM/DD') : ''
 )
 </script>
 
@@ -35,7 +32,7 @@ const formattedDate = computed(() =>
     <template v-slot:activator="{ props }">
       <v-text-field
         :model-value="formattedDate"
-        :rules="rules"
+        :error-messages="errorMessages"
         :label="label"
         :placeholder="placeholder"
         readonly
