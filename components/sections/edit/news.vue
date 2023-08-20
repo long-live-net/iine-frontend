@@ -5,10 +5,12 @@ import { newsCategory2Label } from '@/composables/use-news-category'
 const props = defineProps<{
   newsData?: NewsType | null
   activaterLabel?: string
+  activaterSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
 }>()
 const emit = defineEmits<{
   create: [inputData: NewsForm]
-  update: [inputData: NewsForm]
+  update: [{ id: number; formData: NewsForm }]
+  remove: [id: number]
 }>()
 
 const modal = ref(false)
@@ -41,10 +43,29 @@ const onCreate = handleSubmit((newsForm) => {
 })
 
 const onUpdate = handleSubmit((newsForm) => {
+  console.log('news id', props.newsData?.id)
   console.log('newsForm', newsForm)
-  emit('update', newsForm)
+  if (props.newsData?.id) {
+    emit('update', {
+      id: props.newsData?.id,
+      formData: newsForm,
+    })
+  }
   modal.value = false
 })
+
+const onRemove = () => {
+  console.log('news id', props.newsData?.id)
+  if (props.newsData?.id) {
+    if (process.client) {
+      const confirmed = window.confirm('本当に削除してもよろしいですか？')
+      if (confirmed) {
+        emit('remove', props.newsData.id)
+      }
+    }
+  }
+  modal.value = false
+}
 
 const onCancel = () => {
   modal.value = false
@@ -56,6 +77,7 @@ const onCancel = () => {
     v-model:modal="modal"
     :is-update="!!newsData?.id"
     :activaterLabel="activaterLabel"
+    :activater-size="activaterSize"
   />
   <GuiContentFormDialog v-model:modal="modal" :is-update="!!newsData?.id">
     <v-form class="news-form">
@@ -104,37 +126,51 @@ const onCancel = () => {
           placeholder="本文を入力してください"
         />
       </div>
-      <div class="mt-2 mb-2 text-right">
-        <v-btn
-          v-if="newsData?.id"
-          prepend-icon="mdi-content-save"
-          color="success"
-          variant="flat"
-          width="8rem"
-          @click="onUpdate"
-        >
-          更新する
-        </v-btn>
-        <v-btn
-          v-else
-          prepend-icon="mdi-content-save"
-          color="info"
-          variant="flat"
-          width="8rem"
-          @click="onCreate"
-        >
-          登録する
-        </v-btn>
-        <v-btn
-          prepend-icon="mdi-cancel"
-          color="grey-lighten-2"
-          variant="flat"
-          width="8rem"
-          class="ml-1"
-          @click="onCancel"
-        >
-          キャンセル
-        </v-btn>
+      <div class="mt-2 mb-2 d-flex justify-space-between">
+        <div>
+          <v-btn
+            v-if="newsData?.id"
+            prepend-icon="mdi-delete"
+            color="error"
+            variant="outlined"
+            width="8rem"
+            @click="onRemove"
+          >
+            削除する
+          </v-btn>
+        </div>
+        <div>
+          <v-btn
+            v-if="newsData?.id"
+            prepend-icon="mdi-content-save"
+            color="success"
+            variant="flat"
+            width="8rem"
+            @click="onUpdate"
+          >
+            更新する
+          </v-btn>
+          <v-btn
+            v-else
+            prepend-icon="mdi-content-save"
+            color="info"
+            variant="flat"
+            width="8rem"
+            @click="onCreate"
+          >
+            登録する
+          </v-btn>
+          <v-btn
+            prepend-icon="mdi-cancel"
+            color="grey-lighten-2"
+            variant="flat"
+            width="8rem"
+            class="ml-1"
+            @click="onCancel"
+          >
+            キャンセル
+          </v-btn>
+        </div>
       </div>
     </v-form>
   </GuiContentFormDialog>

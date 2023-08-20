@@ -5,6 +5,7 @@ const props = defineProps<{
   modal: boolean
   isUpdate?: boolean
   activaterLabel?: string
+  activaterSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
 }>()
 const emit = defineEmits<{
   'update:modal': [modal: boolean]
@@ -28,6 +29,7 @@ const activatorColor = computed(() => (props.isUpdate ? 'success' : 'info'))
     v-model:modal="dialog"
     :activatorIcon="activatorIcon"
     :activator-color="activatorColor"
-    :activator-text="activaterLabel ?? ''"
+    :activator-text="activaterLabel"
+    :activator-size="activaterSize"
   />
 </template>

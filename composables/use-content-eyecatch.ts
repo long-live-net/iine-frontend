@@ -11,10 +11,10 @@ export const useEyecatchRead = (customerId: number) => {
   )
   const loading = ref(false)
 
-  const getEyecatch = async () => {
+  const getEyecatch = async (id?: number | null) => {
     try {
       loading.value = true
-      await get()
+      await get(id)
     } finally {
       loading.value = false
     }
@@ -42,13 +42,15 @@ export const useEyecatchRead = (customerId: number) => {
 }
 
 export const useEyecatchWrite = (customerId: number) => {
-  const { create, update } = useContentWrite<EyecatchSaveApi>(
-    customerId,
-    apiUrl
-  )
+  const { create, update, remove } = useContentWrite<
+    EyecatchSaveApi,
+    EyecatchGetApi
+  >(customerId, apiUrl)
   const loading = ref(false)
 
-  const createEyecatch = async (formData: EyecatchForm) => {
+  const createEyecatch = async (
+    formData: EyecatchForm
+  ): Promise<EyecatchType | null> => {
     const inputData: EyecatchSaveApi = {
       customerId,
       title: formData.title,
@@ -57,13 +59,25 @@ export const useEyecatchWrite = (customerId: number) => {
     }
     try {
       loading.value = true
-      return await create(inputData)
+      const ret = await create(inputData)
+      return ret.value
+        ? {
+            id: ret.value.id,
+            customerId: ret.value.customerId,
+            title: ret.value.title,
+            subtitle: ret.value.subtitle,
+            image: ret.value.image,
+          }
+        : null
     } finally {
       loading.value = false
     }
   }
 
-  const updateEyecatch = async (contentId: number, formData: EyecatchForm) => {
+  const updateEyecatch = async (
+    contentId: number,
+    formData: EyecatchForm
+  ): Promise<EyecatchType | null> => {
     const inputData: EyecatchSaveApi = {
       customerId,
       title: formData.title,
@@ -72,7 +86,25 @@ export const useEyecatchWrite = (customerId: number) => {
     }
     try {
       loading.value = true
-      return await update(contentId, inputData)
+      const ret = await update(contentId, inputData)
+      return ret.value
+        ? {
+            id: ret.value.id,
+            customerId: ret.value.customerId,
+            title: ret.value.title,
+            subtitle: ret.value.subtitle,
+            image: ret.value.image,
+          }
+        : null
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const removeEyecatch = async (contentId: number) => {
+    try {
+      loading.value = true
+      return await remove(contentId)
     } finally {
       loading.value = false
     }
@@ -81,6 +113,7 @@ export const useEyecatchWrite = (customerId: number) => {
   return {
     createEyecatch,
     updateEyecatch,
+    removeEyecatch,
     loading,
   }
 }

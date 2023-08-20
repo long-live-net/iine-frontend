@@ -12,19 +12,32 @@ const {
 const {
   createEyecatch,
   updateEyecatch,
+  removeEyecatch,
   loading: writeLoading,
 } = useEyecatchWrite(customerId)
 
 const onCreate = async (formData: EyecatchForm) => {
-  await createEyecatch(formData)
+  const savedData = await createEyecatch(formData)
   nextKey()
-  getEyecatch()
+  getEyecatch(savedData?.id)
 }
 
-const onUpdate = async (formData: EyecatchForm) => {
-  if (eyecatchRef.value === null) return
+const onUpdate = async ({
+  id,
+  formData,
+}: {
+  id: number
+  formData: EyecatchForm
+}) => {
+  if (!id) return
 
-  await updateEyecatch(eyecatchRef.value.id, formData)
+  const savedData = await updateEyecatch(id, formData)
+  nextKey()
+  getEyecatch(savedData?.id)
+}
+
+const onRemove = async (id: number) => {
+  await removeEyecatch(id)
   nextKey()
   getEyecatch()
 }
@@ -60,6 +73,7 @@ await getEyecatch()
         v-if="eyecatchRef?.id"
         :eyecatch-data="eyecatchRef"
         @update="onUpdate"
+        @remove="onRemove"
       />
       <SectionsEditEyecatcher
         v-else

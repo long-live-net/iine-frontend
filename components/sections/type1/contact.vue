@@ -13,19 +13,32 @@ const {
 const {
   createContact,
   updateContact,
+  removeContact,
   loading: writeLoading,
 } = useContactWrite(customerId)
 
 const onCreate = async (formData: ContactForm) => {
-  await createContact(formData)
+  const savedData = await createContact(formData)
   nextKey()
-  getContact()
+  getContact(savedData?.id)
 }
 
-const onUpdate = async (formData: ContactForm) => {
-  if (contactRef.value === null) return
+const onUpdate = async ({
+  id,
+  formData,
+}: {
+  id: number
+  formData: ContactForm
+}) => {
+  if (!id) return
 
-  await updateContact(contactRef.value.id, formData)
+  const savedData = await updateContact(id, formData)
+  nextKey()
+  getContact(savedData?.id)
+}
+
+const onRemove = async (id: number) => {
+  await removeContact(id)
   nextKey()
   getContact()
 }
@@ -67,7 +80,11 @@ await getContact()
         </div>
       </GuiContentCardBody>
       <div v-if="contactRef?.id" class="edit-activator">
-        <SectionsEditContact :contact-data="contactRef" @update="onUpdate" />
+        <SectionsEditContact
+          :contact-data="contactRef"
+          @update="onUpdate"
+          @remove="onRemove"
+        />
       </div>
     </GuiContentCard>
   </GuiContentWrap>

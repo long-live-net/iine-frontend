@@ -14,12 +14,12 @@ const {
 const {
   createNews,
   updateNews,
+  removeNews,
   loading: writeLoading,
 } = useNewsWrite(customerId)
 
 const getNewsListWithPageCondition = async () => {
-  // const filter: ListFilter = { publishOn: false }
-  const filter: ListFilter = {}
+  const filter: ListFilter = { publishOn: false } // Todo: ログインしていれば false にすること後で忘れない様に！
   const sort: ListSort = { publishOn: -1 }
   const pager: ListPager = { page: 1, limit: 5 }
   await getNewsList(filter, sort, pager)
@@ -31,10 +31,22 @@ const onCreate = async (formData: NewsForm) => {
   getNewsListWithPageCondition()
 }
 
-const onUpdate = async (formData: NewsForm) => {
-  if (!formData.id) return
+const onUpdate = async ({
+  id,
+  formData,
+}: {
+  id: number
+  formData: NewsForm
+}) => {
+  if (!id) return
 
-  await updateNews(formData.id, formData)
+  await updateNews(id, formData)
+  nextKey()
+  getNewsListWithPageCondition()
+}
+
+const onRemove = async (id: number) => {
+  await removeNews(id)
   nextKey()
   getNewsListWithPageCondition()
 }
@@ -47,48 +59,55 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
 </script>
 
 <template>
-  <GuiContentCard :loading="false" class="type1-news-list">
-    <GuiContentCardBody>
-      <GuiContentList v-if="newsListRef?.length" :contents="newsListRef">
-        <template #default="{ content }">
-          <div class="news-item">
-            <div class="news-item__header g-theme-contets-item__header">
-              <span>
-                {{ dateString((content as NewsType).publishOn) }}
-              </span>
-              <GuiNewsCategoryBadge
-                :category="(content as NewsType).category"
-                style="margin-left: 0.5rem"
-              />
+  <GuiContentWrap :loading="loading">
+    <GuiContentCard class="type1-news-list">
+      <GuiContentCardBody>
+        <GuiContentList v-if="newsListRef?.length" :contents="newsListRef">
+          <template #default="{ content }">
+            <div class="news-item">
+              <div class="news-item__header g-theme-contets-item__header">
+                <span>
+                  {{ dateString((content as NewsType).publishOn) }}
+                </span>
+                <GuiNewsCategoryBadge
+                  :category="(content as NewsType).category"
+                  style="margin-left: 0.5rem"
+                />
+              </div>
+              <div class="news-item__title">
+                <nuxt-link :to="`/news/${content.id}`">
+                  {{ content.title }}
+                </nuxt-link>
+              </div>
+              <div class="edit-activator">
+                <SectionsEditNews
+                  :newsData="content as NewsType"
+                  activaterSize="x-small"
+                  @update="onUpdate"
+                  @remove="onRemove"
+                />
+              </div>
             </div>
-            <div class="news-item__title">
-              <nuxt-link :to="`/news/${content.id}`">
-                {{ content.title }}
-              </nuxt-link>
-            </div>
-            <div class="edit-activator">
-              <div>編集</div>
-            </div>
+          </template>
+        </GuiContentList>
+        <div v-else class="no-items">
+          <p>データがありません</p>
+          <div>
+            <SectionsEditNews
+              activaterLabel="ニュースを登録してください"
+              @create="onCreate"
+            />
           </div>
-        </template>
-      </GuiContentList>
-      <div v-else class="no-items">
-        <p>データがありません</p>
-        <div>
-          <SectionsEditNews
-            activaterLabel="ニュースを登録してください"
-            @create="onCreate"
-          />
         </div>
+      </GuiContentCardBody>
+      <div class="type1-news-list__action">
+        <NuxtLink to="/news">and more ...</NuxtLink>
       </div>
-    </GuiContentCardBody>
-    <div class="type1-news-list__action">
-      <NuxtLink to="/news">and more ...</NuxtLink>
-    </div>
-    <div v-if="newsListRef?.length" class="create-activator">
-      <SectionsEditNews @create="onCreate" />
-    </div>
-  </GuiContentCard>
+      <div v-if="newsListRef?.length" class="create-activator">
+        <SectionsEditNews @create="onCreate" />
+      </div>
+    </GuiContentCard>
+  </GuiContentWrap>
 </template>
 
 <style lang="scss" scoped>
@@ -135,8 +154,8 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
   }
   .edit-activator {
     position: absolute;
-    top: 0;
-    left: -2rem;
+    top: 4px;
+    left: -40px;
   }
 }
 @media only screen and (max-width: $grid-breakpoint-md) {

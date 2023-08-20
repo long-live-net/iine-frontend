@@ -15,10 +15,10 @@ export const useNewsRead = (customerId: number) => {
     useContentRead<NewsGetApi>(customerId, apiUrl)
   const loading = ref(false)
 
-  const getNews = async () => {
+  const getNews = async (id?: number | null) => {
     try {
       loading.value = true
-      await get()
+      await get(id)
     } finally {
       loading.value = false
     }
@@ -88,10 +88,13 @@ export const useNewsRead = (customerId: number) => {
 }
 
 export const useNewsWrite = (customerId: number) => {
-  const { create, update } = useContentWrite<NewsSaveApi>(customerId, apiUrl)
+  const { create, update, remove } = useContentWrite<NewsSaveApi, NewsGetApi>(
+    customerId,
+    apiUrl
+  )
   const loading = ref(false)
 
-  const createNews = async (formData: NewsForm) => {
+  const createNews = async (formData: NewsForm): Promise<NewsType | null> => {
     const inputData: NewsSaveApi = {
       customerId,
       title: formData.title,
@@ -102,13 +105,27 @@ export const useNewsWrite = (customerId: number) => {
     }
     try {
       loading.value = true
-      return await create(inputData)
+      const ret = await create(inputData)
+      return ret.value
+        ? {
+            id: ret.value.id,
+            customerId: ret.value.customerId,
+            title: ret.value.title,
+            category: ret.value.category,
+            publishOn: ret.value.publishOn,
+            body: ret.value.body,
+            image: ret.value.image,
+          }
+        : null
     } finally {
       loading.value = false
     }
   }
 
-  const updateNews = async (contentId: number, formData: NewsForm) => {
+  const updateNews = async (
+    contentId: number,
+    formData: NewsForm
+  ): Promise<NewsType | null> => {
     const inputData: NewsSaveApi = {
       customerId,
       title: formData.title,
@@ -119,7 +136,27 @@ export const useNewsWrite = (customerId: number) => {
     }
     try {
       loading.value = true
-      return await update(contentId, inputData)
+      const ret = await update(contentId, inputData)
+      return ret.value
+        ? {
+            id: ret.value.id,
+            customerId: ret.value.customerId,
+            title: ret.value.title,
+            category: ret.value.category,
+            publishOn: ret.value.publishOn,
+            body: ret.value.body,
+            image: ret.value.image,
+          }
+        : null
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const removeNews = async (contentId: number) => {
+    try {
+      loading.value = true
+      return await remove(contentId)
     } finally {
       loading.value = false
     }
@@ -128,6 +165,7 @@ export const useNewsWrite = (customerId: number) => {
   return {
     createNews,
     updateNews,
+    removeNews,
     loading,
   }
 }
