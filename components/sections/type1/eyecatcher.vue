@@ -51,36 +51,44 @@ await getEyecatch()
         :subtitle="eyecatchRef?.subtitle"
         class="titles"
       />
+      <div class="image-settings">
+        <div>イメージセッティグ</div>
+      </div>
     </GuiEyecatchImage>
     <div class="edit-activator">
       <SectionsEditEyecatcher
+        v-if="eyecatchRef?.id"
         :eyecatch-data="eyecatchRef"
-        @create="onCreate"
         @update="onUpdate"
       />
-    </div>
-    <div class="image-settings">
-      <div>イメージセッティグ</div>
+      <SectionsEditEyecatcher
+        v-else
+        :eyecatch-data="eyecatchRef"
+        activaterLabel="トップ画像を登録してください"
+        @create="onCreate"
+      />
     </div>
   </GuiContentWrap>
 </template>
 
 <style lang="scss" scoped>
 .type1-eyecatcher {
-  .eyecatcher {
-    position: relative;
-    height: 100vh;
-    min-height: 400px;
-    .titles {
-      position: absolute;
-      top: 70%;
-      left: 50%;
-    }
-  }
+  position: relative;
   .edit-activator {
     position: absolute;
     top: 8.5rem;
     right: 2rem;
+  }
+}
+
+.eyecatcher {
+  position: relative;
+  height: 100vh;
+  min-height: 400px;
+  .titles {
+    position: absolute;
+    top: 70%;
+    left: 50%;
   }
   .image-settings {
     position: absolute;
@@ -89,17 +97,14 @@ await getEyecatch()
     background-color: rgba(255, 255, 255, 0.5);
   }
 }
-
 @media only screen and (max-width: $grid-breakpoint-md) {
-  .type1-top-eyecatcher {
-    .eyecatcher {
-      height: 100vh;
-      min-height: auto;
-    }
-    .image-settings {
-      bottom: 1rem;
-      right: 1rem;
-    }
+  .eyecatcher {
+    height: 100vh;
+    min-height: auto;
+  }
+  .image-settings {
+    bottom: 1rem;
+    right: 1rem;
   }
 }
 </style>

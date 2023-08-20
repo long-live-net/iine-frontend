@@ -54,17 +54,24 @@ await getInformation()
           <div>イメージセッティグ</div>
         </div>
       </GuiEyecatchImage>
-      <GuiContentCardBody class="body">
+      <GuiContentCardBody>
         <div
-          v-if="informationRef?.body"
+          v-if="informationRef?.id"
           v-html="htmlSanitizer(informationRef?.body)"
         />
-        <div v-else>コンテンツが登録されていません</div>
+        <div v-else class="no-items">
+          <p>データがありません</p>
+          <div>
+            <SectionsEditInformation
+              activaterLabel="コンテンツを登録してください"
+              @create="onCreate"
+            />
+          </div>
+        </div>
       </GuiContentCardBody>
-      <div class="edit-activator">
+      <div v-if="informationRef?.id" class="edit-activator">
         <SectionsEditInformation
           :information-data="informationRef"
-          @create="onCreate"
           @update="onUpdate"
         />
       </div>
@@ -83,36 +90,37 @@ $eyecatcher-height-sm: 600px;
     top: 1rem;
     right: 1rem;
   }
-  .eyecatcher {
-    position: relative;
-    height: 30vh;
-    min-height: 400px;
-    max-height: $eyecatcher-height;
-    min-height: calc($eyecatcher-height * 0.5);
-    &__titles {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+  .no-items {
+    p {
+      margin-bottom: 2rem;
+      font-weight: bold;
+      color: $warning;
     }
-    .image-settings {
-      position: absolute;
-      bottom: 1rem;
-      right: 1rem;
-      background-color: rgba(255, 255, 255, 0.5);
-    }
-  }
-  .body {
-    min-height: calc($eyecatcher-height * 0.3);
   }
 }
-
+.eyecatcher {
+  position: relative;
+  height: 30vh;
+  min-height: 400px;
+  max-height: $eyecatcher-height;
+  min-height: calc($eyecatcher-height * 0.5);
+  &__titles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+  .image-settings {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}
 @media only screen and (max-width: $grid-breakpoint-md) {
-  .type1-information {
-    .eyecatcher {
-      height: 50vh;
-      max-height: $eyecatcher-height-sm;
-      min-height: calc($eyecatcher-height-sm * 0.5);
-    }
+  .eyecatcher {
+    height: 50vh;
+    max-height: $eyecatcher-height-sm;
+    min-height: calc($eyecatcher-height-sm * 0.5);
   }
 }
 </style>

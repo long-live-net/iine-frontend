@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ContentType } from '@/types/content'
 
-defineProps<{ contents: ContentType[] }>()
+defineProps<{ contents: Readonly<ContentType[]> }>()
 </script>
 
 <template>

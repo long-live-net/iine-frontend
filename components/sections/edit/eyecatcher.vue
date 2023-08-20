@@ -4,6 +4,7 @@ import { useEyecatchForm } from '~/composables/use-content-eyecatch'
 
 const props = defineProps<{
   eyecatchData?: EyecatchType | null
+  activaterLabel?: string
 }>()
 
 const emit = defineEmits<{
@@ -47,76 +48,69 @@ const onCancel = () => {
 <template>
   <GuiContentFormDialogActivator
     v-model:modal="modal"
-    :content="eyecatchData"
+    :is-update="!!eyecatchData?.id"
+    :activaterLabel="activaterLabel"
   />
-  <GuiContentFormDialog v-model:modal="modal">
-    <template #header>
-      <p class="mr-1">
-        <v-icon icon="mdi-pencil-circle" color="success" size="x-large" />
-      </p>
-      <h3>コンテンツの{{ eyecatchData?.id ? '更新' : '登録' }}</h3>
-    </template>
-    <template #default>
-      <v-form>
-        <div>
-          <BaseFileInput
-            :image-url="formData.image.value.value"
-            :error-messages="formData.image.errorMessage.value"
-            label="トップ画像"
-            @change-image-file="onChangeImageFile"
-          />
-        </div>
-        <div class="mt-3">
-          <v-text-field
-            v-model="formData.title.value.value"
-            :error-messages="formData.title.errorMessage.value"
-            clearable
-            label="トップタイトル"
-            placeholder="トップタイトルを入力してください"
-          />
-        </div>
-        <div class="mt-3">
-          <v-text-field
-            v-model="formData.subtitle.value.value"
-            :error-messages="formData.subtitle.errorMessage.value"
-            clearable
-            label="サブタイトル"
-            placeholder="サブタイトルを入力してください"
-          />
-        </div>
-        <div class="mt-2 mb-2 text-right">
-          <v-btn
-            v-if="eyecatchData?.id"
-            prepend-icon="mdi-content-save"
-            color="success"
-            variant="flat"
-            width="8rem"
-            @click="onUpdate"
-          >
-            更新する
-          </v-btn>
-          <v-btn
-            v-else
-            prepend-icon="mdi-content-save"
-            color="info"
-            variant="flat"
-            width="8rem"
-            @click="onCreate"
-          >
-            作成する
-          </v-btn>
-          <v-btn
-            prepend-icon="mdi-cancel"
-            color="grey-lighten-2"
-            variant="flat"
-            width="8rem"
-            class="ml-1"
-            @click="onCancel"
-          >
-            キャンセル
-          </v-btn>
-        </div>
-      </v-form>
-    </template>
+  <GuiContentFormDialog v-model:modal="modal" :is-update="!!eyecatchData?.id">
+    <v-form>
+      <div>
+        <BaseFileInput
+          :image-url="formData.image.value.value"
+          :error-messages="formData.image.errorMessage.value"
+          label="トップ画像"
+          @change-image-file="onChangeImageFile"
+        />
+      </div>
+      <div class="mt-3">
+        <v-text-field
+          v-model="formData.title.value.value"
+          :error-messages="formData.title.errorMessage.value"
+          clearable
+          label="トップタイトル"
+          placeholder="トップタイトルを入力してください"
+        />
+      </div>
+      <div class="mt-3">
+        <v-text-field
+          v-model="formData.subtitle.value.value"
+          :error-messages="formData.subtitle.errorMessage.value"
+          clearable
+          label="サブタイトル"
+          placeholder="サブタイトルを入力してください"
+        />
+      </div>
+      <div class="mt-2 mb-2 text-right">
+        <v-btn
+          v-if="eyecatchData?.id"
+          prepend-icon="mdi-content-save"
+          color="success"
+          variant="flat"
+          width="8rem"
+          @click="onUpdate"
+        >
+          更新する
+        </v-btn>
+        <v-btn
+          v-else
+          prepend-icon="mdi-content-save"
+          color="info"
+          variant="flat"
+          width="8rem"
+          @click="onCreate"
+        >
+          作成する
+        </v-btn>
+        <v-btn
+          prepend-icon="mdi-cancel"
+          color="grey-lighten-2"
+          variant="flat"
+          width="8rem"
+          class="ml-1"
+          @click="onCancel"
+        >
+          キャンセル
+        </v-btn>
+      </div>
+    </v-form>
   </GuiContentFormDialog>
 </template>

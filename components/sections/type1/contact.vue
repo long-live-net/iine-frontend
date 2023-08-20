@@ -55,15 +55,19 @@ await getContact()
         </div>
       </GuiEyecatchImage>
       <GuiContentCardBody>
-        <div v-if="contactRef?.body" v-html="htmlSanitizer(contactRef?.body)" />
-        <div v-else>コンテンツが登録されていません</div>
+        <div v-if="contactRef?.id" v-html="htmlSanitizer(contactRef?.body)" />
+        <div v-else class="no-items">
+          <p>データがありません</p>
+          <div>
+            <SectionsEditContact
+              activaterLabel="コンテンツを登録してください"
+              @create="onCreate"
+            />
+          </div>
+        </div>
       </GuiContentCardBody>
-      <div class="edit-activator">
-        <SectionsEditContact
-          :contact-data="contactRef"
-          @create="onCreate"
-          @update="onUpdate"
-        />
+      <div v-if="contactRef?.id" class="edit-activator">
+        <SectionsEditContact :contact-data="contactRef" @update="onUpdate" />
       </div>
     </GuiContentCard>
   </GuiContentWrap>
@@ -79,6 +83,13 @@ $eyecatcher-height-sm: 600px;
     position: absolute;
     top: 1rem;
     right: 1rem;
+  }
+  .no-items {
+    p {
+      margin-bottom: 2rem;
+      font-weight: bold;
+      color: $warning;
+    }
   }
 }
 .eyecatcher {
@@ -101,12 +112,10 @@ $eyecatcher-height-sm: 600px;
 }
 
 @media only screen and (max-width: $grid-breakpoint-md) {
-  .type1-contact {
-    .eyecatcher {
-      height: 50vh;
-      max-height: $eyecatcher-height-sm;
-      min-height: calc($eyecatcher-height-sm * 0.5);
-    }
+  .eyecatcher {
+    height: 50vh;
+    max-height: $eyecatcher-height-sm;
+    min-height: calc($eyecatcher-height-sm * 0.5);
   }
 }
 </style>
