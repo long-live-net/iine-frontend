@@ -13,19 +13,32 @@ const {
 const {
   createInformation,
   updateInformation,
+  removeInformation,
   loading: writeLoading,
 } = useInformationWrite(customerId)
 
 const onCreate = async (formData: InformationForm) => {
-  await createInformation(formData)
+  const savedData = await createInformation(formData)
   nextKey()
-  getInformation()
+  getInformation(savedData?.id)
 }
 
-const onUpdate = async (formData: InformationForm) => {
-  if (informationRef.value === null) return
+const onUpdate = async ({
+  id,
+  formData,
+}: {
+  id: number
+  formData: InformationForm
+}) => {
+  if (!id) return
 
-  await updateInformation(informationRef.value.id, formData)
+  const savedData = await updateInformation(id, formData)
+  nextKey()
+  getInformation(savedData?.id)
+}
+
+const onRemove = async (id: number) => {
+  await removeInformation(id)
   nextKey()
   getInformation()
 }
@@ -73,6 +86,7 @@ await getInformation()
         <SectionsEditInformation
           :information-data="informationRef"
           @update="onUpdate"
+          @remove="onRemove"
         />
       </div>
     </GuiContentCard>

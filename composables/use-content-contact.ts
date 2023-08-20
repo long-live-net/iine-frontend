@@ -11,10 +11,10 @@ export const useContactRead = (customerId: number) => {
   )
   const loading = ref(false)
 
-  const getContact = async () => {
+  const getContact = async (id?: number | null) => {
     try {
       loading.value = true
-      await get()
+      await get(id)
     } finally {
       loading.value = false
     }
@@ -43,10 +43,15 @@ export const useContactRead = (customerId: number) => {
 }
 
 export const useContactWrite = (customerId: number) => {
-  const { create, update } = useContentWrite<ContactSaveApi>(customerId, apiUrl)
+  const { create, update, remove } = useContentWrite<
+    ContactSaveApi,
+    ContactGetApi
+  >(customerId, apiUrl)
   const loading = ref(false)
 
-  const createContact = async (formData: ContactForm) => {
+  const createContact = async (
+    formData: ContactForm
+  ): Promise<ContactType | null> => {
     const inputData: ContactSaveApi = {
       customerId,
       title: formData.title,
@@ -56,13 +61,26 @@ export const useContactWrite = (customerId: number) => {
     }
     try {
       loading.value = true
-      return await create(inputData)
+      const ret = await create(inputData)
+      return ret.value
+        ? {
+            id: ret.value.id,
+            customerId: ret.value.customerId,
+            title: ret.value.title,
+            subtitle: ret.value.subtitle,
+            body: ret.value.body,
+            image: ret.value.image,
+          }
+        : null
     } finally {
       loading.value = false
     }
   }
 
-  const updateContact = async (contentId: number, formData: ContactForm) => {
+  const updateContact = async (
+    contentId: number,
+    formData: ContactForm
+  ): Promise<ContactType | null> => {
     const inputData: ContactSaveApi = {
       customerId,
       title: formData.title,
@@ -72,7 +90,26 @@ export const useContactWrite = (customerId: number) => {
     }
     try {
       loading.value = true
-      return await update(contentId, inputData)
+      const ret = await update(contentId, inputData)
+      return ret.value
+        ? {
+            id: ret.value.id,
+            customerId: ret.value.customerId,
+            title: ret.value.title,
+            subtitle: ret.value.subtitle,
+            body: ret.value.body,
+            image: ret.value.image,
+          }
+        : null
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const removeContact = async (contentId: number) => {
+    try {
+      loading.value = true
+      return await remove(contentId)
     } finally {
       loading.value = false
     }
@@ -81,6 +118,7 @@ export const useContactWrite = (customerId: number) => {
   return {
     createContact,
     updateContact,
+    removeContact,
     loading,
   }
 }

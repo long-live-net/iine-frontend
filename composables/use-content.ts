@@ -23,7 +23,7 @@ export const useContentRead = <T extends ContentGetApi>(
    * get content data
    * @param contentId 未設定時は最新データを取得する
    */
-  const get = async (contentId?: number) => {
+  const get = async (contentId?: number | null) => {
     const key = `get_content_${apiPath}_${keyExt.value}`
     const url =
       contentId === undefined || contentId === null
@@ -38,6 +38,7 @@ export const useContentRead = <T extends ContentGetApi>(
       })
     )
     if (error.value) {
+      contentDataRef.value = null
       const apiError: ApiError = error.value
       if (apiError.statusCode === 404) {
         return
@@ -74,6 +75,7 @@ export const useContentRead = <T extends ContentGetApi>(
       })
     )
     if (error.value) {
+      contentListRef.value = null
       const apiError: ApiError = error.value
       if (apiError.statusCode === 404) {
         return
@@ -94,7 +96,10 @@ export const useContentRead = <T extends ContentGetApi>(
   }
 }
 
-export const useContentWrite = <F extends ContentSaveApi>(
+export const useContentWrite = <
+  F extends ContentSaveApi,
+  T extends ContentGetApi,
+>(
   customerId: number,
   apiPath: string
 ) => {
@@ -125,7 +130,7 @@ export const useContentWrite = <F extends ContentSaveApi>(
         settings: getDefaultImageSettings(),
       }
     }
-    const { data, error } = await useAsyncData(() =>
+    const { data, error } = await useAsyncData<T>(() =>
       $fetch(apiPath, {
         baseURL: backendBaseUrl,
         method: 'POST',
@@ -135,7 +140,7 @@ export const useContentWrite = <F extends ContentSaveApi>(
     if (error.value) {
       throw error.value
     }
-    return { data }
+    return data
   }
 
   /**
@@ -165,7 +170,7 @@ export const useContentWrite = <F extends ContentSaveApi>(
         settings: getDefaultImageSettings(),
       }
     }
-    const { data, error } = await useAsyncData(() =>
+    const { data, error } = await useAsyncData<T>(() =>
       $fetch(`${apiPath}/${contentId}`, {
         baseURL: backendBaseUrl,
         method: 'PUT',
@@ -175,12 +180,29 @@ export const useContentWrite = <F extends ContentSaveApi>(
     if (error.value) {
       throw error.value
     }
-    return { data }
+    return data
   }
 
+  /**
+   * remove content data
+   * @param contentId
+   */
+  const remove = async (contentId: number) => {
+    const { data, error } = await useAsyncData(() =>
+      $fetch(`${apiPath}/${contentId}`, {
+        baseURL: backendBaseUrl,
+        method: 'DELETE',
+      })
+    )
+    if (error.value) {
+      throw error.value
+    }
+    return data
+  }
   return {
     create,
     update,
+    remove,
   }
 }
 

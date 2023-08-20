@@ -20,12 +20,13 @@ const emit = defineEmits<{
 
 const iconSize = computed(() => {
   switch (props.activatorSize) {
+    // なんか全部 x-large でいいみたい...
     case 'x-small':
-      return 'small'
+      return 'x-large'
     case 'small':
-      return 'default'
+      return 'x-large'
     case 'default':
-      return 'large'
+      return 'x-large'
     default:
       return 'x-large'
   }

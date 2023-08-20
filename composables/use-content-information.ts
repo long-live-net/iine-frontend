@@ -11,10 +11,10 @@ export const useInformationRead = (customerId: number) => {
   )
   const loading = ref(false)
 
-  const getInformation = async () => {
+  const getInformation = async (id?: number | null) => {
     try {
       loading.value = true
-      await get()
+      await get(id)
     } finally {
       loading.value = false
     }
@@ -43,13 +43,15 @@ export const useInformationRead = (customerId: number) => {
 }
 
 export const useInformationWrite = (customerId: number) => {
-  const { create, update } = useContentWrite<InformationSaveApi>(
-    customerId,
-    apiUrl
-  )
+  const { create, update, remove } = useContentWrite<
+    InformationSaveApi,
+    InformationGetApi
+  >(customerId, apiUrl)
   const loading = ref(false)
 
-  const createInformation = async (formData: InformationForm) => {
+  const createInformation = async (
+    formData: InformationForm
+  ): Promise<InformationType | null> => {
     const inputData: InformationSaveApi = {
       customerId,
       title: formData.title,
@@ -59,7 +61,17 @@ export const useInformationWrite = (customerId: number) => {
     }
     try {
       loading.value = true
-      return await create(inputData)
+      const ret = await create(inputData)
+      return ret.value
+        ? {
+            id: ret.value.id,
+            customerId: ret.value.customerId,
+            title: ret.value.title,
+            subtitle: ret.value.subtitle,
+            body: ret.value.body,
+            image: ret.value.image,
+          }
+        : null
     } finally {
       loading.value = false
     }
@@ -68,7 +80,7 @@ export const useInformationWrite = (customerId: number) => {
   const updateInformation = async (
     contentId: number,
     formData: InformationForm
-  ) => {
+  ): Promise<InformationType | null> => {
     const inputData: InformationSaveApi = {
       customerId,
       title: formData.title,
@@ -78,7 +90,25 @@ export const useInformationWrite = (customerId: number) => {
     }
     try {
       loading.value = true
-      return await update(contentId, inputData)
+      const ret = await update(contentId, inputData)
+      return ret.value
+        ? {
+            id: ret.value.id,
+            customerId: ret.value.customerId,
+            title: ret.value.title,
+            subtitle: ret.value.subtitle,
+            body: ret.value.body,
+            image: ret.value.image,
+          }
+        : null
+    } finally {
+      loading.value = false
+    }
+  }
+  const removeInformation = async (contentId: number) => {
+    try {
+      loading.value = true
+      return await remove(contentId)
     } finally {
       loading.value = false
     }
@@ -87,6 +117,7 @@ export const useInformationWrite = (customerId: number) => {
   return {
     createInformation,
     updateInformation,
+    removeInformation,
     loading,
   }
 }

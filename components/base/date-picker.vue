@@ -2,7 +2,7 @@
 import { VDatePicker } from 'vuetify/labs/VDatePicker'
 
 const props = defineProps<{
-  modelValue?: Date | null
+  modelValue?: Date | string | null
   label?: string
   pickerTitle?: string
   placeholder?: string

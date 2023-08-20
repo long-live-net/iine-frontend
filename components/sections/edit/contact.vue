@@ -8,7 +8,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   create: [inputData: ContactForm]
-  update: [inputData: ContactForm]
+  update: [{ id: number; formData: ContactForm }]
+  remove: [id: number]
 }>()
 
 const modal = ref(false)
@@ -34,10 +35,29 @@ const onCreate = handleSubmit((contanctForm) => {
 })
 
 const onUpdate = handleSubmit((contanctForm) => {
+  console.log('contact id', props.contactData?.id)
   console.log('contanctForm', contanctForm)
-  emit('update', contanctForm)
+  if (props.contactData?.id) {
+    emit('update', {
+      id: props.contactData.id,
+      formData: contanctForm,
+    })
+  }
   modal.value = false
 })
+
+const onRemove = () => {
+  console.log('contact id', props.contactData?.id)
+  if (props.contactData?.id) {
+    if (process.client) {
+      const confirmed = window.confirm('本当に削除してもよろしいですか？')
+      if (confirmed) {
+        emit('remove', props.contactData.id)
+      }
+    }
+  }
+  modal.value = false
+}
 
 const onCancel = () => {
   modal.value = false
@@ -87,37 +107,51 @@ const onCancel = () => {
           placeholder="本文を入力してください"
         />
       </div>
-      <div class="mt-4 mb-2 text-right">
-        <v-btn
-          v-if="contactData?.id"
-          prepend-icon="mdi-content-save"
-          color="success"
-          variant="flat"
-          width="8rem"
-          @click="onUpdate"
-        >
-          更新する
-        </v-btn>
-        <v-btn
-          v-else
-          prepend-icon="mdi-content-save"
-          color="info"
-          variant="flat"
-          width="8rem"
-          @click="onCreate"
-        >
-          作成する
-        </v-btn>
-        <v-btn
-          prepend-icon="mdi-cancel"
-          color="grey-lighten-2"
-          variant="flat"
-          width="8rem"
-          class="ml-1"
-          @click="onCancel"
-        >
-          キャンセル
-        </v-btn>
+      <div class="mt-4 mb-2 d-flex justify-space-between">
+        <div>
+          <v-btn
+            v-if="contactData?.id"
+            prepend-icon="mdi-delete"
+            color="error"
+            variant="outlined"
+            width="8rem"
+            @click="onRemove"
+          >
+            削除する
+          </v-btn>
+        </div>
+        <div>
+          <v-btn
+            v-if="contactData?.id"
+            prepend-icon="mdi-content-save"
+            color="success"
+            variant="flat"
+            width="8rem"
+            @click="onUpdate"
+          >
+            更新する
+          </v-btn>
+          <v-btn
+            v-else
+            prepend-icon="mdi-content-save"
+            color="info"
+            variant="flat"
+            width="8rem"
+            @click="onCreate"
+          >
+            作成する
+          </v-btn>
+          <v-btn
+            prepend-icon="mdi-cancel"
+            color="grey-lighten-2"
+            variant="flat"
+            width="8rem"
+            class="ml-1"
+            @click="onCancel"
+          >
+            キャンセル
+          </v-btn>
+        </div>
       </div>
     </v-form>
   </GuiContentFormDialog>

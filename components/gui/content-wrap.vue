@@ -4,7 +4,10 @@ const props = withDefaults(
     loading?: boolean
     loadingSize?: 'large' | 'default' | 'small'
   }>(),
-  { loading: false }
+  {
+    loading: false,
+    loadingSize: 'default',
+  }
 )
 
 const overlayColor = 'yellow'
