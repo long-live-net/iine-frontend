@@ -21,7 +21,7 @@ const {
 const getNewsListWithPageCondition = async () => {
   const filter: ListFilter = { publishOn: false } // Todo: ログインしていれば false にすること後で忘れない様に！
   const sort: ListSort = { publishOn: -1 }
-  const pager: ListPager = { page: 1, limit: 5 }
+  const pager: ListPager = { page: 1, limit: 6 }
   await getNewsList(filter, sort, pager)
 }
 
@@ -119,8 +119,11 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
     text-align: center;
   }
   .no-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1rem;
     p {
-      margin-bottom: 2rem;
       font-weight: bold;
       color: $warning;
     }

@@ -49,7 +49,7 @@ export interface NewsType extends ContentType {
   publishOn: Date
 }
 export interface ServiceType extends ContentType {
-  body: string
+  caption: string
   image: ImageData
   position: number
 }
@@ -88,6 +88,12 @@ export interface NewsForm extends ContentForm {
   body: string
   category: NewsCategory2Label | null
   publishOn: Date | null
+}
+export interface ServiceForm extends ContentForm {
+  caption: string
+  image: string
+  imageFile: File | null
+  position: number
 }
 export interface ContactForm extends ContentForm {
   body: string

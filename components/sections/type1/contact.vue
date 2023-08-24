@@ -102,8 +102,11 @@ $eyecatcher-height-sm: 600px;
     right: 1rem;
   }
   .no-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1rem;
     p {
-      margin-bottom: 2rem;
       font-weight: bold;
       color: $warning;
     }

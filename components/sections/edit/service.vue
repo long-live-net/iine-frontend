@@ -1,32 +1,25 @@
 <script setup lang="ts">
-import type { NewsType, NewsForm } from '@/types/content'
-import { newsCategory2Label } from '@/composables/use-news-category'
+import type { ServiceType, ServiceForm } from '@/types/content'
 
 const props = defineProps<{
-  newsData?: NewsType | null
+  serviceData?: ServiceType | null
   activaterLabel?: string
   activaterSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
 }>()
 const emit = defineEmits<{
-  create: [inputData: NewsForm]
-  update: [{ id: number; formData: NewsForm }]
+  create: [inputData: ServiceForm]
+  update: [{ id: number; formData: ServiceForm }]
   remove: [id: number]
 }>()
 
 const modal = ref(false)
-const { handleSubmit, handleReset, formData, resetNewsForm } = useNewsForm()
-
-const categoryChoices = Object.entries(newsCategory2Label).map(
-  ([key, value]) => ({
-    value: key,
-    title: value,
-  })
-)
+const { handleSubmit, handleReset, formData, resetServiceForm } =
+  useServiceForm()
 
 watch(modal, (current) => {
   if (current) {
     handleReset()
-    resetNewsForm(props.newsData)
+    resetServiceForm(props.serviceData)
   }
 })
 
@@ -35,27 +28,31 @@ const onChangeImageFile = async (params: { file: File; url: string }) => {
   formData.imageFile.value.value = params.file
 }
 
-const onCreate = handleSubmit((newsForm) => {
-  emit('create', newsForm)
+const onCreate = handleSubmit((serviceForm) => {
+  console.log('serviceForm', serviceForm)
+  emit('create', serviceForm)
   modal.value = false
 })
 
-const onUpdate = handleSubmit((newsForm) => {
-  if (props.newsData?.id) {
+const onUpdate = handleSubmit((serviceForm) => {
+  console.log('service id', props.serviceData?.id)
+  console.log('serviceForm', serviceForm)
+  if (props.serviceData?.id) {
     emit('update', {
-      id: props.newsData?.id,
-      formData: newsForm,
+      id: props.serviceData?.id,
+      formData: serviceForm,
     })
   }
   modal.value = false
 })
 
 const onRemove = () => {
-  if (props.newsData?.id) {
+  console.log('service id', props.serviceData?.id)
+  if (props.serviceData?.id) {
     if (process.client) {
       const confirmed = window.confirm('本当に削除してもよろしいですか？')
       if (confirmed) {
-        emit('remove', props.newsData.id)
+        emit('remove', props.serviceData.id)
       }
     }
   }
@@ -70,12 +67,12 @@ const onCancel = () => {
 <template>
   <GuiContentFormDialogActivator
     v-model:modal="modal"
-    :is-update="!!newsData?.id"
+    :is-update="!!serviceData?.id"
     :activaterLabel="activaterLabel"
     :activater-size="activaterSize"
   />
-  <GuiContentFormDialog v-model:modal="modal" :is-update="!!newsData?.id">
-    <v-form class="news-form">
+  <GuiContentFormDialog v-model:modal="modal" :is-update="!!serviceData?.id">
+    <v-form>
       <div>
         <BaseFileInput
           :image-url="formData.image.value.value"
@@ -93,24 +90,14 @@ const onCancel = () => {
           placeholder="タイトルを入力してください"
         />
       </div>
-      <div class="row-wrapper mt-3">
-        <div class="row-field">
-          <v-select
-            v-model="formData.category.value.value"
-            :error-messages="formData.category.errorMessage.value"
-            :items="categoryChoices"
-            label="カテゴリ"
-          />
-        </div>
-        <div class="row-field">
-          <BaseDatePicker
-            v-model="formData.publishOn.value.value"
-            :error-messages="formData.publishOn.errorMessage.value"
-            label="公開日"
-            placeholder="公開日を選択してください"
-            pickerTitle="公開日を選択してください"
-          />
-        </div>
+      <div class="mt-3">
+        <BaseWysiwsgEditor
+          v-model="formData.caption.value.value"
+          :error-messages="formData.caption.errorMessage.value"
+          clearable
+          label="紹介文"
+          placeholder="紹介文を入力してください"
+        />
       </div>
       <div class="mt-3">
         <BaseWysiwsgEditor
@@ -124,7 +111,7 @@ const onCancel = () => {
       <div class="mt-2 mb-2 d-flex justify-space-between">
         <div>
           <v-btn
-            v-if="newsData?.id"
+            v-if="serviceData?.id"
             prepend-icon="mdi-delete"
             color="error"
             variant="outlined"
@@ -136,7 +123,7 @@ const onCancel = () => {
         </div>
         <div>
           <v-btn
-            v-if="newsData?.id"
+            v-if="serviceData?.id"
             prepend-icon="mdi-content-save"
             color="success"
             variant="flat"
@@ -170,28 +157,3 @@ const onCancel = () => {
     </v-form>
   </GuiContentFormDialog>
 </template>
-
-<style scoped lang="scss">
-.news-form {
-  .row-wrapper {
-    display: flex;
-    flex-flow: row nowrap;
-    column-gap: 1rem;
-    .row-field {
-      width: calc(50% - 0.5rem);
-    }
-  }
-}
-@media only screen and (max-width: $grid-breakpoint-sm) {
-  .news-form {
-    .row-wrapper {
-      flex-flow: column;
-      align-items: stretch;
-      column-gap: normal;
-      .row-field {
-        width: auto;
-      }
-    }
-  }
-}
-</style>

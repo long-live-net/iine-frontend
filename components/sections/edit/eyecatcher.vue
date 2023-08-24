@@ -30,14 +30,11 @@ const onChangeImageFile = async (params: { file: File; url: string }) => {
 }
 
 const onCreate = handleSubmit((eyecatchForm) => {
-  console.log('eyecatchForm', eyecatchForm)
   emit('create', eyecatchForm)
   modal.value = false
 })
 
 const onUpdate = handleSubmit((eyecatchForm) => {
-  console.log('eyecatch id', props.eyecatchData?.id)
-  console.log('eyecatchForm', eyecatchForm)
   if (props.eyecatchData?.id) {
     emit('update', {
       id: props.eyecatchData.id,
@@ -48,7 +45,6 @@ const onUpdate = handleSubmit((eyecatchForm) => {
 })
 
 const onRemove = () => {
-  console.log('eyecatch id', props.eyecatchData?.id)
   if (props.eyecatchData?.id) {
     if (process.client) {
       const confirmed = window.confirm('本当に削除してもよろしいですか？')
