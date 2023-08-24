@@ -29,14 +29,11 @@ const onChangeImageFile = async (params: { file: File; url: string }) => {
 }
 
 const onCreate = handleSubmit((contanctForm) => {
-  console.log('contanctForm', contanctForm)
   emit('create', contanctForm)
   modal.value = false
 })
 
 const onUpdate = handleSubmit((contanctForm) => {
-  console.log('contact id', props.contactData?.id)
-  console.log('contanctForm', contanctForm)
   if (props.contactData?.id) {
     emit('update', {
       id: props.contactData.id,
@@ -47,7 +44,6 @@ const onUpdate = handleSubmit((contanctForm) => {
 })
 
 const onRemove = () => {
-  console.log('contact id', props.contactData?.id)
   if (props.contactData?.id) {
     if (process.client) {
       const confirmed = window.confirm('本当に削除してもよろしいですか？')

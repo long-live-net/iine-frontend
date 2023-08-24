@@ -21,13 +21,18 @@ export interface EyecatchGetApi extends ContentGetApi {
 export interface InformationGetApi extends ContentGetApi {
   body: string
 }
-export interface ContactGetApi extends ContentGetApi {
-  body: string
+export interface ServiceGetApi extends ContentGetApi {
+  caption: string
+  image: ImageData
+  position: number
 }
 export interface NewsGetApi extends ContentGetApi {
   body: string
   category: NewsCategory2Label
   publishOn: Date
+}
+export interface ContactGetApi extends ContentGetApi {
+  body: string
 }
 
 /**
@@ -49,13 +54,18 @@ export interface EyecatchSaveApi extends ContentSaveApi {
 export interface InformationSaveApi extends ContentSaveApi {
   body: string
 }
-export interface ContactSaveApi extends ContentSaveApi {
-  body: string
+export interface ServiceSaveApi extends ContentSaveApi {
+  caption: string
+  imageFile: File | null
+  position: number
 }
 export interface NewsSaveApi extends ContentSaveApi {
   body: string
   category: NewsCategory2Label
   publishOn: Date
+}
+export interface ContactSaveApi extends ContentSaveApi {
+  body: string
 }
 
 /**

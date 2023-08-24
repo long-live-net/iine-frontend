@@ -28,14 +28,11 @@ const onChangeImageFile = async (params: { file: File; url: string }) => {
 }
 
 const onCreate = handleSubmit((informationForm) => {
-  console.log('informationForm', informationForm)
   emit('create', informationForm)
   modal.value = false
 })
 
 const onUpdate = handleSubmit((informationForm) => {
-  console.log('information id', props.informationData?.id)
-  console.log('informationForm', informationForm)
   if (props.informationData?.id) {
     emit('update', {
       id: props.informationData.id,
@@ -46,7 +43,6 @@ const onUpdate = handleSubmit((informationForm) => {
 })
 
 const onRemove = () => {
-  console.log('information id', props.informationData?.id)
   if (props.informationData?.id) {
     if (process.client) {
       const confirmed = window.confirm('本当に削除してもよろしいですか？')
