@@ -3,10 +3,12 @@ import type { ServiceType, ServiceForm } from '@/types/content'
 import type { ListFilter, ListSort, ListPager } from '@/types/content-api'
 
 const customerId = 1 // TODO: 適当！！
+const canEdit = true // TODO: 適当
 
 const {
   nextKey,
   getServiceList,
+  setServiceListPositions,
   serviceListRef,
   loading: readLoading,
 } = useServiceRead(customerId)
@@ -15,6 +17,7 @@ const {
   createService,
   updateService,
   removeService,
+  updateServiceListPositions,
   loading: writeLoading,
 } = useServiceWrite(customerId)
 
@@ -51,6 +54,12 @@ const onRemove = async (id: number) => {
   getServiceListWithPageCondition()
 }
 
+const onUpdatePositions = async (services: ServiceType[]) => {
+  await updateServiceListPositions(setServiceListPositions(services))
+  nextKey()
+  getServiceListWithPageCondition()
+}
+
 const loading = computed(() => readLoading.value || writeLoading.value)
 
 await getServiceListWithPageCondition()
@@ -58,45 +67,77 @@ await getServiceListWithPageCondition()
 
 <template>
   <GuiContentWrap :loading="false" class="type1-services">
-    <GuiContentGrid v-if="serviceListRef?.length" :contents="serviceListRef">
-      <template #default="{ content }">
-        <div class="service-item">
-          <h5 class="service-item__title">
-            {{ content.title }}
-          </h5>
-          <GuiEyecatchImage
-            v-if="content.image"
-            :url="content.image.url"
-            :settings="content.image.settings"
-            circle
-            class="service-item__eyecatcher"
-          />
-          <div class="service-item__caption">
-            {{ (content as ServiceType).caption }}
+    <template v-if="canEdit">
+      <GuiContentGridDraggable
+        v-if="serviceListRef?.length"
+        :contents="serviceListRef"
+        @update="onUpdatePositions($event as ServiceType[])"
+      >
+        <template #default="{ content }">
+          <div class="service-item">
+            <h5 class="service-item__title">
+              {{ content.title }}
+            </h5>
+            <GuiEyecatchImage
+              v-if="content.image"
+              :url="content.image.url"
+              :settings="content.image.settings"
+              circle
+              class="service-item__eyecatcher"
+            />
+            <div
+              class="service-item__caption"
+              v-html="htmlSanitizer((content as ServiceType).caption)"
+            />
+            <div class="edit-activator">
+              <SectionsEditService
+                :serviceData="content as ServiceType"
+                activaterSize="x-small"
+                @update="onUpdate"
+                @remove="onRemove"
+              />
+            </div>
           </div>
-          <div class="edit-activator">
-            <SectionsEditService
-              :serviceData="content as ServiceType"
-              activaterSize="x-small"
-              @update="onUpdate"
-              @remove="onRemove"
+        </template>
+      </GuiContentGridDraggable>
+      <div v-else class="no-items">
+        <p>データがありません</p>
+        <div>
+          <SectionsEditService
+            activaterLabel="コンテンツを登録してください"
+            @create="onCreate"
+          />
+        </div>
+      </div>
+      <div v-if="serviceListRef?.length" class="create-activator">
+        <SectionsEditService @create="onCreate" />
+      </div>
+    </template>
+    <template v-else>
+      <GuiContentGrid v-if="serviceListRef?.length" :contents="serviceListRef">
+        <template #default="{ content }">
+          <div class="service-item">
+            <h5 class="service-item__title">
+              {{ content.title }}
+            </h5>
+            <GuiEyecatchImage
+              v-if="content.image"
+              :url="content.image.url"
+              :settings="content.image.settings"
+              circle
+              class="service-item__eyecatcher"
+            />
+            <div
+              class="service-item__caption"
+              v-html="htmlSanitizer((content as ServiceType).caption)"
             />
           </div>
-        </div>
-      </template>
-    </GuiContentGrid>
-    <div v-else class="no-items">
-      <p>データがありません</p>
-      <div>
-        <SectionsEditService
-          activaterLabel="コンテンツを登録してください"
-          @create="onCreate"
-        />
+        </template>
+      </GuiContentGrid>
+      <div v-else class="no-items">
+        <p>データがありません</p>
       </div>
-    </div>
-    <div v-if="serviceListRef?.length" class="create-activator">
-      <SectionsEditService @create="onCreate" />
-    </div>
+    </template>
   </GuiContentWrap>
 </template>
 
@@ -141,8 +182,8 @@ await getServiceListWithPageCondition()
 
   .edit-activator {
     position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
+    top: -4px;
+    left: -4px;
   }
 }
 </style>

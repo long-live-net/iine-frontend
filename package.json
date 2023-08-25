@@ -32,6 +32,7 @@
     "sanitize-html": "^2.11.0",
     "sass": "^1.63.6",
     "vee-validate": "^4.11.1",
+    "vuedraggable": "^4.1.0",
     "vuetify": "^3.3.9"
   }
 }

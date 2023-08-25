@@ -5,7 +5,7 @@ import type { NewsCategory2Label } from '@/composables/use-news-category'
  * GET API で取得するデータ型
  */
 export interface ContentGetApi {
-  _id: string
+  _id?: string
   id: number
   customerId: number
   title: string
@@ -79,3 +79,8 @@ export type ListPager = { page: number; limit: number }
  * リストデータ取得時のレスポンスデータ
  */
 export type ContentListResponse<T> = { list: T[]; total: number }
+
+/**
+ * リストポジション更新時で使用するPositionデータ
+ */
+export type ContentPosition = { id: number; position: number }

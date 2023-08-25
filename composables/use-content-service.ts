@@ -5,14 +5,21 @@ import type {
   ListSort,
   ServiceGetApi,
   ServiceSaveApi,
+  ContentPosition,
 } from '@/types/content-api'
 import { useField, useForm } from 'vee-validate'
 
 const apiUrl = '/services'
 
 export const useServiceRead = (customerId: number) => {
-  const { get, getList, nextKey, contentDataRef, contentListRef } =
-    useContentRead<ServiceGetApi>(customerId, apiUrl)
+  const {
+    nextKey,
+    get,
+    getList,
+    setListPositions,
+    contentDataRef,
+    contentListRef,
+  } = useContentRead<ServiceGetApi>(customerId, apiUrl)
   const loading = ref(false)
 
   const getService = async (id?: number | null) => {
@@ -76,10 +83,21 @@ export const useServiceRead = (customerId: number) => {
     return contentListRef.value.total
   })
 
+  const setServiceListPositions = (
+    serviceList: ServiceType[]
+  ): ContentPosition[] => {
+    const positions: ContentPosition[] = serviceList.map(
+      (d, i) => ({ id: d.id, position: i + 1 }) as ContentPosition
+    )
+    setListPositions(positions)
+    return positions
+  }
+
   return {
     nextKey,
     getService,
     getServiceList,
+    setServiceListPositions,
     serviceRef,
     serviceListRef,
     serviceTotalRef,
@@ -88,7 +106,7 @@ export const useServiceRead = (customerId: number) => {
 }
 
 export const useServiceWrite = (customerId: number) => {
-  const { create, update, remove } = useContentWrite<
+  const { create, update, remove, updatePositions } = useContentWrite<
     ServiceSaveApi,
     ServiceGetApi
   >(customerId, apiUrl)
@@ -164,10 +182,20 @@ export const useServiceWrite = (customerId: number) => {
     }
   }
 
+  const updateServiceListPositions = async (positions: ContentPosition[]) => {
+    try {
+      loading.value = true
+      await updatePositions(positions)
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     createService,
     updateService,
     removeService,
+    updateServiceListPositions,
     loading,
   }
 }

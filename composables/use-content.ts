@@ -7,6 +7,7 @@ import type {
   ListSort,
   ListPager,
   ContentListResponse,
+  ContentPosition,
 } from '@/types/content-api'
 
 export const useContentRead = <T extends ContentGetApi>(
@@ -87,10 +88,33 @@ export const useContentRead = <T extends ContentGetApi>(
     }
   }
 
+  /**
+   * contents list 配列の並び順を引数のIDリストに合わせて更新
+   * @param list
+   */
+  const setListPositions = (positions: ContentPosition[]) => {
+    if (!contentListRef.value) return
+
+    const contentTotal = contentListRef.value.total
+    const contentList = positions.map((pos) => {
+      const fc = contentListRef.value?.list.find((c) => pos.id === c.id)
+      if (fc) {
+        return { ...fc }
+      } else {
+        return {} as T
+      }
+    })
+    contentListRef.value = {
+      total: contentTotal,
+      list: contentList,
+    }
+  }
+
   return {
     nextKey,
     get,
     getList,
+    setListPositions,
     contentDataRef: readonly(contentDataRef),
     contentListRef: readonly(contentListRef),
   }
@@ -199,10 +223,30 @@ export const useContentWrite = <
     }
     return data
   }
+
+  /**
+   * 並び順更新
+   * @param updatedList
+   */
+  const updatePositions = async (positions: ContentPosition[]) => {
+    const { data, error } = await useAsyncData<T>(() =>
+      $fetch(`${apiPath}/positions`, {
+        baseURL: backendBaseUrl,
+        method: 'PUT',
+        body: positions,
+      })
+    )
+    if (error.value) {
+      throw error.value
+    }
+    return data
+  }
+
   return {
     create,
     update,
     remove,
+    updatePositions,
   }
 }
 

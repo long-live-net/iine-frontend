@@ -157,8 +157,8 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
   }
   .edit-activator {
     position: absolute;
-    top: 4px;
-    left: -40px;
+    top: 3px;
+    left: -50px;
   }
 }
 @media only screen and (max-width: $grid-breakpoint-md) {
