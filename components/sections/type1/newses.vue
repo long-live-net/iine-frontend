@@ -3,6 +3,7 @@ import type { NewsType, NewsForm } from '@/types/content'
 import type { ListFilter, ListSort, ListPager } from '@/types/content-api'
 
 const customerId = 1 // TODO: 適当！！
+const canEdit = true // TODO: 適当
 
 const {
   nextKey,
@@ -79,7 +80,7 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
                   {{ content.title }}
                 </nuxt-link>
               </div>
-              <div class="edit-activator">
+              <div v-if="canEdit" class="edit-activator">
                 <SectionsEditNews
                   :newsData="content as NewsType"
                   activaterSize="x-small"
@@ -92,7 +93,7 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
         </GuiContentList>
         <div v-else class="no-items">
           <p>データがありません</p>
-          <div>
+          <div v-if="canEdit">
             <SectionsEditNews
               activaterLabel="ニュースを登録してください"
               @create="onCreate"
@@ -103,7 +104,7 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
       <div class="type1-news-list__action">
         <NuxtLink to="/news">and more ...</NuxtLink>
       </div>
-      <div v-if="newsListRef?.length" class="create-activator">
+      <div v-if="canEdit && newsListRef?.length" class="create-activator">
         <SectionsEditNews @create="onCreate" />
       </div>
     </GuiContentCard>

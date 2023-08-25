@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const { headerString = '' } = defineProps<{ headerString?: string }>()
+const { title = '' } = defineProps<{ title?: string }>()
 </script>
 
 <template>
-  <h3 class="section-title">
-    <span>{{ headerString }}</span>
+  <h3 v-if="title?.length" class="section-title">
+    <span>{{ title }}</span>
   </h3>
 </template>
 

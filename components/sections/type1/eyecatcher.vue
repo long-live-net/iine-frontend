@@ -2,6 +2,8 @@
 import type { EyecatchForm } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
+const canEdit = true // TODO: 適当
+
 const {
   nextKey,
   getEyecatch,
@@ -64,11 +66,11 @@ await getEyecatch()
         :subtitle="eyecatchRef?.subtitle"
         class="titles"
       />
-      <div class="image-settings">
+      <div v-if="canEdit" class="image-settings">
         <div>イメージセッティグ</div>
       </div>
     </GuiEyecatchImage>
-    <div class="edit-activator">
+    <div v-if="canEdit" class="edit-activator">
       <SectionsEditEyecatcher
         v-if="eyecatchRef?.id"
         :eyecatch-data="eyecatchRef"

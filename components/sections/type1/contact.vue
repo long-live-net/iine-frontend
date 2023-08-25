@@ -2,6 +2,7 @@
 import type { ContactForm } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
+const canEdit = true // TODO: 適当
 
 const {
   nextKey,
@@ -63,15 +64,15 @@ await getContact()
           :subtitle="contactRef?.subtitle"
           class="eyecatcher__titles"
         />
-        <div class="image-settings">
+        <div v-if="canEdit" class="image-settings">
           <div>イメージセッティグ</div>
         </div>
       </GuiEyecatchImage>
       <GuiContentCardBody>
-        <div v-if="contactRef?.id" v-html="htmlSanitizer(contactRef?.body)" />
+        <div v-if="contactRef?.body" v-html="htmlSanitizer(contactRef?.body)" />
         <div v-else class="no-items">
           <p>データがありません</p>
-          <div>
+          <div v-if="canEdit">
             <SectionsEditContact
               activaterLabel="コンテンツを登録してください"
               @create="onCreate"
@@ -79,7 +80,7 @@ await getContact()
           </div>
         </div>
       </GuiContentCardBody>
-      <div v-if="contactRef?.id" class="edit-activator">
+      <div v-if="canEdit && contactRef?.id" class="edit-activator">
         <SectionsEditContact
           :contact-data="contactRef"
           @update="onUpdate"

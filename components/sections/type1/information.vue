@@ -2,6 +2,7 @@
 import type { InformationForm } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
+const canEdit = true // TODO: 適当
 
 const {
   nextKey,
@@ -63,18 +64,18 @@ await getInformation()
           :subtitle="informationRef?.subtitle"
           class="eyecatcher__titles"
         />
-        <div class="image-settings">
+        <div v-if="canEdit" class="image-settings">
           <div>イメージセッティグ</div>
         </div>
       </GuiEyecatchImage>
       <GuiContentCardBody>
         <div
-          v-if="informationRef?.id"
+          v-if="informationRef?.body"
           v-html="htmlSanitizer(informationRef?.body)"
         />
         <div v-else class="no-items">
           <p>データがありません</p>
-          <div>
+          <div v-if="canEdit">
             <SectionsEditInformation
               activaterLabel="コンテンツを登録してください"
               @create="onCreate"
@@ -82,7 +83,7 @@ await getInformation()
           </div>
         </div>
       </GuiContentCardBody>
-      <div v-if="informationRef?.id" class="edit-activator">
+      <div v-if="canEdit && informationRef?.id" class="edit-activator">
         <SectionsEditInformation
           :information-data="informationRef"
           @update="onUpdate"
