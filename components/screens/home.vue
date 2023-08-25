@@ -5,32 +5,32 @@ type DefinePageSections = {
   type: string
   kind: ContentKind
   order: number
-  header?: string
+  title?: string
 }
 const pageSections: DefinePageSections[] = [
   {
     type: 'type1',
     kind: 'infomation',
     order: 1,
-    header: 'Message',
+    title: 'Message',
   },
   {
     type: 'type1',
     kind: 'news',
     order: 2,
-    header: "What's New",
+    title: "What's New",
   },
   {
     type: 'type1',
     kind: 'services',
     order: 3,
-    header: 'Services',
+    title: 'Services',
   },
   {
     type: 'type1',
     kind: 'contact',
     order: 4,
-    header: 'Contact',
+    title: 'Contact',
   },
 ]
 </script>
@@ -47,12 +47,12 @@ const pageSections: DefinePageSections[] = [
       class="section-margin"
     >
       <template v-if="section.type === 'type1'">
-        <SectionsType1SectionHeader
-          v-if="section.header?.length"
-          :header-string="section.header"
+        <SectionsType1SectionTitle
+          v-if="section.title?.length"
+          :title="section.title"
         />
         <SectionsType1Information v-if="section.kind === 'infomation'" />
-        <SectionsType1NewsList v-if="section.kind === 'news'" />
+        <SectionsType1Newses v-if="section.kind === 'news'" />
         <SectionsType1Services v-if="section.kind === 'services'" />
         <SectionsType1Contact v-if="section.kind === 'contact'" />
       </template>
