@@ -29,14 +29,11 @@ const onChangeImageFile = async (params: { file: File; url: string }) => {
 }
 
 const onCreate = handleSubmit((serviceForm) => {
-  console.log('serviceForm', serviceForm)
   emit('create', serviceForm)
   modal.value = false
 })
 
 const onUpdate = handleSubmit((serviceForm) => {
-  console.log('service id', props.serviceData?.id)
-  console.log('serviceForm', serviceForm)
   if (props.serviceData?.id) {
     emit('update', {
       id: props.serviceData?.id,
@@ -47,7 +44,6 @@ const onUpdate = handleSubmit((serviceForm) => {
 })
 
 const onRemove = () => {
-  console.log('service id', props.serviceData?.id)
   if (props.serviceData?.id) {
     if (process.client) {
       const confirmed = window.confirm('本当に削除してもよろしいですか？')
