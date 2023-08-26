@@ -1,3 +1,4 @@
+import debounce from 'lodash/debounce'
 import type { ApiError } from '@/utils/api-fetch'
 import type { ImageSettings } from '@/types/content'
 import type {
@@ -110,11 +111,23 @@ export const useContentRead = <T extends ContentGetApi>(
     }
   }
 
+  /**
+   * image settings の情報を更新する
+   */
+  const setImageSettings = (settings: ImageSettings) => {
+    if (!contentDataRef.value) return
+    if (!contentDataRef.value.image?.settings) return
+
+    const url = contentDataRef.value.image.url
+    contentDataRef.value.image = { url, settings }
+  }
+
   return {
     nextKey,
     get,
     getList,
     setListPositions,
+    setImageSettings,
     contentDataRef: readonly(contentDataRef),
     contentListRef: readonly(contentListRef),
   }
@@ -242,19 +255,41 @@ export const useContentWrite = <
     return data
   }
 
+  /**
+   * 画像 Settings 情報更新
+   */
+  const updateImageSettings = debounce(
+    async (contentId: number, imageSettings: ImageSettings) => {
+      const { data, error } = await useAsyncData<T>(() =>
+        $fetch(`${apiPath}/${contentId}/image-settings`, {
+          baseURL: backendBaseUrl,
+          method: 'PUT',
+          body: imageSettings,
+        })
+      )
+      if (error.value) {
+        throw error.value
+      }
+      return data
+    },
+    600
+  )
+
+  const getDefaultImageSettings = (): ImageSettings => ({
+    lgSize: 'cover',
+    smSize: 'cover',
+    lgPosition: 'center',
+    smPosition: 'center',
+    lgParallax: 'scroll' as 'fixed' | 'scroll',
+    smParallax: 'scroll' as 'fixed' | 'scroll',
+  })
+
   return {
     create,
     update,
     remove,
     updatePositions,
+    updateImageSettings,
+    getDefaultImageSettings,
   }
 }
-
-const getDefaultImageSettings = (): ImageSettings => ({
-  lgSize: 'cover',
-  smSize: 'cover',
-  lgPosition: 'center',
-  smPosition: 'center',
-  lgParallax: 'scroll' as 'fixed' | 'scroll',
-  smParallax: 'scroll' as 'fixed' | 'scroll',
-})
