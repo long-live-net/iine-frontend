@@ -1,14 +1,12 @@
 import { useForm, useField } from 'vee-validate'
-import type { EyecatchType, EyecatchForm } from '@/types/content'
+import type { EyecatchType, EyecatchForm, ImageSettings } from '@/types/content'
 import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/content-api'
 
 const apiUrl = '/eyecatches'
 
 export const useEyecatchRead = (customerId: number) => {
-  const { get, nextKey, contentDataRef } = useContentRead<EyecatchGetApi>(
-    customerId,
-    apiUrl
-  )
+  const { nextKey, get, setImageSettings, contentDataRef } =
+    useContentRead<EyecatchGetApi>(customerId, apiUrl)
   const loading = ref(false)
 
   const getEyecatch = async (id?: number | null) => {
@@ -33,16 +31,29 @@ export const useEyecatchRead = (customerId: number) => {
     }
   })
 
+  const setEyecatchImageSettings = (settings: Partial<ImageSettings>) => {
+    if (!eyecatchRef.value) return
+    if (!eyecatchRef.value.image?.settings) return
+
+    const newSettings: ImageSettings = {
+      ...eyecatchRef.value.image.settings,
+      ...settings,
+    }
+    setImageSettings(newSettings)
+    return newSettings
+  }
+
   return {
     nextKey,
     getEyecatch,
+    setEyecatchImageSettings,
     eyecatchRef,
     loading,
   }
 }
 
 export const useEyecatchWrite = (customerId: number) => {
-  const { create, update, remove } = useContentWrite<
+  const { create, update, remove, updateImageSettings } = useContentWrite<
     EyecatchSaveApi,
     EyecatchGetApi
   >(customerId, apiUrl)
@@ -110,10 +121,18 @@ export const useEyecatchWrite = (customerId: number) => {
     }
   }
 
+  const updateEyecatchImageSettings = async (
+    contentId: number,
+    imageSettings: ImageSettings
+  ) => {
+    updateImageSettings(contentId, imageSettings)
+  }
+
   return {
     createEyecatch,
     updateEyecatch,
     removeEyecatch,
+    updateEyecatchImageSettings,
     loading,
   }
 }

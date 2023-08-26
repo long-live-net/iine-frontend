@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ImageSettings } from '@/types/content'
 import type { EyecatchForm } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
@@ -7,6 +8,7 @@ const canEdit = true // TODO: 適当
 const {
   nextKey,
   getEyecatch,
+  setEyecatchImageSettings,
   eyecatchRef,
   loading: readLoading,
 } = useEyecatchRead(customerId)
@@ -15,6 +17,7 @@ const {
   createEyecatch,
   updateEyecatch,
   removeEyecatch,
+  updateEyecatchImageSettings,
   loading: writeLoading,
 } = useEyecatchWrite(customerId)
 
@@ -44,6 +47,15 @@ const onRemove = async (id: number) => {
   getEyecatch()
 }
 
+const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+  if (!eyecatchRef.value?.id) return
+
+  const newSettings = setEyecatchImageSettings(settings)
+  if (!newSettings) return
+
+  updateEyecatchImageSettings(eyecatchRef.value.id, newSettings)
+}
+
 const loading = computed(() => readLoading.value || writeLoading.value)
 
 await getEyecatch()
@@ -66,8 +78,14 @@ await getEyecatch()
         :subtitle="eyecatchRef?.subtitle"
         class="titles"
       />
-      <div v-if="canEdit" class="image-settings">
-        <div>イメージセッティグ</div>
+      <div
+        v-if="canEdit && eyecatchRef?.image?.settings"
+        class="image-settings"
+      >
+        <GuiImageSetting
+          :settings="eyecatchRef.image.settings"
+          @update="onUpdateImageSetting"
+        />
       </div>
     </GuiEyecatchImage>
     <div v-if="canEdit" class="edit-activator">
@@ -110,17 +128,17 @@ await getEyecatch()
     position: absolute;
     bottom: 2rem;
     right: 2rem;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.6);
   }
 }
 @media only screen and (max-width: $grid-breakpoint-md) {
   .eyecatcher {
     height: 100vh;
     min-height: auto;
-  }
-  .image-settings {
-    bottom: 1rem;
-    right: 1rem;
+    .image-settings {
+      bottom: 0.25rem;
+      right: 0.25rem;
+    }
   }
 }
 </style>
