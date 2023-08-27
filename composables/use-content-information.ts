@@ -1,24 +1,18 @@
 import { useForm, useField } from 'vee-validate'
-import type { InformationType, InformationForm } from '@/types/content'
+import type {
+  InformationType,
+  InformationForm,
+  ImageSettings,
+} from '@/types/content'
 import type { InformationGetApi, InformationSaveApi } from '@/types/content-api'
 
 const apiUrl = '/informations'
 
 export const useInformationRead = (customerId: number) => {
-  const { get, nextKey, contentDataRef } = useContentRead<InformationGetApi>(
-    customerId,
-    apiUrl
-  )
-  const loading = ref(false)
+  const { nextKey, get, setImageSettings, contentDataRef } =
+    useContentRead<InformationGetApi>(customerId, apiUrl)
 
-  const getInformation = async (id?: number | null) => {
-    try {
-      loading.value = true
-      await get(id)
-    } finally {
-      loading.value = false
-    }
-  }
+  const loading = ref(false)
 
   const informationRef = computed<InformationType | null>(() => {
     if (!contentDataRef.value) {
@@ -34,16 +28,40 @@ export const useInformationRead = (customerId: number) => {
     }
   })
 
+  const getInformation = async (id?: number | null) => {
+    try {
+      loading.value = true
+      await get(id)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const setInformationImageSettings = (
+    settings: Partial<ImageSettings>
+  ): ImageSettings | void => {
+    if (!informationRef.value) return
+    if (!informationRef.value.image?.settings) return
+
+    const newSettings: ImageSettings = {
+      ...informationRef.value.image.settings,
+      ...settings,
+    }
+    setImageSettings(newSettings)
+    return newSettings
+  }
+
   return {
     nextKey,
     getInformation,
+    setInformationImageSettings,
     informationRef,
     loading,
   }
 }
 
 export const useInformationWrite = (customerId: number) => {
-  const { create, update, remove } = useContentWrite<
+  const { create, update, remove, updateImageSettings } = useContentWrite<
     InformationSaveApi,
     InformationGetApi
   >(customerId, apiUrl)
@@ -114,10 +132,21 @@ export const useInformationWrite = (customerId: number) => {
     }
   }
 
+  const updateInformationImageSettings = async (
+    contentId: number,
+    imageSettings: ImageSettings
+  ) => {
+    const promise = updateImageSettings(contentId, imageSettings)
+    if (promise) {
+      return await promise
+    }
+  }
+
   return {
     createInformation,
     updateInformation,
     removeInformation,
+    updateInformationImageSettings,
     loading,
   }
 }

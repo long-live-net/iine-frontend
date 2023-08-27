@@ -1,24 +1,14 @@
 import { useForm, useField } from 'vee-validate'
-import type { ContactType, ContactForm } from '@/types/content'
+import type { ContactType, ContactForm, ImageSettings } from '@/types/content'
 import type { ContactGetApi, ContactSaveApi } from '@/types/content-api'
 
 const apiUrl = '/contacts'
 
 export const useContactRead = (customerId: number) => {
-  const { get, nextKey, contentDataRef } = useContentRead<ContactGetApi>(
-    customerId,
-    apiUrl
-  )
-  const loading = ref(false)
+  const { nextKey, get, setImageSettings, contentDataRef } =
+    useContentRead<ContactGetApi>(customerId, apiUrl)
 
-  const getContact = async (id?: number | null) => {
-    try {
-      loading.value = true
-      await get(id)
-    } finally {
-      loading.value = false
-    }
-  }
+  const loading = ref(false)
 
   const contactRef = computed<ContactType | null>(() => {
     if (!contentDataRef.value) {
@@ -34,16 +24,40 @@ export const useContactRead = (customerId: number) => {
     }
   })
 
+  const getContact = async (id?: number | null) => {
+    try {
+      loading.value = true
+      await get(id)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const setContactImageSettings = (
+    settings: Partial<ImageSettings>
+  ): ImageSettings | void => {
+    if (!contactRef.value) return
+    if (!contactRef.value.image?.settings) return
+
+    const newSettings: ImageSettings = {
+      ...contactRef.value.image.settings,
+      ...settings,
+    }
+    setImageSettings(newSettings)
+    return newSettings
+  }
+
   return {
     nextKey,
     getContact,
+    setContactImageSettings,
     contactRef,
     loading,
   }
 }
 
 export const useContactWrite = (customerId: number) => {
-  const { create, update, remove } = useContentWrite<
+  const { create, update, remove, updateImageSettings } = useContentWrite<
     ContactSaveApi,
     ContactGetApi
   >(customerId, apiUrl)
@@ -115,10 +129,21 @@ export const useContactWrite = (customerId: number) => {
     }
   }
 
+  const updateContactImageSettings = async (
+    contentId: number,
+    imageSettings: ImageSettings
+  ) => {
+    const promise = updateImageSettings(contentId, imageSettings)
+    if (promise) {
+      return await promise
+    }
+  }
+
   return {
     createContact,
     updateContact,
     removeContact,
+    updateContactImageSettings,
     loading,
   }
 }

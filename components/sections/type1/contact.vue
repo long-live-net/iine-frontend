@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ContactForm } from '@/types/content'
+import type { ContactForm, ImageSettings } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
 const canEdit = true // TODO: 適当
@@ -7,6 +7,7 @@ const canEdit = true // TODO: 適当
 const {
   nextKey,
   getContact,
+  setContactImageSettings,
   contactRef,
   loading: readLoading,
 } = useContactRead(customerId)
@@ -15,6 +16,7 @@ const {
   createContact,
   updateContact,
   removeContact,
+  updateContactImageSettings,
   loading: writeLoading,
 } = useContactWrite(customerId)
 
@@ -44,6 +46,15 @@ const onRemove = async (id: number) => {
   getContact()
 }
 
+const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+  if (!contactRef.value?.id) return
+
+  const newSettings = setContactImageSettings(settings)
+  if (!newSettings) return
+
+  updateContactImageSettings(contactRef.value.id, newSettings)
+}
+
 const loading = computed(() => readLoading.value || writeLoading.value)
 
 await getContact()
@@ -64,8 +75,14 @@ await getContact()
           :subtitle="contactRef?.subtitle"
           class="eyecatcher__titles"
         />
-        <div v-if="canEdit" class="image-settings">
-          <div>イメージセッティグ</div>
+        <div
+          v-if="canEdit && contactRef?.image?.settings"
+          class="image-settings"
+        >
+          <GuiImageSetting
+            :settings="contactRef.image.settings"
+            @update="onUpdateImageSetting"
+          />
         </div>
       </GuiEyecatchImage>
       <GuiContentCardBody>
@@ -128,7 +145,6 @@ $eyecatcher-height-sm: 600px;
     position: absolute;
     bottom: 1rem;
     right: 1rem;
-    background-color: rgba(255, 255, 255, 0.5);
   }
 }
 
@@ -137,6 +153,10 @@ $eyecatcher-height-sm: 600px;
     height: 50vh;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
+    .image-settings {
+      bottom: 0.5rem;
+      right: 0.5rem;
+    }
   }
 }
 </style>

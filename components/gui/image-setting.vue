@@ -153,7 +153,7 @@ const pySm = computed<number>({
 
 <template>
   <!-- Large画面 -->
-  <div class="g-block-lg">
+  <div class="image-setting g-block-lg">
     <BaseImagePlacer
       v-model:parallax="parallaxLg"
       v-model:auto="autoLg"
@@ -163,7 +163,7 @@ const pySm = computed<number>({
     />
   </div>
   <!-- Small画面 -->
-  <div class="g-block-sm">
+  <div class="image-setting g-block-sm">
     <BaseImagePlacer
       v-model:parallax="parallaxSm"
       v-model:auto="autoSm"
@@ -173,3 +173,10 @@ const pySm = computed<number>({
     />
   </div>
 </template>
+
+<style scoped lang="scss">
+.image-setting {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+}
+</style>
