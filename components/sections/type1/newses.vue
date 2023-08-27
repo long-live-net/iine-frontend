@@ -133,7 +133,6 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background-color: rgba(255, 255, 255, 0.5);
   }
 }
 
@@ -142,6 +141,7 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  padding-left: 1rem;
   gap: 0.5rem;
   &__header {
     padding: 0.2rem;
@@ -159,14 +159,18 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
   .edit-activator {
     position: absolute;
     top: 3px;
-    left: -50px;
+    left: -25px;
   }
 }
 @media only screen and (max-width: $grid-breakpoint-md) {
   .news-item {
     flex-flow: column;
     align-items: stretch;
-    padding: 0 0 0.6rem 0.3rem;
+    padding: 0 0 0.6rem 1rem;
+    .edit-activator {
+      top: 0;
+      left: -22px;
+    }
   }
 }
 </style>

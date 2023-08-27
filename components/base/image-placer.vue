@@ -87,7 +87,7 @@ const positionYComp = computed<number>({
           density="compact"
           hide-details
           min="100"
-          max="300"
+          max="400"
           step="1"
           :disabled="autoComp"
         >

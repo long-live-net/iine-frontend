@@ -7,16 +7,8 @@ const apiUrl = '/eyecatches'
 export const useEyecatchRead = (customerId: number) => {
   const { nextKey, get, setImageSettings, contentDataRef } =
     useContentRead<EyecatchGetApi>(customerId, apiUrl)
-  const loading = ref(false)
 
-  const getEyecatch = async (id?: number | null) => {
-    try {
-      loading.value = true
-      await get(id)
-    } finally {
-      loading.value = false
-    }
-  }
+  const loading = ref(false)
 
   const eyecatchRef = computed<EyecatchType | null>(() => {
     if (!contentDataRef.value) {
@@ -30,6 +22,15 @@ export const useEyecatchRead = (customerId: number) => {
       image: contentDataRef.value.image,
     }
   })
+
+  const getEyecatch = async (id?: number | null) => {
+    try {
+      loading.value = true
+      await get(id)
+    } finally {
+      loading.value = false
+    }
+  }
 
   const setEyecatchImageSettings = (settings: Partial<ImageSettings>) => {
     if (!eyecatchRef.value) return
@@ -125,7 +126,10 @@ export const useEyecatchWrite = (customerId: number) => {
     contentId: number,
     imageSettings: ImageSettings
   ) => {
-    updateImageSettings(contentId, imageSettings)
+    const promise = updateImageSettings(contentId, imageSettings)
+    if (promise) {
+      return await promise
+    }
   }
 
   return {

@@ -126,9 +126,8 @@ await getEyecatch()
   }
   .image-settings {
     position: absolute;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: rgba(255, 255, 255, 0.6);
+    bottom: 1rem;
+    right: 1rem;
   }
 }
 @media only screen and (max-width: $grid-breakpoint-md) {
@@ -136,8 +135,8 @@ await getEyecatch()
     height: 100vh;
     min-height: auto;
     .image-settings {
-      bottom: 0.25rem;
-      right: 0.25rem;
+      bottom: 0.5rem;
+      right: 0.5rem;
     }
   }
 }

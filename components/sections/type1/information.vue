@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { InformationForm } from '@/types/content'
+import type { InformationForm, ImageSettings } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
 const canEdit = true // TODO: 適当
@@ -7,6 +7,7 @@ const canEdit = true // TODO: 適当
 const {
   nextKey,
   getInformation,
+  setInformationImageSettings,
   informationRef,
   loading: readLoading,
 } = useInformationRead(customerId)
@@ -15,6 +16,7 @@ const {
   createInformation,
   updateInformation,
   removeInformation,
+  updateInformationImageSettings,
   loading: writeLoading,
 } = useInformationWrite(customerId)
 
@@ -44,6 +46,15 @@ const onRemove = async (id: number) => {
   getInformation()
 }
 
+const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+  if (!informationRef.value?.id) return
+
+  const newSettings = setInformationImageSettings(settings)
+  if (!newSettings) return
+
+  updateInformationImageSettings(informationRef.value.id, newSettings)
+}
+
 const loading = computed(() => readLoading.value || writeLoading.value)
 
 await getInformation()
@@ -64,8 +75,14 @@ await getInformation()
           :subtitle="informationRef?.subtitle"
           class="eyecatcher__titles"
         />
-        <div v-if="canEdit" class="image-settings">
-          <div>イメージセッティグ</div>
+        <div
+          v-if="canEdit && informationRef?.image?.settings"
+          class="image-settings"
+        >
+          <GuiImageSetting
+            :settings="informationRef.image.settings"
+            @update="onUpdateImageSetting"
+          />
         </div>
       </GuiEyecatchImage>
       <GuiContentCardBody>
@@ -131,7 +148,6 @@ $eyecatcher-height-sm: 600px;
     position: absolute;
     bottom: 1rem;
     right: 1rem;
-    background-color: rgba(255, 255, 255, 0.5);
   }
 }
 @media only screen and (max-width: $grid-breakpoint-md) {
@@ -139,6 +155,10 @@ $eyecatcher-height-sm: 600px;
     height: 50vh;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
+    .image-settings {
+      bottom: 0.5rem;
+      right: 0.5rem;
+    }
   }
 }
 </style>
