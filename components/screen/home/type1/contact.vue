@@ -90,7 +90,7 @@ await getContact()
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <SectionsEditContact
+            <ScreenFormContact
               activaterLabel="コンテンツを登録してください"
               @create="onCreate"
             />
@@ -98,7 +98,7 @@ await getContact()
         </div>
       </GuiContentCardBody>
       <div v-if="canEdit && contactRef?.id" class="edit-activator">
-        <SectionsEditContact
+        <ScreenFormContact
           :contact-data="contactRef"
           @update="onUpdate"
           @remove="onRemove"

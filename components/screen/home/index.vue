@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { ContentKind } from '@/types/content'
 
-type DefinePageSections = {
+type DefineHomeSections = {
   type: string
   kind: ContentKind
   order: number
   title?: string
 }
-const pageSections: DefinePageSections[] = [
+const homeSections: DefineHomeSections[] = [
   {
     type: 'type1',
     kind: 'infomation',
@@ -38,23 +38,23 @@ const pageSections: DefinePageSections[] = [
 <template>
   <article>
     <div id="index-position-top">
-      <SectionsType1Eyecatcher />
+      <ScreenHomeType1Eyecatcher />
     </div>
 
     <section
-      v-for="section in pageSections"
+      v-for="section in homeSections"
       :id="`index-position-${section.kind}`"
       class="section-margin"
     >
       <template v-if="section.type === 'type1'">
-        <SectionsType1SectionTitle
+        <ScreenHomeType1SectionTitle
           v-if="section.title?.length"
           :title="section.title"
         />
-        <SectionsType1Information v-if="section.kind === 'infomation'" />
-        <SectionsType1Newses v-if="section.kind === 'news'" />
-        <SectionsType1Services v-if="section.kind === 'services'" />
-        <SectionsType1Contact v-if="section.kind === 'contact'" />
+        <ScreenHomeType1Information v-if="section.kind === 'infomation'" />
+        <ScreenHomeType1Newses v-if="section.kind === 'news'" />
+        <ScreenHomeType1Services v-if="section.kind === 'services'" />
+        <ScreenHomeType1Contact v-if="section.kind === 'contact'" />
       </template>
     </section>
   </article>

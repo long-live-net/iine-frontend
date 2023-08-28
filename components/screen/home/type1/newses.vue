@@ -81,7 +81,7 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
                 </nuxt-link>
               </div>
               <div v-if="canEdit" class="edit-activator">
-                <SectionsEditNews
+                <ScreenFormNews
                   :newsData="content as NewsType"
                   activaterSize="x-small"
                   @update="onUpdate"
@@ -94,7 +94,7 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <SectionsEditNews
+            <ScreenFormNews
               activaterLabel="ニュースを登録してください"
               @create="onCreate"
             />
@@ -105,7 +105,7 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
         <NuxtLink to="/news">and more ...</NuxtLink>
       </div>
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
-        <SectionsEditNews @create="onCreate" />
+        <ScreenFormNews @create="onCreate" />
       </div>
     </GuiContentCard>
   </GuiContentWrap>

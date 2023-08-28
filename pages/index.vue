@@ -3,5 +3,5 @@ const topButtonImage = '/image/arrow-up4.png'
 </script>
 
 <template>
-  <ScreensHome />
+  <ScreenHome />
 </template>
