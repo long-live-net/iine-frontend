@@ -93,7 +93,7 @@ await getInformation()
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <SectionsEditInformation
+            <ScreenFormInformation
               activaterLabel="コンテンツを登録してください"
               @create="onCreate"
             />
@@ -101,7 +101,7 @@ await getInformation()
         </div>
       </GuiContentCardBody>
       <div v-if="canEdit && informationRef?.id" class="edit-activator">
-        <SectionsEditInformation
+        <ScreenFormInformation
           :information-data="informationRef"
           @update="onUpdate"
           @remove="onRemove"

@@ -89,13 +89,13 @@ await getEyecatch()
       </div>
     </GuiEyecatchImage>
     <div v-if="canEdit" class="edit-activator">
-      <SectionsEditEyecatcher
+      <ScreenFormEyecatcher
         v-if="eyecatchRef?.id"
         :eyecatch-data="eyecatchRef"
         @update="onUpdate"
         @remove="onRemove"
       />
-      <SectionsEditEyecatcher
+      <ScreenFormEyecatcher
         v-else
         :eyecatch-data="eyecatchRef"
         activaterLabel="トップ画像を登録してください"

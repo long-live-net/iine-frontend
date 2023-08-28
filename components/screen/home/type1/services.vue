@@ -90,7 +90,7 @@ await getServiceListWithPageCondition()
               v-html="htmlSanitizer((content as ServiceType).caption)"
             />
             <div class="edit-activator">
-              <SectionsEditService
+              <ScreenFormService
                 :serviceData="content as ServiceType"
                 activaterSize="x-small"
                 @update="onUpdate"
@@ -103,14 +103,14 @@ await getServiceListWithPageCondition()
       <div v-else class="no-items">
         <p>データがありません</p>
         <div>
-          <SectionsEditService
+          <ScreenFormService
             activaterLabel="コンテンツを登録してください"
             @create="onCreate"
           />
         </div>
       </div>
       <div v-if="serviceListRef?.length" class="create-activator">
-        <SectionsEditService @create="onCreate" />
+        <ScreenFormService @create="onCreate" />
       </div>
     </template>
     <template v-else>
