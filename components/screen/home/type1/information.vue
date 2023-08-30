@@ -1,63 +1,18 @@
 <script setup lang="ts">
-import type { InformationForm, ImageSettings } from '@/types/content'
-
 const customerId = 1 // TODO: 適当！！
 const canEdit = true // TODO: 適当
 
 const {
-  nextKey,
-  getInformation,
-  setInformationImageSettings,
   informationRef,
-  loading: readLoading,
-} = useInformationRead(customerId)
+  onLoad,
+  onCreate,
+  onUpdate,
+  onRemove,
+  onUpdateImageSetting,
+  loading,
+} = useInformationActions(customerId)
 
-const {
-  createInformation,
-  updateInformation,
-  removeInformation,
-  updateInformationImageSettings,
-  loading: writeLoading,
-} = useInformationWrite(customerId)
-
-const onCreate = async (formData: InformationForm) => {
-  const savedData = await createInformation(formData)
-  nextKey()
-  getInformation(savedData?.id)
-}
-
-const onUpdate = async ({
-  id,
-  formData,
-}: {
-  id: number
-  formData: InformationForm
-}) => {
-  if (!id) return
-
-  const savedData = await updateInformation(id, formData)
-  nextKey()
-  getInformation(savedData?.id)
-}
-
-const onRemove = async (id: number) => {
-  await removeInformation(id)
-  nextKey()
-  getInformation()
-}
-
-const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
-  if (!informationRef.value?.id) return
-
-  const newSettings = setInformationImageSettings(settings)
-  if (!newSettings) return
-
-  updateInformationImageSettings(informationRef.value.id, newSettings)
-}
-
-const loading = computed(() => readLoading.value || writeLoading.value)
-
-await getInformation()
+await onLoad()
 </script>
 
 <template>

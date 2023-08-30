@@ -14,8 +14,13 @@ const emit = defineEmits<{
 }>()
 
 const modal = ref(false)
-const { handleSubmit, handleReset, formData, resetEyeCatchForm } =
-  useEyecatchForm()
+const {
+  handleSubmit,
+  handleReset,
+  formData,
+  resetEyeCatchForm,
+  changeImageFile,
+} = useEyecatchForm()
 
 watch(modal, (current) => {
   if (current) {
@@ -23,11 +28,6 @@ watch(modal, (current) => {
     resetEyeCatchForm(props.eyecatchData)
   }
 })
-
-const onChangeImageFile = async (params: { file: File; url: string }) => {
-  formData.image.value.value = params.url
-  formData.imageFile.value.value = params.file
-}
 
 const onCreate = handleSubmit((eyecatchForm) => {
   emit('create', eyecatchForm)
@@ -74,7 +74,7 @@ const onCancel = () => {
           :image-url="formData.image.value.value"
           :error-messages="formData.image.errorMessage.value"
           label="トップ画像"
-          @change-image-file="onChangeImageFile"
+          @change-image-file="changeImageFile"
         />
       </div>
       <div class="mt-3">

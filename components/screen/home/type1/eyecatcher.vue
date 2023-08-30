@@ -1,64 +1,18 @@
 <script setup lang="ts">
-import type { ImageSettings } from '@/types/content'
-import type { EyecatchForm } from '@/types/content'
-
 const customerId = 1 // TODO: 適当！！
 const canEdit = true // TODO: 適当
 
 const {
-  nextKey,
-  getEyecatch,
-  setEyecatchImageSettings,
   eyecatchRef,
-  loading: readLoading,
-} = useEyecatchRead(customerId)
+  onLoad,
+  onCreate,
+  onUpdate,
+  onRemove,
+  onUpdateImageSetting,
+  loading,
+} = useEyecatchActions(customerId)
 
-const {
-  createEyecatch,
-  updateEyecatch,
-  removeEyecatch,
-  updateEyecatchImageSettings,
-  loading: writeLoading,
-} = useEyecatchWrite(customerId)
-
-const onCreate = async (formData: EyecatchForm) => {
-  const savedData = await createEyecatch(formData)
-  nextKey()
-  getEyecatch(savedData?.id)
-}
-
-const onUpdate = async ({
-  id,
-  formData,
-}: {
-  id: number
-  formData: EyecatchForm
-}) => {
-  if (!id) return
-
-  const savedData = await updateEyecatch(id, formData)
-  nextKey()
-  getEyecatch(savedData?.id)
-}
-
-const onRemove = async (id: number) => {
-  await removeEyecatch(id)
-  nextKey()
-  getEyecatch()
-}
-
-const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
-  if (!eyecatchRef.value?.id) return
-
-  const newSettings = setEyecatchImageSettings(settings)
-  if (!newSettings) return
-
-  updateEyecatchImageSettings(eyecatchRef.value.id, newSettings)
-}
-
-const loading = computed(() => readLoading.value || writeLoading.value)
-
-await getEyecatch()
+await onLoad()
 </script>
 
 <template>
