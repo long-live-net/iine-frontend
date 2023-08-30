@@ -4,7 +4,7 @@ import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/content-api'
 
 const apiUrl = '/eyecatches'
 
-export const useEyecatchRead = (customerId: number) => {
+const useEyecatchRead = (customerId: number) => {
   const { nextKey, get, setImageSettings, contentDataRef } =
     useContentRead<EyecatchGetApi>(customerId, apiUrl)
 
@@ -53,7 +53,7 @@ export const useEyecatchRead = (customerId: number) => {
   }
 }
 
-export const useEyecatchWrite = (customerId: number) => {
+const useEyecatchWrite = (customerId: number) => {
   const { create, update, remove, updateImageSettings } = useContentWrite<
     EyecatchSaveApi,
     EyecatchGetApi
@@ -141,6 +141,9 @@ export const useEyecatchWrite = (customerId: number) => {
   }
 }
 
+/**
+ * Eyecatch Form
+ */
 export const useEyecatchForm = () => {
   const { noBlank, maxLength } = useValidateRules()
   const eyecatchFormSchema = {
@@ -182,11 +185,90 @@ export const useEyecatchForm = () => {
     formData.imageFile.value.value = null
   }
 
+  const changeImageFile = (params: { file: File; url: string }) => {
+    formData.image.value.value = params.url
+    formData.imageFile.value.value = params.file
+  }
+
   return {
     handleSubmit,
     handleReset,
     validate,
     formData,
     resetEyeCatchForm,
+    changeImageFile,
+  }
+}
+
+/**
+ * Eyecatch API アクションサービス
+ * @param customerId
+ */
+export const useEyecatchActions = (customerId: number) => {
+  const {
+    nextKey,
+    getEyecatch,
+    setEyecatchImageSettings,
+    eyecatchRef,
+    loading: readLoading,
+  } = useEyecatchRead(customerId)
+
+  const {
+    createEyecatch,
+    updateEyecatch,
+    removeEyecatch,
+    updateEyecatchImageSettings,
+    loading: writeLoading,
+  } = useEyecatchWrite(customerId)
+
+  const onLoad = async () => {
+    await getEyecatch()
+  }
+
+  const onCreate = async (formData: EyecatchForm) => {
+    const savedData = await createEyecatch(formData)
+    nextKey()
+    getEyecatch(savedData?.id)
+  }
+
+  const onUpdate = async ({
+    id,
+    formData,
+  }: {
+    id: number
+    formData: EyecatchForm
+  }) => {
+    if (!id) return
+
+    const savedData = await updateEyecatch(id, formData)
+    nextKey()
+    getEyecatch(savedData?.id)
+  }
+
+  const onRemove = async (id: number) => {
+    await removeEyecatch(id)
+    nextKey()
+    getEyecatch()
+  }
+
+  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+    if (!eyecatchRef.value?.id) return
+
+    const newSettings = setEyecatchImageSettings(settings)
+    if (!newSettings) return
+
+    updateEyecatchImageSettings(eyecatchRef.value.id, newSettings)
+  }
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
+
+  return {
+    eyecatchRef,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdateImageSetting,
+    loading,
   }
 }

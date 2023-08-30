@@ -1,62 +1,26 @@
 <script setup lang="ts">
-import type { NewsType, NewsForm } from '@/types/content'
-import type { ListFilter, ListSort, ListPager } from '@/types/content-api'
+import type { NewsType } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
 const canEdit = true // TODO: 適当
-
-const {
-  nextKey,
-  getNewsList,
-  newsListRef,
-  loading: readLoading,
-} = useNewsRead(customerId)
-
-const {
-  createNews,
-  updateNews,
-  removeNews,
-  loading: writeLoading,
-} = useNewsWrite(customerId)
-
-const getNewsListWithPageCondition = async () => {
-  const filter: ListFilter = { publishOn: false } // Todo: ログインしていれば false にすること後で忘れない様に！
-  const sort: ListSort = { publishOn: -1 }
-  const pager: ListPager = { page: 1, limit: 6 }
-  await getNewsList(filter, sort, pager)
-}
-
-const onCreate = async (formData: NewsForm) => {
-  await createNews(formData)
-  nextKey()
-  getNewsListWithPageCondition()
-}
-
-const onUpdate = async ({
-  id,
-  formData,
-}: {
-  id: number
-  formData: NewsForm
-}) => {
-  if (!id) return
-
-  await updateNews(id, formData)
-  nextKey()
-  getNewsListWithPageCondition()
-}
-
-const onRemove = async (id: number) => {
-  await removeNews(id)
-  nextKey()
-  getNewsListWithPageCondition()
-}
-
-const loading = computed(() => readLoading.value || writeLoading.value)
-
-await getNewsListWithPageCondition()
-
 const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
+
+const {
+  filter,
+  sort,
+  pager,
+  newsListRef,
+  onLoad,
+  onCreate,
+  onUpdate,
+  onRemove,
+  loading,
+} = useNewsListActions(customerId)
+
+filter.value = { publishOn: false } // Todo: ログインしていれば false にすること後で忘れない様に！
+sort.value = { publishOn: -1 }
+pager.value = { page: 1, limit: 6 }
+await onLoad()
 </script>
 
 <template>

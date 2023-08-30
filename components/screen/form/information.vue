@@ -12,8 +12,13 @@ const emit = defineEmits<{
 }>()
 
 const modal = ref(false)
-const { handleSubmit, handleReset, formData, resetInformationForm } =
-  useInformationForm()
+const {
+  handleSubmit,
+  handleReset,
+  formData,
+  resetInformationForm,
+  changeImageFile,
+} = useInformationForm()
 
 watch(modal, (current) => {
   if (current) {
@@ -21,11 +26,6 @@ watch(modal, (current) => {
     resetInformationForm(props.informationData)
   }
 })
-
-const onChangeImageFile = async (params: { file: File; url: string }) => {
-  formData.image.value.value = params.url
-  formData.imageFile.value.value = params.file
-}
 
 const onCreate = handleSubmit((informationForm) => {
   emit('create', informationForm)
@@ -75,7 +75,7 @@ const onCancel = () => {
           :image-url="formData.image.value.value"
           :error-messages="formData.image.errorMessage.value"
           label="タイトル画像"
-          @change-image-file="onChangeImageFile"
+          @change-image-file="changeImageFile"
         />
       </div>
       <div class="mt-3">

@@ -14,7 +14,8 @@ const emit = defineEmits<{
 }>()
 
 const modal = ref(false)
-const { handleSubmit, handleReset, formData, resetNewsForm } = useNewsForm()
+const { handleSubmit, handleReset, formData, resetNewsForm, changeImageFile } =
+  useNewsForm()
 
 const categoryChoices = Object.entries(newsCategory2Label).map(
   ([key, value]) => ({
@@ -29,11 +30,6 @@ watch(modal, (current) => {
     resetNewsForm(props.newsData)
   }
 })
-
-const onChangeImageFile = async (params: { file: File; url: string }) => {
-  formData.image.value.value = params.url
-  formData.imageFile.value.value = params.file
-}
 
 const onCreate = handleSubmit((newsForm) => {
   emit('create', newsForm)
@@ -81,7 +77,7 @@ const onCancel = () => {
           :image-url="formData.image.value.value"
           :error-messages="formData.image.errorMessage.value"
           label="タイトル画像"
-          @change-image-file="onChangeImageFile"
+          @change-image-file="changeImageFile"
         />
       </div>
       <div class="mt-3">

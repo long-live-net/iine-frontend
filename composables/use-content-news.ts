@@ -10,7 +10,7 @@ import type {
 
 const apiUrl = '/newses'
 
-export const useNewsRead = (customerId: number) => {
+const useNewsRead = (customerId: number) => {
   const { get, getList, nextKey, contentDataRef, contentListRef } =
     useContentRead<NewsGetApi>(customerId, apiUrl)
   const loading = ref(false)
@@ -87,7 +87,7 @@ export const useNewsRead = (customerId: number) => {
   }
 }
 
-export const useNewsWrite = (customerId: number) => {
+const useNewsWrite = (customerId: number) => {
   const { create, update, remove } = useContentWrite<NewsSaveApi, NewsGetApi>(
     customerId,
     apiUrl
@@ -170,6 +170,9 @@ export const useNewsWrite = (customerId: number) => {
   }
 }
 
+/**
+ * news Form
+ */
 export const useNewsForm = () => {
   const { required, noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
 
@@ -222,11 +225,85 @@ export const useNewsForm = () => {
     formData.imageFile.value.value = null
   }
 
+  const changeImageFile = async (params: { file: File; url: string }) => {
+    formData.image.value.value = params.url
+    formData.imageFile.value.value = params.file
+  }
+
   return {
     handleSubmit,
     handleReset,
     validate,
     formData,
     resetNewsForm,
+    changeImageFile,
+  }
+}
+
+/**
+ * news list API アクションサービス
+ * @param customerId
+ */
+export const useNewsListActions = (customerId: number) => {
+  const filter = ref<ListFilter>({})
+  const sort = ref<ListSort>({ id: 1 })
+  const pager = ref<ListPager>({ page: 1, limit: 20 })
+
+  const {
+    nextKey,
+    getNewsList,
+    newsListRef,
+    loading: readLoading,
+  } = useNewsRead(customerId)
+
+  const {
+    createNews,
+    updateNews,
+    removeNews,
+    loading: writeLoading,
+  } = useNewsWrite(customerId)
+
+  const onLoad = async () => {
+    await getNewsList(filter.value, sort.value, pager.value)
+  }
+
+  const onCreate = async (formData: NewsForm) => {
+    await createNews(formData)
+    nextKey()
+    getNewsList(filter.value, sort.value, pager.value)
+  }
+
+  const onUpdate = async ({
+    id,
+    formData,
+  }: {
+    id: number
+    formData: NewsForm
+  }) => {
+    if (!id) return
+
+    await updateNews(id, formData)
+    nextKey()
+    getNewsList(filter.value, sort.value, pager.value)
+  }
+
+  const onRemove = async (id: number) => {
+    await removeNews(id)
+    nextKey()
+    getNewsList(filter.value, sort.value, pager.value)
+  }
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
+
+  return {
+    filter,
+    sort,
+    pager,
+    newsListRef,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    loading,
   }
 }

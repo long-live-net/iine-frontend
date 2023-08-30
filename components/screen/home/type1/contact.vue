@@ -1,63 +1,18 @@
 <script setup lang="ts">
-import type { ContactForm, ImageSettings } from '@/types/content'
-
 const customerId = 1 // TODO: 適当！！
 const canEdit = true // TODO: 適当
 
 const {
-  nextKey,
-  getContact,
-  setContactImageSettings,
   contactRef,
-  loading: readLoading,
-} = useContactRead(customerId)
+  onLoad,
+  onCreate,
+  onUpdate,
+  onRemove,
+  onUpdateImageSetting,
+  loading,
+} = useContactActions(customerId)
 
-const {
-  createContact,
-  updateContact,
-  removeContact,
-  updateContactImageSettings,
-  loading: writeLoading,
-} = useContactWrite(customerId)
-
-const onCreate = async (formData: ContactForm) => {
-  const savedData = await createContact(formData)
-  nextKey()
-  getContact(savedData?.id)
-}
-
-const onUpdate = async ({
-  id,
-  formData,
-}: {
-  id: number
-  formData: ContactForm
-}) => {
-  if (!id) return
-
-  const savedData = await updateContact(id, formData)
-  nextKey()
-  getContact(savedData?.id)
-}
-
-const onRemove = async (id: number) => {
-  await removeContact(id)
-  nextKey()
-  getContact()
-}
-
-const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
-  if (!contactRef.value?.id) return
-
-  const newSettings = setContactImageSettings(settings)
-  if (!newSettings) return
-
-  updateContactImageSettings(contactRef.value.id, newSettings)
-}
-
-const loading = computed(() => readLoading.value || writeLoading.value)
-
-await getContact()
+await onLoad()
 </script>
 
 <template>

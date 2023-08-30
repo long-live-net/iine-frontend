@@ -13,8 +13,13 @@ const emit = defineEmits<{
 }>()
 
 const modal = ref(false)
-const { handleSubmit, handleReset, formData, resetContactForm } =
-  useContactForm()
+const {
+  handleSubmit,
+  handleReset,
+  formData,
+  resetContactForm,
+  changeImageFile,
+} = useContactForm()
 
 watch(modal, (current) => {
   if (current) {
@@ -22,11 +27,6 @@ watch(modal, (current) => {
     resetContactForm(props.contactData)
   }
 })
-
-const onChangeImageFile = async (params: { file: File; url: string }) => {
-  formData.image.value.value = params.url
-  formData.imageFile.value.value = params.file
-}
 
 const onCreate = handleSubmit((contanctForm) => {
   emit('create', contanctForm)
@@ -73,7 +73,7 @@ const onCancel = () => {
           :image-url="formData.image.value.value"
           :error-messages="formData.image.errorMessage.value"
           label="タイトル画像"
-          @change-image-file="onChangeImageFile"
+          @change-image-file="changeImageFile"
         />
       </div>
       <div class="mt-3">

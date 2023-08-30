@@ -11,7 +11,7 @@ import { useField, useForm } from 'vee-validate'
 
 const apiUrl = '/services'
 
-export const useServiceRead = (customerId: number) => {
+const useServiceRead = (customerId: number) => {
   const {
     nextKey,
     get,
@@ -105,7 +105,7 @@ export const useServiceRead = (customerId: number) => {
   }
 }
 
-export const useServiceWrite = (customerId: number) => {
+const useServiceWrite = (customerId: number) => {
   const { create, update, remove, updatePositions } = useContentWrite<
     ServiceSaveApi,
     ServiceGetApi
@@ -200,8 +200,11 @@ export const useServiceWrite = (customerId: number) => {
   }
 }
 
+/**
+ * service Form
+ */
 export const useServiceForm = () => {
-  const { required, noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
+  const { noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
 
   const serviceFormSchema = {
     title: (v: string | undefined) => {
@@ -257,11 +260,94 @@ export const useServiceForm = () => {
     formData.position.value.value = serviceData?.position ?? 0
   }
 
+  const changeImageFile = (params: { file: File; url: string }) => {
+    formData.image.value.value = params.url
+    formData.imageFile.value.value = params.file
+  }
+
   return {
     handleSubmit,
     handleReset,
     validate,
     formData,
     resetServiceForm,
+    changeImageFile,
+  }
+}
+
+/**
+ * service list API アクションサービス
+ * @param customerId
+ */
+export const useServiceListActions = (customerId: number) => {
+  const filter = ref<ListFilter>({})
+  const sort = ref<ListSort>({ id: 1 })
+  const pager = ref<ListPager>({ page: 1, limit: 20 })
+
+  const {
+    nextKey,
+    getServiceList,
+    setServiceListPositions,
+    serviceListRef,
+    loading: readLoading,
+  } = useServiceRead(customerId)
+
+  const {
+    createService,
+    updateService,
+    removeService,
+    updateServiceListPositions,
+    loading: writeLoading,
+  } = useServiceWrite(customerId)
+
+  const onLoad = async () => {
+    await getServiceList(filter.value, sort.value, pager.value)
+  }
+
+  const onCreate = async (formData: ServiceForm) => {
+    await createService(formData)
+    nextKey()
+    getServiceList(filter.value, sort.value, pager.value)
+  }
+
+  const onUpdate = async ({
+    id,
+    formData,
+  }: {
+    id: number
+    formData: ServiceForm
+  }) => {
+    if (!id) return
+
+    await updateService(id, formData)
+    nextKey()
+    getServiceList(filter.value, sort.value, pager.value)
+  }
+
+  const onRemove = async (id: number) => {
+    await removeService(id)
+    nextKey()
+    getServiceList(filter.value, sort.value, pager.value)
+  }
+
+  const onUpdatePositions = async (services: ServiceType[]) => {
+    await updateServiceListPositions(setServiceListPositions(services))
+    nextKey()
+    getServiceList(filter.value, sort.value, pager.value)
+  }
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
+
+  return {
+    filter,
+    sort,
+    pager,
+    serviceListRef,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdatePositions,
+    loading,
   }
 }

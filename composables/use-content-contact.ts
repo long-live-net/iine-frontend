@@ -148,6 +148,9 @@ export const useContactWrite = (customerId: number) => {
   }
 }
 
+/**
+ * contact Form
+ */
 export const useContactForm = () => {
   const { noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
 
@@ -197,11 +200,90 @@ export const useContactForm = () => {
     formData.imageFile.value.value = null
   }
 
+  const changeImageFile = async (params: { file: File; url: string }) => {
+    formData.image.value.value = params.url
+    formData.imageFile.value.value = params.file
+  }
+
   return {
     handleSubmit,
     handleReset,
     validate,
     formData,
     resetContactForm,
+    changeImageFile,
+  }
+}
+
+/**
+ * Contact API アクションサービス
+ * @param customerId
+ */
+export const useContactActions = (customerId: number) => {
+  const {
+    nextKey,
+    getContact,
+    setContactImageSettings,
+    contactRef,
+    loading: readLoading,
+  } = useContactRead(customerId)
+
+  const {
+    createContact,
+    updateContact,
+    removeContact,
+    updateContactImageSettings,
+    loading: writeLoading,
+  } = useContactWrite(customerId)
+
+  const onLoad = async () => {
+    await getContact()
+  }
+
+  const onCreate = async (formData: ContactForm) => {
+    const savedData = await createContact(formData)
+    nextKey()
+    getContact(savedData?.id)
+  }
+
+  const onUpdate = async ({
+    id,
+    formData,
+  }: {
+    id: number
+    formData: ContactForm
+  }) => {
+    if (!id) return
+
+    const savedData = await updateContact(id, formData)
+    nextKey()
+    getContact(savedData?.id)
+  }
+
+  const onRemove = async (id: number) => {
+    await removeContact(id)
+    nextKey()
+    getContact()
+  }
+
+  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+    if (!contactRef.value?.id) return
+
+    const newSettings = setContactImageSettings(settings)
+    if (!newSettings) return
+
+    updateContactImageSettings(contactRef.value.id, newSettings)
+  }
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
+
+  return {
+    contactRef,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdateImageSetting,
+    loading,
   }
 }

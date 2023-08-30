@@ -1,72 +1,30 @@
 <script setup lang="ts">
-import type { ServiceType, ServiceForm } from '@/types/content'
-import type { ListFilter, ListSort, ListPager } from '@/types/content-api'
+import type { ServiceType } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
 const canEdit = true // TODO: 適当
 
 const {
-  nextKey,
-  getServiceList,
-  setServiceListPositions,
+  filter,
+  sort,
+  pager,
   serviceListRef,
-  loading: readLoading,
-} = useServiceRead(customerId)
+  onLoad,
+  onCreate,
+  onUpdate,
+  onRemove,
+  onUpdatePositions,
+  loading,
+} = useServiceListActions(customerId)
 
-const {
-  createService,
-  updateService,
-  removeService,
-  updateServiceListPositions,
-  loading: writeLoading,
-} = useServiceWrite(customerId)
-
-const getServiceListWithPageCondition = async () => {
-  const filter: ListFilter = {}
-  const sort: ListSort = { position: 1 }
-  const pager: ListPager = { page: 1, limit: 12 }
-  await getServiceList(filter, sort, pager)
-}
-
-const onCreate = async (formData: ServiceForm) => {
-  await createService(formData)
-  nextKey()
-  getServiceListWithPageCondition()
-}
-
-const onUpdate = async ({
-  id,
-  formData,
-}: {
-  id: number
-  formData: ServiceForm
-}) => {
-  if (!id) return
-
-  await updateService(id, formData)
-  nextKey()
-  getServiceListWithPageCondition()
-}
-
-const onRemove = async (id: number) => {
-  await removeService(id)
-  nextKey()
-  getServiceListWithPageCondition()
-}
-
-const onUpdatePositions = async (services: ServiceType[]) => {
-  await updateServiceListPositions(setServiceListPositions(services))
-  nextKey()
-  getServiceListWithPageCondition()
-}
-
-const loading = computed(() => readLoading.value || writeLoading.value)
-
-await getServiceListWithPageCondition()
+filter.value = {}
+sort.value = { position: 1 }
+pager.value = { page: 1, limit: 12 }
+await onLoad()
 </script>
 
 <template>
-  <GuiContentWrap :loading="false" class="type1-services">
+  <GuiContentWrap :loading="loading" class="type1-services">
     <template v-if="canEdit">
       <GuiContentGridDraggable
         v-if="serviceListRef?.length"

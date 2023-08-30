@@ -8,7 +8,7 @@ import type { InformationGetApi, InformationSaveApi } from '@/types/content-api'
 
 const apiUrl = '/informations'
 
-export const useInformationRead = (customerId: number) => {
+const useInformationRead = (customerId: number) => {
   const { nextKey, get, setImageSettings, contentDataRef } =
     useContentRead<InformationGetApi>(customerId, apiUrl)
 
@@ -60,7 +60,7 @@ export const useInformationRead = (customerId: number) => {
   }
 }
 
-export const useInformationWrite = (customerId: number) => {
+const useInformationWrite = (customerId: number) => {
   const { create, update, remove, updateImageSettings } = useContentWrite<
     InformationSaveApi,
     InformationGetApi
@@ -151,6 +151,9 @@ export const useInformationWrite = (customerId: number) => {
   }
 }
 
+/**
+ * Information Form
+ */
 export const useInformationForm = () => {
   const { noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
 
@@ -200,11 +203,90 @@ export const useInformationForm = () => {
     formData.imageFile.value.value = null
   }
 
+  const changeImageFile = (params: { file: File; url: string }) => {
+    formData.image.value.value = params.url
+    formData.imageFile.value.value = params.file
+  }
+
   return {
     handleSubmit,
     handleReset,
     validate,
     formData,
     resetInformationForm,
+    changeImageFile,
+  }
+}
+
+/**
+ * Information API アクションサービス
+ * @param customerId
+ */
+export const useInformationActions = (customerId: number) => {
+  const {
+    nextKey,
+    getInformation,
+    setInformationImageSettings,
+    informationRef,
+    loading: readLoading,
+  } = useInformationRead(customerId)
+
+  const {
+    createInformation,
+    updateInformation,
+    removeInformation,
+    updateInformationImageSettings,
+    loading: writeLoading,
+  } = useInformationWrite(customerId)
+
+  const onLoad = async () => {
+    await getInformation()
+  }
+
+  const onCreate = async (formData: InformationForm) => {
+    const savedData = await createInformation(formData)
+    nextKey()
+    getInformation(savedData?.id)
+  }
+
+  const onUpdate = async ({
+    id,
+    formData,
+  }: {
+    id: number
+    formData: InformationForm
+  }) => {
+    if (!id) return
+
+    const savedData = await updateInformation(id, formData)
+    nextKey()
+    getInformation(savedData?.id)
+  }
+
+  const onRemove = async (id: number) => {
+    await removeInformation(id)
+    nextKey()
+    getInformation()
+  }
+
+  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+    if (!informationRef.value?.id) return
+
+    const newSettings = setInformationImageSettings(settings)
+    if (!newSettings) return
+
+    updateInformationImageSettings(informationRef.value.id, newSettings)
+  }
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
+
+  return {
+    informationRef,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdateImageSetting,
+    loading,
   }
 }
