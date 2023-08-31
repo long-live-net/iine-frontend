@@ -253,6 +253,7 @@ export const useNewsListActions = (customerId: number) => {
     nextKey,
     getNewsList,
     newsListRef,
+    newsTotalRef,
     loading: readLoading,
   } = useNewsRead(customerId)
 
@@ -300,6 +301,7 @@ export const useNewsListActions = (customerId: number) => {
     sort,
     pager,
     newsListRef,
+    newsTotalRef,
     onLoad,
     onCreate,
     onUpdate,

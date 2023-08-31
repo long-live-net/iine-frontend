@@ -1,4 +1,4 @@
 <template>
   <div>ID</div>
-  <ScreenNews />
+  <ScreenNewsNewses />
 </template>

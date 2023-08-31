@@ -16,6 +16,7 @@ const closeSidebar = () => {
     </div>
     <div class="g-block-lg">
       <div>MENU WIDE</div>
+      <nuxt-link to="#home-index-services">Service</nuxt-link>
       <!-- <component :is="wideMenuTemplateName" />
         <customer-user-tools v-show="isAuthenticated" class="ml-2" /> -->
     </div>

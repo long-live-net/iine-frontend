@@ -14,11 +14,14 @@ useHead({
 <template>
   <div id="application-base-body">
     <header>
-      <ScreenLayoutNavHeaderMenu />
+      <ScreenMenuNavHeader />
     </header>
     <main>
       <slot />
     </main>
+    <footer>
+      <p>Footer</p>
+    </footer>
   </div>
 </template>
 

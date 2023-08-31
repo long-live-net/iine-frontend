@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ContentKind } from '@/types/content'
 
+const domidPrefix = 'home-index'
+
 type DefineHomeSections = {
   type: string
   kind: ContentKind
@@ -37,13 +39,12 @@ const homeSections: DefineHomeSections[] = [
 
 <template>
   <article>
-    <div id="index-position-top">
+    <section :id="`${domidPrefix}-eyecatch`">
       <ScreenHomeType1Eyecatcher />
-    </div>
-
+    </section>
     <section
       v-for="section in homeSections"
-      :id="`index-position-${section.kind}`"
+      :id="`${domidPrefix}-${section.kind}`"
       class="section-margin"
     >
       <template v-if="section.type === 'type1'">
@@ -62,7 +63,6 @@ const homeSections: DefineHomeSections[] = [
 
 <style lang="scss" scoped>
 .section-margin {
-  padding-top: calc($nav-header-height + 3rem);
-  margin-bottom: 3rem;
+  padding-top: calc($nav-header-height + 1rem);
 }
 </style>
