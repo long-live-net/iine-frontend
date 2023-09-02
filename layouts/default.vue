@@ -20,7 +20,7 @@ useHead({
       <slot />
     </main>
     <footer>
-      <p>Footer</p>
+      <ScreenMenuNavFooter />
     </footer>
   </div>
 </template>
