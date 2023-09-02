@@ -51,7 +51,7 @@ watch(
 </script>
 
 <template>
-  <GuiContentCard class="newses-list">
+  <GuiContentCard class="news-list">
     <GuiContentCardBody>
       <GuiContentList v-if="newsListRef?.length" :contents="newsListRef">
         <template #default="{ content }">
@@ -85,7 +85,7 @@ watch(
         <p>データがありません</p>
       </div>
     </GuiContentCardBody>
-    <div class="newses-list__action">
+    <div class="news-list__action">
       <BasePagination
         v-model:page="page"
         :limit="pageLimit"
@@ -100,7 +100,7 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-.newses-list {
+.news-list {
   position: relative;
   min-height: 16rem;
   &__action {

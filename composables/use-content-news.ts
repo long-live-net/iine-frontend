@@ -1,5 +1,5 @@
 import { useForm, useField } from 'vee-validate'
-import type { NewsType, NewsForm } from '@/types/content'
+import type { NewsType, NewsForm, ImageSettings } from '@/types/content'
 import type {
   NewsGetApi,
   NewsSaveApi,
@@ -11,19 +11,15 @@ import type {
 const apiUrl = '/newses'
 
 const useNewsRead = (customerId: number) => {
-  const { get, getList, nextKey, contentDataRef, contentListRef } =
-    useContentRead<NewsGetApi>(customerId, apiUrl)
+  const {
+    nextKey,
+    get,
+    getList,
+    setImageSettings,
+    contentDataRef,
+    contentListRef,
+  } = useContentRead<NewsGetApi>(customerId, apiUrl)
   const loading = ref(false)
-
-  const getNews = async (id?: number | null) => {
-    try {
-      loading.value = true
-      await get(id)
-    } finally {
-      loading.value = false
-    }
-  }
-
   const newsRef = computed<NewsType | null>(() => {
     if (!contentDataRef.value) {
       return null
@@ -39,17 +35,27 @@ const useNewsRead = (customerId: number) => {
     }
   })
 
-  const getNewsList = async (
-    filter: ListFilter,
-    sort: ListSort,
-    pager: ListPager
-  ) => {
+  const getNews = async (id?: number | null) => {
     try {
       loading.value = true
-      await getList(filter, sort, pager)
+      await get(id)
     } finally {
       loading.value = false
     }
+  }
+
+  const setNewsImageSettings = (
+    settings: Partial<ImageSettings>
+  ): ImageSettings | void => {
+    if (!newsRef.value) return
+    if (!newsRef.value.image?.settings) return
+
+    const newSettings: ImageSettings = {
+      ...newsRef.value.image.settings,
+      ...settings,
+    }
+    setImageSettings(newSettings)
+    return newSettings
   }
 
   const newsListRef = computed<NewsType[] | null>(() => {
@@ -76,10 +82,24 @@ const useNewsRead = (customerId: number) => {
     return contentListRef.value.total
   })
 
+  const getNewsList = async (
+    filter: ListFilter,
+    sort: ListSort,
+    pager: ListPager
+  ) => {
+    try {
+      loading.value = true
+      await getList(filter, sort, pager)
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     nextKey,
     getNews,
     getNewsList,
+    setNewsImageSettings,
     newsRef,
     newsListRef,
     newsTotalRef,
@@ -88,10 +108,10 @@ const useNewsRead = (customerId: number) => {
 }
 
 const useNewsWrite = (customerId: number) => {
-  const { create, update, remove } = useContentWrite<NewsSaveApi, NewsGetApi>(
-    customerId,
-    apiUrl
-  )
+  const { create, update, remove, updateImageSettings } = useContentWrite<
+    NewsSaveApi,
+    NewsGetApi
+  >(customerId, apiUrl)
   const loading = ref(false)
 
   const createNews = async (formData: NewsForm): Promise<NewsType | null> => {
@@ -162,10 +182,21 @@ const useNewsWrite = (customerId: number) => {
     }
   }
 
+  const updateNewsImageSettings = async (
+    contentId: number,
+    imageSettings: ImageSettings
+  ) => {
+    const promise = updateImageSettings(contentId, imageSettings)
+    if (promise) {
+      return await promise
+    }
+  }
+
   return {
     createNews,
     updateNews,
     removeNews,
+    updateNewsImageSettings,
     loading,
   }
 }
@@ -306,6 +337,79 @@ export const useNewsListActions = (customerId: number) => {
     onCreate,
     onUpdate,
     onRemove,
+    loading,
+  }
+}
+
+/**
+ * news API アクションサービス
+ * @param customerId
+ */
+export const useNewsActions = (customerId: number) => {
+  const {
+    nextKey,
+    getNews,
+    setNewsImageSettings,
+    newsRef,
+    loading: readLoading,
+  } = useNewsRead(customerId)
+
+  const {
+    createNews,
+    updateNews,
+    removeNews,
+    updateNewsImageSettings,
+    loading: writeLoading,
+  } = useNewsWrite(customerId)
+
+  const onLoad = async (id?: number) => {
+    await getNews(id)
+  }
+
+  const onCreate = async (formData: NewsForm) => {
+    const savedData = await createNews(formData)
+    nextKey()
+    getNews(savedData?.id)
+  }
+
+  const onUpdate = async ({
+    id,
+    formData,
+  }: {
+    id: number
+    formData: NewsForm
+  }) => {
+    if (!id) return
+
+    const savedData = await updateNews(id, formData)
+    nextKey()
+    getNews(savedData?.id)
+  }
+
+  const onRemove = async (id: number) => {
+    await removeNews(id)
+    nextKey()
+    getNews()
+  }
+
+  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+    if (!newsRef.value?.id) return
+
+    const newSettings = setNewsImageSettings(settings)
+    if (!newSettings) return
+
+    updateNewsImageSettings(newsRef.value.id, newSettings)
+  }
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
+
+  return {
+    newsRef,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdateImageSetting,
     loading,
   }
 }
