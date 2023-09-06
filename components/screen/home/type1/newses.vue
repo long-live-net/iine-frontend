@@ -2,8 +2,9 @@
 import type { NewsType } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
-const canEdit = true // TODO: 適当
-const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
+
+const { isLoggedIn } = useAuth(customerId)
+const canEdit = computed(() => isLoggedIn.value)
 
 const {
   filter,
@@ -21,6 +22,8 @@ filter.value = { publishOn: false } // Todo: ログインしていれば false �
 sort.value = { publishOn: -1 }
 pager.value = { page: 1, limit: 6 }
 await onLoad()
+
+const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
 </script>
 
 <template>

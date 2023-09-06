@@ -10,7 +10,7 @@ const router = useRouter()
 const customerId = 1 // Toto: 適当、後で実装する
 const customerName = 'Long Live Net' // Toto: 適当、後で実装する
 
-const { login, getUser, authError, authToken } = useAuth()
+const { login, authError, authToken, authUser } = useAuth(customerId)
 
 const onLogin = async (form: LoginFrom) => {
   const credential: LoginApiCredential = {
@@ -20,9 +20,8 @@ const onLogin = async (form: LoginFrom) => {
   }
   await login(credential)
   if (authError.value) return
-
-  await getUser()
-  if (authError.value) return
+  if (!authToken.value) return
+  if (!authUser.value) return
 
   router.push({ name: 'index' })
 }

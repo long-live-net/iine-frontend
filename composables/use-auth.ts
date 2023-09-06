@@ -8,16 +8,16 @@ import type {
 import type { ApiError } from '@/utils/api-fetch'
 
 /**
- * ユーザ認証処理
+ * ユーザ認証・認可処理
  */
-export const useAuth = () => {
+export const useAuth = (customerId: number) => {
   const authEndpoint = '/auth/customer-user'
   const authError = ref<LoginApiError | null>(null)
   const authToken = useState<string | null>('authToken', () => null)
   const authUser = useState<LoginUser | null>('authUser', () => null)
 
-  const login = async (credential: LoginApiCredential) => {
-    const { data, error } = await useAsyncData(() =>
+  const authenticate = async (credential: LoginApiCredential) => {
+    const { data, error } = await useAsyncData<{ token: string }>(() =>
       $fetch(authEndpoint, {
         baseURL: backendBaseUrl,
         method: 'POST',
@@ -25,68 +25,77 @@ export const useAuth = () => {
       })
     )
     if (error.value) {
-      const apiError: ApiError = error.value
-      if (apiError.statusCode === 401) {
-        authError.value = {
-          status: apiError.statusCode,
-          message: 'メールアドレスかパスワードに誤りがあります',
-        }
-      } else if (apiError.statusCode === 403) {
-        authError.value = {
-          status: apiError.statusCode,
-          message: 'アクセスするための権限がありません',
-        }
-      } else {
-        throw error
-      }
+      throw error.value
     }
-    authToken.value = (data.value as { token: string }).token
+    return data.value
   }
-
-  const getUser = async () => {
-    const { data, error } = await useAsyncData(() =>
+  const getUser = async (token: string) => {
+    const { data, error } = await useAsyncData<LoginUser>(() =>
       $fetch(authEndpoint, {
         baseURL: backendBaseUrl,
         method: 'GET',
-        headers: authorizationHeader.value,
+        headers: { Authorization: `Bearer ${token}` },
       })
     )
     if (error.value) {
-      const apiError: ApiError = error.value
-      if (apiError.statusCode === 401) {
-        authError.value = {
-          status: apiError.statusCode,
-          message: 'ログインユーザが見つかりませんでした',
-        }
-      } else if (apiError.statusCode === 403) {
-        authError.value = {
-          status: apiError.statusCode,
-          message: 'アクセスするための権限がありません',
-        }
+      throw error.value
+    }
+    return data.value
+  }
+
+  const login = async (credential: LoginApiCredential) => {
+    const onError = (status: number) => {
+      authError.value = { status, message: 'ユーザ認証できませんでした' }
+    }
+    try {
+      const response = await authenticate(credential)
+      if (!response) {
+        onError(401)
+        return
+      }
+      const token = response.token
+      if (!token) {
+        onError(401)
+        return
+      }
+      const user = await getUser(token)
+      if (!user || user.customerId !== customerId) {
+        onError(403)
+        return
+      }
+      authToken.value = token
+      authUser.value = user
+    } catch (error) {
+      const apiError: ApiError = error as Error
+      if (apiError.statusCode === 401 || apiError.statusCode === 403) {
+        onError(apiError.statusCode)
       } else {
         throw error
       }
     }
-    authUser.value = data.value as LoginUser
   }
 
   const logout = () => {
-    console.log('logout')
     authToken.value = null
+    authUser.value = null
   }
 
   const authorizationHeader = computed(() => ({
     Authorization: `Bearer ${authToken.value ?? ''}`,
   }))
 
+  const isLoggedIn = computed(
+    () => authToken.value && authUser.value?.customerId === customerId
+  )
+
   return {
     login,
-    getUser,
     logout,
     authError: readonly(authError),
     authToken: readonly(authToken),
-    isLoggedIn: computed(() => !!authToken),
+    authUser: readonly(authUser),
     authorizationHeader,
+    isLoggedIn,
   }
 }
 

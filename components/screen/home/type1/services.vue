@@ -2,7 +2,9 @@
 import type { ServiceType } from '@/types/content'
 
 const customerId = 1 // TODO: 適当！！
-const canEdit = true // TODO: 適当
+
+const { isLoggedIn } = useAuth(customerId)
+const canEdit = computed(() => isLoggedIn.value)
 
 const {
   filter,
