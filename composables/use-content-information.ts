@@ -8,7 +8,7 @@ import type { InformationGetApi, InformationSaveApi } from '@/types/content-api'
 
 const apiUrl = '/informations'
 
-const useInformationRead = (customerId: number) => {
+const useInformationRead = (customerId: Ref<number | null>) => {
   const { nextKey, get, setImageSettings, contentDataRef } =
     useContentRead<InformationGetApi>(customerId, apiUrl)
 
@@ -60,7 +60,7 @@ const useInformationRead = (customerId: number) => {
   }
 }
 
-const useInformationWrite = (customerId: number) => {
+const useInformationWrite = (customerId: Ref<number | null>) => {
   const { create, update, remove, updateImageSettings } = useContentWrite<
     InformationSaveApi,
     InformationGetApi
@@ -71,7 +71,7 @@ const useInformationWrite = (customerId: number) => {
     formData: InformationForm
   ): Promise<InformationType | null> => {
     const inputData: InformationSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
       body: formData.body,
@@ -100,7 +100,7 @@ const useInformationWrite = (customerId: number) => {
     formData: InformationForm
   ): Promise<InformationType | null> => {
     const inputData: InformationSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
       body: formData.body,
@@ -222,7 +222,7 @@ export const useInformationForm = () => {
  * Information API アクションサービス
  * @param customerId
  */
-export const useInformationActions = (customerId: number) => {
+export const useInformationActions = (customerId: Ref<number | null>) => {
   const {
     nextKey,
     getInformation,

@@ -11,7 +11,7 @@ import { useField, useForm } from 'vee-validate'
 
 const apiUrl = '/services'
 
-const useServiceRead = (customerId: number) => {
+const useServiceRead = (customerId: Ref<number | null>) => {
   const {
     nextKey,
     get,
@@ -105,7 +105,7 @@ const useServiceRead = (customerId: number) => {
   }
 }
 
-const useServiceWrite = (customerId: number) => {
+const useServiceWrite = (customerId: Ref<number | null>) => {
   const { create, update, remove, updatePositions } = useContentWrite<
     ServiceSaveApi,
     ServiceGetApi
@@ -116,7 +116,7 @@ const useServiceWrite = (customerId: number) => {
     formData: ServiceForm
   ): Promise<ServiceType | null> => {
     const inputData: ServiceSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       caption: formData.caption,
       body: formData.body,
@@ -147,7 +147,7 @@ const useServiceWrite = (customerId: number) => {
     formData: ServiceForm
   ): Promise<ServiceType | null> => {
     const inputData: ServiceSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       caption: formData.caption,
       body: formData.body,
@@ -279,7 +279,7 @@ export const useServiceForm = () => {
  * service list API アクションサービス
  * @param customerId
  */
-export const useServiceListActions = (customerId: number) => {
+export const useServiceListActions = (customerId: Ref<number | null>) => {
   const filter = ref<ListFilter>({})
   const sort = ref<ListSort>({ id: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })

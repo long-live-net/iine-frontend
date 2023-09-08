@@ -4,7 +4,7 @@ import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/content-api'
 
 const apiUrl = '/eyecatches'
 
-const useEyecatchRead = (customerId: number) => {
+const useEyecatchRead = (customerId: Ref<number | null>) => {
   const { nextKey, get, setImageSettings, contentDataRef } =
     useContentRead<EyecatchGetApi>(customerId, apiUrl)
 
@@ -53,7 +53,7 @@ const useEyecatchRead = (customerId: number) => {
   }
 }
 
-const useEyecatchWrite = (customerId: number) => {
+const useEyecatchWrite = (customerId: Ref<number | null>) => {
   const { create, update, remove, updateImageSettings } = useContentWrite<
     EyecatchSaveApi,
     EyecatchGetApi
@@ -64,7 +64,7 @@ const useEyecatchWrite = (customerId: number) => {
     formData: EyecatchForm
   ): Promise<EyecatchType | null> => {
     const inputData: EyecatchSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
       imageFile: formData.imageFile,
@@ -91,7 +91,7 @@ const useEyecatchWrite = (customerId: number) => {
     formData: EyecatchForm
   ): Promise<EyecatchType | null> => {
     const inputData: EyecatchSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
       imageFile: formData.imageFile,
@@ -204,7 +204,7 @@ export const useEyecatchForm = () => {
  * Eyecatch API アクションサービス
  * @param customerId
  */
-export const useEyecatchActions = (customerId: number) => {
+export const useEyecatchActions = (customerId: Ref<number | null>) => {
   const {
     nextKey,
     getEyecatch,

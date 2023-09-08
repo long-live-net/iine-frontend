@@ -8,7 +8,7 @@ const {
   onRemove,
   onUpdateImageSetting,
   loading,
-} = useContactActions(customerId.value)
+} = useContactActions(customerId)
 await onLoad()
 </script>
 

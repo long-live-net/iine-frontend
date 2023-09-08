@@ -1,18 +1,12 @@
-import { storeToRefs } from 'pinia'
-import { useCustomerStore } from '@/stores/customer'
-import { useAuthStore } from '@/stores/auth'
-
 export const useFoundation = () => {
-  const customerStore = useCustomerStore()
-  const { customerRef } = storeToRefs(customerStore)
-
-  const authStore = useAuthStore()
-  const { userRef, tokenRef } = storeToRefs(authStore)
-
-  const customerId = computed(() => customerRef.value?.id ?? 0)
+  const { customerId } = useCustomer()
+  const { authToken, userCustomerId } = useAuth()
 
   const isLoggedIn = computed(
-    () => !!tokenRef.value && userRef.value?.customerId === customerId.value
+    () =>
+      !!authToken.value &&
+      !!customerId.value &&
+      customerId.value === userCustomerId.value
   )
 
   const canEdit = ref(false)
@@ -22,7 +16,9 @@ export const useFoundation = () => {
       (value) => {
         canEdit.value = value
       },
-      { immediate: true }
+      {
+        immediate: true,
+      }
     )
   })
 

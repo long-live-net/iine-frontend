@@ -8,7 +8,7 @@ const {
   onRemove,
   onUpdateImageSetting,
   loading,
-} = useInformationActions(customerId.value)
+} = useInformationActions(customerId)
 await onLoad()
 </script>
 

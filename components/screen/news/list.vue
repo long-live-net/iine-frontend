@@ -12,7 +12,7 @@ const {
   onCreate,
   onUpdate,
   onRemove,
-} = useNewsListActions(customerId.value)
+} = useNewsListActions(customerId)
 
 const page = ref(1)
 const pageLimit = ref(20)
