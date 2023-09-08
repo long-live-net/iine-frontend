@@ -13,7 +13,7 @@ const {
   onRemove,
   onUpdatePositions,
   loading,
-} = useServiceListActions(customerId.value ?? 0)
+} = useServiceListActions(customerId)
 
 filter.value = {}
 sort.value = { position: 1 }

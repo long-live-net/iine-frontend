@@ -4,7 +4,7 @@ import type { ContactGetApi, ContactSaveApi } from '@/types/content-api'
 
 const apiUrl = '/contacts'
 
-export const useContactRead = (customerId: number) => {
+export const useContactRead = (customerId: Ref<number | null>) => {
   const { nextKey, get, setImageSettings, contentDataRef } =
     useContentRead<ContactGetApi>(customerId, apiUrl)
 
@@ -56,7 +56,7 @@ export const useContactRead = (customerId: number) => {
   }
 }
 
-export const useContactWrite = (customerId: number) => {
+export const useContactWrite = (customerId: Ref<number | null>) => {
   const { create, update, remove, updateImageSettings } = useContentWrite<
     ContactSaveApi,
     ContactGetApi
@@ -67,7 +67,7 @@ export const useContactWrite = (customerId: number) => {
     formData: ContactForm
   ): Promise<ContactType | null> => {
     const inputData: ContactSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
       body: formData.body,
@@ -96,7 +96,7 @@ export const useContactWrite = (customerId: number) => {
     formData: ContactForm
   ): Promise<ContactType | null> => {
     const inputData: ContactSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
       body: formData.body,
@@ -219,7 +219,7 @@ export const useContactForm = () => {
  * Contact API アクションサービス
  * @param customerId
  */
-export const useContactActions = (customerId: number) => {
+export const useContactActions = (customerId: Ref<number | null>) => {
   const {
     nextKey,
     getContact,

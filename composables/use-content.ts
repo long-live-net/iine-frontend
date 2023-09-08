@@ -12,7 +12,7 @@ import type {
 } from '@/types/content-api'
 
 export const useContentRead = <T extends ContentGetApi>(
-  customerId: number,
+  customerId: Ref<number | null>,
   apiPath: string
 ) => {
   const contentDataRef: Ref<T | null> = ref(null)
@@ -36,7 +36,7 @@ export const useContentRead = <T extends ContentGetApi>(
       $fetch(url, {
         baseURL: backendBaseUrl,
         method: 'GET',
-        params: { customerId },
+        params: { customerId: customerId.value },
       })
     )
     if (error.value) {
@@ -69,7 +69,7 @@ export const useContentRead = <T extends ContentGetApi>(
         baseURL: backendBaseUrl,
         method: 'GET',
         params: {
-          customerId,
+          customerId: customerId.value,
           filter: JSON.stringify(filter),
           sort: JSON.stringify(sort),
           pager: JSON.stringify(pager),
@@ -137,7 +137,7 @@ export const useContentWrite = <
   F extends ContentSaveApi,
   T extends ContentGetApi,
 >(
-  customerId: number,
+  customerId: Ref<number | null>,
   apiPath: string
 ) => {
   const { authorizationHeader } = useAuth()
@@ -157,7 +157,7 @@ export const useContentWrite = <
           baseURL: backendBaseUrl,
           method: 'POST',
           headers: authorizationHeader.value,
-          params: { customerId },
+          params: { customerId: customerId.value },
           body: formData,
         })
       )
@@ -199,7 +199,7 @@ export const useContentWrite = <
           baseURL: backendBaseUrl,
           method: 'POST',
           headers: authorizationHeader.value,
-          params: { customerId },
+          params: { customerId: customerId.value },
           body: formData,
         })
       )

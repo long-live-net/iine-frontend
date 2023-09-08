@@ -12,7 +12,7 @@ const {
   onUpdate,
   onRemove,
   loading,
-} = useNewsListActions(customerId.value)
+} = useNewsListActions(customerId)
 
 const isWholeData = ref(false)
 const loadNewses = async () => {

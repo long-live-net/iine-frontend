@@ -8,7 +8,7 @@ const {
   onRemove,
   onUpdateImageSetting,
   loading,
-} = useEyecatchActions(customerId.value)
+} = useEyecatchActions(customerId)
 await onLoad()
 </script>
 

@@ -5,14 +5,13 @@ definePageMeta({ layout: 'simple' })
 <script setup lang="ts">
 import type { LoginApiCredential, LoginFrom } from '@/types/auth'
 
-const { login, authError, authToken, authUser, customer } = useAuth()
-const customerId = computed(() => customer.value?.id ?? 0)
-const customerName = computed(() => customer.value?.name ?? '')
+const { customerId, customerName } = useCustomer()
+const { login, authToken, authUser, authError } = useAuth()
 
 const router = useRouter()
 const onLogin = async (form: LoginFrom) => {
   const credential: LoginApiCredential = {
-    customerId: customerId.value,
+    customerId: customerId.value ?? 0,
     username: form.username,
     password: form.password,
   }
@@ -35,7 +34,6 @@ const onLogin = async (form: LoginFrom) => {
       <p v-if="authError?.status" class="form-caution">
         ログイン認証できませんでした
       </p>
-      <p v-else-if="authToken" class="form-success">ログイン認証成功しました</p>
       <div>
         <ScreenFormLogin :customerName="customerName" @login="onLogin" />
       </div>

@@ -8,7 +8,7 @@ const {
   onRemove,
   onUpdateImageSetting,
   loading,
-} = useNewsActions(customerId.value)
+} = useNewsActions(customerId)
 
 const route = useRoute()
 const contentId = route.params.id

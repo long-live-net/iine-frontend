@@ -10,7 +10,7 @@ import type {
 
 const apiUrl = '/newses'
 
-const useNewsRead = (customerId: number) => {
+const useNewsRead = (customerId: Ref<number | null>) => {
   const {
     nextKey,
     get,
@@ -107,7 +107,7 @@ const useNewsRead = (customerId: number) => {
   }
 }
 
-const useNewsWrite = (customerId: number) => {
+const useNewsWrite = (customerId: Ref<number | null>) => {
   const { create, update, remove, updateImageSettings } = useContentWrite<
     NewsSaveApi,
     NewsGetApi
@@ -116,7 +116,7 @@ const useNewsWrite = (customerId: number) => {
 
   const createNews = async (formData: NewsForm): Promise<NewsType | null> => {
     const inputData: NewsSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       category: formData.category ?? 'I',
       publishOn: formData.publishOn ?? localDate(),
@@ -147,7 +147,7 @@ const useNewsWrite = (customerId: number) => {
     formData: NewsForm
   ): Promise<NewsType | null> => {
     const inputData: NewsSaveApi = {
-      customerId,
+      customerId: customerId.value ?? 0,
       title: formData.title,
       category: formData.category ?? 'I',
       publishOn: formData.publishOn ?? localDate(),
@@ -275,7 +275,7 @@ export const useNewsForm = () => {
  * news list API アクションサービス
  * @param customerId
  */
-export const useNewsListActions = (customerId: number) => {
+export const useNewsListActions = (customerId: Ref<number | null>) => {
   const filter = ref<ListFilter>({})
   const sort = ref<ListSort>({ id: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })
@@ -345,7 +345,7 @@ export const useNewsListActions = (customerId: number) => {
  * news API アクションサービス
  * @param customerId
  */
-export const useNewsActions = (customerId: number) => {
+export const useNewsActions = (customerId: Ref<number | null>) => {
   const {
     nextKey,
     getNews,
