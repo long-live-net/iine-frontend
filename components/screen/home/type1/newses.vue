@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import type { NewsType } from '@/types/content'
 
-const customerId = 1 // TODO: 適当！！
-const canEdit = true // TODO: 適当
-const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
-
+const { customerId, canEdit } = useFoundation()
 const {
   filter,
   sort,
@@ -15,12 +12,20 @@ const {
   onUpdate,
   onRemove,
   loading,
-} = useNewsListActions(customerId)
+} = useNewsListActions(customerId.value)
 
-filter.value = { publishOn: false } // Todo: ログインしていれば false にすること後で忘れない様に！
-sort.value = { publishOn: -1 }
-pager.value = { page: 1, limit: 6 }
-await onLoad()
+const isWholeData = ref(false)
+const loadNewses = async () => {
+  filter.value = { publishOn: !isWholeData.value }
+  sort.value = { publishOn: -1 }
+  pager.value = { page: 1, limit: 6 }
+  await onLoad()
+}
+watch(isWholeData, () => {
+  loadNewses()
+})
+
+await loadNewses()
 </script>
 
 <template>
@@ -32,7 +37,12 @@ await onLoad()
             <div class="news-item">
               <div class="news-item__header g-theme-contets-item__header">
                 <span>
-                  {{ dateString((content as NewsType).publishOn) }}
+                  {{
+                    formatLocalDate(
+                      (content as NewsType).publishOn,
+                      'YYYY/MM/DD'
+                    )
+                  }}
                 </span>
                 <GuiNewsCategoryBadge
                   :category="(content as NewsType).category"
@@ -64,6 +74,9 @@ await onLoad()
             />
           </div>
         </div>
+        <div v-if="canEdit" class="whole-switch">
+          <EditorNewsWholeSwitch v-model="isWholeData" />
+        </div>
       </GuiContentCardBody>
       <div class="type1-news-list__action">
         <NuxtLink to="/news">and more ...</NuxtLink>
@@ -92,6 +105,9 @@ await onLoad()
       font-weight: bold;
       color: $warning;
     }
+  }
+  .whole-switch {
+    margin-top: 1rem;
   }
   .create-activator {
     position: absolute;

@@ -5,24 +5,21 @@ definePageMeta({ layout: 'simple' })
 <script setup lang="ts">
 import type { LoginApiCredential, LoginFrom } from '@/types/auth'
 
+const { login, authError, authToken, authUser, customer } = useAuth()
+const customerId = computed(() => customer.value?.id ?? 0)
+const customerName = computed(() => customer.value?.name ?? '')
+
 const router = useRouter()
-
-const customerId = 1 // Toto: 適当、後で実装する
-const customerName = 'Long Live Net' // Toto: 適当、後で実装する
-
-const { login, getUser, authError, authToken } = useAuth()
-
 const onLogin = async (form: LoginFrom) => {
   const credential: LoginApiCredential = {
-    customerId,
+    customerId: customerId.value,
     username: form.username,
     password: form.password,
   }
   await login(credential)
   if (authError.value) return
-
-  await getUser()
-  if (authError.value) return
+  if (!authToken.value) return
+  if (!authUser.value) return
 
   router.push({ name: 'index' })
 }

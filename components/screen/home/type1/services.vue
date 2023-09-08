@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { ServiceType } from '@/types/content'
 
-const customerId = 1 // TODO: 適当！！
-const canEdit = true // TODO: 適当
-
+const { customerId, canEdit } = useFoundation()
 const {
   filter,
   sort,
@@ -15,7 +13,7 @@ const {
   onRemove,
   onUpdatePositions,
   loading,
-} = useServiceListActions(customerId)
+} = useServiceListActions(customerId.value ?? 0)
 
 filter.value = {}
 sort.value = { position: 1 }

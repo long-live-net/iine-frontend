@@ -1,7 +1,5 @@
 <script setup lang="ts">
-const customerId = 1 // TODO: 適当！！
-const canEdit = true // TODO: 適当
-
+const { customerId, canEdit } = useFoundation()
 const {
   contactRef,
   onLoad,
@@ -10,8 +8,7 @@ const {
   onRemove,
   onUpdateImageSetting,
   loading,
-} = useContactActions(customerId)
-
+} = useContactActions(customerId.value)
 await onLoad()
 </script>
 

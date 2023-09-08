@@ -140,6 +140,8 @@ export const useContentWrite = <
   customerId: number,
   apiPath: string
 ) => {
+  const { authorizationHeader } = useAuth()
+
   /**
    * create content data
    * @param newData
@@ -154,6 +156,7 @@ export const useContentWrite = <
         $fetch('/uploads/image', {
           baseURL: backendBaseUrl,
           method: 'POST',
+          headers: authorizationHeader.value,
           params: { customerId },
           body: formData,
         })
@@ -171,6 +174,7 @@ export const useContentWrite = <
       $fetch(apiPath, {
         baseURL: backendBaseUrl,
         method: 'POST',
+        headers: authorizationHeader.value,
         body: sendData,
       })
     )
@@ -194,6 +198,7 @@ export const useContentWrite = <
         $fetch('/uploads/image', {
           baseURL: backendBaseUrl,
           method: 'POST',
+          headers: authorizationHeader.value,
           params: { customerId },
           body: formData,
         })
@@ -211,6 +216,7 @@ export const useContentWrite = <
       $fetch(`${apiPath}/${contentId}`, {
         baseURL: backendBaseUrl,
         method: 'PUT',
+        headers: authorizationHeader.value,
         body: sendData,
       })
     )
@@ -228,6 +234,7 @@ export const useContentWrite = <
     const { data, error } = await useAsyncData(() =>
       $fetch(`${apiPath}/${contentId}`, {
         baseURL: backendBaseUrl,
+        headers: authorizationHeader.value,
         method: 'DELETE',
       })
     )
@@ -246,6 +253,7 @@ export const useContentWrite = <
       $fetch(`${apiPath}/positions`, {
         baseURL: backendBaseUrl,
         method: 'PUT',
+        headers: authorizationHeader.value,
         body: positions,
       })
     )
@@ -264,6 +272,7 @@ export const useContentWrite = <
         $fetch(`${apiPath}/${contentId}/image-settings`, {
           baseURL: backendBaseUrl,
           method: 'PUT',
+          headers: authorizationHeader.value,
           body: imageSettings,
         })
       )

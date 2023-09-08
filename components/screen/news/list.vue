@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import type { NewsType } from '@/types/content'
 
-const route = useRoute()
-const router = useRouter()
-const customerId = 1 // TODO: 適当！！
-const canEdit = true // TODO: 適当
-const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
+const { customerId, canEdit } = useFoundation()
 const {
   filter,
   sort,
@@ -16,22 +12,33 @@ const {
   onCreate,
   onUpdate,
   onRemove,
-} = useNewsListActions(customerId)
+} = useNewsListActions(customerId.value)
 
 const page = ref(1)
 const pageLimit = ref(20)
-watch(
-  page,
-  () => {
-    router.push({
-      query: {
-        page: page.value,
-        limit: pageLimit.value,
-      },
-    })
-  },
-  { immediate: true }
-)
+const isWholeData = ref(false)
+const loadNewses = async () => {
+  filter.value = { publishOn: !isWholeData.value }
+  sort.value = { publishOn: -1 }
+  pager.value = { page: page.value, limit: pageLimit.value }
+  await onLoad()
+}
+
+watch(isWholeData, () => {
+  page.value = 1
+  loadNewses()
+})
+
+const route = useRoute()
+const router = useRouter()
+watch(page, () => {
+  router.push({
+    query: {
+      page: page.value,
+      limit: pageLimit.value,
+    },
+  })
+})
 watch(
   () => route.query,
   () => {
@@ -41,13 +48,10 @@ watch(
     if (pageLimit.value != route.query?.limit) {
       pageLimit.value = route.query?.limit ?? 20
     }
-    filter.value = { publishOn: false } // Todo: ログインしていれば false にすること後で忘れない様に！
-    sort.value = { publishOn: -1 }
-    pager.value = { page: page.value, limit: pageLimit.value }
-    onLoad()
-  },
-  { immediate: true }
+    loadNewses()
+  }
 )
+await loadNewses()
 </script>
 
 <template>
@@ -58,7 +62,9 @@ watch(
           <div class="news-item">
             <div class="news-item__header g-theme-contets-item__header">
               <span>
-                {{ dateString((content as NewsType).publishOn) }}
+                {{
+                  formatLocalDate((content as NewsType).publishOn, 'YYYY/MM/DD')
+                }}
               </span>
               <GuiNewsCategoryBadge
                 :category="(content as NewsType).category"
@@ -83,6 +89,9 @@ watch(
       </GuiContentList>
       <div v-else class="no-items">
         <p>データがありません</p>
+      </div>
+      <div v-if="canEdit" class="whole-switch">
+        <EditorNewsWholeSwitch v-model="isWholeData" />
       </div>
     </GuiContentCardBody>
     <div class="news-list__action">
@@ -116,6 +125,9 @@ watch(
       font-weight: bold;
       color: $warning;
     }
+  }
+  .whole-switch {
+    margin-top: 1rem;
   }
   .create-activator {
     position: absolute;
