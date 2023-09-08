@@ -8,6 +8,7 @@ type DefineHomeSections = {
   kind: ContentKind
   order: number
   title?: string
+  menuTitle?: string
 }
 const homeSections: DefineHomeSections[] = [
   {
@@ -21,12 +22,13 @@ const homeSections: DefineHomeSections[] = [
     kind: 'news',
     order: 2,
     title: "What's New",
+    menuTitle: 'News',
   },
   {
     type: 'type1',
-    kind: 'services',
+    kind: 'service',
     order: 3,
-    title: 'Services',
+    title: 'Service',
   },
   {
     type: 'type1',
@@ -54,7 +56,7 @@ const homeSections: DefineHomeSections[] = [
         />
         <ScreenHomeType1Information v-if="section.kind === 'infomation'" />
         <ScreenHomeType1Newses v-if="section.kind === 'news'" />
-        <ScreenHomeType1Services v-if="section.kind === 'services'" />
+        <ScreenHomeType1Services v-if="section.kind === 'service'" />
         <ScreenHomeType1Contact v-if="section.kind === 'contact'" />
       </template>
     </section>

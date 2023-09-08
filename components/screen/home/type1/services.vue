@@ -46,7 +46,7 @@ await onLoad()
               v-html="htmlSanitizer((content as ServiceType).caption)"
             />
             <div class="edit-activator">
-              <ScreenFormService
+              <EditorService
                 :serviceData="content as ServiceType"
                 activaterSize="x-small"
                 @update="onUpdate"
@@ -59,14 +59,14 @@ await onLoad()
       <div v-else class="no-items">
         <p>データがありません</p>
         <div>
-          <ScreenFormService
+          <EditorService
             activaterLabel="コンテンツを登録してください"
             @create="onCreate"
           />
         </div>
       </div>
       <div v-if="serviceListRef?.length" class="create-activator">
-        <ScreenFormService @create="onCreate" />
+        <EditorService @create="onCreate" />
       </div>
     </template>
     <template v-else>

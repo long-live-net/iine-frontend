@@ -31,7 +31,7 @@ await onLoad()
           v-if="canEdit && contactRef?.image?.settings"
           class="image-settings"
         >
-          <GuiImageSetting
+          <EditorImageSetting
             :settings="contactRef.image.settings"
             @update="onUpdateImageSetting"
           />
@@ -42,7 +42,7 @@ await onLoad()
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <ScreenFormContact
+            <EditorContact
               activaterLabel="コンテンツを登録してください"
               @create="onCreate"
             />
@@ -50,7 +50,7 @@ await onLoad()
         </div>
       </GuiContentCardBody>
       <div v-if="canEdit && contactRef?.id" class="edit-activator">
-        <ScreenFormContact
+        <EditorContact
           :contact-data="contactRef"
           @update="onUpdate"
           @remove="onRemove"
