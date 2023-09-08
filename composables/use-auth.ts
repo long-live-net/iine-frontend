@@ -1,20 +1,27 @@
 import { useForm, useField } from 'vee-validate'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
+import { useCustomerStore } from '@/stores/customer'
+import type { ApiError } from '@/utils/api-fetch'
 import type {
   LoginApiCredential,
   LoginApiError,
   LoginFrom,
   LoginUser,
 } from '@/types/auth'
-import type { ApiError } from '@/utils/api-fetch'
 
 /**
  * ユーザ認証・認可処理
  */
-export const useAuth = (customerId: number) => {
+export const useAuth = () => {
+  const customerStore = useCustomerStore()
+  const { customerRef } = storeToRefs(customerStore)
+
+  const authStore = useAuthStore()
+  const { userRef: authUser, tokenRef: authToken } = storeToRefs(authStore)
+
   const authEndpoint = '/auth/customer-user'
   const authError = ref<LoginApiError | null>(null)
-  const authToken = useState<string | null>('authToken', () => null)
-  const authUser = useState<LoginUser | null>('authUser', () => null)
 
   const authenticate = async (credential: LoginApiCredential) => {
     const { data, error } = await useAsyncData<{ token: string }>(() =>
@@ -59,12 +66,11 @@ export const useAuth = (customerId: number) => {
         return
       }
       const user = await getUser(token)
-      if (!user || user.customerId !== customerId) {
+      if (!user || user.customerId !== customerRef.value?.id) {
         onError(403)
         return
       }
-      authToken.value = token
-      authUser.value = user
+      authStore.login({ token, user })
     } catch (error) {
       const apiError: ApiError = error as Error
       if (apiError.statusCode === 401 || apiError.statusCode === 403) {
@@ -76,17 +82,12 @@ export const useAuth = (customerId: number) => {
   }
 
   const logout = () => {
-    authToken.value = null
-    authUser.value = null
+    authStore.logout()
   }
 
   const authorizationHeader = computed(() => ({
     Authorization: `Bearer ${authToken.value ?? ''}`,
   }))
-
-  const isLoggedIn = computed(
-    () => authToken.value && authUser.value?.customerId === customerId
-  )
 
   return {
     login,
@@ -94,8 +95,8 @@ export const useAuth = (customerId: number) => {
     authError: readonly(authError),
     authToken: readonly(authToken),
     authUser: readonly(authUser),
+    customer: readonly(customerRef),
     authorizationHeader,
-    isLoggedIn,
   }
 }
 

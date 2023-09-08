@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import type { NewsType } from '@/types/content'
 
-const customerId = 1 // TODO: 適当！！
-
-const { isLoggedIn } = useAuth(customerId)
-const canEdit = computed(() => isLoggedIn.value)
-
+const { customerId, canEdit } = useFoundation()
 const {
   filter,
   sort,
@@ -16,14 +12,20 @@ const {
   onUpdate,
   onRemove,
   loading,
-} = useNewsListActions(customerId)
+} = useNewsListActions(customerId.value)
 
-filter.value = { publishOn: false } // Todo: ログインしていれば false にすること後で忘れない様に！
-sort.value = { publishOn: -1 }
-pager.value = { page: 1, limit: 6 }
-await onLoad()
+const isWholeData = ref(false)
+const loadNewses = async () => {
+  filter.value = { publishOn: !isWholeData.value }
+  sort.value = { publishOn: -1 }
+  pager.value = { page: 1, limit: 6 }
+  await onLoad()
+}
+watch(isWholeData, () => {
+  loadNewses()
+})
 
-const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
+await loadNewses()
 </script>
 
 <template>
@@ -35,7 +37,12 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
             <div class="news-item">
               <div class="news-item__header g-theme-contets-item__header">
                 <span>
-                  {{ dateString((content as NewsType).publishOn) }}
+                  {{
+                    formatLocalDate(
+                      (content as NewsType).publishOn,
+                      'YYYY/MM/DD'
+                    )
+                  }}
                 </span>
                 <GuiNewsCategoryBadge
                   :category="(content as NewsType).category"
@@ -67,6 +74,9 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
             />
           </div>
         </div>
+        <div v-if="canEdit" class="whole-switch">
+          <EditorNewsWholeSwitch v-model="isWholeData" />
+        </div>
       </GuiContentCardBody>
       <div class="type1-news-list__action">
         <NuxtLink to="/news">and more ...</NuxtLink>
@@ -95,6 +105,9 @@ const dateString = (pdate: Date) => formatLocalDate(pdate, 'YYYY/MM/DD')
       font-weight: bold;
       color: $warning;
     }
+  }
+  .whole-switch {
+    margin-top: 1rem;
   }
   .create-activator {
     position: absolute;

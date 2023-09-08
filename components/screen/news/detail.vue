@@ -1,10 +1,5 @@
 <script setup lang="ts">
-const customerId = 1 // TODO: 適当！！
-const canEdit = true // TODO: 適当
-
-const route = useRoute()
-const contentId = route.params.id
-
+const { customerId, canEdit } = useFoundation()
 const {
   newsRef,
   onLoad,
@@ -13,8 +8,10 @@ const {
   onRemove,
   onUpdateImageSetting,
   loading,
-} = useNewsActions(customerId)
+} = useNewsActions(customerId.value)
 
+const route = useRoute()
+const contentId = route.params.id
 await onLoad(contentId)
 </script>
 
@@ -37,12 +34,12 @@ await onLoad(contentId)
       <GuiContentCardBody>
         <template v-if="newsRef?.id">
           <div class="news-detail__header">
+            <GuiNewsCategoryBadge :category="newsRef.category" small />
             <p>
               <small>{{
                 formatLocalDate(newsRef.publishOn, 'YYYY/MM/DD')
               }}</small>
             </p>
-            <GuiNewsCategoryBadge :category="newsRef.category" small />
           </div>
           <h5 class="g-text-cl news-detail__title">
             <span>{{ newsRef?.title ?? '' }}</span>
