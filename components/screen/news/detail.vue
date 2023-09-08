@@ -25,7 +25,7 @@ await onLoad(contentId)
         class="eyecatcher"
       >
         <div v-if="canEdit && newsRef?.image?.settings" class="image-settings">
-          <GuiImageSetting
+          <EditorImageSetting
             :settings="newsRef.image.settings"
             @update="onUpdateImageSetting"
           />

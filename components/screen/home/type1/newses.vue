@@ -55,7 +55,7 @@ await loadNewses()
                 </nuxt-link>
               </div>
               <div v-if="canEdit" class="edit-activator">
-                <ScreenFormNews
+                <EditorNews
                   :newsData="content as NewsType"
                   activaterSize="x-small"
                   @update="onUpdate"
@@ -68,7 +68,7 @@ await loadNewses()
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <ScreenFormNews
+            <EditorNews
               activaterLabel="ニュースを登録してください"
               @create="onCreate"
             />
@@ -82,7 +82,7 @@ await loadNewses()
         <NuxtLink to="/news">and more ...</NuxtLink>
       </div>
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
-        <ScreenFormNews @create="onCreate" />
+        <EditorNews @create="onCreate" />
       </div>
     </GuiContentCard>
   </GuiContentWrap>

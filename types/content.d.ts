@@ -23,7 +23,7 @@ export interface ImageData {
 export type ContentKind =
   | 'infomation'
   | 'news'
-  | 'services'
+  | 'service'
   | 'works'
   | 'contact'
   | 'about'

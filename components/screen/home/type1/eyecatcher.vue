@@ -33,20 +33,20 @@ await onLoad()
         v-if="canEdit && eyecatchRef?.image?.settings"
         class="image-settings"
       >
-        <GuiImageSetting
+        <EditorImageSetting
           :settings="eyecatchRef.image.settings"
           @update="onUpdateImageSetting"
         />
       </div>
     </GuiEyecatchImage>
     <div v-if="canEdit" class="edit-activator">
-      <ScreenFormEyecatcher
+      <EditorEyecatcher
         v-if="eyecatchRef?.id"
         :eyecatch-data="eyecatchRef"
         @update="onUpdate"
         @remove="onRemove"
       />
-      <ScreenFormEyecatcher
+      <EditorEyecatcher
         v-else
         :eyecatch-data="eyecatchRef"
         activaterLabel="トップ画像を登録してください"

@@ -31,7 +31,7 @@ await onLoad()
           v-if="canEdit && informationRef?.image?.settings"
           class="image-settings"
         >
-          <GuiImageSetting
+          <EditorImageSetting
             :settings="informationRef.image.settings"
             @update="onUpdateImageSetting"
           />
@@ -45,7 +45,7 @@ await onLoad()
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <ScreenFormInformation
+            <EditorInformation
               activaterLabel="コンテンツを登録してください"
               @create="onCreate"
             />
@@ -53,7 +53,7 @@ await onLoad()
         </div>
       </GuiContentCardBody>
       <div v-if="canEdit && informationRef?.id" class="edit-activator">
-        <ScreenFormInformation
+        <EditorInformation
           :information-data="informationRef"
           @update="onUpdate"
           @remove="onRemove"
