@@ -17,19 +17,6 @@ export interface ImageData {
   settings: ImageSettings
 }
 
-/**
- * Content Data Types
- */
-export type ContentKind =
-  | 'infomation'
-  | 'news'
-  | 'service'
-  | 'works'
-  | 'contact'
-  | 'about'
-  | 'menu'
-  | 'reason'
-
 export interface ContentType {
   id: number
   customerId?: number

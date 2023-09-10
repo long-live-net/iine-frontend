@@ -35,7 +35,7 @@ const onLogin = async (form: LoginFrom) => {
         ログイン認証できませんでした
       </p>
       <div>
-        <ScreenFormLogin :customerName="customerName" @login="onLogin" />
+        <EditorLogin :customerName="customerName" @login="onLogin" />
       </div>
     </div>
   </div>

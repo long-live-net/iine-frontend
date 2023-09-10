@@ -49,7 +49,7 @@ await onLoad(contentId)
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <ScreenFormNews
+            <EditorNews
               activaterLabel="コンテンツを登録してください"
               @create="onCreate"
             />
@@ -57,7 +57,7 @@ await onLoad(contentId)
         </div>
       </GuiContentCardBody>
       <div v-if="canEdit && newsRef?.id" class="edit-activator">
-        <ScreenFormNews
+        <EditorNews
           :news-data="newsRef"
           @update="onUpdate"
           @remove="onRemove"
