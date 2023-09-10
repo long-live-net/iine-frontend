@@ -1,24 +1,37 @@
 <script setup lang="ts">
-const sidebar = ref(false)
-const openSidebar = () => {
-  sidebar.value = true
+const headerTitle = {
+  title: 'ロングリブネット',
+  color: 'yellow',
+  to: { name: 'index', hash: '#home-index-top' },
 }
-const closeSidebar = () => {
-  sidebar.value = false
-}
+
+const { domidPrefix, homeSections } = useHomePageSections()
 </script>
 
 <template>
   <nav class="nav-header g-theme-header">
-    <div>
-      <p>ロングリブネット</p>
-      <!-- <component :is="titleTemplateName" /> -->
-    </div>
+    <h2 class="nav-header__title">
+      <nuxt-link :to="headerTitle.to">
+        {{ headerTitle.title }}
+      </nuxt-link>
+    </h2>
     <div class="g-block-lg">
-      <div>MENU WIDE</div>
-      <nuxt-link to="#home-index-services">Service</nuxt-link>
-      <!-- <component :is="wideMenuTemplateName" />
-        <customer-user-tools v-show="isAuthenticated" class="ml-2" /> -->
+      <div class="nav-header__wide">
+        <p
+          v-for="section in homeSections"
+          :key="section.order"
+          class="menu-link"
+        >
+          <nuxt-link
+            :to="{
+              name: 'index',
+              hash: `#${domidPrefix}-${section.kind}`,
+            }"
+          >
+            {{ section.menuTitle ?? section.title }}
+          </nuxt-link>
+        </p>
+      </div>
     </div>
     <div class="g-block-sm">
       <div>MENU NARROW</div>
@@ -50,9 +63,33 @@ const closeSidebar = () => {
   justify-content: space-between;
   align-items: center;
   padding: 0 1.5rem;
-  &__wide-menu {
+  &__title {
+    margin: 0;
+    font-size: 1.3rem;
+    :deep(a) {
+      font-weight: 900;
+      color: v-bind('headerTitle.color');
+    }
+    :deep(a:hover) {
+      color: orange;
+    }
+  }
+  &__wide {
     display: flex;
     align-items: center;
+    .menu-link {
+      margin: 0;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-right: 0.75rem;
+      :deep(a) {
+        font-weight: bold;
+        color: white;
+      }
+      :deep(a:hover) {
+        color: orange;
+      }
+    }
   }
 }
 </style>

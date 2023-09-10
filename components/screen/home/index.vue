@@ -1,42 +1,5 @@
 <script setup lang="ts">
-import type { ContentKind } from '@/types/content'
-
-const domidPrefix = 'home-index'
-
-type DefineHomeSections = {
-  type: string
-  kind: ContentKind
-  order: number
-  title?: string
-  menuTitle?: string
-}
-const homeSections: DefineHomeSections[] = [
-  {
-    type: 'type1',
-    kind: 'infomation',
-    order: 1,
-    title: 'Message',
-  },
-  {
-    type: 'type1',
-    kind: 'news',
-    order: 2,
-    title: "What's New",
-    menuTitle: 'News',
-  },
-  {
-    type: 'type1',
-    kind: 'service',
-    order: 3,
-    title: 'Service',
-  },
-  {
-    type: 'type1',
-    kind: 'contact',
-    order: 4,
-    title: 'Contact',
-  },
-]
+const { domidPrefix, homeSections } = useHomePageSections()
 </script>
 
 <template>
@@ -47,6 +10,7 @@ const homeSections: DefineHomeSections[] = [
     <section
       v-for="section in homeSections"
       :id="`${domidPrefix}-${section.kind}`"
+      :key="section.order"
       class="section-margin"
     >
       <template v-if="section.type === 'type1'">
