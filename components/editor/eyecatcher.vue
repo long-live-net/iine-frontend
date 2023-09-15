@@ -35,24 +35,21 @@ const onCreate = handleSubmit((eyecatchForm) => {
 })
 
 const onUpdate = handleSubmit((eyecatchForm) => {
-  if (props.eyecatchData?.id) {
-    emit('update', {
-      id: props.eyecatchData.id,
-      formData: eyecatchForm,
-    })
+  if (!props.eyecatchData?.id) {
+    return
   }
+  emit('update', {
+    id: props.eyecatchData.id,
+    formData: eyecatchForm,
+  })
   modal.value = false
 })
 
 const onRemove = () => {
-  if (props.eyecatchData?.id) {
-    if (process.client) {
-      const confirmed = window.confirm('本当に削除してもよろしいですか？')
-      if (confirmed) {
-        emit('remove', props.eyecatchData.id)
-      }
-    }
+  if (!props.eyecatchData?.id) {
+    return
   }
+  emit('remove', props.eyecatchData.id)
   modal.value = false
 }
 
@@ -95,96 +92,14 @@ const onCancel = () => {
           placeholder="サブタイトルを入力してください"
         />
       </div>
-      <div class="mt-2 mb-2 d-flex justify-space-between">
-        <div class="g-block-sm">
-          <v-btn
-            v-if="eyecatchData?.id"
-            prepend-icon="mdi-delete"
-            color="error"
-            variant="outlined"
-            stacked
-            @click="onRemove"
-          >
-            削除
-          </v-btn>
-        </div>
-        <div class="g-block-sm">
-          <v-btn
-            v-if="eyecatchData?.id"
-            prepend-icon="mdi-content-save"
-            color="success"
-            variant="flat"
-            stacked
-            @click="onUpdate"
-          >
-            更新
-          </v-btn>
-          <v-btn
-            v-else
-            prepend-icon="mdi-content-save"
-            color="info"
-            variant="flat"
-            stacked
-            @click="onCreate"
-          >
-            作成
-          </v-btn>
-          <v-btn
-            prepend-icon="mdi-cancel"
-            color="secondary"
-            variant="flat"
-            stacked
-            class="ml-1"
-            @click="onCancel"
-          >
-            中止
-          </v-btn>
-        </div>
-        <div class="g-block-lg">
-          <v-btn
-            v-if="eyecatchData?.id"
-            prepend-icon="mdi-delete"
-            color="error"
-            variant="outlined"
-            width="8rem"
-            @click="onRemove"
-          >
-            削除する
-          </v-btn>
-        </div>
-        <div class="g-block-lg">
-          <v-btn
-            v-if="eyecatchData?.id"
-            prepend-icon="mdi-content-save"
-            color="success"
-            variant="flat"
-            width="8rem"
-            @click="onUpdate"
-          >
-            更新する
-          </v-btn>
-          <v-btn
-            v-else
-            prepend-icon="mdi-content-save"
-            color="info"
-            variant="flat"
-            width="8rem"
-            @click="onCreate"
-          >
-            作成する
-          </v-btn>
-          <v-btn
-            prepend-icon="mdi-cancel"
-            color="secondary"
-            variant="flat"
-            width="8rem"
-            class="ml-1"
-            @click="onCancel"
-          >
-            キャンセル
-          </v-btn>
-        </div>
-      </div>
+      <EditorFormActions
+        :contentId="eyecatchData?.id"
+        class="mt-4 mb-2"
+        @create="onCreate"
+        @update="onUpdate"
+        @remove="onRemove"
+        @cancel="onCancel"
+      />
     </v-form>
   </GuiContentFormDialog>
 </template>
