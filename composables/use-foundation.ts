@@ -9,12 +9,17 @@ export const useFoundation = () => {
       customerId.value === userCustomerId.value
   )
 
+  const isPreview = useState<boolean>('isPreview', () => false)
+  const togglePreview = () => {
+    isPreview.value = !isPreview.value
+  }
+
   const canEdit = ref(false)
   onMounted(() => {
     watch(
-      isLoggedIn,
-      (value) => {
-        canEdit.value = value
+      [isLoggedIn, isPreview],
+      () => {
+        canEdit.value = isLoggedIn.value && !isPreview.value
       },
       {
         immediate: true,
@@ -25,6 +30,8 @@ export const useFoundation = () => {
   return {
     customerId,
     isLoggedIn,
+    isPreview: readonly(isPreview),
+    togglePreview,
     canEdit,
     user: authUser,
     customer,

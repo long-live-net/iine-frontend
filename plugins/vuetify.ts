@@ -6,13 +6,13 @@ import * as directives from 'vuetify/directives'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const myThemeLightColors = {
-    primary: '#006CCC',
-    secondary: '#00B4C8',
-    accent: '#FABE00',
-    error: '#FF5252',
-    info: '#2196F3',
+    primary: '#303F9F',
+    secondary: '#E0E0E0',
+    accent: '#FFAB40',
+    error: '#F44336',
+    info: '#03A9F4',
     success: '#4CAF50',
-    warning: '#FB8C00',
+    warning: '#FFFF00',
   }
 
   const vuetify = createVuetify({

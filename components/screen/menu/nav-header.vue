@@ -11,7 +11,7 @@ const { domidPrefix, homeSections } = useHomePageSections()
 const sidebar = ref(false)
 
 const { logout } = useAuth()
-const { user, isLoggedIn } = useFoundation()
+const { user, isLoggedIn, isPreview, togglePreview } = useFoundation()
 const userMenuItems: MenuItem[] = [
   { title: 'プレビュー', value: 'preview', props: { prependIcon: 'mdi-eye' } },
   { type: 'divider' },
@@ -36,7 +36,7 @@ const logoutDialog = ref(false)
 const onSelectUserMenu = (value: number | string) => {
   switch (value) {
     case 'preview':
-      console.log('preview')
+      togglePreview()
       break
     case 'userinfo':
       console.log('userinfo')
@@ -89,7 +89,7 @@ const onLogout = () => {
               <template #activator="{ props }">
                 <v-btn
                   v-bind="props"
-                  color="yellow"
+                  color="accent"
                   prepend-icon="mdi-account"
                   rounded="lg"
                   style="text-transform: none; min-width: 8rem"
@@ -117,7 +117,7 @@ const onLogout = () => {
               @select="onSelectUserMenu"
             >
               <template #activator="{ props }">
-                <v-btn v-bind="props" color="yellow" icon="mdi-account" />
+                <v-btn v-bind="props" color="accent" icon="mdi-account" />
               </template>
             </BaseDropdown>
             <v-btn
@@ -128,7 +128,7 @@ const onLogout = () => {
             />
           </div>
           <teleport to="#application-body">
-            <BaseDrawer v-model:drawer="sidebar" color="#333333" theme="dark">
+            <BaseDrawer v-model:drawer="sidebar" color="#424242" theme="dark">
               <div class="column-direction">
                 <h2 class="menu-title">
                   <nuxt-link :to="headerTitle.to">
@@ -162,6 +162,11 @@ const onLogout = () => {
       @cancel="logoutDialog = false"
       @confirm="onLogout"
     />
+    <ScreenMenuOnPreview
+      v-if="isPreview"
+      class="nav-header__on-preview"
+      @click="togglePreview"
+    />
   </nav>
 </template>
 
@@ -178,6 +183,11 @@ const onLogout = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  &__on-preview {
+    position: fixed;
+    top: calc($nav-header-height + 1rem);
+    right: 1rem;
   }
 }
 
