@@ -20,6 +20,10 @@ $dark-theme-link-active: gold;
     color: variables.$silver;
   }
 
+  .g-theme-app-body {
+    background-color: variables.$black;
+    color: variables.$white;
+  }
   .g-theme-header {
     background-color: rgba(128, 128, 128, 0.5);
     color: variables.$white;

@@ -12,21 +12,23 @@ useHead({
 </script>
 
 <template>
-  <div id="application-base-body">
-    <header>
-      <ScreenMenuNavHeader />
-    </header>
-    <main>
-      <slot />
-    </main>
-    <footer>
-      <ScreenMenuNavFooter />
-    </footer>
-  </div>
+  <v-app class="g-theme-app-body">
+    <div id="application-body">
+      <header>
+        <ScreenMenuNavHeader />
+      </header>
+      <main>
+        <slot />
+      </main>
+      <footer>
+        <ScreenMenuNavFooter />
+      </footer>
+    </div>
+  </v-app>
 </template>
 
 <style lang="scss" scoped>
-#application-base-body {
+#application-body {
   display: flex;
   flex-flow: column;
   min-height: 100vh;

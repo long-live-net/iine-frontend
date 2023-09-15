@@ -1,95 +1,222 @@
 <script setup lang="ts">
+import type { MenuItem } from '@/components/base/dropdown.vue'
+
+// Todo: 適当
 const headerTitle = {
   title: 'ロングリブネット',
   color: 'yellow',
   to: { name: 'index', hash: '#home-index-top' },
 }
-
 const { domidPrefix, homeSections } = useHomePageSections()
+const sidebar = ref(false)
+
+const { logout } = useAuth()
+const { user, isLoggedIn } = useFoundation()
+const userMenuItems: MenuItem[] = [
+  { title: 'プレビュー', value: 'preview', props: { prependIcon: 'mdi-eye' } },
+  { type: 'divider' },
+  {
+    title: 'ユーザ情報',
+    value: 'userinfo',
+    props: { prependIcon: 'mdi-account' },
+  },
+  {
+    title: 'パスワード変更',
+    value: 'changePassword',
+    props: { prependIcon: 'mdi-lock' },
+  },
+  { type: 'divider' },
+  {
+    title: 'ログアウト',
+    value: 'logout',
+    props: { prependIcon: 'mdi-logout' },
+  },
+]
+const logoutDialog = ref(false)
+const onSelectUserMenu = (value: number | string) => {
+  switch (value) {
+    case 'preview':
+      console.log('preview')
+      break
+    case 'userinfo':
+      console.log('userinfo')
+      break
+    case 'changePassword':
+      console.log('changePassword')
+      break
+    case 'logout':
+      logoutDialog.value = true
+      break
+  }
+}
+const onLogout = () => {
+  logoutDialog.value = false
+  logout()
+}
 </script>
 
 <template>
   <nav class="nav-header g-theme-header">
-    <h2 class="nav-header__title">
-      <nuxt-link :to="headerTitle.to">
-        {{ headerTitle.title }}
-      </nuxt-link>
-    </h2>
     <div class="g-block-lg">
-      <div class="nav-header__wide">
-        <p
-          v-for="section in homeSections"
-          :key="section.order"
-          class="menu-link"
-        >
-          <nuxt-link
-            :to="{
-              name: 'index',
-              hash: `#${domidPrefix}-${section.kind}`,
-            }"
-          >
-            {{ section.menuTitle ?? section.title }}
+      <div class="nav-header__menu">
+        <h2 class="menu-title">
+          <nuxt-link :to="headerTitle.to">
+            {{ headerTitle.title }}
           </nuxt-link>
-        </p>
+        </h2>
+        <div class="row-direction">
+          <p
+            v-for="section in homeSections"
+            :key="section.order"
+            class="menu-link"
+          >
+            <nuxt-link
+              :to="{
+                name: 'index',
+                hash: `#${domidPrefix}-${section.kind}`,
+              }"
+            >
+              {{ section.menuTitle ?? section.title }}
+            </nuxt-link>
+          </p>
+          <ClientOnly>
+            <BaseDropdown
+              v-if="isLoggedIn"
+              :items="userMenuItems"
+              location="bottom left"
+              @select="onSelectUserMenu"
+            >
+              <template #activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  color="yellow"
+                  prepend-icon="mdi-account"
+                  rounded="lg"
+                  style="text-transform: none; min-width: 8rem"
+                >
+                  {{ user?.name ?? 'No Name' }}
+                </v-btn>
+              </template>
+            </BaseDropdown>
+          </ClientOnly>
+        </div>
       </div>
     </div>
     <div class="g-block-sm">
-      <div>MENU NARROW</div>
-      <!-- <customer-user-tools v-show="isAuthenticated" :with-name="false" />
-        <b-button variant="light" @click="openSidebar">
-          <b-icon
-            icon="list"
-            variant="dark"
-            style="width: 1.5rem; height: 18px"
-          />
-        </b-button> -->
-      <!-- <b-sidebar
-        v-model="sidebar"
-        bg-variant="dark"
-        text-variant="light"
-        shadow
-        backdrop
-      >
-        <component :is="narrowMenuTemplateName" @close="closeSidebar" />
-      </b-sidebar> -->
+      <div class="nav-header__menu">
+        <h2 class="menu-title">
+          <nuxt-link :to="headerTitle.to">
+            {{ headerTitle.title }}
+          </nuxt-link>
+        </h2>
+        <ClientOnly>
+          <div>
+            <BaseDropdown
+              v-if="isLoggedIn"
+              :items="userMenuItems"
+              @select="onSelectUserMenu"
+            >
+              <template #activator="{ props }">
+                <v-btn v-bind="props" color="yellow" icon="mdi-account" />
+              </template>
+            </BaseDropdown>
+            <v-btn
+              variant="text"
+              icon="mdi-menu"
+              color="white"
+              @click="sidebar = !sidebar"
+            />
+          </div>
+          <teleport to="#application-body">
+            <BaseDrawer v-model:drawer="sidebar" color="#333333" theme="dark">
+              <div class="column-direction">
+                <h2 class="menu-title">
+                  <nuxt-link :to="headerTitle.to">
+                    {{ headerTitle.title }}
+                  </nuxt-link>
+                </h2>
+                <p
+                  v-for="section in homeSections"
+                  :key="section.order"
+                  class="menu-link"
+                >
+                  <nuxt-link
+                    :to="{
+                      name: 'index',
+                      hash: `#${domidPrefix}-${section.kind}`,
+                    }"
+                  >
+                    {{ section.menuTitle ?? section.title }}
+                  </nuxt-link>
+                </p>
+              </div>
+            </BaseDrawer>
+          </teleport>
+        </ClientOnly>
+      </div>
     </div>
+    <BaseConfirm
+      v-model:comfirm="logoutDialog"
+      message="本当にログアウトしますか？"
+      exec-text="ログアウト"
+      @cancel="logoutDialog = false"
+      @confirm="onLogout"
+    />
   </nav>
 </template>
 
 <style lang="scss" scoped>
 .nav-header {
-  height: $nav-header-height;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1.5rem;
-  &__title {
-    margin: 0;
-    font-size: 1.3rem;
-    :deep(a) {
-      font-weight: 900;
-      color: v-bind('headerTitle.color');
-    }
-    :deep(a:hover) {
-      color: orange;
-    }
+  .g-block-lg {
+    padding: 0 1.8rem;
   }
-  &__wide {
+  .g-block-sm {
+    padding: 0 0.5rem 0 1rem;
+  }
+  &__menu {
+    height: $nav-header-height;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    .menu-link {
-      margin: 0;
-      font-weight: bold;
-      font-size: 1rem;
-      margin-right: 0.75rem;
-      :deep(a) {
-        font-weight: bold;
-        color: white;
-      }
-      :deep(a:hover) {
-        color: orange;
-      }
-    }
+  }
+}
+
+.row-direction {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+}
+.column-direction {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+  .menu-title {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.menu-title {
+  font-size: 1.3rem;
+  :deep(a) {
+    font-weight: 900;
+    color: v-bind('headerTitle.color');
+  }
+  :deep(a:hover) {
+    color: orange;
+  }
+}
+
+.menu-link {
+  font-weight: bold;
+  font-size: 1rem;
+  :deep(a) {
+    font-weight: bold;
+    color: white;
+  }
+  :deep(a:hover) {
+    color: orange;
   }
 }
 </style>

@@ -12,7 +12,9 @@ useHead({
 </script>
 
 <template>
-  <main>
-    <slot />
-  </main>
+  <v-app class="g-theme-app-body">
+    <main>
+      <slot />
+    </main>
+  </v-app>
 </template>

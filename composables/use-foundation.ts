@@ -1,6 +1,6 @@
 export const useFoundation = () => {
-  const { customerId } = useCustomer()
-  const { authToken, userCustomerId } = useAuth()
+  const { customer, customerId } = useCustomer()
+  const { authToken, authUser, userCustomerId } = useAuth()
 
   const isLoggedIn = computed(
     () =>
@@ -26,5 +26,7 @@ export const useFoundation = () => {
     customerId,
     isLoggedIn,
     canEdit,
+    user: authUser,
+    customer,
   }
 }
