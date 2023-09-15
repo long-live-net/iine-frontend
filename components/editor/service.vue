@@ -34,24 +34,21 @@ const onCreate = handleSubmit((serviceForm) => {
 })
 
 const onUpdate = handleSubmit((serviceForm) => {
-  if (props.serviceData?.id) {
-    emit('update', {
-      id: props.serviceData?.id,
-      formData: serviceForm,
-    })
+  if (!props.serviceData?.id) {
+    return
   }
+  emit('update', {
+    id: props.serviceData?.id,
+    formData: serviceForm,
+  })
   modal.value = false
 })
 
 const onRemove = () => {
-  if (props.serviceData?.id) {
-    if (process.client) {
-      const confirmed = window.confirm('本当に削除してもよろしいですか？')
-      if (confirmed) {
-        emit('remove', props.serviceData.id)
-      }
-    }
+  if (!props.serviceData?.id) {
+    return
   }
+  emit('remove', props.serviceData.id)
   modal.value = false
 }
 
@@ -104,96 +101,14 @@ const onCancel = () => {
           placeholder="本文を入力してください"
         />
       </div>
-      <div class="mt-2 mb-2 d-flex justify-space-between">
-        <div class="g-block-sm">
-          <v-btn
-            v-if="serviceData?.id"
-            prepend-icon="mdi-delete"
-            color="error"
-            variant="outlined"
-            stacked
-            @click="onRemove"
-          >
-            削除
-          </v-btn>
-        </div>
-        <div class="g-block-sm">
-          <v-btn
-            v-if="serviceData?.id"
-            prepend-icon="mdi-content-save"
-            color="success"
-            variant="flat"
-            stacked
-            @click="onUpdate"
-          >
-            更新
-          </v-btn>
-          <v-btn
-            v-else
-            prepend-icon="mdi-content-save"
-            color="info"
-            variant="flat"
-            stacked
-            @click="onCreate"
-          >
-            登録
-          </v-btn>
-          <v-btn
-            prepend-icon="mdi-cancel"
-            color="secondary"
-            variant="flat"
-            stacked
-            class="ml-1"
-            @click="onCancel"
-          >
-            中止
-          </v-btn>
-        </div>
-        <div class="g-block-lg">
-          <v-btn
-            v-if="serviceData?.id"
-            prepend-icon="mdi-delete"
-            color="error"
-            variant="outlined"
-            width="8rem"
-            @click="onRemove"
-          >
-            削除する
-          </v-btn>
-        </div>
-        <div class="g-block-lg">
-          <v-btn
-            v-if="serviceData?.id"
-            prepend-icon="mdi-content-save"
-            color="success"
-            variant="flat"
-            width="8rem"
-            @click="onUpdate"
-          >
-            更新する
-          </v-btn>
-          <v-btn
-            v-else
-            prepend-icon="mdi-content-save"
-            color="info"
-            variant="flat"
-            width="8rem"
-            @click="onCreate"
-          >
-            登録する
-          </v-btn>
-          <v-btn
-            prepend-icon="mdi-cancel"
-            color="secondary"
-            variant="flat"
-            width="8rem"
-            class="ml-1"
-            @click="onCancel"
-          >
-            キャンセル
-          </v-btn>
-        </div>
-      </div>
+      <EditorFormActions
+        :contentId="serviceData?.id"
+        class="mt-4 mb-2"
+        @create="onCreate"
+        @update="onUpdate"
+        @remove="onRemove"
+        @cancel="onCancel"
+      />
     </v-form>
   </GuiContentFormDialog>
 </template>
