@@ -1,5 +1,4 @@
 import type { RouterOptions } from '@nuxt/schema'
-import { LoDashExplicitNumberArrayWrapper } from 'lodash'
 
 export default <RouterOptions>{
   scrollBehavior(to, from, savedPosition) {
