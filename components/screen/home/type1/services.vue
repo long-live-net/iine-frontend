@@ -109,7 +109,7 @@ await onLoad()
     margin-top: 1rem;
     p {
       font-weight: bold;
-      color: $warning;
+      color: $accent;
     }
   }
   .create-activator {

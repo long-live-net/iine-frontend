@@ -5,7 +5,7 @@ defineEmits<{ click: [] }>()
 <template>
   <div class="on-preview-wrap">
     <v-btn
-      color="yellow"
+      color="warning"
       prepend-icon="mdi-eye"
       rounded="lg"
       width="260"

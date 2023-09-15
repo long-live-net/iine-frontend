@@ -31,7 +31,7 @@ const confirmDialog = computed({
       <v-card-text>
         <p>{{ message }}</p>
         <div class="mt-4 mb-2 p-3 text-right">
-          <v-btn color="grey-lighten-2" @click="$emit('cancel')">{{
+          <v-btn color="secondary" @click="$emit('cancel')">{{
             cancelText
           }}</v-btn>
           <v-btn color="error" class="ml-1" @click="$emit('confirm')">{{

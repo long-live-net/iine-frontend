@@ -103,7 +103,7 @@ await loadNewses()
     row-gap: 1rem;
     p {
       font-weight: bold;
-      color: $warning;
+      color: $accent;
     }
   }
   .whole-switch {

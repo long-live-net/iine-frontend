@@ -186,7 +186,7 @@ const onLogout = () => {
   }
   &__on-preview {
     position: fixed;
-    top: calc($nav-header-height + 1rem);
+    top: calc($nav-header-height + 0.75rem);
     right: 1rem;
   }
 }
