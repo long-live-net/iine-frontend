@@ -106,7 +106,51 @@ const onCancel = () => {
         />
       </div>
       <div class="mt-2 mb-2 d-flex justify-space-between">
-        <div>
+        <div class="g-block-sm">
+          <v-btn
+            v-if="informationData?.id"
+            prepend-icon="mdi-delete"
+            color="error"
+            variant="outlined"
+            stacked
+            @click="onRemove"
+          >
+            削除
+          </v-btn>
+        </div>
+        <div class="g-block-sm">
+          <v-btn
+            v-if="informationData?.id"
+            prepend-icon="mdi-content-save"
+            color="success"
+            variant="flat"
+            stacked
+            @click="onUpdate"
+          >
+            更新
+          </v-btn>
+          <v-btn
+            v-else
+            prepend-icon="mdi-content-save"
+            color="info"
+            variant="flat"
+            stacked
+            @click="onCreate"
+          >
+            作成
+          </v-btn>
+          <v-btn
+            prepend-icon="mdi-cancel"
+            color="secondary"
+            variant="flat"
+            stacked
+            class="ml-1"
+            @click="onCancel"
+          >
+            中止
+          </v-btn>
+        </div>
+        <div class="g-block-lg">
           <v-btn
             v-if="informationData?.id"
             prepend-icon="mdi-delete"
@@ -118,7 +162,7 @@ const onCancel = () => {
             削除する
           </v-btn>
         </div>
-        <div>
+        <div class="g-block-lg">
           <v-btn
             v-if="informationData?.id"
             prepend-icon="mdi-content-save"
@@ -141,7 +185,7 @@ const onCancel = () => {
           </v-btn>
           <v-btn
             prepend-icon="mdi-cancel"
-            color="grey-lighten-2"
+            color="secondary"
             variant="flat"
             width="8rem"
             class="ml-1"

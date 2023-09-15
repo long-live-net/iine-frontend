@@ -78,7 +78,7 @@ $eyecatcher-height-sm: 600px;
     row-gap: 1rem;
     p {
       font-weight: bold;
-      color: $warning;
+      color: $accent;
     }
   }
 }
