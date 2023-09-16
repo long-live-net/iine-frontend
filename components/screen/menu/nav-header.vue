@@ -117,7 +117,9 @@ const onLogout = () => {
               @select="onSelectUserMenu"
             >
               <template #activator="{ props }">
-                <v-btn v-bind="props" color="accent" icon="mdi-account" />
+                <v-btn v-bind="props" color="accent" rounded="lg">
+                  <v-icon icon="mdi-account" />
+                </v-btn>
               </template>
             </BaseDropdown>
             <v-btn
