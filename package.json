@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@mdi/font": "^7.2.96",
-    "@nuxt/devtools": "latest",
+    "@nuxt/devtools": "^0.8.3",
     "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
     "@types/node": "^18",
     "@types/sanitize-html": "^2.9.0",

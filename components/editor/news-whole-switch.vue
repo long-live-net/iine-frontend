@@ -13,7 +13,7 @@ const wholeValue = computed({
 <template>
   <v-checkbox
     v-model="wholeValue"
-    label="公開日が未来のデータも含めて表示"
+    label="公開日が未来のデータを含む"
     color="primary"
   />
 </template>
