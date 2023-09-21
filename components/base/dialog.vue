@@ -1,5 +1,13 @@
 <script setup lang="ts">
-const props = defineProps<{ modal: boolean }>()
+const props = withDefaults(
+  defineProps<{
+    modal: boolean
+    maxWidth?: number
+  }>(),
+  {
+    maxWidth: 800,
+  }
+)
 const emit = defineEmits<{
   'update:modal': [modal: boolean]
 }>()
@@ -13,7 +21,7 @@ const dialog = computed({
 </script>
 
 <template>
-  <v-dialog v-model="dialog" max-width="800">
+  <v-dialog v-model="dialog" :max-width="maxWidth">
     <slot />
   </v-dialog>
 </template>

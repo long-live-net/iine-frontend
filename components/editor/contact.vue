@@ -58,12 +58,12 @@ const onCancel = () => {
 </script>
 
 <template>
-  <GuiContentFormDialogActivator
+  <GuiContentEditActivator
     v-model:modal="modal"
     :is-update="!!contactData?.id"
     :activaterLabel="activaterLabel"
   />
-  <GuiContentFormDialog v-model:modal="modal" :is-update="!!contactData?.id">
+  <GuiContentEditDialog v-model:modal="modal" :is-update="!!contactData?.id">
     <v-form>
       <div>
         <BaseFileInput
@@ -109,5 +109,5 @@ const onCancel = () => {
         @cancel="onCancel"
       />
     </v-form>
-  </GuiContentFormDialog>
+  </GuiContentEditDialog>
 </template>

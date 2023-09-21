@@ -7,7 +7,7 @@ const headerTitle = {
   color: 'yellow',
   to: { name: 'index', hash: '#home-index-top' },
 }
-const { domidPrefix, homeSections } = useHomePageSections()
+const { domidPrefix, homeSections } = useHomeSectionsRead()
 const sidebar = ref(false)
 
 const { logout } = useAuth()

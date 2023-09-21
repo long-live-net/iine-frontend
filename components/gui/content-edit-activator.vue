@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ContentType } from '@/types/content'
-
 const props = defineProps<{
   modal: boolean
   isUpdate?: boolean
