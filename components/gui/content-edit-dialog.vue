@@ -14,8 +14,8 @@ const dialog = computed({
 
 <template>
   <BaseDialog v-model:modal="dialog">
-    <div class="content-form-dialog">
-      <header class="content-form-dialog__header">
+    <div class="content-edit-dialog">
+      <header class="content-edit-dialog__header">
         <slot name="header">
           <template v-if="isUpdate">
             <p class="mr-1">
@@ -31,7 +31,7 @@ const dialog = computed({
           </template>
         </slot>
       </header>
-      <div class="content-form-dialog__body">
+      <div class="content-edit-dialog__body">
         <slot />
       </div>
     </div>
@@ -39,7 +39,7 @@ const dialog = computed({
 </template>
 
 <style lang="scss" scoped>
-.content-form-dialog {
+.content-edit-dialog {
   background-color: $white;
   overflow-y: auto;
   &__header {
