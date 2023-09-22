@@ -1,5 +1,15 @@
 <script setup lang="ts">
-const props = defineProps<{ modal: boolean }>()
+const props = withDefaults(
+  defineProps<{
+    modal: boolean
+    title?: string
+    maxWidth?: number
+  }>(),
+  {
+    title: 'ページ設定',
+    maxWidth: 540,
+  }
+)
 const emit = defineEmits<{
   'update:modal': [modal: boolean]
 }>()
@@ -13,9 +23,9 @@ const dialog = computed({
 </script>
 
 <template>
-  <BaseDialog v-model:modal="dialog" :max-width="540">
-    <div class="page-layout-dialog">
-      <header class="page-layout-dialog__header">
+  <BaseDialog v-model:modal="dialog" :max-width="maxWidth">
+    <div class="page-setting-dialog">
+      <header class="page-setting-dialog__header">
         <slot name="header">
           <p class="mr-1">
             <v-icon
@@ -24,10 +34,10 @@ const dialog = computed({
               size="x-large"
             />
           </p>
-          <h3>ページレイアウト変更</h3>
+          <h3>{{ title }}</h3>
         </slot>
       </header>
-      <div class="page-layout-dialog__body">
+      <div class="page-setting-dialog__body">
         <slot />
       </div>
     </div>
@@ -35,7 +45,7 @@ const dialog = computed({
 </template>
 
 <style lang="scss" scoped>
-.page-layout-dialog {
+.page-setting-dialog {
   background-color: $white;
   overflow-y: auto;
   &__header {
