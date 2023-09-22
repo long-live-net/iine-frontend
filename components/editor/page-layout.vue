@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import type { PageSection } from '@/types/page-section'
+import type {
+  PageSection,
+  BasePageSection,
+  PageSectionEdit,
+} from '@/types/page-setting'
 
 const props = defineProps<{
   sections: PageSection[] | null
 }>()
 
 const emit = defineEmits<{
-  update: [{ homeSections: PageSection[] }]
+  update: [homeSections: PageSectionEdit[]]
 }>()
 
-const {
-  editSectionType,
-  sectionTypes,
-  baseSections,
-  editSections,
-  resetSections,
-} = useHomeSectionsEdit()
+const title = 'ページレイアウト変更'
+const { customerId } = useFoundation()
+const { baseSections, editSections, resetSections } = useHomeLayoutEdit()
 
 const modal = ref(false)
 
@@ -26,11 +26,16 @@ watch(modal, (current) => {
   }
 })
 
-const clone = (data: PageSection) => {
-  return data
+const clone = (data: BasePageSection): PageSectionEdit => {
+  return { ...data, customerId }
 }
 
 const onCancel = () => {
+  modal.value = false
+}
+
+const onUpdate = () => {
+  emit('update', editSections.value)
   modal.value = false
 }
 
@@ -47,90 +52,82 @@ const removeItem = (baseId: string) => {
     v-model:modal="modal"
     activatorIcon="mdi-view-dashboard-edit"
     activator-color="accent"
-    activator-text="ページレイアウト変更"
+    :activator-text="title"
   />
-  <GuiPageLayoutDialog v-model:modal="modal" class="page-layout-editor">
-    <div class="page-layout-editor__theme">
-      <h4>レイアウトテーマ選択</h4>
-      <div class="theme-selection">
-        <v-radio-group v-model="editSectionType" inline>
-          <v-radio
-            v-for="st in sectionTypes"
-            key="st.type"
-            color="primary"
-            :label="st.label"
-            :value="st.type"
-          ></v-radio>
-        </v-radio-group>
-      </div>
-    </div>
+  <GuiPageSettingDialog v-model:modal="modal" :title="title">
     <ClientOnly>
-      <div class="page-layout-editor__layout">
-        <h4>ページレイアウト設定</h4>
-        <p class="font-weight-bold">
-          <small class="g-theme-contets-item__draggable--notion">
-            テンプレートからレイアウトにドラッグドロップして設定します
-          </small>
-        </p>
-        <div class="layout-selection">
-          <div class="base-layout">
-            <h5>テンプレート</h5>
-            <draggable
-              :list="baseSections"
-              :clone="clone"
-              :group="{ name: 'page-layouts', pull: 'clone', put: false }"
-              item-key="baseId"
-              handle=".draggable"
-              class="drag-group base"
-            >
-              <template #item="{ element }">
-                <div
-                  class="drag-group__item"
-                  :class="{ draggable: !hasAssigned(element.baseId) }"
-                >
-                  <p>{{ element.kind }}</p>
-                </div>
-              </template>
-            </draggable>
-          </div>
+      <div class="page-layout-editor">
+        <div class="layout-setting base">
+          <h4 class="mb-2">テンプレート</h4>
+          <draggable
+            :list="baseSections"
+            :clone="clone"
+            :group="{ name: 'page-layouts', pull: 'clone', put: false }"
+            item-key="baseId"
+            handle=".draggable"
+            class="drag-group"
+          >
+            <template #item="{ element }">
+              <div
+                class="drag-group__item"
+                :class="{ draggable: !hasAssigned(element.baseId) }"
+              >
+                <p>{{ element.kind }}</p>
+                <p class="drag-group__item--icon">
+                  <v-icon
+                    v-if="hasAssigned(element.baseId)"
+                    icon="mdi-cancel"
+                  />
+                  <v-icon v-else icon="mdi-transfer-right" color="accent" />
+                </p>
+              </div>
+            </template>
+          </draggable>
+        </div>
 
-          <div class="page-layout">
-            <h5>ページレイアウト</h5>
-            <draggable
-              :list="editSections"
-              group="page-layouts"
-              item-key="baseId"
-              handle=".draggable"
-              class="drag-group page"
-            >
-              <template #item="{ element }">
-                <div class="drag-group__item page__item draggable">
-                  <p>{{ element.kind }}</p>
-                  <p class="page__item--remove">
-                    <v-btn
-                      color="grey-darken-1"
-                      icon="mdi-close"
-                      size="small"
-                      density="comfortable"
-                      flat
-                      @click="removeItem(element.baseId)"
-                    />
-                  </p>
-                </div>
-              </template>
-            </draggable>
-          </div>
+        <div class="layout-setting page">
+          <h4 class="mb-2">レイアウト</h4>
+          <draggable
+            :list="editSections"
+            group="page-layouts"
+            item-key="baseId"
+            handle=".draggable"
+            class="drag-group"
+          >
+            <template #item="{ element }">
+              <div class="drag-group__item draggable">
+                <p>{{ element.kind }}</p>
+                <p class="drag-group__item--icon">
+                  <v-btn
+                    color="grey-darken-1"
+                    icon="mdi-close"
+                    size="small"
+                    density="comfortable"
+                    flat
+                    @click="removeItem(element.baseId)"
+                  />
+                </p>
+              </div>
+            </template>
+          </draggable>
         </div>
       </div>
     </ClientOnly>
-    <div class="d-flex justify-end mt-8">
+    <div class="mt-3">
+      <p class="font-weight-bold">
+        <small class="text-blue-darken-1">
+          テンプレートからレイアウトに要素をドラッグドロップして設定できます
+        </small>
+      </p>
+    </div>
+    <div class="d-flex justify-end mt-6">
       <div>
         <v-btn
           prepend-icon="mdi-content-save"
           color="accent"
           variant="flat"
           width="8rem"
-          @click="$emit('update')"
+          @click="onUpdate"
         >
           変更する
         </v-btn>
@@ -146,73 +143,63 @@ const removeItem = (baseId: string) => {
         </v-btn>
       </div>
     </div>
-  </GuiPageLayoutDialog>
+  </GuiPageSettingDialog>
 </template>
 
 <style scoped lang="scss">
 .page-layout-editor {
-  &__theme {
-    .theme-selection {
-      padding: 0;
-    }
-  }
-  &__layout {
-    .layout-selection {
+  display: flex;
+  justify-content: space-between;
+
+  .layout-setting {
+    width: calc(50% - 0.4rem);
+
+    .drag-group {
+      min-height: 252px;
+      padding: 0.6rem;
       display: flex;
-      justify-content: space-between;
-      margin-top: 0.5rem;
-      .base-layout {
-        margin-top: 0.5rem;
-        width: calc(50% - 0.5rem);
-        h4,
-        h5 {
-          color: $blue-darken1;
+      flex-direction: column;
+      row-gap: 0.5rem;
+      border-radius: 6px;
+      &__item {
+        position: relative;
+        line-height: 3rem;
+        padding: 0 0.5rem;
+        background-color: $gray-lighten1;
+        color: $gray-lighten3;
+        border: 2px solid $blue-darken1;
+        &--icon {
+          position: absolute;
+          top: 1px;
+          right: 6px;
         }
       }
-      .page-layout {
-        margin-top: 0.5rem;
-        width: calc(50% - 0.5rem);
-        h4,
-        h5 {
-          color: $accent;
-        }
+      .draggable {
+        background-color: #ffffcc;
+        color: $black;
+        border: 2px dashed $orange;
+        cursor: pointer;
       }
     }
   }
-  .drag-group {
-    min-height: 14.5rem;
-    padding: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    row-gap: 0.5rem;
-    border-radius: 6px;
-    &__item {
-      line-height: 3rem;
-      padding: 0 0.5rem;
-      background-color: $gray-lighten1;
-      color: $gray-lighten3;
-    }
-  }
+
   .base {
-    background-color: $blue-darken1;
-    border: 3px solid $blue-darken1;
+    h4,
+    h5 {
+      color: $blue-darken1;
+    }
+    .drag-group {
+      background-color: $blue-darken1;
+    }
   }
   .page {
-    background-color: $accent;
-    border: 3px dashed $orange;
-    &__item {
-      position: relative;
-      &--remove {
-        position: absolute;
-        top: 1px;
-        right: 6px;
-      }
+    h4,
+    h5 {
+      color: $accent;
     }
-  }
-  .draggable {
-    background-color: #ffffcc;
-    color: $black;
-    cursor: pointer;
+    .drag-group {
+      background-color: $accent;
+    }
   }
 }
 </style>

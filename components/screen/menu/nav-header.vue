@@ -1,19 +1,27 @@
 <script setup lang="ts">
 import type { MenuItem } from '@/components/base/dropdown.vue'
 
+const { logout } = useAuth()
+const { customerId, user, isLoggedIn, isPreview, togglePreview } =
+  useFoundation()
+
 // Todo: 適当
 const headerTitle = {
   title: 'ロングリブネット',
   color: 'yellow',
   to: { name: 'index', hash: '#home-index-top' },
 }
-const { domidPrefix, homeSections } = useHomeSectionsRead()
+const { domidPrefix, homeSections, fetchHomeLayout } =
+  useHomeLayoutRead(customerId)
 const sidebar = ref(false)
 
-const { logout } = useAuth()
-const { user, isLoggedIn, isPreview, togglePreview } = useFoundation()
 const userMenuItems: MenuItem[] = [
   { title: 'プレビュー', value: 'preview', props: { prependIcon: 'mdi-eye' } },
+  {
+    title: 'テーマ設定',
+    value: 'themeSetting',
+    props: { prependIcon: 'mdi-cog' },
+  },
   { type: 'divider' },
   {
     title: 'ユーザ情報',
@@ -38,6 +46,9 @@ const onSelectUserMenu = (value: number | string) => {
     case 'preview':
       togglePreview()
       break
+    case 'themeSetting':
+      console.log('themeSetting')
+      break
     case 'userinfo':
       console.log('userinfo')
       break
@@ -53,6 +64,8 @@ const onLogout = () => {
   logoutDialog.value = false
   logout()
 }
+
+homeSections.value ?? (await fetchHomeLayout())
 </script>
 
 <template>
@@ -67,7 +80,7 @@ const onLogout = () => {
         <div class="row-direction">
           <p
             v-for="section in homeSections"
-            :key="section.order"
+            :key="section.id"
             class="menu-link"
           >
             <nuxt-link
@@ -139,7 +152,7 @@ const onLogout = () => {
                 </h2>
                 <p
                   v-for="section in homeSections"
-                  :key="section.order"
+                  :key="section.id"
                   class="menu-link"
                 >
                   <nuxt-link
