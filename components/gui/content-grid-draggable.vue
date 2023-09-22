@@ -21,12 +21,14 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
 <template>
   <div>
     <p class="draggable-notion g-theme-contets-item__draggable--notion">
-      ドラッグドロップで位置を変更できます
+      <v-icon icon="mdi-apps" size="x-large" />
+      ドラッグドロップして位置を変更できます
     </p>
     <ClientOnly>
       <draggable
         v-model="draggableContents"
         item-key="id"
+        handle=".draggable"
         class="content-grid"
         @start="isDragging = true"
         @end="isDragging = false"
@@ -36,8 +38,15 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
             class="content-grid__column column-draggable g-theme-contets-item__draggable"
           >
             <slot :content="element" />
-            <div class="edit-position">
-              <v-icon icon="mdi-drag" size="x-large" color="grey-darken-2" />
+            <div
+              class="edit-position-top draggable g-theme-contets-item__draggable--notion"
+            >
+              <v-icon icon="mdi-apps" size="x-large" />
+            </div>
+            <div
+              class="edit-position-bottom draggable g-theme-contets-item__draggable--notion"
+            >
+              <v-icon icon="mdi-apps" size="x-large" />
             </div>
           </section>
         </template>
@@ -72,12 +81,19 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
     position: relative;
     width: 92% !important;
     border-radius: 6px;
-    cursor: v-bind('columnCursor');
-    .edit-position {
+    .edit-position-top {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+    .edit-position-bottom {
       position: absolute;
       bottom: 0.5rem;
       right: 0.5rem;
     }
+  }
+  .draggable {
+    cursor: v-bind('columnCursor');
   }
 }
 </style>
