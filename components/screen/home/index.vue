@@ -19,8 +19,8 @@ const layoutTheme = computed<LayoutTheme>(
 )
 
 const onUpdateSections = async (pageSections: PageSectionEdit[]) => {
-  await replaceHomeLayout(pageSections)
   nextKey()
+  await replaceHomeLayout(pageSections)
   await fetchHomeLayout()
 }
 

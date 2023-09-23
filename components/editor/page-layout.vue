@@ -72,14 +72,14 @@ const removeItem = (baseId: string) => {
                 class="drag-group__item"
                 :class="{ draggable: !hasAssigned(element.baseId) }"
               >
-                <p>{{ element.kind }}</p>
                 <p class="drag-group__item--icon">
                   <v-icon
                     v-if="hasAssigned(element.baseId)"
                     icon="mdi-cancel"
                   />
-                  <v-icon v-else icon="mdi-transfer-right" color="accent" />
+                  <v-icon v-else icon="mdi-apps" color="accent" />
                 </p>
+                <p>{{ element.kind }}</p>
               </div>
             </template>
           </draggable>
@@ -96,8 +96,11 @@ const removeItem = (baseId: string) => {
           >
             <template #item="{ element }">
               <div class="drag-group__item draggable">
-                <p>{{ element.kind }}</p>
                 <p class="drag-group__item--icon">
+                  <v-icon icon="mdi-apps" color="accent" />
+                </p>
+                <p>{{ element.kind }}</p>
+                <p class="drag-group__item--action">
                   <v-btn
                     color="grey-darken-1"
                     icon="mdi-close"
@@ -155,7 +158,7 @@ const removeItem = (baseId: string) => {
     width: calc(50% - 0.4rem);
 
     .drag-group {
-      min-height: 252px;
+      min-height: 316px;
       padding: 0.6rem;
       display: flex;
       flex-direction: column;
@@ -163,22 +166,17 @@ const removeItem = (baseId: string) => {
       border-radius: 6px;
       &__item {
         position: relative;
-        line-height: 3rem;
+        line-height: 4rem;
         padding: 0 0.5rem;
         background-color: $gray-lighten1;
         color: $gray-lighten3;
         border: 2px solid $blue-darken1;
-        &--icon {
-          position: absolute;
-          top: 1px;
-          right: 6px;
-        }
       }
       .draggable {
         background-color: #ffffcc;
         color: $black;
         border: 2px dashed $orange;
-        cursor: pointer;
+        cursor: grab;
       }
     }
   }
@@ -190,6 +188,13 @@ const removeItem = (baseId: string) => {
     }
     .drag-group {
       background-color: $blue-darken1;
+      &__item {
+        &--icon {
+          position: absolute;
+          top: 0;
+          right: 6px;
+        }
+      }
     }
   }
   .page {
@@ -199,6 +204,37 @@ const removeItem = (baseId: string) => {
     }
     .drag-group {
       background-color: $accent;
+      &__item {
+        &--icon {
+          position: absolute;
+          top: 0;
+          right: 32px;
+        }
+        &--action {
+          position: absolute;
+          top: 0px;
+          right: 3px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: $grid-breakpoint-md) {
+  .page-layout-editor {
+    .page {
+      .drag-group {
+        &__item {
+          &--icon {
+            top: 16px;
+            right: 6px;
+          }
+          &--action {
+            top: -12px;
+            right: 4px;
+          }
+        }
+      }
     }
   }
 }
