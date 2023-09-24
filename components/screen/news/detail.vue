@@ -16,9 +16,9 @@ await onLoad(contentId)
 </script>
 
 <template>
-  <GuiContentCard class="news-detail">
-    <GuiContentWrap :loading="loading">
-      <GuiEyecatchImage
+  <CommonContentCard class="news-detail">
+    <CommonContentWrap :loading="loading">
+      <CommonEyecatchImage
         v-if="newsRef?.image"
         :url="newsRef?.image?.url"
         :settings="newsRef?.image?.settings"
@@ -30,11 +30,11 @@ await onLoad(contentId)
             @update="onUpdateImageSetting"
           />
         </div>
-      </GuiEyecatchImage>
-      <GuiContentCardBody>
+      </CommonEyecatchImage>
+      <CommonContentCardBody>
         <template v-if="newsRef?.id">
           <div class="news-detail__header">
-            <GuiNewsCategoryBadge :category="newsRef.category" small />
+            <CommonNewsCategoryBadge :category="newsRef.category" small />
             <p>
               <small>{{
                 formatLocalDate(newsRef.publishOn, 'YYYY/MM/DD')
@@ -55,7 +55,7 @@ await onLoad(contentId)
             />
           </div>
         </div>
-      </GuiContentCardBody>
+      </CommonContentCardBody>
       <div v-if="canEdit && newsRef?.id" class="edit-activator">
         <EditorNews
           :news-data="newsRef"
@@ -63,8 +63,8 @@ await onLoad(contentId)
           @remove="onRemove"
         />
       </div>
-    </GuiContentWrap>
-  </GuiContentCard>
+    </CommonContentWrap>
+  </CommonContentCard>
 </template>
 
 <style scoped lang="scss">

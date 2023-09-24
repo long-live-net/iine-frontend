@@ -117,11 +117,19 @@ homeSections.value ?? (await fetchHomeLayout())
     </div>
     <div class="g-block-sm">
       <div class="nav-header__menu">
-        <h2 class="menu-title">
-          <nuxt-link :to="headerTitle.to">
-            {{ headerTitle.title }}
-          </nuxt-link>
-        </h2>
+        <div class="nav-header__menu--title">
+          <v-btn
+            variant="text"
+            icon="mdi-menu"
+            color="white"
+            @click="sidebar = !sidebar"
+          />
+          <h2 class="menu-title">
+            <nuxt-link :to="headerTitle.to">
+              {{ headerTitle.title }}
+            </nuxt-link>
+          </h2>
+        </div>
         <ClientOnly>
           <div>
             <BaseDropdown
@@ -135,12 +143,6 @@ homeSections.value ?? (await fetchHomeLayout())
                 </v-btn>
               </template>
             </BaseDropdown>
-            <v-btn
-              variant="text"
-              icon="mdi-menu"
-              color="white"
-              @click="sidebar = !sidebar"
-            />
           </div>
           <teleport to="#application-body">
             <BaseDrawer v-model:drawer="sidebar" color="#424242" theme="dark">
@@ -191,13 +193,17 @@ homeSections.value ?? (await fetchHomeLayout())
     padding: 0 1.8rem;
   }
   .g-block-sm {
-    padding: 0 0.5rem 0 1rem;
+    padding: 0 0.6rem 0 0;
   }
   &__menu {
     height: $nav-header-height;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    &--title {
+      display: flex;
+      align-items: center;
+    }
   }
   &__on-preview {
     position: fixed;
@@ -226,7 +232,7 @@ homeSections.value ?? (await fetchHomeLayout())
   font-size: 1.3rem;
   :deep(a) {
     font-weight: 900;
-    color: v-bind('headerTitle.color');
+    color: v-bind('headerTitle.color') !important;
   }
   :deep(a:hover) {
     color: orange;

@@ -57,12 +57,12 @@ const onCancel = () => {
 </script>
 
 <template>
-  <GuiContentEditActivator
+  <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!informationData?.id"
     :activaterLabel="activaterLabel"
   />
-  <GuiContentEditDialog
+  <CommonContentEditDialog
     v-model:modal="modal"
     :is-update="!!informationData?.id"
   >
@@ -111,5 +111,5 @@ const onCancel = () => {
         @cancel="onCancel"
       />
     </v-form>
-  </GuiContentEditDialog>
+  </CommonContentEditDialog>
 </template>

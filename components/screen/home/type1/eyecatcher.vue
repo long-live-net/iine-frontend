@@ -13,17 +13,17 @@ await onLoad()
 </script>
 
 <template>
-  <GuiContentWrap
+  <CommonContentWrap
     class="type1-eyecatcher"
     :loading="loading"
     loadingSize="large"
   >
-    <GuiEyecatchImage
+    <CommonEyecatchImage
       :url="eyecatchRef?.image?.url"
       :settings="eyecatchRef?.image?.settings"
       class="eyecatcher"
     >
-      <GuiEyecatchTitles
+      <CommonEyecatchTitles
         place="top"
         :title="eyecatchRef?.title"
         :subtitle="eyecatchRef?.subtitle"
@@ -38,7 +38,7 @@ await onLoad()
           @update="onUpdateImageSetting"
         />
       </div>
-    </GuiEyecatchImage>
+    </CommonEyecatchImage>
     <div v-if="canEdit" class="edit-activator">
       <EditorEyecatcher
         v-if="eyecatchRef?.id"
@@ -53,7 +53,7 @@ await onLoad()
         @create="onCreate"
       />
     </div>
-  </GuiContentWrap>
+  </CommonContentWrap>
 </template>
 
 <style lang="scss" scoped>

@@ -13,15 +13,15 @@ await onLoad()
 </script>
 
 <template>
-  <GuiContentWrap :loading="loading">
-    <GuiContentCard class="type1-contact">
-      <GuiEyecatchImage
+  <CommonContentWrap :loading="loading">
+    <CommonContentCard class="type1-contact">
+      <CommonEyecatchImage
         v-if="contactRef?.image"
         :url="contactRef?.image?.url"
         :settings="contactRef?.image?.settings"
         class="eyecatcher"
       >
-        <GuiEyecatchTitles
+        <CommonEyecatchTitles
           place="section"
           :title="contactRef?.title"
           :subtitle="contactRef?.subtitle"
@@ -36,8 +36,8 @@ await onLoad()
             @update="onUpdateImageSetting"
           />
         </div>
-      </GuiEyecatchImage>
-      <GuiContentCardBody>
+      </CommonEyecatchImage>
+      <CommonContentCardBody>
         <div v-if="contactRef?.body" v-html="htmlSanitizer(contactRef?.body)" />
         <div v-else class="no-items">
           <p>データがありません</p>
@@ -48,7 +48,7 @@ await onLoad()
             />
           </div>
         </div>
-      </GuiContentCardBody>
+      </CommonContentCardBody>
       <div v-if="canEdit && contactRef?.id" class="edit-activator">
         <EditorContact
           :contact-data="contactRef"
@@ -56,8 +56,8 @@ await onLoad()
           @remove="onRemove"
         />
       </div>
-    </GuiContentCard>
-  </GuiContentWrap>
+    </CommonContentCard>
+  </CommonContentWrap>
 </template>
 
 <style scoped lang="scss">

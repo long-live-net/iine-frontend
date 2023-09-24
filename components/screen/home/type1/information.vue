@@ -13,15 +13,15 @@ await onLoad()
 </script>
 
 <template>
-  <GuiContentWrap :loading="loading">
-    <GuiContentCard class="type1-information">
-      <GuiEyecatchImage
+  <CommonContentWrap :loading="loading">
+    <CommonContentCard class="type1-information">
+      <CommonEyecatchImage
         v-if="informationRef?.image"
         :url="informationRef?.image?.url"
         :settings="informationRef?.image?.settings"
         class="eyecatcher"
       >
-        <GuiEyecatchTitles
+        <CommonEyecatchTitles
           place="section"
           :title="informationRef?.title"
           :subtitle="informationRef?.subtitle"
@@ -36,8 +36,8 @@ await onLoad()
             @update="onUpdateImageSetting"
           />
         </div>
-      </GuiEyecatchImage>
-      <GuiContentCardBody>
+      </CommonEyecatchImage>
+      <CommonContentCardBody>
         <div
           v-if="informationRef?.body"
           v-html="htmlSanitizer(informationRef?.body)"
@@ -51,7 +51,7 @@ await onLoad()
             />
           </div>
         </div>
-      </GuiContentCardBody>
+      </CommonContentCardBody>
       <div v-if="canEdit && informationRef?.id" class="edit-activator">
         <EditorInformation
           :information-data="informationRef"
@@ -59,8 +59,8 @@ await onLoad()
           @remove="onRemove"
         />
       </div>
-    </GuiContentCard>
-  </GuiContentWrap>
+    </CommonContentCard>
+  </CommonContentWrap>
 </template>
 
 <style scoped lang="scss">

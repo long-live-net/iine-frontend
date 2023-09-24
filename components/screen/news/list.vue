@@ -55,9 +55,9 @@ await loadNewses()
 </script>
 
 <template>
-  <GuiContentCard class="news-list">
-    <GuiContentCardBody>
-      <GuiContentList v-if="newsListRef?.length" :contents="newsListRef">
+  <CommonContentCard class="news-list">
+    <CommonContentCardBody>
+      <CommonContentList v-if="newsListRef?.length" :contents="newsListRef">
         <template #default="{ content }">
           <div class="news-item">
             <div class="news-item__header g-theme-contets-item__header">
@@ -66,7 +66,7 @@ await loadNewses()
                   formatLocalDate((content as NewsType).publishOn, 'YYYY/MM/DD')
                 }}
               </span>
-              <GuiNewsCategoryBadge
+              <CommonNewsCategoryBadge
                 :category="(content as NewsType).category"
                 style="margin-left: 0.5rem"
               />
@@ -86,14 +86,14 @@ await loadNewses()
             </div>
           </div>
         </template>
-      </GuiContentList>
+      </CommonContentList>
       <div v-else class="no-items">
         <p>データがありません</p>
       </div>
       <div v-if="canEdit" class="whole-switch">
         <EditorNewsWholeSwitch v-model="isWholeData" />
       </div>
-    </GuiContentCardBody>
+    </CommonContentCardBody>
     <div class="news-list__action">
       <BasePagination
         v-model:page="page"
@@ -105,7 +105,7 @@ await loadNewses()
     <div v-if="canEdit && newsListRef?.length" class="create-activator">
       <EditorNews @create="onCreate" />
     </div>
-  </GuiContentCard>
+  </CommonContentCard>
 </template>
 
 <style lang="scss" scoped>

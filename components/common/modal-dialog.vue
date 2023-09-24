@@ -3,11 +3,15 @@ const props = withDefaults(
   defineProps<{
     modal: boolean
     title?: string
+    titleIcon?: string
+    titleIconColor?: string
     maxWidth?: number
   }>(),
   {
-    title: 'ページ設定',
-    maxWidth: 540,
+    title: '設定ダイアログ',
+    titleIcon: 'mdi-cog',
+    titleIconColor: 'primary',
+    maxWidth: 600,
   }
 )
 const emit = defineEmits<{
@@ -28,11 +32,7 @@ const dialog = computed({
       <header class="page-setting-dialog__header">
         <slot name="header">
           <p class="mr-1">
-            <v-icon
-              icon="mdi-view-dashboard-edit"
-              color="accent"
-              size="x-large"
-            />
+            <v-icon :icon="titleIcon" :color="titleIconColor" size="x-large" />
           </p>
           <h3>{{ title }}</h3>
         </slot>

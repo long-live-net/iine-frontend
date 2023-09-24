@@ -22,9 +22,9 @@ await onLoad()
 </script>
 
 <template>
-  <GuiContentWrap :loading="loading" class="type1-services">
+  <CommonContentWrap :loading="loading" class="type1-services">
     <template v-if="canEdit">
-      <GuiContentGridDraggable
+      <CommonContentGridDraggable
         v-if="serviceListRef?.length"
         :contents="serviceListRef"
         @update="onUpdatePositions($event as ServiceType[])"
@@ -34,7 +34,7 @@ await onLoad()
             <h5 class="service-item__title">
               {{ content.title }}
             </h5>
-            <GuiEyecatchImage
+            <CommonEyecatchImage
               v-if="content.image"
               :url="content.image.url"
               :settings="content.image.settings"
@@ -55,7 +55,7 @@ await onLoad()
             </div>
           </div>
         </template>
-      </GuiContentGridDraggable>
+      </CommonContentGridDraggable>
       <div v-else class="no-items">
         <p>データがありません</p>
         <div>
@@ -70,13 +70,16 @@ await onLoad()
       </div>
     </template>
     <template v-else>
-      <GuiContentGrid v-if="serviceListRef?.length" :contents="serviceListRef">
+      <CommonContentGrid
+        v-if="serviceListRef?.length"
+        :contents="serviceListRef"
+      >
         <template #default="{ content }">
           <div class="service-item">
             <h5 class="service-item__title">
               {{ content.title }}
             </h5>
-            <GuiEyecatchImage
+            <CommonEyecatchImage
               v-if="content.image"
               :url="content.image.url"
               :settings="content.image.settings"
@@ -89,12 +92,12 @@ await onLoad()
             />
           </div>
         </template>
-      </GuiContentGrid>
+      </CommonContentGrid>
       <div v-else class="no-items">
         <p>データがありません</p>
       </div>
     </template>
-  </GuiContentWrap>
+  </CommonContentWrap>
 </template>
 
 <style lang="scss" scoped>
