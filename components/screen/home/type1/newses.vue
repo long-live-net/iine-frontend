@@ -29,10 +29,10 @@ await loadNewses()
 </script>
 
 <template>
-  <GuiContentWrap :loading="loading">
-    <GuiContentCard class="type1-news-list">
-      <GuiContentCardBody>
-        <GuiContentList v-if="newsListRef?.length" :contents="newsListRef">
+  <CommonContentWrap :loading="loading">
+    <CommonContentCard class="type1-news-list">
+      <CommonContentCardBody>
+        <CommonContentList v-if="newsListRef?.length" :contents="newsListRef">
           <template #default="{ content }">
             <div class="news-item">
               <div class="news-item__header g-theme-contets-item__header">
@@ -44,7 +44,7 @@ await loadNewses()
                     )
                   }}
                 </span>
-                <GuiNewsCategoryBadge
+                <CommonNewsCategoryBadge
                   :category="(content as NewsType).category"
                   style="margin-left: 0.5rem"
                 />
@@ -64,7 +64,7 @@ await loadNewses()
               </div>
             </div>
           </template>
-        </GuiContentList>
+        </CommonContentList>
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
@@ -77,15 +77,15 @@ await loadNewses()
         <div v-if="canEdit" class="whole-switch">
           <EditorNewsWholeSwitch v-model="isWholeData" />
         </div>
-      </GuiContentCardBody>
+      </CommonContentCardBody>
       <div class="type1-news-list__action">
         <NuxtLink to="/news">and more ...</NuxtLink>
       </div>
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
         <EditorNews @create="onCreate" />
       </div>
-    </GuiContentCard>
-  </GuiContentWrap>
+    </CommonContentCard>
+  </CommonContentWrap>
 </template>
 
 <style lang="scss" scoped>

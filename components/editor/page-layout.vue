@@ -14,7 +14,11 @@ const emit = defineEmits<{
   update: [homeSections: PageSectionEdit[]]
 }>()
 
-const title = 'ページレイアウト変更'
+const titleData = {
+  title: 'ページレイアウト変更',
+  titleIcon: 'mdi-view-dashboard-edit',
+  titleColor: 'accent',
+}
 const { customerId } = useFoundation()
 const { baseSections, editSections, resetSections } = useHomeLayoutEdit()
 
@@ -50,11 +54,16 @@ const removeItem = (baseId: string) => {
 <template>
   <BaseActivator
     v-model:modal="modal"
-    activatorIcon="mdi-view-dashboard-edit"
-    activator-color="accent"
-    :activator-text="title"
+    :activator-icon="titleData.titleIcon"
+    :activator-color="titleData.titleColor"
+    :activator-text="titleData.title"
   />
-  <GuiPageSettingDialog v-model:modal="modal" :title="title">
+  <CommonModalDialog
+    v-model:modal="modal"
+    :title="titleData.title"
+    :title-icon="titleData.titleIcon"
+    :title-icon-color="titleData.titleColor"
+  >
     <ClientOnly>
       <div class="page-layout-editor">
         <div class="layout-setting base">
@@ -146,7 +155,7 @@ const removeItem = (baseId: string) => {
         </v-btn>
       </div>
     </div>
-  </GuiPageSettingDialog>
+  </CommonModalDialog>
 </template>
 
 <style scoped lang="scss">
