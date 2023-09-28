@@ -21,7 +21,7 @@ const dialog = computed({
 </script>
 
 <template>
-  <v-dialog v-model="dialog" :max-width="maxWidth">
+  <v-dialog v-model="dialog" :max-width="maxWidth" scrollable>
     <slot />
   </v-dialog>
 </template>

@@ -44,7 +44,12 @@ await onLoad(contentId)
           <h5 class="g-text-cl news-detail__title">
             <span>{{ newsRef?.title ?? '' }}</span>
           </h5>
-          <div v-if="newsRef?.body" v-html="htmlSanitizer(newsRef?.body)" />
+          <div v-if="newsRef?.body">
+            <div v-html="htmlSanitizer(newsRef?.body)" />
+            <div class="inquire-activator">
+              <ScreenInquire />
+            </div>
+          </div>
         </template>
         <div v-else class="no-items">
           <p>データがありません</p>
@@ -87,6 +92,10 @@ $eyecatcher-height-sm: 600px;
     position: absolute;
     top: 1rem;
     right: 1rem;
+  }
+  .inquire-activator {
+    margin-top: 1.5rem;
+    text-align: center;
   }
   .no-items {
     display: flex;
