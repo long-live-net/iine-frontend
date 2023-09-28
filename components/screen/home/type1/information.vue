@@ -38,10 +38,12 @@ await onLoad()
         </div>
       </CommonEyecatchImage>
       <CommonContentCardBody>
-        <div
-          v-if="informationRef?.body"
-          v-html="htmlSanitizer(informationRef?.body)"
-        />
+        <div v-if="informationRef?.body">
+          <div v-html="htmlSanitizer(informationRef?.body)" />
+          <div class="inquire-activator">
+            <ScreenInquire />
+          </div>
+        </div>
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
@@ -73,6 +75,10 @@ $eyecatcher-height-sm: 600px;
     position: absolute;
     top: 1rem;
     right: 1rem;
+  }
+  .inquire-activator {
+    margin-top: 1.5rem;
+    text-align: center;
   }
   .no-items {
     display: flex;
