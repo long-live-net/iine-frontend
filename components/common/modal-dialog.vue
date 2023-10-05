@@ -28,8 +28,8 @@ const dialog = computed({
 
 <template>
   <BaseDialog v-model:modal="dialog" :max-width="maxWidth">
-    <div class="page-setting-dialog">
-      <header class="page-setting-dialog__header">
+    <div class="modal-dialog">
+      <header class="modal-dialog__header">
         <slot name="header">
           <p class="mr-1">
             <v-icon :icon="titleIcon" :color="titleIconColor" size="x-large" />
@@ -37,7 +37,7 @@ const dialog = computed({
           <h3>{{ title }}</h3>
         </slot>
       </header>
-      <div class="page-setting-dialog__body">
+      <div class="modal-dialog__body">
         <slot />
       </div>
     </div>
@@ -45,8 +45,9 @@ const dialog = computed({
 </template>
 
 <style lang="scss" scoped>
-.page-setting-dialog {
+.modal-dialog {
   background-color: $white;
+  color: $black;
   overflow-y: auto;
   &__header {
     display: flex;

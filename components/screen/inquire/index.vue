@@ -29,11 +29,11 @@ const onConfirm = handleSubmit((inquire) => {
   confirmDialog.value = true
 })
 const onSend = async () => {
-  confirmDialog.value = false
   if (inquireMail.value) {
     await sendInquire(inquireMail.value)
     pageMode.value = 'done'
   }
+  confirmDialog.value = false
 }
 const onCompleted = () => {
   modal.value = false
@@ -52,7 +52,7 @@ const onCancel = () => {
   />
   <CommonModalDialog
     v-model:modal="modal"
-    :max-width="1024"
+    :max-width="800"
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
@@ -66,9 +66,10 @@ const onCancel = () => {
     <ScreenInquireResult v-else @ok="onCompleted" />
     <BaseConfirm
       v-model:comfirm="confirmDialog"
-      message="この内容でEメールを送信します。よろしいですか？"
+      message="お問い合わせのメールを送信します。よろしいですか？"
       exec-text="送信する"
       cancelText="戻る"
+      :loading="sending"
       @cancel="confirmDialog = false"
       @confirm="onSend"
     />

@@ -1,14 +1,37 @@
-<script setup>
+<script setup lang="ts">
 defineOptions({
   name: 'DefaultLayout',
 })
 
-const bodyClass = 'g-theme-default'
-useHead({
-  bodyAttrs: {
-    class: bodyClass,
+const { customer } = useFoundation()
+const bodyClass = ref('g-theme-default')
+
+watch(
+  customer,
+  () => {
+    if (customer.value?.colorTheme === 'dark') {
+      bodyClass.value = 'g-theme-dark'
+    } else {
+      bodyClass.value = 'g-theme-default'
+    }
   },
-})
+  {
+    immediate: true,
+  }
+)
+watch(
+  bodyClass,
+  () => {
+    useHead({
+      bodyAttrs: {
+        class: bodyClass.value,
+      },
+    })
+  },
+  {
+    immediate: true,
+  }
+)
 </script>
 
 <template>

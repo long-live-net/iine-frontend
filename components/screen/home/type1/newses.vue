@@ -35,7 +35,7 @@ await loadNewses()
         <CommonContentList v-if="newsListRef?.length" :contents="newsListRef">
           <template #default="{ content }">
             <div class="news-item">
-              <div class="news-item__header g-theme-contets-item__header">
+              <div class="news-item__header g-theme-contents-item__header">
                 <span>
                   {{
                     formatLocalDate(
