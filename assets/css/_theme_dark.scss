@@ -25,23 +25,23 @@ $dark-theme-link-active: gold;
     color: variables.$white;
   }
   .g-theme-header {
-    background-color: rgba(128, 128, 128, 0.5);
+    background-color: rgba(96, 96, 96, 0.5);
     color: variables.$white;
   }
   .g-theme-footer {
-    background-color: #393939;
+    background-color: #383838;
     color: variables.$white;
   }
   .g-theme-contents-card {
-    background-color: #393939;
+    background-color: #383838;
     color: variables.$white;
   }
-  .g-theme-contets-item {
+  .g-theme-contents-item {
     &__header {
       background-color: variables.$black;
     }
     &__draggable {
-      background-color: midnightblue;
+      background-color: #002244;
       box-shadow: 0 0 8px lightsteelblue;
       &--notion {
         color: variables.$white;
@@ -52,9 +52,7 @@ $dark-theme-link-active: gold;
     color: variables.$black;
   }
   .g-theme-wysiwyg-editor {
-    background-color: #747474;
-    color: variables.$white;
-    --theme-wysiwyg-editor-toolbar-color: variables.$white;
-    --theme-wysiwyg-editor-toolbar-active-color: lightskyblue;
+    background-color: whitesmoke;
+    color: variables.$black;
   }
 }

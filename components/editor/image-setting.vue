@@ -180,3 +180,11 @@ const pySm = computed<number>({
   border-radius: 8px;
 }
 </style>
+
+<style deep lang="scss">
+.image-setting {
+  small {
+    color: $gray-darken2;
+  }
+}
+</style>

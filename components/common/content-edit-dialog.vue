@@ -41,6 +41,7 @@ const dialog = computed({
 <style lang="scss" scoped>
 .content-edit-dialog {
   background-color: $white;
+  color: $black;
   overflow-y: auto;
   &__header {
     display: flex;

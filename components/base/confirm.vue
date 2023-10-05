@@ -5,10 +5,12 @@ const props = withDefaults(
     message: string
     execText?: string
     cancelText?: string
+    loading?: boolean
   }>(),
   {
     execText: '実行する',
     cancelText: 'キャンセル',
+    loading: false,
   }
 )
 const emit = defineEmits<{
@@ -33,6 +35,7 @@ const confirmDialog = computed({
         <div class="mt-4 mb-2 p-3 text-right">
           <v-btn
             color="error"
+            :loading="loading"
             class="action-button mr-2"
             @click="$emit('confirm')"
             >{{ execText }}</v-btn

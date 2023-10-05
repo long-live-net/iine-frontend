@@ -37,3 +37,6 @@ export const useFoundation = () => {
     customer,
   }
 }
+
+export type UserType = ReturnType<typeof useFoundation>['user']['value']
+export type CostomerType = ReturnType<typeof useFoundation>['customer']['value']

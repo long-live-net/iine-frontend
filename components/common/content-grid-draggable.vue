@@ -20,7 +20,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
 
 <template>
   <div>
-    <p class="draggable-notion g-theme-contets-item__draggable--notion">
+    <p class="draggable-notion g-theme-contents-item__draggable--notion">
       <v-icon icon="mdi-apps" size="x-large" />
       ドラッグドロップして位置を変更できます
     </p>
@@ -35,16 +35,16 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
       >
         <template #item="{ element }">
           <section
-            class="content-grid__column column-draggable g-theme-contets-item__draggable"
+            class="content-grid__column column-draggable g-theme-contents-item__draggable"
           >
             <slot :content="element" />
             <div
-              class="edit-position-top draggable g-theme-contets-item__draggable--notion"
+              class="edit-position-top draggable g-theme-contents-item__draggable--notion"
             >
               <v-icon icon="mdi-apps" size="x-large" />
             </div>
             <div
-              class="edit-position-bottom draggable g-theme-contets-item__draggable--notion"
+              class="edit-position-bottom draggable g-theme-contents-item__draggable--notion"
             >
               <v-icon icon="mdi-apps" size="x-large" />
             </div>
