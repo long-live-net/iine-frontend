@@ -5,7 +5,7 @@ const { isLoggedIn } = useFoundation()
 <template>
   <div class="nav-footer g-theme-footer">
     <div v-show="!isLoggedIn" class="nav-footer__user">
-      <nuxt-link :to="{ name: 'auth-login' }">
+      <nuxt-link :to="{ name: 'customer-login' }">
         <v-icon icon="mdi-account-circle" color="success" size="x-large" />
       </nuxt-link>
     </div>

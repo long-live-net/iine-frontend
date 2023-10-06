@@ -1,7 +1,7 @@
 @use 'variables.scss';
 
 .g-theme-default {
-  background-color: variables.$gray-lighten2;
+  background-color: variables.$gray-lighten25;
   color: variables.$gray-darken2;
 
   a {
@@ -24,10 +24,6 @@
     font-weight: bolder;
   }
 
-  .g-theme-app-body {
-    background-color: variables.$gray-lighten2;
-    color: variables.$gray-darken2;
-  }
   .g-theme-header {
     background-color: rgba(64, 64, 64, 0.5);
   }

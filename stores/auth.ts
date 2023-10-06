@@ -20,7 +20,7 @@ const useAuthApi = () => {
     }
     return data.value
   }
-  const getUser = async (token: string) => {
+  const fetchUser = async (token: string) => {
     const { data, error } = await useAsyncData<LoginUser>(() =>
       $fetch(authEndpoint, {
         baseURL: backendBaseUrl,
@@ -33,7 +33,7 @@ const useAuthApi = () => {
     }
     return data.value
   }
-  return { authenticate, getUser }
+  return { authenticate, fetchUser }
 }
 
 /**
@@ -45,7 +45,7 @@ export const useAuthStore = defineStore(
     const userRef = ref<LoginUser | null>(null)
     const tokenRef = ref<string | null>(null)
     const errorRef = ref<LoginApiError | null>(null)
-    const { authenticate, getUser } = useAuthApi()
+    const { authenticate, fetchUser } = useAuthApi()
 
     const clearRef = () => {
       userRef.value = null
@@ -72,7 +72,7 @@ export const useAuthStore = defineStore(
           onError(401)
           return
         }
-        const user = await getUser(token)
+        const user = await fetchUser(token)
         if (!user || user.customerId !== credential.customerId) {
           onError(403)
           return

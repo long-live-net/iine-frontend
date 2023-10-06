@@ -1,16 +1,12 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
 import type { Customer } from '@/types/customer'
 
-export const useCustomerStore = defineStore('customer', () => {
-  const customerRef = ref<Customer | null>(null)
-
-  function setCustomer(customer: Customer | null) {
-    customerRef.value = customer ? { ...customer } : null
-  }
-
-  async function fetchCustomer(hostname: string) {
+const useCustomerApi = (token: Ref<string | null>) => {
+  const endpoint = '/customers'
+  const fetchByUrl = async (hostname: string) => {
     const { data, error } = await useAsyncData<Customer>(() =>
-      $fetch('/customers/customer-url', {
+      $fetch(`${endpoint}/customer-url`, {
         baseURL: backendBaseUrl,
         method: 'GET',
         params: { url: hostname },
@@ -19,12 +15,71 @@ export const useCustomerStore = defineStore('customer', () => {
     if (error.value) {
       throw error.value
     }
-    setCustomer(data.value)
+    return data.value
+  }
+  const fetch = async (id: number) => {
+    const { data, error } = await useAsyncData<Customer>(() =>
+      $fetch(`/customers/${id}`, {
+        baseURL: backendBaseUrl,
+        method: 'GET',
+      })
+    )
+    if (error.value) {
+      throw error.value
+    }
+    return data.value
+  }
+  const update = async (customer: Customer) => {
+    const { data, error } = await useAsyncData<Customer>(() =>
+      $fetch(`/customers/${customer.id}`, {
+        baseURL: backendBaseUrl,
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token.value ?? 'notoken'}` },
+        body: customer,
+      })
+    )
+    if (error.value) {
+      throw error.value
+    }
+    return data
+  }
+
+  return {
+    fetchByUrl,
+    fetch,
+    update,
+  }
+}
+
+export const useCustomerStore = defineStore('customer', () => {
+  const { tokenRef } = storeToRefs(useAuthStore())
+  const { fetchByUrl, fetch, update } = useCustomerApi(tokenRef)
+
+  const customerRef = ref<Customer | null>(null)
+
+  function setCustomer(customer: Customer | null) {
+    customerRef.value = customer ? { ...customer } : null
+  }
+
+  async function fetchCustomerByUrl(url: string) {
+    const customer = await fetchByUrl(url)
+    setCustomer(customer)
+  }
+
+  async function fetchCustomer(customerId: number) {
+    const customer = await fetch(customerId)
+    setCustomer(customer)
+  }
+
+  async function updateCustomer(customer: Customer) {
+    await update(customer)
   }
 
   return {
     customerRef,
     setCustomer,
+    fetchCustomerByUrl,
     fetchCustomer,
+    updateCustomer,
   }
 })

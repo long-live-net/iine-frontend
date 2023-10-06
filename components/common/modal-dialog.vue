@@ -28,17 +28,33 @@ const dialog = computed({
 
 <template>
   <BaseDialog v-model:modal="dialog" :max-width="maxWidth">
-    <div class="modal-dialog">
-      <header class="modal-dialog__header">
-        <slot name="header">
-          <p class="mr-1">
-            <v-icon :icon="titleIcon" :color="titleIconColor" size="x-large" />
-          </p>
-          <h3>{{ title }}</h3>
-        </slot>
-      </header>
-      <div class="modal-dialog__body">
-        <slot />
+    <div class="dialog-base-frame">
+      <div class="modal-dialog">
+        <header class="modal-dialog__header">
+          <slot name="header">
+            <p class="mr-1">
+              <v-icon
+                :icon="titleIcon"
+                :color="titleIconColor"
+                size="x-large"
+              />
+            </p>
+            <h3>{{ title }}</h3>
+          </slot>
+        </header>
+        <div class="modal-dialog__body">
+          <slot />
+        </div>
+      </div>
+      <div class="dismiss">
+        <v-btn
+          variant="text"
+          append-icon="mdi-close"
+          size="small"
+          color="primary"
+          @click="dialog = false"
+          >閉じる</v-btn
+        >
       </div>
     </div>
   </BaseDialog>
@@ -57,6 +73,16 @@ const dialog = computed({
   }
   &__body {
     padding: 1.5rem;
+  }
+}
+
+.dialog-base-frame {
+  position: relative;
+
+  .dismiss {
+    position: absolute;
+    top: 20px;
+    right: 8px;
   }
 }
 </style>
