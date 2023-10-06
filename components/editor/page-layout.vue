@@ -1,18 +1,6 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import type {
-  PageSection,
-  BasePageSection,
-  PageSectionEdit,
-} from '@/types/page-setting'
-
-const props = defineProps<{
-  sections: PageSection[] | null
-}>()
-
-const emit = defineEmits<{
-  update: [homeSections: PageSectionEdit[]]
-}>()
+import type { BasePageSection, PageSectionEdit } from '@/types/page-setting'
 
 const titleData = {
   title: 'ページレイアウト変更',
@@ -20,15 +8,10 @@ const titleData = {
   titleColor: 'accent',
 }
 const { customerId } = useFoundation()
-const { baseSections, editSections, resetSections } = useHomeLayoutEdit()
+const { baseSections, editSections, loading, onUpdateSections } =
+  useHomeLayoutEdit(customerId)
 
 const modal = ref(false)
-
-watch(modal, (current) => {
-  if (current) {
-    resetSections(props.sections ?? [])
-  }
-})
 
 const clone = (data: BasePageSection): PageSectionEdit => {
   return { ...data, customerId }
@@ -38,8 +21,8 @@ const onCancel = () => {
   modal.value = false
 }
 
-const onUpdate = () => {
-  emit('update', editSections.value)
+const onUpdate = async () => {
+  await onUpdateSections()
   modal.value = false
 }
 
@@ -139,6 +122,7 @@ const removeItem = (baseId: string) => {
           color="accent"
           variant="flat"
           width="8rem"
+          :loading="loading"
           @click="onUpdate"
         >
           変更する

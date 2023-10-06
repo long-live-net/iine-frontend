@@ -4,8 +4,12 @@ import type { Customer } from '@/types/customer'
 
 const useCustomerApi = (token: Ref<string | null>) => {
   const endpoint = '/customers'
+  const keyExt = ref(1)
+  const nextKey = () => keyExt.value++
+
   const fetchByUrl = async (hostname: string) => {
-    const { data, error } = await useAsyncData<Customer>(() =>
+    const key = `fetch_customer_${endpoint}_${keyExt.value}`
+    const { data, error } = await useAsyncData<Customer>(key, () =>
       $fetch(`${endpoint}/customer-url`, {
         baseURL: backendBaseUrl,
         method: 'GET',
@@ -18,7 +22,8 @@ const useCustomerApi = (token: Ref<string | null>) => {
     return data.value
   }
   const fetch = async (id: number) => {
-    const { data, error } = await useAsyncData<Customer>(() =>
+    const key = `fetch_customer_${endpoint}_${keyExt.value}`
+    const { data, error } = await useAsyncData<Customer>(key, () =>
       $fetch(`/customers/${id}`, {
         baseURL: backendBaseUrl,
         method: 'GET',
@@ -45,6 +50,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
   }
 
   return {
+    nextKey,
     fetchByUrl,
     fetch,
     update,
@@ -53,7 +59,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
 
 export const useCustomerStore = defineStore('customer', () => {
   const { tokenRef } = storeToRefs(useAuthStore())
-  const { fetchByUrl, fetch, update } = useCustomerApi(tokenRef)
+  const { fetchByUrl, fetch, update, nextKey } = useCustomerApi(tokenRef)
 
   const customerRef = ref<Customer | null>(null)
 
@@ -73,6 +79,7 @@ export const useCustomerStore = defineStore('customer', () => {
 
   async function updateCustomer(customer: Customer) {
     await update(customer)
+    nextKey()
   }
 
   return {

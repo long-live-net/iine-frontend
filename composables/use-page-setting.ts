@@ -4,54 +4,6 @@ import type {
   PageSectionEdit,
 } from '@/types/page-setting'
 
-export const useHomeLayoutEdit = () => {
-  const baseSections: BasePageSection[] = [
-    {
-      baseId: 'type1-information',
-      kind: 'information',
-      title: 'Information',
-    },
-    {
-      baseId: 'type1-news',
-      kind: 'news',
-      title: 'News',
-    },
-    {
-      baseId: 'type1-service',
-      kind: 'service',
-      title: 'Service',
-    },
-    {
-      baseId: 'type1-contact',
-      kind: 'contact',
-      title: 'Contact',
-    },
-  ]
-
-  const editSections = ref<PageSectionEdit[]>([])
-
-  const resetSections = (sections: PageSection[]) => {
-    if (!sections.length) {
-      editSections.value = []
-      return
-    }
-    editSections.value = sections.map((s) => ({
-      baseId: s.baseId,
-      customerId: s.customerId,
-      kind: s.kind,
-      title: s.title,
-      position: s.position,
-      menuTitle: s.menuTitle,
-    }))
-  }
-
-  return {
-    baseSections,
-    editSections,
-    resetSections,
-  }
-}
-
 export const useHomeLayoutRead = (customerId: Ref<number | null>) => {
   const apiPath = '/layout/home'
   const domidPrefix = 'home-index'
@@ -138,5 +90,77 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
   return {
     replaceHomeLayout,
     loading,
+  }
+}
+
+export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
+  const {
+    homeSections,
+    nextKey,
+    fetchHomeLayout,
+    loading: readLoading,
+  } = useHomeLayoutRead(customerId)
+  const { replaceHomeLayout, loading: writeLoading } =
+    useHomeLayoutWrite(customerId)
+
+  const baseSections: BasePageSection[] = [
+    {
+      baseId: 'type1-information',
+      kind: 'information',
+      title: 'Information',
+    },
+    {
+      baseId: 'type1-news',
+      kind: 'news',
+      title: 'News',
+    },
+    {
+      baseId: 'type1-service',
+      kind: 'service',
+      title: 'Service',
+    },
+    {
+      baseId: 'type1-contact',
+      kind: 'contact',
+      title: 'Contact',
+    },
+  ]
+
+  const editSections = ref<PageSectionEdit[]>([])
+
+  watch(
+    homeSections,
+    (sections) => {
+      if (!sections?.length) {
+        editSections.value = []
+        return
+      }
+      editSections.value = sections.map((s) => ({
+        baseId: s.baseId,
+        customerId: s.customerId,
+        kind: s.kind,
+        title: s.title,
+        position: s.position,
+        menuTitle: s.menuTitle,
+      }))
+    },
+    {
+      immediate: true,
+    }
+  )
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
+
+  const onUpdateSections = async () => {
+    nextKey()
+    await replaceHomeLayout(editSections.value)
+    await fetchHomeLayout()
+  }
+
+  return {
+    baseSections,
+    editSections,
+    loading,
+    onUpdateSections,
   }
 }
