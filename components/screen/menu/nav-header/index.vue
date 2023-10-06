@@ -2,10 +2,7 @@
 import type { HeaderTitle } from '@/components/screen/menu/nav-header/title.vue'
 import type { HeaderItem } from '@/components/screen/menu/nav-header/item.vue'
 
-const { logout } = useAuth()
-const { customerId, user, isLoggedIn, isPreview, togglePreview } =
-  useFoundation()
-
+const { customerId, isLoggedIn } = useFoundation()
 const sidebar = ref(false)
 
 // Todo: 適当
@@ -31,12 +28,6 @@ const headerItems = computed<HeaderItem[]>(
     })) ?? []
 )
 
-const logoutDialog = ref(false)
-const onLogout = () => {
-  logoutDialog.value = false
-  logout()
-}
-
 homeSections.value ?? (await fetchHomeLayout())
 </script>
 
@@ -52,12 +43,7 @@ homeSections.value ?? (await fetchHomeLayout())
             :menu-item="item"
           />
           <ClientOnly>
-            <ScreenMenuNavHeaderUserMenu
-              v-if="isLoggedIn"
-              :user="user"
-              @logout="logoutDialog = true"
-              @preview="togglePreview"
-            />
+            <ScreenMenuNavHeaderUserMenuActions v-if="isLoggedIn" />
           </ClientOnly>
         </div>
       </div>
@@ -77,17 +63,12 @@ homeSections.value ?? (await fetchHomeLayout())
         </div>
         <div>
           <ClientOnly>
-            <ScreenMenuNavHeaderUserMenu
-              v-if="isLoggedIn"
-              :user="user"
-              @logout="logoutDialog = true"
-              @preview="togglePreview"
-            />
+            <ScreenMenuNavHeaderUserMenuActions v-if="isLoggedIn" />
           </ClientOnly>
         </div>
       </div>
       <ClientOnly>
-        <teleport to="#application-body">
+        <teleport to="#default-layout-container">
           <BaseDrawer v-model:drawer="sidebar" color="#424242" theme="dark">
             <div class="column-direction">
               <ScreenMenuNavHeaderTitle :headerTitle="headerTitle" />
@@ -101,18 +82,6 @@ homeSections.value ?? (await fetchHomeLayout())
         </teleport>
       </ClientOnly>
     </div>
-    <BaseConfirm
-      v-model:comfirm="logoutDialog"
-      message="本当にログアウトしますか？"
-      exec-text="ログアウト"
-      @cancel="logoutDialog = false"
-      @confirm="onLogout"
-    />
-    <ScreenMenuOnPreview
-      v-if="isPreview"
-      class="nav-header__on-preview"
-      @click="togglePreview"
-    />
   </nav>
 </template>
 
@@ -133,11 +102,6 @@ homeSections.value ?? (await fetchHomeLayout())
       display: flex;
       align-items: center;
     }
-  }
-  &__on-preview {
-    position: fixed;
-    top: calc($nav-header-height + 0.75rem);
-    right: 1rem;
   }
 }
 

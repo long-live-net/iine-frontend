@@ -1,12 +1,24 @@
 <script setup lang="ts">
-import type { UserType } from '@/composables/use-foundation'
 import type { MenuItem } from '@/components/base/dropdown.vue'
 
-defineProps<{ user?: UserType }>()
 const emit = defineEmits<{
-  logout: []
   preview: []
+  themeSetting: []
+  userinfo: []
+  changePassword: []
+  logout: []
 }>()
+
+const { logout } = useAuth()
+const { user, isPreview, togglePreview } = useFoundation()
+
+const logoutDialog = ref(false)
+const onLogout = () => {
+  logoutDialog.value = false
+  logout()
+}
+
+const themeSettingModal = ref(false)
 
 const userMenuItems: MenuItem[] = [
   { title: 'プレビュー', value: 'preview', props: { prependIcon: 'mdi-eye' } },
@@ -36,19 +48,21 @@ const userMenuItems: MenuItem[] = [
 const onSelectUserMenu = (value: number | string) => {
   switch (value) {
     case 'preview':
-      emit('preview')
+      togglePreview()
       break
     case 'themeSetting':
-      console.log('themeSetting')
+      themeSettingModal.value = true
       break
     case 'userinfo':
       console.log('userinfo')
+      emit('userinfo')
       break
     case 'changePassword':
       console.log('changePassword')
+      emit('changePassword')
       break
     case 'logout':
-      emit('logout')
+      logoutDialog.value = true
       break
   }
 }
@@ -83,4 +97,25 @@ const onSelectUserMenu = (value: number | string) => {
       </template>
     </BaseDropdown>
   </div>
+  <ScreenMenuOnPreview
+    v-if="isPreview"
+    id="on-preview-button"
+    @click="togglePreview"
+  />
+  <EditorThemeSetting v-model:modal="themeSettingModal" />
+  <BaseConfirm
+    v-model:comfirm="logoutDialog"
+    message="本当にログアウトしますか？"
+    exec-text="ログアウト"
+    @cancel="logoutDialog = false"
+    @confirm="onLogout"
+  />
 </template>
+
+<style scoped lang="scss">
+#on-preview-button {
+  position: fixed;
+  top: calc($nav-header-height + 0.75rem);
+  right: 1rem;
+}
+</style>

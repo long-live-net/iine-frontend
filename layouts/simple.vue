@@ -2,19 +2,12 @@
 defineOptions({
   name: 'SimpleLayout',
 })
-
-const bodyClass = 'g-theme-default'
-useHead({
-  bodyAttrs: {
-    class: bodyClass,
-  },
-})
 </script>
 
 <template>
-  <v-app class="g-theme-app-body">
+  <div class="simple-layout-wrap">
     <main>
       <slot />
     </main>
-  </v-app>
+  </div>
 </template>

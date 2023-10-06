@@ -1,5 +1,6 @@
 import { storeToRefs } from 'pinia'
 import { useCustomerStore } from '@/stores/customer'
+import type { Customer } from '@/types/customer'
 import type { ColorTheme, LayoutTheme } from '@/types/customer'
 
 /**
@@ -12,10 +13,24 @@ export const useCustomer = () => {
   const customerId = computed(() => customer.value?.id ?? null)
   const customerName = computed(() => customer.value?.name ?? '')
 
+  const setCustomer = (customer: Customer | null) => {
+    customerStore.setCustomer(customer)
+  }
+
+  const updateCustomer = async (customer: Customer | null) => {
+    if (!customer) {
+      return
+    }
+    await customerStore.updateCustomer(customer)
+    await customerStore.fetchCustomer(customer.id)
+  }
+
   return {
     customer: readonly(customer),
     customerId,
     customerName,
+    setCustomer,
+    updateCustomer,
   }
 }
 
@@ -23,8 +38,29 @@ export const useCustomer = () => {
  * 顧客情報のテーマ設定関連
  */
 export const useThemeSettingsEdit = () => {
-  const editLayoutTheme = ref<LayoutTheme | null>(null)
-  const editColorTheme = ref<ColorTheme | null>(null)
+  const { customer, setCustomer, updateCustomer } = useCustomer()
+
+  const editLayoutTheme = computed<LayoutTheme>({
+    get: () => customer.value?.layoutTheme ?? 'type1',
+    set: (theme: LayoutTheme) => {
+      if (customer.value) {
+        const updateData = { ...customer.value, layoutTheme: theme }
+        setCustomer(updateData)
+        updateCustomer(updateData)
+      }
+    },
+  })
+
+  const editColorTheme = computed<ColorTheme | undefined>({
+    get: () => customer.value?.colorTheme,
+    set: (theme?: ColorTheme) => {
+      if (customer.value) {
+        const updateData = { ...customer.value, colorTheme: theme }
+        setCustomer(updateData)
+        updateCustomer(updateData)
+      }
+    },
+  })
 
   const layoutThemeOptions: {
     type: LayoutTheme
@@ -60,20 +96,3 @@ export const useThemeSettingsEdit = () => {
     colorThemeOptions,
   }
 }
-
-// レイアウトテーマ選択 template 参考例
-//
-// <div class="page-setting-editor__theme">
-//   <h4>レイアウトテーマ選択</h4>
-//   <div class="theme-selection">
-//     <v-radio-group v-model="editSectionType" inline>
-//       <v-radio
-//         v-for="st in sectionTypes"
-//         key="st.type"
-//         color="primary"
-//         :label="st.label"
-//         :value="st.type"
-//       ></v-radio>
-//     </v-radio-group>
-//   </div>
-// </div>

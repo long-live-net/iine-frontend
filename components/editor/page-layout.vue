@@ -178,8 +178,8 @@ const removeItem = (baseId: string) => {
         line-height: 4rem;
         padding: 0 0.5rem;
         background-color: $gray-lighten1;
-        color: $gray-lighten3;
-        border: 2px solid $blue-darken1;
+        color: $gray-lighten4;
+        border: 2px solid $blue-darken2;
       }
       .draggable {
         background-color: #ffffcc;

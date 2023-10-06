@@ -1,44 +1,37 @@
 @use 'variables.scss';
 
-$dark-theme-link-normal: lightskyblue;
-$dark-theme-link-active: gold;
-
 .g-theme-dark {
-  background-color: variables.$black;
+  background-color: variables.$gray-darken2;
   color: variables.$white;
 
   a {
-    color: $dark-theme-link-normal;
+    color: variables.$blue-lighten2;
   }
   a:hover {
-    color: $dark-theme-link-active;
+    color: variables.$link-active;
   }
   a:active {
-    color: $dark-theme-link-active;
+    color: variables.$link-active;
   }
   small {
     color: variables.$silver;
   }
 
-  .g-theme-app-body {
-    background-color: variables.$black;
-    color: variables.$white;
-  }
   .g-theme-header {
-    background-color: rgba(96, 96, 96, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     color: variables.$white;
   }
   .g-theme-footer {
-    background-color: #383838;
+    background-color: variables.$black;
     color: variables.$white;
   }
   .g-theme-contents-card {
-    background-color: #383838;
+    background-color: variables.$black;
     color: variables.$white;
   }
   .g-theme-contents-item {
     &__header {
-      background-color: variables.$black;
+      background-color: variables.$gray-darken1;
     }
     &__draggable {
       background-color: #002244;

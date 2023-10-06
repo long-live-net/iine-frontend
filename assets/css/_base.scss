@@ -4,13 +4,14 @@ html {
   margin: 0;
   padding: 0;
   font-size: 100%;
-  font-family: 'Noto Sans JP', 'Yu Gothic', '游ゴシック', '游ゴシック体',
-    'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+  // font-family: Ubuntu, 'Noto Sans JP', sans-serif;
+  // font-family: 'Noto Sans JP', 'Yu Gothic', '游ゴシック', '游ゴシック体',
+  //   'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
   // font-family: 'Avenir', 'Helvetica Neue', 'Helvetica', 'Arial',
   //   'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', 'Meiryo',
   //   '游ゴシック', 'Yu Gothic', sans-serif;
-  // font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ',
-  //   'Meiryo', '游ゴシック', 'Yu Gothic', 'MS PGothic', sans-serif;
+  font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ',
+    'Meiryo', '游ゴシック', 'Yu Gothic', 'MS PGothic', sans-serif;
   background-color: variables.$gray-lighten2;
   color: variables.$gray-darken2;
 }

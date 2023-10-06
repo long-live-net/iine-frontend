@@ -184,7 +184,7 @@ const pySm = computed<number>({
 <style deep lang="scss">
 .image-setting {
   small {
-    color: $gray-darken2;
+    color: $gray-darken3;
   }
 }
 </style>
