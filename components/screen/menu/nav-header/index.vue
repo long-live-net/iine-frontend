@@ -13,8 +13,7 @@ const headerTitle: HeaderTitle = {
   to: { name: 'index', hash: '#home-index-top' },
 }
 
-const { domidPrefix, homeSections, fetchHomeLayout } =
-  useHomeLayoutRead(customerId)
+const { domidPrefix, homeSections } = useHomeLayoutRead(customerId)
 const headerItems = computed<HeaderItem[]>(
   () =>
     homeSections.value?.map((s) => ({
@@ -27,8 +26,6 @@ const headerItems = computed<HeaderItem[]>(
       },
     })) ?? []
 )
-
-homeSections.value ?? (await fetchHomeLayout())
 </script>
 
 <template>
