@@ -24,6 +24,10 @@
     font-weight: bolder;
   }
 
+  .g-theme-app-container {
+    background-color: variables.$gray-lighten25;
+    color: variables.$gray-darken2;
+  }
   .g-theme-header {
     background-color: rgba(64, 64, 64, 0.5);
   }
@@ -51,5 +55,11 @@
   }
   .g-theme-wysiwyg-editor {
     background-color: whitesmoke;
+    border-color: variables.$gray-lighten23;
+    --g-theme-wysiwyg-editor-label-color: #{variables.$gray-lighten1};
+    --g-theme-wysiwyg-editor-label-focused-color: #{variables.$gray-darken1};
+    --g-theme-wysiwyg-editor-placeholder-color: #{variables.$dimgray};
+    --g-theme-wysiwyg-editor-hovered-background-color: #{variables.$gray-lighten3};
+    --g-theme-wysiwyg-editor-focused-background-color: #{variables.$gray-lighten4};
   }
 }

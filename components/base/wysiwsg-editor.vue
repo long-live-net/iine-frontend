@@ -61,7 +61,7 @@ const editorClasses = computed(() => {
 const labelClass = computed(() =>
   invalidMessages.value?.length
     ? ['wysiwyg-editor__label--error']
-    : isFocus
+    : isFocus.value
     ? ['wysiwyg-editor__label--focused']
     : []
 )
@@ -129,14 +129,15 @@ const onClear = () => {
 <style lang="scss" scoped>
 .wysiwyg-editor {
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border-style: solid;
+  border-width: 1px;
   border-radius: 4px;
   position: relative;
   &__label {
+    color: var(--g-theme-wysiwyg-editor-label-color);
     padding: 0 9px 6px 9px;
-    color: #7e7e7e;
     &--focused {
-      color: $gray-darken1;
+      color: var(--g-theme-wysiwyg-editor-label-focused-color);
     }
     &--error {
       color: $error;
@@ -152,11 +153,11 @@ const onClear = () => {
 }
 
 .hovered {
-  background-color: $gray-lighten3;
+  background-color: var(--g-theme-wysiwyg-editor-hovered-background-color);
 }
 .focused {
   border-bottom: 2px solid $gray-darken1;
-  background-color: $gray-lighten2;
+  background-color: var(--g-theme-wysiwyg-editor-focused-background-color);
 }
 
 .error-state {
@@ -165,7 +166,7 @@ const onClear = () => {
 
 .focused-error-state {
   border-bottom: 2px solid $error;
-  background-color: $gray-lighten2;
+  background-color: var(--g-theme-wysiwyg-editor-focused-background-color);
 }
 
 .error-messages-wrap {
@@ -210,5 +211,8 @@ const onClear = () => {
   .ql-editor {
     min-height: 7rem;
   }
+}
+.ql-editor.ql-blank::before {
+  color: var(--g-theme-wysiwyg-editor-placeholder-color);
 }
 </style>
