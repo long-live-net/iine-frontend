@@ -239,12 +239,15 @@ export const useInformationActions = (customerId: Ref<number | null>) => {
     loading: writeLoading,
   } = useInformationWrite(customerId)
 
+  const { addSnackber } = useSnackbars()
+
   const onLoad = async () => {
     await getInformation()
   }
 
   const onCreate = async (formData: InformationForm) => {
     const savedData = await createInformation(formData)
+    addSnackber?.('Information を登録しました。')
     nextKey()
     getInformation(savedData?.id)
   }
@@ -259,12 +262,14 @@ export const useInformationActions = (customerId: Ref<number | null>) => {
     if (!id) return
 
     const savedData = await updateInformation(id, formData)
+    addSnackber?.('Information を更新しました。')
     nextKey()
     getInformation(savedData?.id)
   }
 
   const onRemove = async (id: number) => {
     await removeInformation(id)
+    addSnackber?.('Information を削除しました。')
     nextKey()
     getInformation()
   }

@@ -46,25 +46,28 @@ export const useCustomer = () => {
  */
 export const useThemeSettingsEdit = () => {
   const { customer, setCustomer, updateCustomer, saving } = useCustomer()
+  const { addSnackber } = useSnackbars()
 
   const editLayoutTheme = computed<LayoutTheme>({
     get: () => customer.value?.layoutTheme ?? 'type1',
-    set: (theme: LayoutTheme) => {
+    set: async (theme: LayoutTheme) => {
       if (customer.value) {
         const updateData = { ...customer.value, layoutTheme: theme }
         setCustomer(updateData)
-        updateCustomer(updateData)
+        await updateCustomer(updateData)
+        addSnackber?.('レイアウトテーマを更新しました。')
       }
     },
   })
 
   const editColorTheme = computed<ColorTheme | undefined>({
     get: () => customer.value?.colorTheme,
-    set: (theme?: ColorTheme) => {
+    set: async (theme?: ColorTheme) => {
       if (customer.value) {
         const updateData = { ...customer.value, colorTheme: theme }
         setCustomer(updateData)
-        updateCustomer(updateData)
+        await updateCustomer(updateData)
+        addSnackber?.('カラーテーマを更新しました。')
       }
     },
   })

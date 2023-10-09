@@ -100,8 +100,11 @@ export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
     fetchHomeLayout,
     loading: readLoading,
   } = useHomeLayoutRead(customerId)
+
   const { replaceHomeLayout, loading: writeLoading } =
     useHomeLayoutWrite(customerId)
+
+  const { addSnackber } = useSnackbars()
 
   const baseSections: BasePageSection[] = [
     {
@@ -155,6 +158,7 @@ export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
     nextKey()
     await replaceHomeLayout(editSections.value)
     await fetchHomeLayout()
+    addSnackber?.('ホームページレイアウトを変更しました。')
   }
 
   return {

@@ -33,14 +33,7 @@ watch(
 )
 
 const baseSnackBars = ref()
-const addSnackber = (message: string, color?: string) => {
-  if (baseSnackBars.value) {
-    baseSnackBars.value.addSnackbar(message, color)
-  }
-}
-
-// export const snackbarInjectionKey = Symbol()
-provide('snackbarInjectionKey', addSnackber)
+useProvideSnackbars(baseSnackBars)
 </script>
 <template>
   <v-app class="g-theme-app-container">

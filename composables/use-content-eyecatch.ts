@@ -221,12 +221,15 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
     loading: writeLoading,
   } = useEyecatchWrite(customerId)
 
+  const { addSnackber } = useSnackbars()
+
   const onLoad = async () => {
     await getEyecatch()
   }
 
   const onCreate = async (formData: EyecatchForm) => {
     const savedData = await createEyecatch(formData)
+    addSnackber?.('トップ画像を登録しました。')
     nextKey()
     getEyecatch(savedData?.id)
   }
@@ -241,12 +244,14 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
     if (!id) return
 
     const savedData = await updateEyecatch(id, formData)
+    addSnackber?.('トップ画像を更新しました。')
     nextKey()
     getEyecatch(savedData?.id)
   }
 
   const onRemove = async (id: number) => {
     await removeEyecatch(id)
+    addSnackber?.('トップ画像を削除しました。')
     nextKey()
     getEyecatch()
   }
