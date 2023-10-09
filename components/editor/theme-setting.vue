@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ColorTheme, LayoutTheme } from '@/types/customer'
-
 const props = defineProps<{ modal: boolean }>()
 const emit = defineEmits<{
   'update:modal': [modal: boolean]
@@ -24,7 +22,15 @@ const {
   editColorTheme,
   layoutThemeOptions,
   colorThemeOptions,
+  saving,
 } = useThemeSettingsEdit()
+
+const addSnackber = inject<(mesg: string) => void>('snackbarInjectionKey')
+watch(saving, (cur, pre) => {
+  if (pre && !cur) {
+    addSnackber?.('テーマを更新しました')
+  }
+})
 </script>
 
 <template>
@@ -36,7 +42,7 @@ const {
   >
     <div class="theme-setting">
       <section>
-        <h4>色テーマ選択</h4>
+        <h4>カラーテーマ選択</h4>
         <div class="theme-selection">
           <v-radio-group v-model="editColorTheme" inline>
             <v-radio

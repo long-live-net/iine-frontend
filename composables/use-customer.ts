@@ -12,6 +12,7 @@ export const useCustomer = () => {
 
   const customerId = computed(() => customer.value?.id ?? null)
   const customerName = computed(() => customer.value?.name ?? '')
+  const saving = ref(false)
 
   const setCustomer = (customer: Customer | null) => {
     customerStore.setCustomer(customer)
@@ -21,8 +22,13 @@ export const useCustomer = () => {
     if (!customer) {
       return
     }
-    await customerStore.updateCustomer(customer)
-    await customerStore.fetchCustomer(customer.id)
+    saving.value = true
+    try {
+      await customerStore.updateCustomer(customer)
+      await customerStore.fetchCustomer(customer.id)
+    } finally {
+      saving.value = false
+    }
   }
 
   return {
@@ -31,6 +37,7 @@ export const useCustomer = () => {
     customerName,
     setCustomer,
     updateCustomer,
+    saving,
   }
 }
 
@@ -38,7 +45,7 @@ export const useCustomer = () => {
  * 顧客情報のテーマ設定関連
  */
 export const useThemeSettingsEdit = () => {
-  const { customer, setCustomer, updateCustomer } = useCustomer()
+  const { customer, setCustomer, updateCustomer, saving } = useCustomer()
 
   const editLayoutTheme = computed<LayoutTheme>({
     get: () => customer.value?.layoutTheme ?? 'type1',
@@ -94,5 +101,6 @@ export const useThemeSettingsEdit = () => {
     editColorTheme,
     layoutThemeOptions,
     colorThemeOptions,
+    saving,
   }
 }

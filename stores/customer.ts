@@ -58,7 +58,8 @@ const useCustomerApi = (token: Ref<string | null>) => {
 }
 
 export const useCustomerStore = defineStore('customer', () => {
-  const { tokenRef } = storeToRefs(useAuthStore())
+  const authStore = useAuthStore()
+  const tokenRef = computed(() => authStore.tokenRef)
   const { fetchByUrl, fetch, update, nextKey } = useCustomerApi(tokenRef)
 
   const customerRef = ref<Customer | null>(null)

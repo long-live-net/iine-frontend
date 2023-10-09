@@ -48,6 +48,11 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
             >
               <v-icon icon="mdi-apps" size="x-large" />
             </div>
+            <div
+              class="edit-position-left-bottom draggable g-theme-contents-item__draggable--notion"
+            >
+              <v-icon icon="mdi-apps" size="x-large" />
+            </div>
           </section>
         </template>
       </draggable>
@@ -90,6 +95,11 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
       position: absolute;
       bottom: 0.5rem;
       right: 0.5rem;
+    }
+    .edit-position-left-bottom {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 0.5rem;
     }
   }
   .draggable {

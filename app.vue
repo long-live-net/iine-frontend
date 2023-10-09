@@ -15,13 +15,38 @@ watch(
     immediate: true,
   }
 )
+watch(
+  bodyClass,
+  () => {
+    if (process.client) {
+      // NOTE: useHead でやると body class のリストに
+      // 追加されてしまうため document.body.className
+      // を直接書き直す
+      document.body.className = bodyClass.value
+    } else {
+      useHead({ bodyAttrs: { class: bodyClass.value } })
+    }
+  },
+  {
+    immediate: true,
+  }
+)
+
+const baseSnackBars = ref()
+const addSnackber = (message: string, color?: string) => {
+  if (baseSnackBars.value) {
+    baseSnackBars.value.addSnackbar(message, color)
+  }
+}
+
+// export const snackbarInjectionKey = Symbol()
+provide('snackbarInjectionKey', addSnackber)
 </script>
 <template>
-  <v-app>
-    <div :class="bodyClass">
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
-    </div>
+  <v-app class="g-theme-app-container">
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+    <BaseSnackbars ref="baseSnackBars" />
   </v-app>
 </template>
