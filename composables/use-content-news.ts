@@ -362,12 +362,15 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     loading: writeLoading,
   } = useNewsWrite(customerId)
 
+  const { addSnackber } = useSnackbars()
+
   const onLoad = async (id?: number) => {
     await getNews(id)
   }
 
   const onCreate = async (formData: NewsForm) => {
     const savedData = await createNews(formData)
+    addSnackber?.('News を登録しました。')
     nextKey()
     getNews(savedData?.id)
   }
@@ -382,12 +385,14 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     if (!id) return
 
     const savedData = await updateNews(id, formData)
+    addSnackber?.('News を更新しました。')
     nextKey()
     getNews(savedData?.id)
   }
 
   const onRemove = async (id: number) => {
     await removeNews(id)
+    addSnackber?.('News を削除しました。')
     nextKey()
     getNews()
   }

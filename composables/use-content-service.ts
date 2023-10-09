@@ -300,12 +300,15 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
     loading: writeLoading,
   } = useServiceWrite(customerId)
 
+  const { addSnackber } = useSnackbars()
+
   const onLoad = async () => {
     await getServiceList(filter.value, sort.value, pager.value)
   }
 
   const onCreate = async (formData: ServiceForm) => {
     await createService(formData)
+    addSnackber?.('Service を登録しました。')
     nextKey()
     getServiceList(filter.value, sort.value, pager.value)
   }
@@ -320,18 +323,21 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
     if (!id) return
 
     await updateService(id, formData)
+    addSnackber?.('Service を更新しました。')
     nextKey()
     getServiceList(filter.value, sort.value, pager.value)
   }
 
   const onRemove = async (id: number) => {
     await removeService(id)
+    addSnackber?.('Service を削除しました。')
     nextKey()
     getServiceList(filter.value, sort.value, pager.value)
   }
 
   const onUpdatePositions = async (services: ServiceType[]) => {
     await updateServiceListPositions(setServiceListPositions(services))
+    addSnackber?.('位置を変更しました。')
     nextKey()
     getServiceList(filter.value, sort.value, pager.value)
   }

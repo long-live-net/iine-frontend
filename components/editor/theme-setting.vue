@@ -22,15 +22,7 @@ const {
   editColorTheme,
   layoutThemeOptions,
   colorThemeOptions,
-  saving,
 } = useThemeSettingsEdit()
-
-const addSnackber = inject<(mesg: string) => void>('snackbarInjectionKey')
-watch(saving, (cur, pre) => {
-  if (pre && !cur) {
-    addSnackber?.('テーマを更新しました')
-  }
-})
 </script>
 
 <template>

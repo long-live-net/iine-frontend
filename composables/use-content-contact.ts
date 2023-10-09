@@ -236,12 +236,15 @@ export const useContactActions = (customerId: Ref<number | null>) => {
     loading: writeLoading,
   } = useContactWrite(customerId)
 
+  const { addSnackber } = useSnackbars()
+
   const onLoad = async () => {
     await getContact()
   }
 
   const onCreate = async (formData: ContactForm) => {
     const savedData = await createContact(formData)
+    addSnackber?.('Contact を登録しました。')
     nextKey()
     getContact(savedData?.id)
   }
@@ -256,12 +259,14 @@ export const useContactActions = (customerId: Ref<number | null>) => {
     if (!id) return
 
     const savedData = await updateContact(id, formData)
+    addSnackber?.('Contact を更新しました。')
     nextKey()
     getContact(savedData?.id)
   }
 
   const onRemove = async (id: number) => {
     await removeContact(id)
+    addSnackber?.('Contact を削除しました。')
     nextKey()
     getContact()
   }
