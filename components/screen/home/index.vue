@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { LayoutTheme } from '@/types/customer'
 
-const { customerId, customer, canEdit } = useFoundation()
+const { customerId, customer } = useFoundation()
 const { domidPrefix, homeSections } = useHomeLayoutRead(customerId)
 
 const layoutTheme = computed<LayoutTheme>(
@@ -31,9 +31,6 @@ const layoutTheme = computed<LayoutTheme>(
         <ScreenHomeType1Contact v-if="section.kind === 'contact'" />
       </template>
     </section>
-    <div v-if="canEdit" class="edit-activator">
-      <EditorPageLayout />
-    </div>
   </article>
 </template>
 
@@ -41,11 +38,6 @@ const layoutTheme = computed<LayoutTheme>(
 article {
   .section-margin {
     padding-top: calc($nav-header-height + 1rem);
-  }
-  .edit-activator {
-    position: fixed;
-    top: calc($nav-header-height + 1rem);
-    left: 1rem;
   }
 }
 </style>

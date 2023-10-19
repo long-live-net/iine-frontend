@@ -35,6 +35,7 @@ watch(
 const baseSnackBars = ref()
 useProvideSnackbars(baseSnackBars)
 </script>
+
 <template>
   <v-app class="g-theme-app-container">
     <NuxtLayout>

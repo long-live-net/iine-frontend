@@ -26,7 +26,7 @@ const vSnackBar = computed({
         valiant="text"
         @click="$emit('update:snackbar', false)"
       >
-        とじる
+        閉じる
       </v-btn>
     </template>
   </v-snackbar>
