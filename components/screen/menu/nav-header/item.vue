@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PageSection } from '@/types/page-setting'
+import type { PageSection } from '@/types/customer-setting'
 
 export type HeaderItem = PageSection & {
   color?: string

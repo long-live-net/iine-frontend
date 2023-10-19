@@ -1,29 +1,38 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import type { BasePageSection, PageSectionEdit } from '@/types/page-setting'
+import type { BasePageSection, PageSectionEdit } from '@/types/customer-setting'
+
+const props = defineProps<{ modal: boolean }>()
+const emit = defineEmits<{
+  'update:modal': [modal: boolean]
+}>()
+const settingModal = computed({
+  get: () => props.modal,
+  set: (modal: boolean) => {
+    emit('update:modal', modal)
+  },
+})
 
 const titleData = {
-  title: 'ページレイアウト変更',
-  titleIcon: 'mdi-view-dashboard-edit',
+  title: 'ホームレイアウト変更',
+  titleIcon: 'mdi-view-split-horizontal',
   titleColor: 'accent',
 }
 const { customerId } = useFoundation()
 const { baseSections, editSections, loading, onUpdateSections } =
   useHomeLayoutEdit(customerId)
 
-const modal = ref(false)
-
 const clone = (data: BasePageSection): PageSectionEdit => {
   return { ...data, customerId }
 }
 
 const onCancel = () => {
-  modal.value = false
+  settingModal.value = false
 }
 
 const onUpdate = async () => {
   await onUpdateSections()
-  modal.value = false
+  settingModal.value = false
 }
 
 const hasAssigned = (baseId: string) =>
@@ -35,14 +44,8 @@ const removeItem = (baseId: string) => {
 </script>
 
 <template>
-  <BaseActivator
-    v-model:modal="modal"
-    :activator-icon="titleData.titleIcon"
-    :activator-color="titleData.titleColor"
-    :activator-text="titleData.title"
-  />
   <CommonModalDialog
-    v-model:modal="modal"
+    v-model:modal="settingModal"
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"

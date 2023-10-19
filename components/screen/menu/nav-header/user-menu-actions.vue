@@ -2,8 +2,6 @@
 import type { MenuItem } from '@/components/base/dropdown.vue'
 
 const emit = defineEmits<{
-  preview: []
-  themeSetting: []
   userinfo: []
   changePassword: []
   logout: []
@@ -18,6 +16,7 @@ const onLogout = () => {
   logout()
 }
 
+const homeLayoutSettingModal = ref(false)
 const themeSettingModal = ref(false)
 
 const userMenuItems: MenuItem[] = [
@@ -26,6 +25,11 @@ const userMenuItems: MenuItem[] = [
     title: 'テーマ設定',
     value: 'themeSetting',
     props: { prependIcon: 'mdi-cog' },
+  },
+  {
+    title: 'ホームレイアウト設定',
+    value: 'homeLayout',
+    props: { prependIcon: 'mdi-view-split-horizontal' },
   },
   { type: 'divider' },
   {
@@ -52,6 +56,9 @@ const onSelectUserMenu = (value: number | string) => {
       break
     case 'themeSetting':
       themeSettingModal.value = true
+      break
+    case 'homeLayout':
+      homeLayoutSettingModal.value = true
       break
     case 'userinfo':
       console.log('userinfo')
@@ -103,6 +110,7 @@ const onSelectUserMenu = (value: number | string) => {
     @click="togglePreview"
   />
   <EditorThemeSetting v-model:modal="themeSettingModal" />
+  <EditorHomeLayoutSetting v-model:modal="homeLayoutSettingModal" />
   <BaseConfirm
     v-model:comfirm="logoutDialog"
     message="本当にログアウトしますか？"
