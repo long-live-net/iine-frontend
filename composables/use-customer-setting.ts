@@ -88,7 +88,7 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
         })
       )
       if (error.value) {
-        throw error.value
+        throw createApiError(error.value)
       }
       return data
     } finally {

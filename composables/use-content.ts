@@ -41,11 +41,7 @@ export const useContentRead = <T extends ContentGetApi>(
     )
     if (error.value) {
       contentDataRef.value = null
-      const apiError: ApiError = error.value
-      if (apiError.statusCode === 404) {
-        return
-      }
-      throw apiError
+      throw createApiError(error.value)
     }
     if (data.value) {
       contentDataRef.value = data.value as T
