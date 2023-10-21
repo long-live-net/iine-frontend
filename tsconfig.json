@@ -4,7 +4,8 @@
   "compilerOptions": {
     "paths": {
       "~/*": ["./*"],
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "#app": ["./node_modules/nuxt/dist/app/index"]
     }
   }
 }
