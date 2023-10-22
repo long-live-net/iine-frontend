@@ -41,10 +41,15 @@ const onClickBack = () => {
 <style scoped lang="scss">
 .error-wrap {
   background-color: transparent;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   .error-card {
     width: 90%;
     max-width: 800px;
-    margin: 5rem auto 0 auto;
     background-color: $white;
     border-radius: 1rem;
     .error-field {

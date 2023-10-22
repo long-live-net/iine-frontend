@@ -47,9 +47,8 @@ const passwordView = ref(false)
       <v-btn
         type="submit"
         prepend-icon="mdi-login"
-        color="success"
-        variant="flat"
-        width="8rem"
+        color="primary"
+        width="16rem"
       >
         ログイン
       </v-btn>
@@ -64,7 +63,7 @@ const passwordView = ref(false)
   }
   .form-action {
     margin-top: 1.5rem;
-    text-align: right;
+    text-align: center;
   }
 }
 </style>

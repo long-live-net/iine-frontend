@@ -9,11 +9,13 @@ const emit = defineEmits<{
 
 const { logout } = useAuth()
 const { user, isPreview, togglePreview } = useFoundation()
+const router = useRouter()
 
 const logoutDialog = ref(false)
 const onLogout = () => {
   logoutDialog.value = false
   logout()
+  router.push('/customer/logout')
 }
 
 const homeLayoutSettingModal = ref(false)
