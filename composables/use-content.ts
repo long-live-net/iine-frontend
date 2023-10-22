@@ -1,5 +1,4 @@
 import debounce from 'lodash/debounce'
-import type { ApiError } from '@/utils/api-fetch'
 import type { ImageSettings } from '@/types/content'
 import type {
   ContentGetApi,
@@ -74,11 +73,7 @@ export const useContentRead = <T extends ContentGetApi>(
     )
     if (error.value) {
       contentListRef.value = null
-      const apiError: ApiError = error.value
-      if (apiError.statusCode === 404) {
-        return
-      }
-      throw apiError
+      throw createApiError(error.value)
     }
     if (data.value) {
       contentListRef.value = data.value as ContentListResponse<T>
@@ -158,7 +153,7 @@ export const useContentWrite = <
         })
       )
       if (error.value) {
-        throw error.value
+        throw createApiError(error.value)
       }
       const imageUrl = data.value as { fileUrl: string }
       sendData.image = {
@@ -175,7 +170,7 @@ export const useContentWrite = <
       })
     )
     if (error.value) {
-      throw error.value
+      throw createApiError(error.value)
     }
     return data
   }
@@ -200,7 +195,7 @@ export const useContentWrite = <
         })
       )
       if (error.value) {
-        throw error.value
+        throw createApiError(error.value)
       }
       const imageUrl = data.value as { fileUrl: string }
       sendData.image = {
@@ -217,7 +212,7 @@ export const useContentWrite = <
       })
     )
     if (error.value) {
-      throw error.value
+      throw createApiError(error.value)
     }
     return data
   }
@@ -235,7 +230,7 @@ export const useContentWrite = <
       })
     )
     if (error.value) {
-      throw error.value
+      throw createApiError(error.value)
     }
     return data
   }
@@ -254,7 +249,7 @@ export const useContentWrite = <
       })
     )
     if (error.value) {
-      throw error.value
+      throw createApiError(error.value)
     }
     return data
   }
@@ -273,7 +268,7 @@ export const useContentWrite = <
         })
       )
       if (error.value) {
-        throw error.value
+        throw createApiError(error.value)
       }
       return data
     },
