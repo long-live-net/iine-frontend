@@ -1,14 +1,15 @@
-<script lang="ts">
-definePageMeta({ layout: 'simple' })
-</script>
-
 <script setup lang="ts">
 import type { LoginApiCredential, LoginFrom } from '@/types/auth'
 
+definePageMeta({ layout: 'simple' })
+
 const { customerId, customerName } = useCustomer()
 const { login, authToken, authUser, authError } = useAuth()
+const { addSnackber } = useSnackbars()
 
+const route = useRoute()
 const router = useRouter()
+
 const onLogin = async (form: LoginFrom) => {
   const credential: LoginApiCredential = {
     customerId: customerId.value ?? 0,
@@ -20,15 +21,24 @@ const onLogin = async (form: LoginFrom) => {
   if (!authToken.value) return
   if (!authUser.value) return
 
+  addSnackber?.('ログイン成功しました')
+  addSnackber?.(`ようこそ ${authUser.value.name} さん`, 'info')
   router.push({ name: 'index' })
 }
+
+const isReauthorization = computed(() => route.query?.reauthorization)
+const backhomeLabel = computed(() =>
+  isReauthorization.value
+    ? 'ログインせずに閲覧のみ行う（ホームへ）'
+    : 'ホームに戻る'
+)
 </script>
 
 <template>
   <div class="auth-login">
-    <div class="auth-login__navigation">
-      <nuxt-link :to="{ name: 'index' }">HOME</nuxt-link>
-    </div>
+    <p v-if="isReauthorization" class="auth-login__note">
+      管理者権限を維持するには再ログインが必要です。
+    </p>
     <div class="auth-login__card">
       <h5 class="form-title">{{ customerName }} 管理者ログイン</h5>
       <p v-if="authError?.status" class="form-caution">
@@ -38,6 +48,9 @@ const onLogin = async (form: LoginFrom) => {
         <EditorLogin :customerName="customerName" @login="onLogin" />
       </div>
     </div>
+    <div class="auth-login__navigation">
+      <nuxt-link :to="{ name: 'index' }">{{ backhomeLabel }}</nuxt-link>
+    </div>
   </div>
 </template>
 
@@ -45,17 +58,23 @@ const onLogin = async (form: LoginFrom) => {
 .auth-login {
   width: 100%;
   height: 100vh;
-  padding: 0 0.5rem;
-  &__navigation {
-    padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &__note {
+    color: $error;
+    font-size: 14px;
+    font-weight: bolder;
+    margin-bottom: 1rem;
   }
   &__card {
+    width: 90%;
     max-width: 30rem;
-    color: black;
-    background-color: white;
+    color: $black;
+    background-color: $white;
     border-radius: 12px;
     padding: 2rem;
-    margin: 2rem auto;
     .form-title {
       font-size: 1rem;
       font-weight: bold;
@@ -71,6 +90,10 @@ const onLogin = async (form: LoginFrom) => {
       color: mediumseagreen;
       font-weight: bold;
     }
+  }
+  &__navigation {
+    margin-top: 2rem;
+    text-align: center;
   }
 }
 </style>

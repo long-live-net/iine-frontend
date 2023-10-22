@@ -9,21 +9,35 @@ export default defineNuxtPlugin((nuxtApp) => {
     // ----------
     // nuxtApp.hook('vue:error', (error, instance, info) => {
     // ===========
-    const nerr: NuxtError = error as NuxtError
-    const message =
-      nerr.statusCode && nerr.message
-        ? `${nerr.statusCode}: ${nerr.message}`
-        : nerr.toString()
-
-    console.error('message', message)
-    if (nerr.statusCode && nerr.message) {
-      console.log('statusCode', nerr.statusCode)
-      console.log('statusMessage', nerr.statusMessage)
-      console.log('message', nerr.message)
+    const nuxtError: NuxtError = error as NuxtError
+    const uiErrData: {
+      message: string
+      color: string
+      status: number
+      redirect: string | null
+    } = {
+      message: nuxtError.toString(),
+      color: 'error',
+      status: 400,
+      redirect: null,
     }
+    if (nuxtError.statusCode && nuxtError.message) {
+      uiErrData.status = nuxtError.statusCode
+      uiErrData.message = `${nuxtError.statusCode}: ${nuxtError.message}`
+      if (nuxtError.statusCode === 401 || nuxtError.statusCode === 403) {
+        uiErrData.message = '管理者ユーザの再認証が必要です。'
+        uiErrData.color = 'warning'
+        uiErrData.redirect = '/customer/login?reauthorization=true'
+        useAuth().logout()
+      }
+    }
+    console.error('### status ####', uiErrData.status)
+    console.error('### message ###', uiErrData.message)
 
-    const { addSnackber } = useGlobalSnackbars()
-    addSnackber?.(message, 'error')
-    await clearError()
+    useGlobalSnackbars().addSnackber?.(uiErrData.message, uiErrData.color)
+    const options = uiErrData.redirect?.length
+      ? { redirect: uiErrData.redirect }
+      : {}
+    await clearError(options)
   }
 })
