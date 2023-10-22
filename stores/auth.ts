@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
+import type { NuxtError } from '#app'
 import type { LoginApiCredential, LoginUser, LoginApiError } from '@/types/auth'
-import type { ApiError } from '@/utils/api-fetch'
 
 /**
  * ログイン認証関連API通信処理
@@ -16,7 +16,7 @@ const useAuthApi = () => {
       })
     )
     if (error.value) {
-      throw error.value
+      throw createApiError(error.value)
     }
     return data.value
   }
@@ -29,7 +29,7 @@ const useAuthApi = () => {
       })
     )
     if (error.value) {
-      throw error.value
+      throw createApiError(error.value)
     }
     return data.value
   }
@@ -57,8 +57,11 @@ export const useAuthStore = defineStore(
      * 利用者ログイン認証処理
      */
     const login = async (credential: LoginApiCredential) => {
-      const onError = (status: number) => {
-        errorRef.value = { status, message: 'ユーザ認証できませんでした' }
+      const onError = (status: number, message?: string) => {
+        errorRef.value = {
+          status,
+          message: message ?? 'ログイン認証できませんでした',
+        }
       }
       clearRef()
       try {
@@ -86,9 +89,9 @@ export const useAuthStore = defineStore(
         }
         tokenRef.value = token
       } catch (error) {
-        const apiError: ApiError = error as Error
-        if (apiError.statusCode === 401 || apiError.statusCode === 403) {
-          onError(apiError.statusCode)
+        const loginError = error as NuxtError
+        if (loginError.statusCode === 401 || loginError.statusCode === 403) {
+          onError(loginError.statusCode)
         } else {
           throw error
         }

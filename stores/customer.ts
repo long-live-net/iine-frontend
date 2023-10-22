@@ -17,7 +17,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
       })
     )
     if (error.value) {
-      throw error.value
+      throw createApiError(error.value)
     }
     return data.value
   }
@@ -30,7 +30,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
       })
     )
     if (error.value) {
-      throw error.value
+      throw createApiError(error.value)
     }
     return data.value
   }
@@ -44,7 +44,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
       })
     )
     if (error.value) {
-      throw error.value
+      throw createApiError(error.value)
     }
     return data
   }

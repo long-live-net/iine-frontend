@@ -32,7 +32,7 @@ const onLogin = async (form: LoginFrom) => {
     <div class="auth-login__card">
       <h5 class="form-title">{{ customerName }} 管理者ログイン</h5>
       <p v-if="authError?.status" class="form-caution">
-        ログイン認証できませんでした
+        {{ authError?.message ?? 'ログインできません' }}
       </p>
       <div>
         <EditorLogin :customerName="customerName" @login="onLogin" />
