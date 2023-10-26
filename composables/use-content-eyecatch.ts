@@ -54,7 +54,7 @@ const useEyecatchRead = (customerId: Ref<number | null>) => {
 }
 
 const useEyecatchWrite = (customerId: Ref<number | null>) => {
-  const { create, update, remove, updateImageSettings } = useContentWrite<
+  const { create, update, remove, useUpdateImageSettings } = useContentWrite<
     EyecatchSaveApi,
     EyecatchGetApi
   >(customerId, apiUrl)
@@ -122,14 +122,12 @@ const useEyecatchWrite = (customerId: Ref<number | null>) => {
     }
   }
 
-  const updateEyecatchImageSettings = async (
+  const { debouncedFunc } = useUpdateImageSettings()
+  const updateEyecatchImageSettings = (
     contentId: number,
     imageSettings: ImageSettings
   ) => {
-    const promise = updateImageSettings(contentId, imageSettings)
-    if (promise) {
-      return await promise
-    }
+    debouncedFunc(contentId, imageSettings)
   }
 
   return {

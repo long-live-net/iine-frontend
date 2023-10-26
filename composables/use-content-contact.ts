@@ -57,7 +57,7 @@ export const useContactRead = (customerId: Ref<number | null>) => {
 }
 
 export const useContactWrite = (customerId: Ref<number | null>) => {
-  const { create, update, remove, updateImageSettings } = useContentWrite<
+  const { create, update, remove, useUpdateImageSettings } = useContentWrite<
     ContactSaveApi,
     ContactGetApi
   >(customerId, apiUrl)
@@ -129,14 +129,12 @@ export const useContactWrite = (customerId: Ref<number | null>) => {
     }
   }
 
+  const { debouncedFunc } = useUpdateImageSettings()
   const updateContactImageSettings = async (
     contentId: number,
     imageSettings: ImageSettings
   ) => {
-    const promise = updateImageSettings(contentId, imageSettings)
-    if (promise) {
-      return await promise
-    }
+    debouncedFunc(contentId, imageSettings)
   }
 
   return {
