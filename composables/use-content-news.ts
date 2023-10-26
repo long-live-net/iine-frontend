@@ -108,7 +108,7 @@ const useNewsRead = (customerId: Ref<number | null>) => {
 }
 
 const useNewsWrite = (customerId: Ref<number | null>) => {
-  const { create, update, remove, updateImageSettings } = useContentWrite<
+  const { create, update, remove, useUpdateImageSettings } = useContentWrite<
     NewsSaveApi,
     NewsGetApi
   >(customerId, apiUrl)
@@ -182,14 +182,12 @@ const useNewsWrite = (customerId: Ref<number | null>) => {
     }
   }
 
+  const { debouncedFunc } = useUpdateImageSettings()
   const updateNewsImageSettings = async (
     contentId: number,
     imageSettings: ImageSettings
   ) => {
-    const promise = updateImageSettings(contentId, imageSettings)
-    if (promise) {
-      return await promise
-    }
+    debouncedFunc(contentId, imageSettings)
   }
 
   return {
@@ -295,12 +293,15 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
     loading: writeLoading,
   } = useNewsWrite(customerId)
 
+  const { addSnackber } = useSnackbars()
+
   const onLoad = async () => {
     await getNewsList(filter.value, sort.value, pager.value)
   }
 
   const onCreate = async (formData: NewsForm) => {
     await createNews(formData)
+    addSnackber?.('News を登録しました。')
     nextKey()
     getNewsList(filter.value, sort.value, pager.value)
   }
@@ -315,12 +316,14 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
     if (!id) return
 
     await updateNews(id, formData)
+    addSnackber?.('News を更新しました。')
     nextKey()
     getNewsList(filter.value, sort.value, pager.value)
   }
 
   const onRemove = async (id: number) => {
     await removeNews(id)
+    addSnackber?.('News を削除しました。')
     nextKey()
     getNewsList(filter.value, sort.value, pager.value)
   }

@@ -61,7 +61,7 @@ const useInformationRead = (customerId: Ref<number | null>) => {
 }
 
 const useInformationWrite = (customerId: Ref<number | null>) => {
-  const { create, update, remove, updateImageSettings } = useContentWrite<
+  const { create, update, remove, useUpdateImageSettings } = useContentWrite<
     InformationSaveApi,
     InformationGetApi
   >(customerId, apiUrl)
@@ -132,14 +132,12 @@ const useInformationWrite = (customerId: Ref<number | null>) => {
     }
   }
 
+  const { debouncedFunc } = useUpdateImageSettings()
   const updateInformationImageSettings = async (
     contentId: number,
     imageSettings: ImageSettings
   ) => {
-    const promise = updateImageSettings(contentId, imageSettings)
-    if (promise) {
-      return await promise
-    }
+    debouncedFunc(contentId, imageSettings)
   }
 
   return {

@@ -255,25 +255,57 @@ export const useContentWrite = <
   }
 
   /**
-   * 画像 Settings 情報更新
+   * useUpdateImageSettings
+   *
+   * Note.
+   * lodash.debounce() は非同期に実行するので
+   * 実行する関数のリターン値を指定しても undefined
+   * となる。
+   * このため useAsyncData の結果をリアクティブな
+   * 変数にセットして、それを watch しつつ結果を
+   * 返すような形で実装するようにした。
    */
-  const updateImageSettings = debounce(
-    async (contentId: number, imageSettings: ImageSettings) => {
-      const { data, error } = await useAsyncData<T>(() =>
-        $fetch(`${apiPath}/${contentId}/image-settings`, {
-          baseURL: backendBaseUrl,
-          method: 'PUT',
-          headers: authorizationHeader.value,
-          body: imageSettings,
-        })
-      )
+  const useUpdateImageSettings = () => {
+    const data = ref<any>(null)
+    const error = ref<Error | null>(null)
+    const fatal = ref<Error | null>(null)
+
+    const debouncedFunc = debounce(
+      (contentId: number, imageSettings: ImageSettings) => {
+        useAsyncData<T>(() =>
+          $fetch(`${apiPath}/${contentId}/image-settings`, {
+            baseURL: backendBaseUrl,
+            method: 'PUT',
+            headers: authorizationHeader.value,
+            body: imageSettings,
+          })
+        )
+          .then((response) => {
+            data.value = response?.data?.value ?? null
+            error.value = response?.error?.value ?? null
+          })
+          .catch((e) => {
+            fatal.value = e
+          })
+      },
+      600
+    )
+    watch(error, () => {
       if (error.value) {
         throw createApiError(error.value)
       }
-      return data
-    },
-    600
-  )
+    })
+    watch(fatal, () => {
+      if (fatal.value) {
+        throw createApiError(error.value)
+      }
+    })
+
+    return {
+      debouncedFunc,
+      data,
+    }
+  }
 
   const getDefaultImageSettings = (): ImageSettings => ({
     lgSize: 'cover',
@@ -289,7 +321,7 @@ export const useContentWrite = <
     update,
     remove,
     updatePositions,
-    updateImageSettings,
+    useUpdateImageSettings,
     getDefaultImageSettings,
   }
 }
