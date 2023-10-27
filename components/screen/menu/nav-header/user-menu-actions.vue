@@ -18,8 +18,9 @@ const onLogout = () => {
   router.push('/customer/logout')
 }
 
-const homeLayoutSettingModal = ref(false)
-const themeSettingModal = ref(false)
+const homeLayoutSettingDialog = ref(false)
+const themeSettingDialog = ref(false)
+const userInfoDialog = ref(false)
 
 const userMenuItems: MenuItem[] = [
   { title: 'プレビュー', value: 'preview', props: { prependIcon: 'mdi-eye' } },
@@ -57,13 +58,13 @@ const onSelectUserMenu = (value: number | string) => {
       togglePreview()
       break
     case 'themeSetting':
-      themeSettingModal.value = true
+      themeSettingDialog.value = true
       break
     case 'homeLayout':
-      homeLayoutSettingModal.value = true
+      homeLayoutSettingDialog.value = true
       break
     case 'userinfo':
-      console.log('userinfo')
+      userInfoDialog.value = true
       emit('userinfo')
       break
     case 'changePassword':
@@ -106,13 +107,14 @@ const onSelectUserMenu = (value: number | string) => {
       </template>
     </BaseDropdown>
   </div>
-  <ScreenMenuOnPreview
+  <ScreenCustomerOnPreview
     v-if="isPreview"
     id="on-preview-button"
     @click="togglePreview"
   />
-  <EditorThemeSetting v-model:modal="themeSettingModal" />
-  <EditorHomeLayoutSetting v-model:modal="homeLayoutSettingModal" />
+  <EditorThemeSetting v-model:modal="themeSettingDialog" />
+  <EditorHomeLayoutSetting v-model:modal="homeLayoutSettingDialog" />
+  <ScreenCustomerUserInfo v-model:modal="userInfoDialog" />
   <BaseConfirm
     v-model:comfirm="logoutDialog"
     message="本当にログアウトしますか？"

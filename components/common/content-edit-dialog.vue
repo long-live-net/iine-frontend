@@ -43,6 +43,7 @@ const dialog = computed({
   background-color: $white;
   color: $black;
   overflow-y: auto;
+  border-radius: 6px;
   &__header {
     display: flex;
     align-items: center;
