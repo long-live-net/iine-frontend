@@ -65,11 +65,9 @@ const onSelectUserMenu = (value: number | string) => {
       break
     case 'userinfo':
       userInfoDialog.value = true
-      emit('userinfo')
       break
     case 'changePassword':
-      console.log('changePassword')
-      emit('changePassword')
+      router.push('/customer/change-password')
       break
     case 'logout':
       logoutDialog.value = true

@@ -24,6 +24,14 @@ export type LoginFrom = {
 }
 
 /**
+ * Change Password Form
+ */
+export type ChangePasswordFrom = {
+  password: string
+  passwordConfirm: string
+}
+
+/**
  * Login User 情報
  */
 export type LoginUser = {

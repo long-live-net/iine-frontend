@@ -43,6 +43,7 @@ const { user, customer } = useFoundation()
 
 <style scoped lang="scss">
 .user-info-wrap {
+  padding: 1rem 2rem 2rem 2rem;
   dl {
     display: grid;
     grid-template-columns: 11rem auto;
