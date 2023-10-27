@@ -55,10 +55,7 @@ export const useValidateRules = () => {
    * email チェック
    */
   const validateEmail = (v: ValidateValueType) => {
-    if (null === v || undefined === v) {
-      return true
-    }
-    if (!v.length) {
+    if (!v?.length) {
       return true
     }
     const format =
@@ -70,10 +67,7 @@ export const useValidateRules = () => {
    * 電話番号チェック
    */
   const validatePhone = (v: ValidateValueType) => {
-    if (null === v || undefined === v) {
-      return true
-    }
-    if (!v.length) {
+    if (!v?.length) {
       return true
     }
     const format = /^\d{2,5}-\d{1,4}-\d{4}$/
@@ -84,10 +78,7 @@ export const useValidateRules = () => {
    * Password Complexity
    */
   const passwordComplexity = (v: ValidateValueType) => {
-    if (null === v || undefined === v) {
-      return true
-    }
-    if (!v.length) {
+    if (!v?.length) {
       return true
     }
     if (!/[a-z]/.test(v)) return false
@@ -95,6 +86,16 @@ export const useValidateRules = () => {
     if (!/\d/.test(v)) return false
     return true
   }
+
+  /**
+   * customValidator
+   */
+  type CustomValidatorFunc = () => boolean
+  const customValidatorFunc = ref<CustomValidatorFunc | null>(null)
+  const setCustomValidatorFunc = (func: CustomValidatorFunc) => {
+    customValidatorFunc.value = func
+  }
+  const customValidator = () => customValidatorFunc.value?.() ?? false
 
   return {
     required,
@@ -105,5 +106,7 @@ export const useValidateRules = () => {
     validateEmail,
     validatePhone,
     passwordComplexity,
+    setCustomValidatorFunc,
+    customValidator,
   }
 }
