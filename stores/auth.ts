@@ -16,7 +16,7 @@ const useAuthApi = () => {
       })
     )
     if (error.value) {
-      throw createApiError(error.value)
+      throw error.value
     }
     return data.value
   }
@@ -29,7 +29,7 @@ const useAuthApi = () => {
       })
     )
     if (error.value) {
-      throw createApiError(error.value)
+      throw error.value
     }
     return data.value
   }

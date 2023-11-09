@@ -113,7 +113,7 @@ export const useUpdatePassword = () => {
         })
       )
       if (error.value) {
-        throw createApiError(error.value)
+        throw error.value
       }
       return data
     } finally {

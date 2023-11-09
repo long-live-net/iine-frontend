@@ -74,7 +74,7 @@ export const useInquireSend = (customerId: Ref<number | null>) => {
         })
       )
       if (error.value) {
-        throw createApiError(error.value)
+        throw error.value
       }
       return data
     } finally {

@@ -30,7 +30,8 @@ export const useSnackbars = () => {
 }
 /**
  * useGlobalSnackbars
- * この use は setup context でない場所で inject が使用できない場合に使用できます
+ * この use は inject できない場合 (setup context でない場所等) に使用できます
+ * Global な変数を見ていることからあまり使いたくないので、限定的に使用すること
  */
 export const useGlobalSnackbars = () => {
   return { addSnackber: globalAddSnackbar.value }
