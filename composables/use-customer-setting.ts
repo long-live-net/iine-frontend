@@ -33,7 +33,7 @@ export const useHomeLayoutRead = (customerId: Ref<number | null>) => {
         })
       )
       if (error.value) {
-        throw createApiError(error.value)
+        throw error.value
       }
       homeSections.value = (data.value ?? []).map((d) => ({
         baseId: d.baseId,
@@ -88,7 +88,7 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
         })
       )
       if (error.value) {
-        throw createApiError(error.value)
+        throw error.value
       }
       return data
     } finally {

@@ -40,7 +40,7 @@ export const useContentRead = <T extends ContentGetApi>(
     )
     if (error.value) {
       contentDataRef.value = null
-      throw createApiError(error.value)
+      throw error.value
     }
     if (data.value) {
       contentDataRef.value = data.value as T
@@ -73,7 +73,7 @@ export const useContentRead = <T extends ContentGetApi>(
     )
     if (error.value) {
       contentListRef.value = null
-      throw createApiError(error.value)
+      throw error.value
     }
     if (data.value) {
       contentListRef.value = data.value as ContentListResponse<T>
@@ -153,7 +153,7 @@ export const useContentWrite = <
         })
       )
       if (error.value) {
-        throw createApiError(error.value)
+        throw error.value
       }
       const imageUrl = data.value as { fileUrl: string }
       sendData.image = {
@@ -170,7 +170,7 @@ export const useContentWrite = <
       })
     )
     if (error.value) {
-      throw createApiError(error.value)
+      throw error.value
     }
     return data
   }
@@ -195,7 +195,7 @@ export const useContentWrite = <
         })
       )
       if (error.value) {
-        throw createApiError(error.value)
+        throw error.value
       }
       const imageUrl = data.value as { fileUrl: string }
       sendData.image = {
@@ -212,7 +212,7 @@ export const useContentWrite = <
       })
     )
     if (error.value) {
-      throw createApiError(error.value)
+      throw error.value
     }
     return data
   }
@@ -230,7 +230,7 @@ export const useContentWrite = <
       })
     )
     if (error.value) {
-      throw createApiError(error.value)
+      throw error.value
     }
     return data
   }
@@ -249,7 +249,7 @@ export const useContentWrite = <
       })
     )
     if (error.value) {
-      throw createApiError(error.value)
+      throw error.value
     }
     return data
   }
@@ -292,12 +292,12 @@ export const useContentWrite = <
     )
     watch(error, () => {
       if (error.value) {
-        throw createApiError(error.value)
+        throw error.value
       }
     })
     watch(fatal, () => {
       if (fatal.value) {
-        throw createApiError(error.value)
+        throw error.value
       }
     })
 
