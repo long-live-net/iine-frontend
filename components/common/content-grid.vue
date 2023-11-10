@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ContentType } from '@/types/content'
+import type { ContentType } from '@/types/content'
 
 defineProps<{ contents: Readonly<ContentType[]> }>()
 </script>
