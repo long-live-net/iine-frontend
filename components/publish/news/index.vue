@@ -77,7 +77,7 @@ await loadNewses()
               </nuxt-link>
             </div>
             <div v-if="canEdit" class="edit-activator">
-              <EditorNews
+              <ManageContentNews
                 :newsData="content as NewsType"
                 activaterSize="x-small"
                 @update="onUpdate"
@@ -91,7 +91,7 @@ await loadNewses()
         <p>データがありません</p>
       </div>
       <div v-if="canEdit" class="whole-switch">
-        <EditorNewsWholeSwitch v-model="isWholeData" />
+        <ManageContentNewsWholeSwitch v-model="isWholeData" />
       </div>
     </CommonContentCardBody>
     <div class="news-list__action">
@@ -103,7 +103,7 @@ await loadNewses()
       />
     </div>
     <div v-if="canEdit && newsListRef?.length" class="create-activator">
-      <EditorNews @create="onCreate" />
+      <ManageContentNews @create="onCreate" />
     </div>
   </CommonContentCard>
 </template>

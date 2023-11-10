@@ -31,7 +31,7 @@ await onLoad()
           v-if="canEdit && contactRef?.image?.settings"
           class="image-settings"
         >
-          <EditorImageSetting
+          <ManageContentImageSetting
             :settings="contactRef.image.settings"
             @update="onUpdateImageSetting"
           />
@@ -41,13 +41,13 @@ await onLoad()
         <div v-if="contactRef?.body">
           <div v-html="htmlSanitizer(contactRef?.body)" />
           <div class="inquire-activator">
-            <ScreenInquire />
+            <PublishInquire />
           </div>
         </div>
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <EditorContact
+            <ManageContentContact
               activaterLabel="コンテンツを登録してください"
               @create="onCreate"
             />
@@ -55,7 +55,7 @@ await onLoad()
         </div>
       </CommonContentCardBody>
       <div v-if="canEdit && contactRef?.id" class="edit-activator">
-        <EditorContact
+        <ManageContentContact
           :contact-data="contactRef"
           @update="onUpdate"
           @remove="onRemove"

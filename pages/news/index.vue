@@ -1,7 +1,7 @@
 <template>
   <div id="news-index-top">
-    <ScreenMenuNavBreadCrumb />
-    <ScreenNews />
+    <PublishMenuNavBreadCrumb />
+    <PublishNews />
   </div>
 </template>
 

@@ -45,7 +45,7 @@ const backhomeLabel = computed(() =>
         {{ authError?.message ?? 'ログインできません' }}
       </p>
       <div>
-        <EditorLogin :customerName="customerName" @login="onLogin" />
+        <ManageCustomerLogin :customerName="customerName" @login="onLogin" />
       </div>
     </div>
     <div class="auth-login__navigation">

@@ -57,13 +57,13 @@ const onCancel = () => {
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
   >
-    <ScreenInquireForm
+    <PublishInquireForm
       v-if="pageMode === 'input'"
       :inquire-form="inquireForm"
       @confirm="onConfirm"
       @cancel="onCancel"
     />
-    <ScreenInquireResult v-else @ok="onCompleted" />
+    <PublishInquireResult v-else @ok="onCompleted" />
     <BaseConfirm
       v-model:comfirm="confirmDialog"
       message="お問い合わせのメールを送信します。よろしいですか？"

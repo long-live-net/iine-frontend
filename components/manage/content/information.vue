@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import type { EyecatchType, EyecatchForm } from '@/types/content'
-import { useEyecatchForm } from '~/composables/use-content-eyecatch'
+import type { InformationType, InformationForm } from '@/types/content'
 
 const props = defineProps<{
-  eyecatchData?: EyecatchType | null
+  informationData?: InformationType | null
   activaterLabel?: string
 }>()
-
 const emit = defineEmits<{
-  create: [inputData: EyecatchForm]
-  update: [{ id: number; formData: EyecatchForm }]
+  create: [inputData: InformationForm]
+  update: [{ id: number; formData: InformationForm }]
   remove: [id: number]
 }>()
 
@@ -18,38 +16,38 @@ const {
   handleSubmit,
   handleReset,
   formData,
-  resetEyeCatchForm,
+  resetInformationForm,
   changeImageFile,
-} = useEyecatchForm()
+} = useInformationForm()
 
 watch(modal, (current) => {
   if (current) {
     handleReset()
-    resetEyeCatchForm(props.eyecatchData)
+    resetInformationForm(props.informationData)
   }
 })
 
-const onCreate = handleSubmit((eyecatchForm) => {
-  emit('create', eyecatchForm)
+const onCreate = handleSubmit((informationForm) => {
+  emit('create', informationForm)
   modal.value = false
 })
 
-const onUpdate = handleSubmit((eyecatchForm) => {
-  if (!props.eyecatchData?.id) {
+const onUpdate = handleSubmit((informationForm) => {
+  if (!props.informationData?.id) {
     return
   }
   emit('update', {
-    id: props.eyecatchData.id,
-    formData: eyecatchForm,
+    id: props.informationData.id,
+    formData: informationForm,
   })
   modal.value = false
 })
 
 const onRemove = () => {
-  if (!props.eyecatchData?.id) {
+  if (!props.informationData?.id) {
     return
   }
-  emit('remove', props.eyecatchData.id)
+  emit('remove', props.informationData.id)
   modal.value = false
 }
 
@@ -61,19 +59,19 @@ const onCancel = () => {
 <template>
   <CommonContentEditActivator
     v-model:modal="modal"
-    :is-update="!!eyecatchData?.id"
+    :is-update="!!informationData?.id"
     :activaterLabel="activaterLabel"
   />
   <CommonContentEditDialog
     v-model:modal="modal"
-    :is-update="!!eyecatchData?.id"
+    :is-update="!!informationData?.id"
   >
     <v-form>
       <div>
         <BaseFileInput
           :image-url="formData.image.value.value"
           :error-messages="formData.image.errorMessage.value"
-          label="トップ画像"
+          label="タイトル画像"
           @change-image-file="changeImageFile"
         />
       </div>
@@ -82,8 +80,8 @@ const onCancel = () => {
           v-model="formData.title.value.value"
           :error-messages="formData.title.errorMessage.value"
           clearable
-          label="トップタイトル"
-          placeholder="トップタイトルを入力してください"
+          label="タイトル"
+          placeholder="タイトルを入力してください"
         />
       </div>
       <div class="mt-3">
@@ -95,8 +93,17 @@ const onCancel = () => {
           placeholder="サブタイトルを入力してください"
         />
       </div>
-      <EditorFormActions
-        :contentId="eyecatchData?.id"
+      <div class="mt-3">
+        <BaseWysiwsgEditor
+          v-model="formData.body.value.value"
+          :error-messages="formData.body.errorMessage.value"
+          clearable
+          label="本文"
+          placeholder="本文を入力してください"
+        />
+      </div>
+      <ManageContentFormActions
+        :contentId="informationData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"
