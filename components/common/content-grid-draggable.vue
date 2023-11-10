@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import { ContentType } from '@/types/content'
+import type { ContentType } from '@/types/content'
 
 const props = defineProps<{ contents: ContentType[] }>()
 const emit = defineEmits<{

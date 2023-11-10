@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VDatePicker } from 'vuetify/labs/VDatePicker'
+import type { VDatePicker } from 'vuetify/labs/VDatePicker'
 
 const props = defineProps<{
   modelValue?: Date | string | null
