@@ -55,7 +55,7 @@ await loadNewses()
                 </nuxt-link>
               </div>
               <div v-if="canEdit" class="edit-activator">
-                <EditorNews
+                <ManageContentNews
                   :newsData="content as NewsType"
                   activaterSize="x-small"
                   @update="onUpdate"
@@ -68,21 +68,21 @@ await loadNewses()
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <EditorNews
+            <ManageContentNews
               activaterLabel="ニュースを登録してください"
               @create="onCreate"
             />
           </div>
         </div>
         <div v-if="canEdit" class="whole-switch">
-          <EditorNewsWholeSwitch v-model="isWholeData" />
+          <ManageContentNewsWholeSwitch v-model="isWholeData" />
         </div>
       </CommonContentCardBody>
       <div class="type1-news-list__action">
         <NuxtLink to="/news">and more ...</NuxtLink>
       </div>
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
-        <EditorNews @create="onCreate" />
+        <ManageContentNews @create="onCreate" />
       </div>
     </CommonContentCard>
   </CommonContentWrap>

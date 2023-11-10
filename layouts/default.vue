@@ -7,13 +7,13 @@ defineOptions({
 <template>
   <div id="default-layout-container">
     <header>
-      <ScreenMenuNavHeader />
+      <PublishMenuNavHeader />
     </header>
     <main>
       <slot />
     </main>
     <footer>
-      <ScreenMenuNavFooter />
+      <PublishMenuNavFooter />
     </footer>
   </div>
 </template>

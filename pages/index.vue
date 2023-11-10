@@ -4,7 +4,7 @@ const topButtonImage = '/image/arrow-up4.png'
 
 <template>
   <div id="home-index-top">
-    <ScreenHome />
+    <PublishHome />
   </div>
 </template>
 

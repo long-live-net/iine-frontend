@@ -55,8 +55,10 @@ export default defineNuxtPlugin((nuxtApp) => {
    * Note: === nuxt3ノウハウメモ ===
    * nuxtApp.vueApp.config.errorHandler で定義すると
    * unhandledrejection 含め全てのエラーを取得できるようなので
-   * 以下のような window を listen しなくともよくなる模様
+   * 以下のような window を listen しなくともよくなる模様である
+   * が、念の為生かしておく
    *
+   */
   if (process.client) {
     window.addEventListener('error', (event) => {
       console.error('--- window error ---', event.error)
@@ -67,5 +69,4 @@ export default defineNuxtPlugin((nuxtApp) => {
       handleError(event.reason)
     })
   }
-  */
 })

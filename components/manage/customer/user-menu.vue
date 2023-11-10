@@ -105,14 +105,14 @@ const onSelectUserMenu = (value: number | string) => {
       </template>
     </BaseDropdown>
   </div>
-  <ScreenCustomerOnPreview
+  <ManageCustomerOnPreview
     v-if="isPreview"
     id="on-preview-button"
     @click="togglePreview"
   />
-  <EditorThemeSetting v-model:modal="themeSettingDialog" />
-  <EditorHomeLayoutSetting v-model:modal="homeLayoutSettingDialog" />
-  <ScreenCustomerUserInfo v-model:modal="userInfoDialog" />
+  <ManageCustomerThemeSetting v-model:modal="themeSettingDialog" />
+  <ManageCustomerHomeLayoutSetting v-model:modal="homeLayoutSettingDialog" />
+  <ManageCustomerUserInfo v-model:modal="userInfoDialog" />
   <BaseConfirm
     v-model:comfirm="logoutDialog"
     message="本当にログアウトしますか？"

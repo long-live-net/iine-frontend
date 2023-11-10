@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { HeaderTitle } from '@/components/screen/menu/nav-header/title.vue'
-import type { HeaderItem } from '@/components/screen/menu/nav-header/item.vue'
+import type { HeaderTitle } from '@/components/publish/menu/nav-header/title.vue'
+import type { HeaderItem } from '@/components/publish/menu/nav-header/item.vue'
 
 const { customerId, isLoggedIn } = useFoundation()
 const sidebar = ref(false)
@@ -32,15 +32,15 @@ const headerItems = computed<HeaderItem[]>(
   <nav class="nav-header g-theme-header">
     <div class="g-block-lg">
       <div class="nav-header__menu">
-        <ScreenMenuNavHeaderTitle :headerTitle="headerTitle" />
+        <PublishMenuNavHeaderTitle :headerTitle="headerTitle" />
         <div class="row-direction">
-          <ScreenMenuNavHeaderItem
+          <PublishMenuNavHeaderItem
             v-for="item in headerItems"
             :key="item.id"
             :menu-item="item"
           />
           <ClientOnly>
-            <ScreenMenuNavHeaderUserMenuActions v-if="isLoggedIn" />
+            <ManageCustomerUserMenu v-if="isLoggedIn" />
           </ClientOnly>
         </div>
       </div>
@@ -54,13 +54,13 @@ const headerItems = computed<HeaderItem[]>(
             color="white"
             @click="sidebar = !sidebar"
           />
-          <ScreenMenuNavHeaderTitle
+          <PublishMenuNavHeaderTitle
             :headerTitle="{ ...headerTitle, color: 'white' }"
           />
         </div>
         <div>
           <ClientOnly>
-            <ScreenMenuNavHeaderUserMenuActions v-if="isLoggedIn" />
+            <ManageCustomerUserMenu v-if="isLoggedIn" />
           </ClientOnly>
         </div>
       </div>
@@ -68,8 +68,8 @@ const headerItems = computed<HeaderItem[]>(
         <teleport to="#default-layout-container">
           <BaseDrawer v-model:drawer="sidebar" color="#424242" theme="dark">
             <div class="column-direction">
-              <ScreenMenuNavHeaderTitle :headerTitle="headerTitle" />
-              <ScreenMenuNavHeaderItem
+              <PublishMenuNavHeaderTitle :headerTitle="headerTitle" />
+              <PublishMenuNavHeaderItem
                 v-for="item in headerItems"
                 :key="item.id"
                 :menu-item="item"

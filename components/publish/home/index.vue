@@ -12,7 +12,7 @@ const layoutTheme = computed<LayoutTheme>(
 <template>
   <article>
     <section :id="`${domidPrefix}-eyecatch`">
-      <ScreenHomeType1Eyecatcher />
+      <PublishHomeType1Eyecatcher />
     </section>
     <section
       v-for="section in homeSections"
@@ -21,14 +21,14 @@ const layoutTheme = computed<LayoutTheme>(
       class="section-margin"
     >
       <template v-if="layoutTheme === 'type1'">
-        <ScreenHomeType1SectionTitle
+        <PublishHomeType1SectionTitle
           v-if="section.title?.length"
           :title="section.title"
         />
-        <ScreenHomeType1Information v-if="section.kind === 'information'" />
-        <ScreenHomeType1Newses v-if="section.kind === 'news'" />
-        <ScreenHomeType1Services v-if="section.kind === 'service'" />
-        <ScreenHomeType1Contact v-if="section.kind === 'contact'" />
+        <PublishHomeType1Information v-if="section.kind === 'information'" />
+        <PublishHomeType1Newses v-if="section.kind === 'news'" />
+        <PublishHomeType1Services v-if="section.kind === 'service'" />
+        <PublishHomeType1Contact v-if="section.kind === 'contact'" />
       </template>
     </section>
   </article>

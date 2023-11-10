@@ -114,7 +114,7 @@ const onCancel = () => {
           placeholder="本文を入力してください"
         />
       </div>
-      <EditorFormActions
+      <ManageContentFormActions
         :contentId="newsData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
