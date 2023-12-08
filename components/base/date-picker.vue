@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { VDatePicker } from 'vuetify/labs/VDatePicker'
-
 const props = defineProps<{
   modelValue?: Date | string | null
   label?: string
@@ -9,13 +7,18 @@ const props = defineProps<{
   errorMessages?: string | string[]
 }>()
 const emit = defineEmits<{
-  'update:modelValue': [value: Date | null]
+  'update:modelValue': [value: Date | string | null]
 }>()
 
 const datepickerMenu = ref(false)
-const datepickerValue = ref<Date[] | Date | undefined>()
+const datepickerValue = ref<Date>(new Date())
+onMounted(() => {
+  if (props.modelValue) {
+    datepickerValue.value = new Date(props.modelValue)
+  }
+})
 watch(datepickerValue, () => {
-  emit('update:modelValue', (datepickerValue.value as Date) ?? null)
+  emit('update:modelValue', datepickerValue.value)
 })
 
 const formattedDate = computed(() =>
@@ -42,11 +45,9 @@ const formattedDate = computed(() =>
       />
     </template>
     <v-date-picker
-      v-model="datepickerValue as Date[] | undefined"
+      v-model="datepickerValue"
       :title="pickerTitle"
       color="primary"
-      @click:save="datepickerMenu = false"
-      @click:cancel="datepickerMenu = false"
     >
       <template #header></template>
     </v-date-picker>
