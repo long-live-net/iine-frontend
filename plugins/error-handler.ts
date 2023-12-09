@@ -22,6 +22,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       })
     }
   }
+
   const handleError = async (error: any) => {
     if ('statusCode' in error && 'message' in error) {
       handleNuxtError(error)
