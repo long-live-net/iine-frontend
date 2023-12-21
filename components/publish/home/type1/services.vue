@@ -42,7 +42,7 @@ await onLoad()
               class="service-item__eyecatcher"
             />
             <div
-              class="service-item__caption"
+              class="service-item__caption ql-editor"
               v-html="htmlSanitizer((content as ServiceType).caption)"
             />
             <div class="edit-activator">
