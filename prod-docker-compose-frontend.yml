@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_BACKEND_BASEURL=${VITE_BACKEND_BASEURL}
-    image: ngzm/iine-frontend:1.0.0
+    image: ngzm/iine-frontend:1.0.1
     tty: true
     stdin_open: true
     ports:
