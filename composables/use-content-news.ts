@@ -215,7 +215,6 @@ export const useNewsForm = () => {
     publishOn: (v: Date | null) => required(v) || '公開日を入力してください',
     body: (v: string | undefined) => {
       if (!noBlankForWysiwyg(v)) return '本文を入力してください'
-      if (!maxLength(v, 1000)) return '1000文字以内で入力してください'
       return true
     },
     image: () => true,

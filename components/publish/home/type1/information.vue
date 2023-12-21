@@ -38,7 +38,7 @@ await onLoad()
         </div>
       </CommonEyecatchImage>
       <CommonContentCardBody>
-        <div v-if="informationRef?.body">
+        <div v-if="informationRef?.body" class="ql-editor">
           <div v-html="htmlSanitizer(informationRef?.body)" />
           <div class="inquire-activator">
             <PublishInquire />

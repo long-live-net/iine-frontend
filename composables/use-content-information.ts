@@ -165,7 +165,6 @@ export const useInformationForm = () => {
       maxLength(v, 50) || '50文字以内で入力してください',
     body: (v: string | undefined) => {
       if (!noBlankForWysiwyg(v)) return '本文を入力してください'
-      if (!maxLength(v, 1000)) return '1000文字以内で入力してください'
       return true
     },
     image: () => true,

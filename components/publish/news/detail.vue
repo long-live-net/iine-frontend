@@ -44,7 +44,7 @@ await onLoad(contentId)
           <h5 class="g-text-cl news-detail__title">
             <span>{{ newsRef?.title ?? '' }}</span>
           </h5>
-          <div v-if="newsRef?.body">
+          <div v-if="newsRef?.body" class="ql-editor">
             <div v-html="htmlSanitizer(newsRef?.body)" />
             <div class="inquire-activator">
               <PublishInquire />

@@ -13,23 +13,39 @@ const dialog = computed({
 </script>
 
 <template>
-  <BaseDialog v-model:modal="dialog">
+  <BaseDialog v-model:modal="dialog" persistent>
     <div class="content-edit-dialog">
       <header class="content-edit-dialog__header">
-        <slot name="header">
-          <template v-if="isUpdate">
-            <p class="mr-1">
-              <v-icon icon="mdi-pencil-circle" color="success" size="x-large" />
-            </p>
-            <h3>コンテンツの更新</h3>
-          </template>
-          <template v-else>
-            <p class="mr-1">
-              <v-icon icon="mdi-plus-circle" color="info" size="x-large" />
-            </p>
-            <h3>コンテンツの追加</h3>
-          </template>
-        </slot>
+        <div class="header-label">
+          <slot name="header">
+            <template v-if="isUpdate">
+              <p class="mr-1">
+                <v-icon
+                  icon="mdi-pencil-circle"
+                  color="success"
+                  size="x-large"
+                />
+              </p>
+              <h3>コンテンツの更新</h3>
+            </template>
+            <template v-else>
+              <p class="mr-1">
+                <v-icon icon="mdi-plus-circle" color="info" size="x-large" />
+              </p>
+              <h3>コンテンツの追加</h3>
+            </template>
+          </slot>
+        </div>
+        <div class="header-dismiss">
+          <v-btn
+            variant="text"
+            append-icon="mdi-close"
+            size="small"
+            color="primary"
+            @click="dialog = false"
+            >閉じる</v-btn
+          >
+        </div>
       </header>
       <div class="content-edit-dialog__body">
         <slot />
@@ -47,8 +63,13 @@ const dialog = computed({
   &__header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 1rem;
     border-bottom: 1px solid lightgray;
+    .header-label {
+      display: flex;
+      align-items: center;
+    }
   }
   &__body {
     padding: 1.5rem;

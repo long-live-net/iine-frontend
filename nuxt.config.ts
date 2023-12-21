@@ -1,10 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  css: [
-    '~/assets/css/main.scss',
-    'vuetify/styles',
-    '@mdi/font/css/materialdesignicons.css',
-  ],
+  css: ['~/assets/css/main.scss'],
   app: {
     head: {
       title: 'iine-t',
