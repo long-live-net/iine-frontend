@@ -56,6 +56,7 @@ const onCancel = () => {
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
+    persistent
   >
     <PublishInquireForm
       v-if="pageMode === 'input'"
