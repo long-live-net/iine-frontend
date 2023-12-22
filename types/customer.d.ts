@@ -6,6 +6,7 @@ export type LayoutTheme = 'type1' | 'type2'
  */
 export interface Customer {
   id: number
+  nickName: string
   name: string
   layoutTheme: LayoutTheme
   colorTheme?: ColorTheme

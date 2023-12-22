@@ -2,6 +2,25 @@
 defineOptions({
   name: 'DefaultLayout',
 })
+
+const { headInfo } = usePageHeadInfo()
+useHead({
+  title: headInfo.title,
+  meta: [
+    {
+      hid: 'description',
+      name: 'description',
+      content: headInfo.description,
+    },
+  ],
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: `/${headInfo.favicon}`,
+    },
+  ],
+})
 </script>
 
 <template>

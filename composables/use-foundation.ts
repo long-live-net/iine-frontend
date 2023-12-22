@@ -37,3 +37,15 @@ export const useFoundation = () => {
     customer,
   }
 }
+
+export const usePageHeadInfo = () => {
+  const { customer } = useCustomer()
+  const headInfo = {
+    title: customer.value?.name ?? 'IINE',
+    description: `${customer.value?.name ?? 'IINE'} Website`,
+    favicon: customer.value?.nickName
+      ? `favicon-${customer.value?.nickName}.ico`
+      : 'favicon.ico',
+  }
+  return { headInfo }
+}
