@@ -1,4 +1,4 @@
-FROM node:hydrogen-alpine
+FROM node:iron-alpine
 
 ARG VITE_BACKEND_BASEURL
 ENV LANG=C.UTF-8 \
