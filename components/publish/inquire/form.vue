@@ -7,9 +7,6 @@ defineEmits<{ confirm: []; cancel: [] }>()
 
 <template>
   <v-form class="inquire-email-form">
-    <div class="mb-5">
-      <h4>Eメールによるお問い合わせ</h4>
-    </div>
     <div>
       <v-text-field
         v-model="inquireForm.name.value.value"
@@ -19,7 +16,7 @@ defineEmits<{ confirm: []; cancel: [] }>()
         placeholder="入力してください"
       />
     </div>
-    <div class="mt-4">
+    <div class="mt-1">
       <v-text-field
         v-model="inquireForm.email.value.value"
         :error-messages="inquireForm.email.errorMessage.value"
@@ -28,7 +25,7 @@ defineEmits<{ confirm: []; cancel: [] }>()
         placeholder="入力してください"
       />
     </div>
-    <div class="mt-4">
+    <div class="mt-1">
       <v-text-field
         v-model="inquireForm.phone.value.value"
         :error-messages="inquireForm.phone.errorMessage.value"
@@ -37,7 +34,7 @@ defineEmits<{ confirm: []; cancel: [] }>()
         placeholder="入力してください"
       />
     </div>
-    <div class="mt-4">
+    <div class="mt-1">
       <v-textarea
         v-model="inquireForm.inquiry.value.value"
         :error-messages="inquireForm.inquiry.errorMessage.value"
@@ -47,7 +44,7 @@ defineEmits<{ confirm: []; cancel: [] }>()
         placeholder="入力してください"
       />
     </div>
-    <div class="d-flex justify-end mt-4">
+    <div class="d-flex justify-end mt-1">
       <v-btn
         prepend-icon="mdi-email-fast"
         color="primary"
