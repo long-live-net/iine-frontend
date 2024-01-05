@@ -1,7 +1,7 @@
 /**
  * Page Layout Settings
  */
-export type SectionKind = 'information' | 'news' | 'service' | 'contact'
+export type SectionKind = 'top' | 'information' | 'news' | 'service' | 'contact'
 export type PageSection = {
   baseId: string
   id: number

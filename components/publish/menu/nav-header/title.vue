@@ -1,51 +1,52 @@
 <script setup lang="ts">
-export type HeaderTitle = {
-  title: string
+type HeaderTitle = {
+  linkTo?: string | { name: string; hash?: string }
+  title?: string
   color?: string
   hoverColor?: string
-  logo?: { url: string; alt: string }
-  to?: { name: string; hash?: string }
 }
-const props = defineProps<{
-  headerTitle: HeaderTitle
-}>()
+withDefaults(defineProps<HeaderTitle>(), {
+  linkTo: '',
+  title: '',
+  color: 'white',
+  hoverColor: 'skyblue',
+})
 
-const titleColor = computed(() => props.headerTitle.color ?? 'white')
-const titleHoverColor = computed(
-  () => props.headerTitle.hoverColor ?? 'skyblue'
-)
-const titleTo = computed(
-  () => props.headerTitle.to ?? { name: 'index', hash: '#home-index-top' }
-)
+defineEmits<{ click: [] }>()
 </script>
 
 <template>
-  <h2 class="header-title">
-    <img
-      v-if="headerTitle.logo"
-      :src="headerTitle.logo.url"
-      :alt="headerTitle.logo.alt"
-      width="auto"
-      height="1.1em"
-    />
-    <nuxt-link :to="titleTo">
-      {{ headerTitle.title }}
+  <h3 class="header-title">
+    <nuxt-link v-if="linkTo" :to="linkTo">
+      <slot>
+        {{ title }}
+      </slot>
     </nuxt-link>
-  </h2>
+    <span v-else @click.stop="$emit('click')">
+      <slot>
+        {{ title }}
+      </slot>
+    </span>
+  </h3>
 </template>
 
 <style scoped lang="scss">
 .header-title {
-  font-size: 1.3rem;
-  img {
-    margin-right: 0.5rem;
-  }
+  font-weight: 900;
   :deep(a) {
+    display: inline-block;
     font-weight: 900;
-    color: v-bind(titleColor) !important;
+    color: v-bind(color) !important;
   }
   :deep(a:hover) {
-    color: v-bind(titleHoverColor) !important;
+    color: v-bind(hoverColor) !important;
+  }
+  span {
+    color: v-bind(color) !important;
+    cursor: pointer;
+    &:hover {
+      color: v-bind(hoverColor) !important;
+    }
   }
 }
 </style>
