@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import type { HeaderTitle } from '@/components/publish/menu/nav-header/title.vue'
-import type { HeaderItem } from '@/components/publish/menu/nav-header/item.vue'
-
 const { customerId, isLoggedIn } = useFoundation()
 const sidebar = ref(false)
 
 // Todo: 適当
-const headerTitle: HeaderTitle = {
+const headerTitle = {
   title: 'ロングリブネット',
   color: 'yellow',
   hoverColor: 'orange',
@@ -14,10 +11,12 @@ const headerTitle: HeaderTitle = {
 }
 
 const { domidPrefix, homeSections } = useHomeLayoutRead(customerId)
-const headerItems = computed<HeaderItem[]>(
+const headerItems = computed(
   () =>
     homeSections.value?.map((s) => ({
-      ...s,
+      id: s.id,
+      title: s.title,
+      menuTitle: s.menuTitle,
       color: 'white',
       hoverColor: 'orange',
       to: {
@@ -32,12 +31,27 @@ const headerItems = computed<HeaderItem[]>(
   <nav class="nav-header g-theme-header">
     <div class="g-block-lg">
       <div class="nav-header__menu">
-        <PublishMenuNavHeaderTitle :headerTitle="headerTitle" />
+        <PublishMenuNavHeaderTitle
+          :linkTo="headerTitle.to"
+          :title="headerTitle.title"
+          :color="headerTitle.color"
+          :hoverColor="headerTitle.hoverColor"
+        />
         <div class="row-direction">
+          <PublishMenuNavHeaderItem
+            :linkTo="{ name: 'index', hash: '#home-index-top' }"
+            color="white"
+            hoverColor="orange"
+          >
+            <v-icon icon="mdi-home" size="large" style="padding-bottom: 2px" />
+          </PublishMenuNavHeaderItem>
           <PublishMenuNavHeaderItem
             v-for="item in headerItems"
             :key="item.id"
-            :menu-item="item"
+            :linkTo="item.to"
+            :title="item.menuTitle ?? item.title"
+            :color="item.color"
+            :hoverColor="item.hoverColor"
           />
           <ClientOnly>
             <ManageCustomerUserMenu v-if="isLoggedIn" />
@@ -55,7 +69,10 @@ const headerItems = computed<HeaderItem[]>(
             @click="sidebar = !sidebar"
           />
           <PublishMenuNavHeaderTitle
-            :headerTitle="{ ...headerTitle, color: 'white' }"
+            :title="headerTitle.title"
+            color="white"
+            hoverColor="white"
+            @click="sidebar = !sidebar"
           />
         </div>
         <div>
@@ -68,11 +85,19 @@ const headerItems = computed<HeaderItem[]>(
         <teleport to="#default-layout-container">
           <BaseDrawer v-model:drawer="sidebar" color="#424242" theme="dark">
             <div class="column-direction">
-              <PublishMenuNavHeaderTitle :headerTitle="headerTitle" />
+              <PublishMenuNavHeaderTitle
+                :linkTo="headerTitle.to"
+                :title="headerTitle.title"
+                :color="headerTitle.color"
+                :hoverColor="headerTitle.hoverColor"
+              />
               <PublishMenuNavHeaderItem
                 v-for="item in headerItems"
                 :key="item.id"
-                :menu-item="item"
+                :linkTo="item.to"
+                :title="item.menuTitle ?? item.title"
+                :color="item.color"
+                :hoverColor="item.hoverColor"
               />
             </div>
           </BaseDrawer>
@@ -105,12 +130,12 @@ const headerItems = computed<HeaderItem[]>(
 .row-direction {
   display: flex;
   align-items: center;
-  column-gap: 1rem;
+  column-gap: 14px;
 }
 .column-direction {
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
+  row-gap: 16px;
   margin-top: 0.5rem;
   padding-left: 1.5rem;
   p:first-child {

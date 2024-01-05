@@ -24,8 +24,8 @@ export const useHomeLayoutRead = (customerId: Ref<number | null>) => {
     loading.value = true
     const key = `fetch_home_layout_${apiPath}_${keyExt.value}`
     try {
-      const { data, error } = await useAsyncData<PageSection[]>(key, () =>
-        $fetch(apiPath, {
+      const { data, error } = await useAsyncData(key, () =>
+        $fetch<PageSection[]>(apiPath, {
           baseURL: backendBaseUrl,
           method: 'GET',
           headers: authorizationHeader.value,
@@ -39,7 +39,7 @@ export const useHomeLayoutRead = (customerId: Ref<number | null>) => {
         baseId: d.baseId,
         id: d.id,
         customerId: d.customerId,
-        kind: d.kind,
+        kind: d.kind as PageSection['kind'],
         title: d.title,
         position: d.position,
       }))
@@ -78,8 +78,8 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
     }))
     loading.value = true
     try {
-      const { data, error } = await useAsyncData(() =>
-        $fetch(apiPath, {
+      const { error } = await useAsyncData(() =>
+        $fetch<void>(apiPath, {
           baseURL: backendBaseUrl,
           method: 'PUT',
           headers: authorizationHeader.value,
@@ -90,7 +90,7 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
       if (error.value) {
         throw error.value
       }
-      return data
+      return
     } finally {
       loading.value = false
     }
