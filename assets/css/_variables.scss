@@ -1,11 +1,19 @@
 // colors same as bootstrap theme
+$blue-darken1: #3949ab;
+$blue-darken2: #303f9f;
 $blue: #0d6efd;
+$blue-lighten1: #2979ff;
+$blue-lighten2: #42a5f5;
+$blue-lighten3: #64b5f6;
+$blue-lighten4: #90caf9;
+$blue-lighten5: #bbdefb;
+$blue-lighten6: #e3f2fd;
 $indigo: #6610f2;
 $purple: #6f42c1;
 $pink: #d63384;
 $red: #dc3545;
 $orange: #fd7e14;
-$yellow: #ffc107;
+$yellow: #ffff00;
 $gold: gold;
 $silver: silver;
 $green: #198754;
@@ -13,18 +21,34 @@ $teal: #20c997;
 $cyan: #0dcaf0;
 $skyblue: skyblue;
 $skyblue-lighten1: lightskyblue;
+$indigo-lighten4: #e8eaf6;
 
-$gray-darken2: #333333;
-$gray-darken1: #666666;
+$gray-darken3: #303030;
+$gray-darken2: #464646;
+$gray-darken1: #686868;
 $dimgray: dimgray;
 $gray: gray;
-$gray-lighten1: #999999;
-$gray-lighten2: #d3d3d3;
+$lightgray: lightgray;
+$gray-lighten1: #999;
+$gray-lighten2: #bbb;
+$gray-lighten23: #ccc;
+$gray-lighten25: #d4d4d4;
+$gray-lighten3: #ddd;
+$gray-lighten4: #eee;
 $black: black;
 $white: white;
+$whitesmoke: whitesmoke;
 
 $link-normal: #0033ff;
 $link-active: hotpink;
+
+$primary: #1976d2;
+$secondary: #e0e0e0;
+$accent: #ffab40;
+$error: #f44336;
+$info: #00acc1;
+$success: #4caf50;
+$warning: #ffff00;
 
 // grid system
 $grid-breakpoints: (
@@ -41,5 +65,6 @@ $grid-breakpoint-md: map-get($grid-breakpoints, md);
 $grid-breakpoint-lg: map-get($grid-breakpoints, lg);
 $grid-breakpoint-xl: map-get($grid-breakpoints, xl);
 
-// nav header height
+// nav header footer height
 $nav-header-height: 120px;
+$nav-footer-height: 60px;

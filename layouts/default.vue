@@ -1,29 +1,44 @@
-<script setup>
+<script setup lang="ts">
 defineOptions({
   name: 'DefaultLayout',
 })
 
-const bodyClass = 'g-theme-default'
+const { headInfo } = usePageHeadInfo()
 useHead({
-  bodyAttrs: {
-    class: bodyClass,
-  },
+  title: headInfo.title,
+  meta: [
+    {
+      hid: 'description',
+      name: 'description',
+      content: headInfo.description,
+    },
+  ],
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: `/${headInfo.favicon}`,
+    },
+  ],
 })
 </script>
 
 <template>
-  <div id="application-base-body">
+  <div id="default-layout-container">
     <header>
-      <LayoutsHeaderMenu />
+      <PublishMenuNavHeader />
     </header>
     <main>
       <slot />
     </main>
+    <footer>
+      <PublishMenuNavFooter />
+    </footer>
   </div>
 </template>
 
 <style lang="scss" scoped>
-#application-base-body {
+#default-layout-container {
   display: flex;
   flex-flow: column;
   min-height: 100vh;

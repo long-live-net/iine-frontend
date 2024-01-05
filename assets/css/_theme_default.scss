@@ -1,36 +1,44 @@
-@import '_variables.scss';
+@use 'variables.scss';
 
 .g-theme-default {
-  background-color: $gray-lighten2;
-  color: $gray-darken2;
+  background-color: variables.$gray-lighten2;
+  color: variables.$gray-darken2;
 
   a {
-    color: $link-normal;
+    color: variables.$link-normal;
   }
   a:link {
-    color: $link-normal;
+    color: variables.$link-normal;
   }
   a:hover {
-    color: $link-active;
+    color: variables.$link-active;
   }
   a:active {
-    color: $link-active;
+    color: variables.$link-active;
   }
   small {
-    color: $dimgray;
+    color: variables.$dimgray;
+  }
+  b {
+    color: variables.$gray-darken2;
+    font-weight: bolder;
   }
 
+  .g-theme-app-container {
+    background-color: variables.$gray-lighten25;
+    color: variables.$gray-darken2;
+  }
   .g-theme-header {
     background-color: rgba(64, 64, 64, 0.5);
   }
   .g-theme-footer {
-    background-color: $white;
-    color: $dimgray;
+    background-color: variables.$white;
+    color: variables.$dimgray;
   }
   .g-theme-contents-card {
-    background-color: $white;
+    background-color: variables.$white;
   }
-  .g-theme-contets-item {
+  .g-theme-contents-item {
     &__header {
       background-color: #ccccff;
     }
@@ -38,14 +46,20 @@
       background-color: lightsteelblue;
       box-shadow: 0 0 8px royalblue;
       &--notion {
-        color: $blue;
+        color: variables.$blue;
       }
     }
   }
   .g-theme-edit-contents {
-    color: $black;
+    color: variables.$black;
   }
   .g-theme-wysiwyg-editor {
     background-color: whitesmoke;
+    border-color: variables.$gray-lighten23;
+    --g-theme-wysiwyg-editor-label-color: #{variables.$gray-lighten1};
+    --g-theme-wysiwyg-editor-label-focused-color: #{variables.$gray-darken1};
+    --g-theme-wysiwyg-editor-placeholder-color: #{variables.$dimgray};
+    --g-theme-wysiwyg-editor-hovered-background-color: #{variables.$gray-lighten4};
+    --g-theme-wysiwyg-editor-focused-background-color: #{variables.$white};
   }
 }

@@ -1,18 +1,23 @@
-@import '_variables.scss';
+@use 'variables.scss';
 
 html {
   margin: 0;
   padding: 0;
-  font-size: 100%; // 16px
-  // font-size: 62.5%; // 16 * 62.5 = 10px
-  font-family: Ubuntu, 'Noto Sans JP', sans-serif;
-  background-color: $gray-lighten2;
-  color: $gray-darken2;
+  font-size: 100%;
+  // font-family: Ubuntu, 'Noto Sans JP', sans-serif;
+  // font-family: 'Noto Sans JP', 'Yu Gothic', '游ゴシック', '游ゴシック体',
+  //   'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+  // font-family: 'Avenir', 'Helvetica Neue', 'Helvetica', 'Arial',
+  //   'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', 'Meiryo',
+  //   '游ゴシック', 'Yu Gothic', sans-serif;
+  font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ',
+    'Meiryo', '游ゴシック', 'Yu Gothic', 'MS PGothic', sans-serif;
+  background-color: variables.$gray-lighten2;
+  color: variables.$gray-darken2;
 }
 body {
   margin: 0;
   padding: 0;
-  font-size: 1rem;
 }
 p {
   margin: 0;
@@ -32,15 +37,20 @@ li {
 a {
   text-decoration: none;
 }
-// a:link {
-//   text-decoration: none;
-// }
-// a:hover {
-//   text-decoration: none;
-// }
-// a:active {
-//   text-decoration: none;
-// }
+a:link {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+a:active {
+  text-decoration: none;
+}
+
+blockquote {
+  border-left: 5px solid #ddd;
+  padding-left: 1rem !important;
+}
 
 // 画面サイズに応じて表示したり非表示にしたりする
 // sm
@@ -62,7 +72,7 @@ a {
   text-align: center;
 }
 
-@media only screen and (max-width: $grid-breakpoint-md) {
+@media only screen and (max-width: variables.$grid-breakpoint-md) {
   .g-block-lg,
   .g-inline-block-lg {
     display: none;
@@ -76,10 +86,4 @@ a {
   .g-text-cl {
     text-align: left;
   }
-}
-
-// wysiwyg-editor テーマ対応
-.g-theme-wysiwyg-editor {
-  --theme-wysiwyg-editor-toolbar-color: currentColor;
-  --theme-wysiwyg-editor-toolbar-active-color: currentColor;
 }

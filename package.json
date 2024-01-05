@@ -2,26 +2,40 @@
   "name": "nuxt-app",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "build": "nuxt build --mode production",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate --mode production",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/devtools": "latest",
-    "@types/node": "^18",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
-    "@vue/eslint-config-prettier": "^7.1.0",
-    "@vue/eslint-config-typescript": "^11.0.3",
-    "eslint": "^8.44.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-vue": "^9.15.1",
-    "nuxt": "^3.6.2",
-    "prettier": "^3.0.0"
+    "@mdi/font": "^7.3.67",
+    "@nuxt/devtools": "^1.0.6",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
+    "@types/node": "^20",
+    "@types/sanitize-html": "^2.9.5",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "@vue/eslint-config-typescript": "^12.0.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-prettier": "^5.1.1",
+    "eslint-plugin-vue": "^9.19.2",
+    "nuxt": "^3.8.2",
+    "prettier": "^3.1.1"
   },
   "dependencies": {
-    "sass": "^1.63.6"
+    "@pinia/nuxt": "^0.5.1",
+    "@types/lodash": "^4.14.202",
+    "@vueup/vue-quill": "^1.2.0",
+    "browser-image-compression": "^2.0.2",
+    "dayjs": "^1.11.10",
+    "lodash": "^4.17.21",
+    "pinia": "^2.1.7",
+    "sanitize-html": "^2.11.0",
+    "sass": "^1.69.5",
+    "vee-validate": "^4.12.3",
+    "vuedraggable": "^4.1.0",
+    "vuetify": "^3.4.8"
   }
 }
