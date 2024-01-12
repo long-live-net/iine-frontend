@@ -1,11 +1,14 @@
 <script setup lang="ts">
-const topButtonImage = '/image/arrow-up4.png'
+const topButtonImage = '/images/arrow-up2.png'
 </script>
 
 <template>
   <div id="home-index-top">
     <PublishHome />
   </div>
+  <client-only>
+    <CommonTopToButton :src="topButtonImage" />
+  </client-only>
 </template>
 
 <style scoped lang="scss">

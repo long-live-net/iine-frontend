@@ -46,7 +46,7 @@ await loadNewses()
                 </span>
                 <CommonNewsCategoryBadge
                   :category="(content as NewsType).category"
-                  style="margin-left: 0.5rem"
+                  class="ml-2"
                 />
               </div>
               <div class="news-item__title">
