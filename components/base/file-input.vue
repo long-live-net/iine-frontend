@@ -62,6 +62,10 @@ const invalidMessages = computed<string[] | null>(() =>
       : [props.errorMessages]
     : null
 )
+
+const imageSrc = computed(() =>
+  props.imageUrl?.length ? props.imageUrl : '/images/no-image.jpg'
+)
 </script>
 
 <template>
@@ -79,8 +83,7 @@ const invalidMessages = computed<string[] | null>(() =>
         @drop.prevent="onDropFile"
       >
         <div class="file-input__drag-drop--img">
-          <img v-if="imageUrl?.length" :src="imageUrl" :alt="imageUrl" />
-          <img v-else src="~/assets/image/no-image.jpg" alt="no-image" />
+          <img :src="imageSrc" :alt="imageUrl" />
           <BaseOverlayLiner :overlay="compressing" />
         </div>
         <div class="file-input__drag-drop--nav">

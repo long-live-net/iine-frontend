@@ -25,12 +25,12 @@ export const useContentRead = <T extends ContentGetApi>(
    * @param contentId 未設定時は最新データを取得する
    */
   const get = async (contentId?: number | null) => {
+    contentDataRef.value = null
     const key = `get_content_${apiPath}_${keyExt.value}`
     const url =
       contentId === undefined || contentId === null
         ? `${apiPath}/recent`
         : `${apiPath}/${contentId}`
-
     const { data, error } = await useAsyncData<T>(key, () =>
       $fetch(url, {
         baseURL: backendBaseUrl,
@@ -39,7 +39,6 @@ export const useContentRead = <T extends ContentGetApi>(
       })
     )
     if (error.value) {
-      contentDataRef.value = null
       throw error.value
     }
     if (data.value) {
@@ -58,6 +57,7 @@ export const useContentRead = <T extends ContentGetApi>(
     sort: ListSort = {},
     pager: ListPager = { page: 1, limit: 20 }
   ) => {
+    contentListRef.value = null
     const key = `get_list_content_${apiPath}_${keyExt.value}`
     const { data, error } = await useAsyncData(key, () =>
       $fetch(apiPath, {
@@ -72,7 +72,6 @@ export const useContentRead = <T extends ContentGetApi>(
       })
     )
     if (error.value) {
-      contentListRef.value = null
       throw error.value
     }
     if (data.value) {
@@ -223,7 +222,7 @@ export const useContentWrite = <
    */
   const remove = async (contentId: number) => {
     const { data, error } = await useAsyncData(() =>
-      $fetch(`${apiPath}/${contentId}`, {
+      $fetch<void>(`${apiPath}/${contentId}`, {
         baseURL: backendBaseUrl,
         headers: authorizationHeader.value,
         method: 'DELETE',
