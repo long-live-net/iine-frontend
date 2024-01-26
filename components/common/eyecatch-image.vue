@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ImageSettings } from '@/types/content'
-import noImage from '@/assets/image/no-image-g.png'
 
 type EyeCatchImageProps = {
   url?: string
@@ -8,7 +7,7 @@ type EyeCatchImageProps = {
   circle?: boolean
   round?: boolean
 }
-withDefaults(defineProps<EyeCatchImageProps>(), {
+const props = withDefaults(defineProps<EyeCatchImageProps>(), {
   url: '',
   settings: () => ({
     lgSize: 'cover',
@@ -21,22 +20,13 @@ withDefaults(defineProps<EyeCatchImageProps>(), {
   circle: false,
   round: false,
 })
+
+const noImage = '/images/no-image-g.png'
+const bkImage = computed(() => `url(${props.url.length ? props.url : noImage})`)
 </script>
 
 <template>
-  <div
-    class="eyecatch-image"
-    :class="{ circle: circle, round: round }"
-    :style="{
-      '--background-image': `url(${url.length ? url : noImage})`,
-      '--background-size-lg': settings.lgSize,
-      '--background-size-sm': settings.smSize,
-      '--background-position-lg': settings.lgPosition,
-      '--background-position-sm': settings.smPosition,
-      '--background-parallax-lg': settings.lgParallax,
-      '--background-parallax-sm': settings.smParallax,
-    }"
-  >
+  <div class="eyecatch-image" :class="{ circle: circle, round: round }">
     <slot />
   </div>
 </template>
@@ -44,11 +34,10 @@ withDefaults(defineProps<EyeCatchImageProps>(), {
 <style lang="scss" scoped>
 .eyecatch-image {
   background-repeat: no-repeat;
-  background-image: var(--background-image);
-  // background-image: url('~/assets/image/no-image.jpg');
-  background-size: var(--background-size-lg);
-  background-position: var(--background-position-lg);
-  background-attachment: var(--background-parallax-lg);
+  background-image: v-bind('bkImage');
+  background-size: v-bind('settings.lgSize');
+  background-position: v-bind('settings.lgPosition');
+  background-attachment: v-bind('settings.lgParallax');
 }
 .circle {
   border-radius: 50%;
@@ -61,9 +50,9 @@ withDefaults(defineProps<EyeCatchImageProps>(), {
 
 @media only screen and (max-width: $grid-breakpoint-md) {
   .eyecatch-image {
-    background-size: var(--background-size-sm);
-    background-position: var(--background-position-sm);
-    background-attachment: var(--background-parallax-sm);
+    background-size: v-bind('settings.smSize');
+    background-position: v-bind('settings.smPosition');
+    background-attachment: v-bind('settings.smParallax');
   }
 }
 </style>
