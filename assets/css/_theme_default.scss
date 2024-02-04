@@ -1,7 +1,7 @@
 @use 'variables.scss';
 
 .g-theme-default {
-  background-color: variables.$gray-lighten2;
+  background-color: variables.$gray-lighten25;
   color: variables.$gray-darken2;
 
   a {
@@ -29,7 +29,8 @@
     color: variables.$gray-darken2;
   }
   .g-theme-header {
-    background-color: rgba(64, 64, 64, 0.5);
+    background-color: variables.$gray-darken3;
+    opacity: 0.75;
   }
   .g-theme-footer {
     background-color: variables.$white;
@@ -37,14 +38,15 @@
   }
   .g-theme-contents-card {
     background-color: variables.$white;
+    box-shadow: 2px 2px 16px variables.$gray-lighten1;
   }
   .g-theme-contents-item {
     &__header {
-      background-color: #ccccff;
+      background-color: variables.$blue-lighten6;
     }
     &__draggable {
-      background-color: lightsteelblue;
-      box-shadow: 0 0 8px royalblue;
+      background-color: variables.$gray-lighten25;
+      box-shadow: 0 0 8px variables.$gray-darken1;
       &--notion {
         color: variables.$blue;
       }

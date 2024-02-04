@@ -1,11 +1,11 @@
 @use 'variables.scss';
 
 .g-theme-dark {
-  background-color: variables.$gray-darken2;
+  background-color: variables.$gray-darken3;
   color: variables.$white;
 
   a {
-    color: variables.$blue-lighten2;
+    color: variables.$blue-lighten3;
   }
   a:hover {
     color: variables.$link-active;
@@ -18,29 +18,31 @@
   }
 
   .g-theme-app-container {
-    background-color: variables.$gray-darken2;
+    background-color: variables.$gray-darken3;
     color: variables.$white;
   }
 
   .g-theme-header {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: variables.$gray-darken5;
+    opacity: 0.75;
     color: variables.$white;
   }
   .g-theme-footer {
-    background-color: variables.$black;
+    background-color: variables.$gray-darken5;
     color: variables.$white;
   }
   .g-theme-contents-card {
-    background-color: variables.$black;
+    background-color: variables.$gray-darken5;
     color: variables.$white;
+    box-shadow: 2px 2px 16px variables.$black;
   }
   .g-theme-contents-item {
     &__header {
-      background-color: variables.$gray-darken1;
+      background-color: variables.$blue-lighten2;
     }
     &__draggable {
-      background-color: #002244;
-      box-shadow: 0 0 8px lightsteelblue;
+      background-color: variables.$gray-darken3;
+      box-shadow: 0 0 8px variables.$gray-lighten1;
       &--notion {
         color: variables.$white;
       }
@@ -50,13 +52,13 @@
     color: variables.$black;
   }
   .g-theme-wysiwyg-editor {
-    background-color: variables.$gray-darken3;
+    background-color: variables.$gray-darken4;
     color: variables.$white;
     border-color: variables.$gray-darken2;
     --g-theme-wysiwyg-editor-label-color: #{variables.$gray-lighten1};
     --g-theme-wysiwyg-editor-label-focused-color: #{variables.$white};
     --g-theme-wysiwyg-editor-placeholder-color: #{variables.$gray-lighten1};
-    --g-theme-wysiwyg-editor-hovered-background-color: #{variables.$gray-darken2};
-    --g-theme-wysiwyg-editor-focused-background-color: #{variables.$black};
+    --g-theme-wysiwyg-editor-hovered-background-color: #{variables.$gray-darken3};
+    --g-theme-wysiwyg-editor-focused-background-color: #{variables.$gray-darken5};
   }
 }
