@@ -74,12 +74,12 @@ await onLoad(contentId)
       </template>
       <template #outsider>
         <div v-if="newsPreNextIdRefRef?.preId" class="nav-pre">
-          <nuxt-link :to="`./${newsPreNextIdRefRef.preId}`">
+          <nuxt-link :to="`/news/${newsPreNextIdRefRef.preId}`">
             <v-icon color="primary" icon="mdi-chevron-left" />前のNEWS
           </nuxt-link>
         </div>
         <div v-if="newsPreNextIdRefRef?.nextId" class="nav-next">
-          <nuxt-link :to="`./${newsPreNextIdRefRef.nextId}`">
+          <nuxt-link :to="`/news/${newsPreNextIdRefRef.nextId}`">
             次のNEWS<v-icon color="primary" icon="mdi-chevron-right" />
           </nuxt-link>
         </div>
