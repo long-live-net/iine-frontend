@@ -27,7 +27,7 @@ watch(isWholeData, () => {
   loadNewses()
 })
 
-loadNewses()
+await loadNewses()
 </script>
 
 <template>
@@ -46,7 +46,7 @@ loadNewses()
                     )
                   }}
                 </span>
-                <CommonNewsCategoryBadge
+                <PublishNewsCategoryBadge
                   :category="(content as NewsType).category"
                   class="ml-2"
                 />

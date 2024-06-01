@@ -58,7 +58,7 @@ watch(
     loadNewses()
   }
 )
-loadNewses()
+await loadNewses()
 </script>
 
 <template>
