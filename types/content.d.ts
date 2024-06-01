@@ -86,6 +86,14 @@ export interface ContactForm extends ContentForm {
   body: string
 }
 
+/*
+ * Pre Next ID 取得時のレスポンスデータ
+ */
+export interface ContentPreNextId {
+  preId: number | null
+  nextId: number | null
+}
+
 /**
  * ContentListOption
  */

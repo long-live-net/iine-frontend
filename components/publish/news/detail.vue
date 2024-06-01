@@ -2,12 +2,13 @@
 const { customerId, canEdit } = useFoundation()
 const {
   newsRef,
+  newsPreNextIdRefRef,
+  loading,
   onLoad,
   onCreate,
   onUpdate,
   onRemove,
   onUpdateImageSetting,
-  loading,
 } = useNewsActions(customerId)
 
 const route = useRoute()
@@ -16,25 +17,28 @@ await onLoad(contentId)
 </script>
 
 <template>
-  <CommonContentCard class="news-detail">
-    <CommonContentWrap :loading="loading">
-      <CommonEyecatchImage
-        v-if="newsRef?.image"
-        :url="newsRef?.image?.url"
-        :settings="newsRef?.image?.settings"
-        class="eyecatcher"
-      >
-        <div v-if="canEdit && newsRef?.image?.settings" class="image-settings">
-          <ManageContentImageSetting
-            :settings="newsRef.image.settings"
-            @update="onUpdateImageSetting"
-          />
-        </div>
-      </CommonEyecatchImage>
-      <CommonContentCardBody>
-        <template v-if="newsRef?.id">
-          <div class="news-detail__header">
-            <CommonNewsCategoryBadge :category="newsRef.category" small />
+  <CommonContentWrap :loading="loading">
+    <CommonContentCard class="news-detail">
+      <template #default>
+        <CommonEyecatchImage
+          v-if="newsRef?.image"
+          :url="newsRef?.image?.url"
+          :settings="newsRef?.image?.settings"
+          class="eyecatcher"
+        >
+          <div
+            v-if="canEdit && newsRef?.image?.settings"
+            class="image-settings"
+          >
+            <ManageContentImageSetting
+              :settings="newsRef.image.settings"
+              @update="onUpdateImageSetting"
+            />
+          </div>
+        </CommonEyecatchImage>
+        <CommonContentCardBody>
+          <div v-if="newsRef?.id" class="news-detail__header">
+            <PublishNewsCategoryBadge :category="newsRef.category" small />
             <p>
               <small>{{
                 formatLocalDate(newsRef.publishOn, 'YYYY/MM/DD')
@@ -50,26 +54,38 @@ await onLoad(contentId)
               <PublishInquire />
             </div>
           </div>
-        </template>
-        <div v-else class="no-items">
-          <p>データがありません</p>
-          <div v-if="canEdit">
-            <ManageContentNews
-              activaterLabel="コンテンツを登録してください"
-              @create="onCreate"
-            />
+          <div v-else class="no-items">
+            <p>データがありません</p>
+            <div v-if="canEdit">
+              <ManageContentNews
+                activaterLabel="コンテンツを登録してください"
+                @create="onCreate"
+              />
+            </div>
           </div>
+        </CommonContentCardBody>
+        <div v-if="canEdit && newsRef?.id" class="edit-activator">
+          <ManageContentNews
+            :news-data="newsRef"
+            @update="onUpdate"
+            @remove="onRemove"
+          />
         </div>
-      </CommonContentCardBody>
-      <div v-if="canEdit && newsRef?.id" class="edit-activator">
-        <ManageContentNews
-          :news-data="newsRef"
-          @update="onUpdate"
-          @remove="onRemove"
-        />
-      </div>
-    </CommonContentWrap>
-  </CommonContentCard>
+      </template>
+      <template #outsider>
+        <div v-if="newsPreNextIdRefRef?.preId" class="nav-pre">
+          <nuxt-link :to="`/news/${newsPreNextIdRefRef.preId}`">
+            <v-icon color="primary" icon="mdi-chevron-left" />前のNEWS
+          </nuxt-link>
+        </div>
+        <div v-if="newsPreNextIdRefRef?.nextId" class="nav-next">
+          <nuxt-link :to="`/news/${newsPreNextIdRefRef.nextId}`">
+            次のNEWS<v-icon color="primary" icon="mdi-chevron-right" />
+          </nuxt-link>
+        </div>
+      </template>
+    </CommonContentCard>
+  </CommonContentWrap>
 </template>
 
 <style scoped lang="scss">
@@ -107,6 +123,16 @@ $eyecatcher-height-sm: 600px;
       color: $accent;
     }
   }
+  .nav-pre {
+    position: absolute;
+    bottom: -3.5rem;
+    left: 1rem;
+  }
+  .nav-next {
+    position: absolute;
+    bottom: -3.5rem;
+    right: 1rem;
+  }
 }
 .eyecatcher {
   position: relative;
@@ -125,7 +151,16 @@ $eyecatcher-height-sm: 600px;
     right: 1rem;
   }
 }
+
 @media only screen and (max-width: $grid-breakpoint-md) {
+  .news-detail {
+    .nav-pre {
+      bottom: -2.75rem;
+    }
+    .nav-next {
+      bottom: -2.75rem;
+    }
+  }
   .eyecatcher {
     height: 50vh;
     max-height: $eyecatcher-height-sm;

@@ -80,6 +80,14 @@ export type ListPager = { page: number; limit: number }
  */
 export type ContentListResponse<T> = { list: T[]; total: number }
 
+/*
+ * Pre Next ID 取得時のレスポンスデータ
+ */
+export type ContentPreNextId = {
+  preId: number | null
+  nextId: number | null
+}
+
 /**
  * リストポジション更新時で使用するPositionデータ
  */

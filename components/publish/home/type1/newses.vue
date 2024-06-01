@@ -14,11 +14,13 @@ const {
   loading,
 } = useNewsListActions(customerId)
 
+filter.value = { publishOn: true }
+sort.value = { publishOn: -1 }
+pager.value = { page: 1, limit: 6 }
+
 const isWholeData = ref(false)
 const loadNewses = async () => {
   filter.value = { publishOn: !isWholeData.value }
-  sort.value = { publishOn: -1 }
-  pager.value = { page: 1, limit: 6 }
   await onLoad()
 }
 watch(isWholeData, () => {
@@ -44,7 +46,7 @@ await loadNewses()
                     )
                   }}
                 </span>
-                <CommonNewsCategoryBadge
+                <PublishNewsCategoryBadge
                   :category="(content as NewsType).category"
                   class="ml-2"
                 />
