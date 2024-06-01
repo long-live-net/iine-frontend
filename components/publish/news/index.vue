@@ -8,10 +8,12 @@ const {
   pager,
   newsListRef,
   newsTotalRef,
+  loading,
   onLoad,
   onCreate,
   onUpdate,
   onRemove,
+  setListQueries,
 } = useNewsListActions(customerId)
 
 const page = ref(1)
@@ -22,6 +24,11 @@ const loadNewses = async () => {
   sort.value = { publishOn: -1 }
   pager.value = { page: page.value, limit: pageLimit.value }
   await onLoad()
+  setListQueries({
+    filter: filter.value,
+    sort: sort.value,
+    pager: pager.value,
+  })
 }
 
 watch(isWholeData, () => {
@@ -55,57 +62,62 @@ await loadNewses()
 </script>
 
 <template>
-  <CommonContentCard class="news-list">
-    <CommonContentCardBody>
-      <CommonContentList v-if="newsListRef?.length" :contents="newsListRef">
-        <template #default="{ content }">
-          <div class="news-item">
-            <div class="news-item__header g-theme-contents-item__header">
-              <span>
-                {{
-                  formatLocalDate((content as NewsType).publishOn, 'YYYY/MM/DD')
-                }}
-              </span>
-              <CommonNewsCategoryBadge
-                :category="(content as NewsType).category"
-                style="margin-left: 0.5rem"
-              />
+  <CommonContentWrap :loading="loading">
+    <CommonContentCard class="news-list">
+      <CommonContentCardBody>
+        <CommonContentList v-if="newsListRef?.length" :contents="newsListRef">
+          <template #default="{ content }">
+            <div class="news-item">
+              <div class="news-item__header g-theme-contents-item__header">
+                <span>
+                  {{
+                    formatLocalDate(
+                      (content as NewsType).publishOn,
+                      'YYYY/MM/DD'
+                    )
+                  }}
+                </span>
+                <PublishNewsCategoryBadge
+                  :category="(content as NewsType).category"
+                  style="margin-left: 0.5rem"
+                />
+              </div>
+              <div class="news-item__title">
+                <nuxt-link :to="`/news/${content.id}`">
+                  {{ content.title }}
+                </nuxt-link>
+              </div>
+              <div v-if="canEdit" class="edit-activator">
+                <ManageContentNews
+                  :newsData="content as NewsType"
+                  activaterSize="x-small"
+                  @update="onUpdate"
+                  @remove="onRemove"
+                />
+              </div>
             </div>
-            <div class="news-item__title">
-              <nuxt-link :to="`/news/${content.id}`">
-                {{ content.title }}
-              </nuxt-link>
-            </div>
-            <div v-if="canEdit" class="edit-activator">
-              <ManageContentNews
-                :newsData="content as NewsType"
-                activaterSize="x-small"
-                @update="onUpdate"
-                @remove="onRemove"
-              />
-            </div>
-          </div>
-        </template>
-      </CommonContentList>
-      <div v-else class="no-items">
-        <p>データがありません</p>
+          </template>
+        </CommonContentList>
+        <div v-else class="no-items">
+          <p>データがありません</p>
+        </div>
+        <div v-if="canEdit" class="whole-switch">
+          <ManageContentNewsWholeSwitch v-model="isWholeData" />
+        </div>
+      </CommonContentCardBody>
+      <div class="news-list__action">
+        <BasePagination
+          v-model:page="page"
+          :limit="pageLimit"
+          :total="newsTotalRef ?? 1"
+          :total-visible="7"
+        />
       </div>
-      <div v-if="canEdit" class="whole-switch">
-        <ManageContentNewsWholeSwitch v-model="isWholeData" />
+      <div v-if="canEdit && newsListRef?.length" class="create-activator">
+        <ManageContentNews @create="onCreate" />
       </div>
-    </CommonContentCardBody>
-    <div class="news-list__action">
-      <BasePagination
-        v-model:page="page"
-        :limit="pageLimit"
-        :total="newsTotalRef ?? 1"
-        :total-visible="7"
-      />
-    </div>
-    <div v-if="canEdit && newsListRef?.length" class="create-activator">
-      <ManageContentNews @create="onCreate" />
-    </div>
-  </CommonContentCard>
+    </CommonContentCard>
+  </CommonContentWrap>
 </template>
 
 <style lang="scss" scoped>

@@ -27,19 +27,7 @@ watch(
 </script>
 
 <template>
-  <div class="nav-bread-crumbs">
+  <div>
     <BaseBreadCrumb :items="items" />
   </div>
 </template>
-
-<style scoped lang="scss">
-.nav-bread-crumbs {
-  margin-bottom: 2.5rem;
-}
-
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .nav-bread-crumbs {
-    margin-bottom: 0;
-  }
-}
-</style>
