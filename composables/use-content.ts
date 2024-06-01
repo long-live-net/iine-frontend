@@ -7,6 +7,7 @@ import type {
   ListSort,
   ListPager,
   ContentListResponse,
+  ContentPreNextId,
   ContentPosition,
 } from '@/types/content-api'
 
@@ -16,6 +17,7 @@ export const useContentRead = <T extends ContentGetApi>(
 ) => {
   const contentDataRef: Ref<T | null> = ref(null)
   const contentListRef: Ref<ContentListResponse<T> | null> = ref(null)
+  const preNextIdRef: Ref<ContentPreNextId | null> = ref(null)
 
   const keyExt = ref(1)
   const nextKey = () => keyExt.value++
@@ -112,14 +114,49 @@ export const useContentRead = <T extends ContentGetApi>(
     contentDataRef.value.image = { url, settings }
   }
 
+  /**
+   * get Pre and Next ContentId
+   * @param currentId 現在の ContentId
+   * @param filter 検索フィルタ
+   * @param sort ソートキー
+   */
+  const getPreNextId = async (
+    currentId: number,
+    filter: ListFilter = {},
+    sort: ListSort = {}
+  ) => {
+    preNextIdRef.value = null
+    const key = `get_pre_next_id_${apiPath}_${keyExt.value}`
+    const url = `${apiPath}/${currentId}/pre-next-id`
+    const { data, error } = await useAsyncData(key, () =>
+      $fetch(url, {
+        baseURL: backendBaseUrl,
+        method: 'GET',
+        params: {
+          customerId: customerId.value,
+          filter: JSON.stringify(filter),
+          sort: JSON.stringify(sort),
+        },
+      })
+    )
+    if (error.value) {
+      throw error.value
+    }
+    if (data.value) {
+      preNextIdRef.value = data.value as ContentPreNextId
+    }
+  }
+
   return {
     nextKey,
     get,
     getList,
     setListPositions,
     setImageSettings,
+    getPreNextId,
     contentDataRef: readonly(contentDataRef),
     contentListRef: readonly(contentListRef),
+    preNextIdRef: readonly(preNextIdRef),
   }
 }
 

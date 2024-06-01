@@ -1,6 +1,11 @@
 <template>
-  <div class="contents-card g-theme-contents-card">
-    <slot />
+  <div class="contents-card-wrap">
+    <div class="contents-card g-theme-contents-card">
+      <slot />
+    </div>
+    <div v-if="$slots.outsider">
+      <slot name="outsider" />
+    </div>
   </div>
 </template>
 
@@ -8,18 +13,22 @@
 $contents-card-max-width: 1140px;
 $contents-card-min-height: 240px;
 
-.contents-card {
+.contents-card-wrap {
   width: 100%;
   max-width: $contents-card-max-width;
   min-height: $contents-card-min-height;
   margin: 0 auto;
-  overflow: hidden;
+  .contents-card {
+    overflow: hidden;
+  }
 }
 
 @media only screen and (min-width: $grid-breakpoint-md) {
-  .contents-card {
+  .contents-card-wrap {
     width: 90%;
-    border-radius: 12px;
+    .contents-card {
+      border-radius: 12px;
+    }
   }
 }
 </style>

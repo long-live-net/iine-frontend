@@ -1,5 +1,10 @@
 import { useForm, useField } from 'vee-validate'
-import type { NewsType, NewsForm, ImageSettings } from '@/types/content'
+import type {
+  NewsType,
+  NewsForm,
+  ImageSettings,
+  ContentPreNextId,
+} from '@/types/content'
 import type {
   NewsGetApi,
   NewsSaveApi,
@@ -16,8 +21,10 @@ const useNewsRead = (customerId: Ref<number | null>) => {
     get,
     getList,
     setImageSettings,
+    getPreNextId,
     contentDataRef,
     contentListRef,
+    preNextIdRef,
   } = useContentRead<NewsGetApi>(customerId, apiUrl)
   const loading = ref(false)
   const newsRef = computed<NewsType | null>(() => {
@@ -95,14 +102,32 @@ const useNewsRead = (customerId: Ref<number | null>) => {
     }
   }
 
+  const newsPreNextIdRefRef = computed<ContentPreNextId | null>(
+    () => preNextIdRef.value
+  )
+  const getNewsPreNextId = async (
+    currentId: number,
+    filter: ListFilter,
+    sort: ListSort
+  ) => {
+    try {
+      loading.value = true
+      await getPreNextId(currentId, filter, sort)
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     nextKey,
     getNews,
     getNewsList,
     setNewsImageSettings,
+    getNewsPreNextId,
     newsRef,
     newsListRef,
     newsTotalRef,
+    newsPreNextIdRefRef,
     loading,
   }
 }
@@ -268,6 +293,18 @@ export const useNewsForm = () => {
   }
 }
 
+const useNewsListQueriesStore = () => {
+  const filter = useState<ListFilter>('newsListFilter', () => ({
+    publishOn: true,
+  }))
+  const sort = useState<ListSort>('newsListSort', () => ({ publishOn: -1 }))
+  const pager = useState<ListPager>('newsListPager', () => ({
+    page: 1,
+    limit: 20,
+  }))
+  return { filter, sort, pager }
+}
+
 /**
  * news list API アクションサービス
  * @param customerId
@@ -276,7 +313,6 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
   const filter = ref<ListFilter>({})
   const sort = ref<ListSort>({ id: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })
-
   const {
     nextKey,
     getNewsList,
@@ -284,15 +320,15 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
     newsTotalRef,
     loading: readLoading,
   } = useNewsRead(customerId)
-
   const {
     createNews,
     updateNews,
     removeNews,
     loading: writeLoading,
   } = useNewsWrite(customerId)
-
   const { addSnackber } = useSnackbars()
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
 
   const onLoad = async () => {
     await getNewsList(filter.value, sort.value, pager.value)
@@ -327,7 +363,16 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
     getNewsList(filter.value, sort.value, pager.value)
   }
 
-  const loading = computed(() => readLoading.value || writeLoading.value)
+  const listQueries = useNewsListQueriesStore()
+  const setListQueries = (queries: {
+    filter: ListFilter
+    sort: ListSort
+    pager: ListPager
+  }) => {
+    listQueries.filter.value = queries.filter
+    listQueries.sort.value = queries.sort
+    listQueries.pager.value = queries.pager
+  }
 
   return {
     filter,
@@ -335,11 +380,12 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
     pager,
     newsListRef,
     newsTotalRef,
+    loading,
     onLoad,
     onCreate,
     onUpdate,
     onRemove,
-    loading,
+    setListQueries,
   }
 }
 
@@ -352,7 +398,9 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     nextKey,
     getNews,
     setNewsImageSettings,
+    getNewsPreNextId,
     newsRef,
+    newsPreNextIdRefRef,
     loading: readLoading,
   } = useNewsRead(customerId)
 
@@ -399,6 +447,13 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     getNews()
   }
 
+  const { filter, sort } = useNewsListQueriesStore()
+  watch(newsRef, () => {
+    if (newsRef.value) {
+      getNewsPreNextId(newsRef.value.id, filter.value, sort.value)
+    }
+  })
+
   const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
     if (!newsRef.value?.id) return
 
@@ -412,6 +467,7 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
 
   return {
     newsRef,
+    newsPreNextIdRefRef,
     onLoad,
     onCreate,
     onUpdate,
