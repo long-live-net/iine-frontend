@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { NewsType, NewsForm } from '@/types/content'
-import { newsCategory2Label } from '@/composables/use-news-category'
+import { newsCategory2Label } from '@/types/news-category'
 
 const props = defineProps<{
   newsData?: NewsType | null

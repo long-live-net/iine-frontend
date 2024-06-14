@@ -36,17 +36,16 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   }
 
+  nuxtApp.hook('vue:error', (error) => {
+    console.error('--- errorHandler ---', error)
+    handleError(error)
+  })
   /**
    * Note: === nuxt3ノウハウメモ ===
    * nuxtApp.hook('vue:error' ....) で定義すると
    * Unhandled error となってしまうため注意すること
    *
-  nuxtApp.hook('vue:error', (error) => {
-    console.error('--- errorHandler ---', error)
-    handleError(error)
-  })
-  */
-
+   */
   nuxtApp.vueApp.config.errorHandler = async (error /* instance, info */) => {
     console.error('--- errorHandler ---', error)
     handleError(error)

@@ -10,6 +10,7 @@ const {
   newsTotalRef,
   loading,
   onLoad,
+  getList,
   onCreate,
   onUpdate,
   onRemove,
@@ -19,11 +20,11 @@ const {
 const page = ref(1)
 const pageLimit = ref(20)
 const isWholeData = ref(false)
-const loadNewses = async () => {
+const getNewses = async () => {
   filter.value = { publishOn: !isWholeData.value }
   sort.value = { publishOn: -1 }
   pager.value = { page: page.value, limit: pageLimit.value }
-  await onLoad()
+  await getList()
   setListQueries({
     filter: filter.value,
     sort: sort.value,
@@ -31,9 +32,9 @@ const loadNewses = async () => {
   })
 }
 
-watch(isWholeData, () => {
+watch(isWholeData, async () => {
   page.value = 1
-  loadNewses()
+  await getNewses()
 })
 
 const route = useRoute()
@@ -48,17 +49,21 @@ watch(page, () => {
 })
 watch(
   () => route.query,
-  () => {
+  async () => {
     if (page.value != route.query?.page) {
       page.value = route.query?.page ?? 1
     }
     if (pageLimit.value != route.query?.limit) {
       pageLimit.value = route.query?.limit ?? 20
     }
-    loadNewses()
+    await getNewses()
   }
 )
-await loadNewses()
+
+filter.value = { publishOn: !isWholeData.value }
+sort.value = { publishOn: -1 }
+pager.value = { page: page.value, limit: pageLimit.value }
+await onLoad()
 </script>
 
 <template>
