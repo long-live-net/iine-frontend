@@ -104,18 +104,14 @@ export const useUpdatePassword = () => {
   const updatePassword = async (newPassword: string) => {
     loading.value = true
     try {
-      const { data, error } = await useAsyncData(() =>
-        $fetch(apiPath, {
-          baseURL: backendBaseUrl,
-          headers: authorizationHeader.value,
-          method: 'PUT',
-          body: { password: newPassword },
-        })
-      )
-      if (error.value) {
-        throw error.value
-      }
-      return data
+      const data = await $fetch(apiPath, {
+        baseURL: backendBaseUrl,
+        headers: authorizationHeader.value,
+        method: 'PUT',
+        body: { password: newPassword },
+      })
+    } catch (e) {
+      throw createError(e as Error)
     } finally {
       loading.value = false
     }

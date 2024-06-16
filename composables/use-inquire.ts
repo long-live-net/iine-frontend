@@ -65,18 +65,14 @@ export const useInquireSend = (customerId: Ref<number | null>) => {
   const sendInquire = async (inquire: InquireMail) => {
     loading.value = true
     try {
-      const { data, error } = await useAsyncData(() =>
-        $fetch(apiPath, {
-          baseURL: backendBaseUrl,
-          method: 'POST',
-          params: { customerId: customerId.value },
-          body: inquire,
-        })
-      )
-      if (error.value) {
-        throw error.value
-      }
-      return data
+      const data = await $fetch(apiPath, {
+        baseURL: backendBaseUrl,
+        method: 'POST',
+        params: { customerId: customerId.value },
+        body: inquire,
+      })
+    } catch (e) {
+      throw createError(e as Error)
     } finally {
       loading.value = false
     }

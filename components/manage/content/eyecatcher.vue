@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { EyecatchType, EyecatchForm } from '@/types/content'
-import { useEyecatchForm } from '~/composables/use-content-eyecatch'
 
 const props = defineProps<{
   eyecatchData?: EyecatchType | null

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { newsCategory2Label } from '@/composables/use-news-category'
-import type { NewsCategory2Label } from '@/composables/use-news-category'
+import { newsCategory2Label } from '@/types/news-category'
+import type { NewsCategory2Label } from '@/types/news-category'
 
 const props = defineProps<{
   category: NewsCategory2Label
