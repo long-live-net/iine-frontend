@@ -1,6 +1,6 @@
 import { useForm, useField } from 'vee-validate'
 import type { EyecatchType, EyecatchForm, ImageSettings } from '@/types/content'
-import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/content-api'
+import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/API/content-api'
 
 const apiUrl = '/eyecatches'
 const useEyecatchContent = (customerId: Ref<number | null>) => {

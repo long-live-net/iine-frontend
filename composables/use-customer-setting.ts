@@ -3,7 +3,22 @@ import type {
   BasePageSection,
   PageSectionEdit,
 } from '@/types/customer-setting'
-import type { Customer, ColorTheme, LayoutTheme } from '@/types/customer'
+import type { PageSectionApi } from '@/types/API/customer-setting-api'
+import type { ColorTheme, LayoutTheme } from '@/types/customer'
+
+const apiToPageSection = (
+  apiData?: PageSectionApi | null
+): PageSection | null =>
+  apiData
+    ? {
+        baseId: apiData.baseId,
+        id: apiData.id,
+        customerId: apiData.customerId,
+        kind: apiData.kind as PageSection['kind'],
+        title: apiData.title,
+        position: apiData.position,
+      }
+    : null
 
 /**
  * ホームレイアウト情報の取得処理
@@ -18,14 +33,12 @@ export const useHomeLayoutRead = (customerId: Ref<number | null>) => {
   const homeSections = useState<PageSection[] | null>(() => null)
 
   const keyExt = ref(1)
-  const nextKey = () => keyExt.value++
-
-  const fetchHomeLayout = async () => {
+  const loadHomeLayout = async () => {
     loading.value = true
-    const key = `fetch_home_layout_${apiPath}_${keyExt.value}`
+    const key = `fetch_home_layout_${apiPath}_${keyExt.value++}`
     try {
       const { data, error } = await useAsyncData(key, () =>
-        $fetch<PageSection[]>(apiPath, {
+        $fetch<PageSectionApi[]>(apiPath, {
           baseURL: backendBaseUrl,
           method: 'GET',
           headers: authorizationHeader.value,
@@ -35,21 +48,36 @@ export const useHomeLayoutRead = (customerId: Ref<number | null>) => {
       if (error.value) {
         throw error.value
       }
-      homeSections.value = (data.value ?? []).map((d) => ({
-        baseId: d.baseId,
-        id: d.id,
-        customerId: d.customerId,
-        kind: d.kind as PageSection['kind'],
-        title: d.title,
-        position: d.position,
-      }))
+      homeSections.value = (data.value ?? []).map(
+        (d) => apiToPageSection(d) ?? ({} as PageSection)
+      )
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const fetchHomeLayout = async () => {
+    loading.value = true
+    const key = `fetch_home_layout_${apiPath}_${keyExt.value}`
+    try {
+      const data = await $fetch<PageSectionApi[]>(apiPath, {
+        baseURL: backendBaseUrl,
+        method: 'GET',
+        headers: authorizationHeader.value,
+        params: { customerId: customerId.value },
+      })
+      homeSections.value = (data ?? []).map(
+        (d) => apiToPageSection(d) ?? ({} as PageSection)
+      )
+    } catch (e) {
+      throw createError(e as Error)
     } finally {
       loading.value = false
     }
   }
 
   return {
-    nextKey,
+    loadHomeLayout,
     fetchHomeLayout,
     homeSections,
     loading,
@@ -68,29 +96,22 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
 
   const replaceHomeLayout = async (editSections: PageSectionEdit[]) => {
     let position = 0
-    const modifiedData = editSections.map((s) => ({
-      baseId: s.baseId,
-      customerId: s.customerId,
-      kind: s.kind,
-      title: s.title,
-      position: ++position,
-      menuTitle: s.menuTitle,
-    }))
+    const modifiedData = editSections.map<PageSectionEdit>((s) => {
+      const { id, ...modified } = s
+      modified.position = ++position
+      return modified
+    })
     loading.value = true
     try {
-      const { error } = await useAsyncData(() =>
-        $fetch<void>(apiPath, {
-          baseURL: backendBaseUrl,
-          method: 'PUT',
-          headers: authorizationHeader.value,
-          params: { customerId: customerId.value },
-          body: modifiedData,
-        })
-      )
-      if (error.value) {
-        throw error.value
-      }
-      return
+      await $fetch<void>(apiPath, {
+        baseURL: backendBaseUrl,
+        method: 'PUT',
+        headers: authorizationHeader.value,
+        params: { customerId: customerId.value },
+        body: modifiedData,
+      })
+    } catch (e) {
+      throw createError(e as Error)
     } finally {
       loading.value = false
     }
@@ -109,7 +130,6 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
 export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
   const {
     homeSections,
-    nextKey,
     fetchHomeLayout,
     loading: readLoading,
   } = useHomeLayoutRead(customerId)
@@ -143,7 +163,6 @@ export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
   ]
 
   const editSections = ref<PageSectionEdit[]>([])
-
   watch(
     homeSections,
     (sections) => {
@@ -151,14 +170,10 @@ export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
         editSections.value = []
         return
       }
-      editSections.value = sections.map((s) => ({
-        baseId: s.baseId,
-        customerId: s.customerId,
-        kind: s.kind,
-        title: s.title,
-        position: s.position,
-        menuTitle: s.menuTitle,
-      }))
+      editSections.value = sections.map<PageSectionEdit>((s) => {
+        const { id, ...modified } = s
+        return modified
+      })
     },
     {
       immediate: true,
@@ -168,7 +183,6 @@ export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
   const loading = computed(() => readLoading.value || writeLoading.value)
 
   const onUpdateSections = async () => {
-    nextKey()
     await replaceHomeLayout(editSections.value)
     await fetchHomeLayout()
     addSnackber?.('ホームページのレイアウトを変更しました。')

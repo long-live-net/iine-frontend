@@ -4,7 +4,10 @@ import type {
   InformationForm,
   ImageSettings,
 } from '@/types/content'
-import type { InformationGetApi, InformationSaveApi } from '@/types/content-api'
+import type {
+  InformationGetApi,
+  InformationSaveApi,
+} from '@/types/API/content-api'
 
 const apiUrl = '/informations'
 const useInformationContent = (customerId: Ref<number | null>) => {

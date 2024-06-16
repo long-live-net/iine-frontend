@@ -9,7 +9,7 @@ import type {
   ContentListResponse,
   ContentPreNextId,
   ContentPosition,
-} from '@/types/content-api'
+} from '@/types/API/content-api'
 
 export const useContentRead = <T extends ContentGetApi>(
   customerId: Ref<number | null>,

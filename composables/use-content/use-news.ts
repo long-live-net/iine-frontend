@@ -5,7 +5,7 @@ import type {
   ListFilter,
   ListSort,
   ListPager,
-} from '@/types/content-api'
+} from '@/types/API/content-api'
 
 const apiUrl = '/newses'
 const useNewsContent = (customerId: Ref<number | null>) => {

@@ -1,5 +1,5 @@
 import type { ContactType, ContactForm, ImageSettings } from '@/types/content'
-import type { ContactGetApi, ContactSaveApi } from '@/types/content-api'
+import type { ContactGetApi, ContactSaveApi } from '@/types/API/content-api'
 
 const apiUrl = '/contacts'
 const useContactContent = (customerId: Ref<number | null>) => {

@@ -8,30 +8,20 @@ import type { LoginApiCredential, LoginUser, LoginApiError } from '@/types/auth'
 const useAuthApi = () => {
   const authEndpoint = '/auth/customer-user'
   const authenticate = async (credential: LoginApiCredential) => {
-    const { data, error } = await useAsyncData<{ token: string }>(() =>
-      $fetch(authEndpoint, {
-        baseURL: backendBaseUrl,
-        method: 'POST',
-        body: { ...credential },
-      })
-    )
-    if (error.value) {
-      throw error.value
-    }
-    return data.value
+    const data = await $fetch<{ token: string }>(authEndpoint, {
+      baseURL: backendBaseUrl,
+      method: 'POST',
+      body: { ...credential },
+    })
+    return data
   }
   const fetchUser = async (token: string) => {
-    const { data, error } = await useAsyncData<LoginUser>(() =>
-      $fetch(authEndpoint, {
-        baseURL: backendBaseUrl,
-        method: 'GET',
-        headers: { Authorization: `Bearer ${token}` },
-      })
-    )
-    if (error.value) {
-      throw error.value
-    }
-    return data.value
+    const data = await $fetch<LoginUser>(authEndpoint, {
+      baseURL: backendBaseUrl,
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    return data
   }
   return { authenticate, fetchUser }
 }

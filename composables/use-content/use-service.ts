@@ -6,7 +6,7 @@ import type {
   ServiceGetApi,
   ServiceSaveApi,
   ContentPosition,
-} from '@/types/content-api'
+} from '@/types/API/content-api'
 
 const apiUrl = '/services'
 const useServiceContent = (customerId: Ref<number | null>) => {

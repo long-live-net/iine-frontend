@@ -5,10 +5,9 @@ import type { Customer } from '@/types/customer'
 const useCustomerApi = (token: Ref<string | null>) => {
   const endpoint = '/customers'
   const keyExt = ref(1)
-  const nextKey = () => keyExt.value++
 
-  const fetchByUrl = async (hostname: string) => {
-    const key = `fetch_customer_${endpoint}_${keyExt.value}`
+  const loadByUrl = async (hostname: string) => {
+    const key = `fetch_customer_${endpoint}_${keyExt.value++}`
     const { data, error } = await useAsyncData<Customer>(key, () =>
       $fetch(`${endpoint}/customer-url`, {
         baseURL: backendBaseUrl,
@@ -23,35 +22,24 @@ const useCustomerApi = (token: Ref<string | null>) => {
   }
   const fetch = async (id: number) => {
     const key = `fetch_customer_${endpoint}_${keyExt.value}`
-    const { data, error } = await useAsyncData<Customer>(key, () =>
-      $fetch(`/customers/${id}`, {
-        baseURL: backendBaseUrl,
-        method: 'GET',
-      })
-    )
-    if (error.value) {
-      throw error.value
-    }
-    return data.value
+    const data = await $fetch<Customer>(`/customers/${id}`, {
+      baseURL: backendBaseUrl,
+      method: 'GET',
+    })
+    return data
   }
   const update = async (customer: Customer) => {
-    const { data, error } = await useAsyncData<Customer>(() =>
-      $fetch(`/customers/${customer.id}`, {
-        baseURL: backendBaseUrl,
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token.value ?? 'notoken'}` },
-        body: customer,
-      })
-    )
-    if (error.value) {
-      throw error.value
-    }
+    const data = await $fetch<Customer>(`/customers/${customer.id}`, {
+      baseURL: backendBaseUrl,
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token.value ?? 'notoken'}` },
+      body: customer,
+    })
     return data
   }
 
   return {
-    nextKey,
-    fetchByUrl,
+    loadByUrl,
     fetch,
     update,
   }
@@ -60,7 +48,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
 export const useCustomerStore = defineStore('customer', () => {
   const authStore = useAuthStore()
   const tokenRef = computed(() => authStore.tokenRef)
-  const { fetchByUrl, fetch, update, nextKey } = useCustomerApi(tokenRef)
+  const { loadByUrl, fetch, update } = useCustomerApi(tokenRef)
 
   const customerRef = ref<Customer | null>(null)
 
@@ -68,8 +56,8 @@ export const useCustomerStore = defineStore('customer', () => {
     customerRef.value = customer ? { ...customer } : null
   }
 
-  async function fetchCustomerByUrl(url: string) {
-    const customer = await fetchByUrl(url)
+  async function loadCustomerByUrl(url: string) {
+    const customer = await loadByUrl(url)
     setCustomer(customer)
   }
 
@@ -80,13 +68,12 @@ export const useCustomerStore = defineStore('customer', () => {
 
   async function updateCustomer(customer: Customer) {
     await update(customer)
-    nextKey()
   }
 
   return {
     customerRef,
     setCustomer,
-    fetchCustomerByUrl,
+    loadCustomerByUrl,
     fetchCustomer,
     updateCustomer,
   }
