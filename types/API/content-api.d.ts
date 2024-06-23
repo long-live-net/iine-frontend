@@ -1,5 +1,5 @@
 import type { ImageData } from '@/types/content'
-import type { NewsCategory2Label } from '@/composables/use-news-category'
+import type { NewsCategory2Label } from '@/types/news-category'
 
 /**
  * GET API で取得するデータ型

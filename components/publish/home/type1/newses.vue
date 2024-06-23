@@ -8,26 +8,27 @@ const {
   pager,
   newsListRef,
   onLoad,
+  getList,
   onCreate,
   onUpdate,
   onRemove,
   loading,
 } = useNewsListActions(customerId)
 
+const isWholeData = ref(false)
 filter.value = { publishOn: true }
 sort.value = { publishOn: -1 }
 pager.value = { page: 1, limit: 6 }
 
-const isWholeData = ref(false)
-const loadNewses = async () => {
+const getNewses = async () => {
   filter.value = { publishOn: !isWholeData.value }
-  await onLoad()
+  await getList()
 }
-watch(isWholeData, () => {
-  loadNewses()
+watch(isWholeData, async () => {
+  await getNewses()
 })
 
-await loadNewses()
+await onLoad()
 </script>
 
 <template>

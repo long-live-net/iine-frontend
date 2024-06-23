@@ -18,6 +18,7 @@ const onLogout = () => {
   router.push('/customer/logout')
 }
 
+const sectionTitleSettingDialog = ref(false)
 const homeLayoutSettingDialog = ref(false)
 const themeSettingDialog = ref(false)
 const userInfoDialog = ref(false)
@@ -25,14 +26,19 @@ const userInfoDialog = ref(false)
 const userMenuItems: MenuItem[] = [
   { title: 'プレビュー', value: 'preview', props: { prependIcon: 'mdi-eye' } },
   {
-    title: 'テーマ設定',
-    value: 'themeSetting',
-    props: { prependIcon: 'mdi-cog' },
+    title: 'メニュータイトル設定',
+    value: 'sectionTitleSetting',
+    props: { prependIcon: 'mdi-layers-edit' },
   },
   {
     title: 'ホームレイアウト設定',
-    value: 'homeLayout',
+    value: 'homeLayoutSetting',
     props: { prependIcon: 'mdi-view-split-horizontal' },
+  },
+  {
+    title: 'テーマ設定',
+    value: 'themeSetting',
+    props: { prependIcon: 'mdi-cog' },
   },
   { type: 'divider' },
   {
@@ -57,11 +63,14 @@ const onSelectUserMenu = (value: number | string) => {
     case 'preview':
       togglePreview()
       break
+    case 'sectionTitleSetting':
+      sectionTitleSettingDialog.value = true
+      break
+    case 'homeLayoutSetting':
+      homeLayoutSettingDialog.value = true
+      break
     case 'themeSetting':
       themeSettingDialog.value = true
-      break
-    case 'homeLayout':
-      homeLayoutSettingDialog.value = true
       break
     case 'userinfo':
       userInfoDialog.value = true
@@ -110,8 +119,11 @@ const onSelectUserMenu = (value: number | string) => {
     id="on-preview-button"
     @click="togglePreview"
   />
-  <ManageCustomerThemeSetting v-model:modal="themeSettingDialog" />
+  <ManageCustomerSectionTitleSetting
+    v-model:modal="sectionTitleSettingDialog"
+  />
   <ManageCustomerHomeLayoutSetting v-model:modal="homeLayoutSettingDialog" />
+  <ManageCustomerThemeSetting v-model:modal="themeSettingDialog" />
   <ManageCustomerUserInfo v-model:modal="userInfoDialog" />
   <BaseConfirm
     v-model:comfirm="logoutDialog"

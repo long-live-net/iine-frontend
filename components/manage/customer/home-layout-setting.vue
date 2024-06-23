@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import type { BasePageSection, PageSectionEdit } from '@/types/customer-setting'
+import type { PageSectionEdit } from '@/types/customer-setting'
 
 const props = defineProps<{ modal: boolean }>()
 const emit = defineEmits<{
@@ -19,19 +19,17 @@ const titleData = {
   titleColor: 'accent',
 }
 const { customerId } = useFoundation()
-const { baseSections, editSections, loading, onUpdateSections } =
+const { baseSections, editSections, loading, replaceSections } =
   useHomeLayoutEdit(customerId)
 
-const clone = (data: BasePageSection): PageSectionEdit => {
-  return { ...data, customerId }
-}
+const clone = (data: PageSectionEdit): PageSectionEdit => ({ ...data })
 
 const onCancel = () => {
   settingModal.value = false
 }
 
 const onUpdate = async () => {
-  await onUpdateSections()
+  await replaceSections()
   settingModal.value = false
 }
 
@@ -74,7 +72,7 @@ const removeItem = (baseId: string) => {
                   />
                   <v-icon v-else icon="mdi-apps" color="accent" />
                 </p>
-                <p>{{ element.kind }}</p>
+                <p>{{ element.menuTitle || element.title }}</p>
               </div>
             </template>
           </draggable>
@@ -94,7 +92,7 @@ const removeItem = (baseId: string) => {
                 <p class="drag-group__item--icon">
                   <v-icon icon="mdi-apps" color="accent" />
                 </p>
-                <p>{{ element.kind }}</p>
+                <p>{{ element.menuTitle || element.title }}</p>
                 <p class="drag-group__item--action">
                   <v-btn
                     color="grey-darken-1"
