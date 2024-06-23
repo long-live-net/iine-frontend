@@ -1,8 +1,4 @@
-import type {
-  PageSection,
-  BasePageSection,
-  PageSectionEdit,
-} from '@/types/customer-setting'
+import type { PageSection, PageSectionEdit } from '@/types/customer-setting'
 import type { PageSectionApi } from '@/types/API/customer-setting-api'
 import type { ColorTheme, LayoutTheme } from '@/types/customer'
 
@@ -16,6 +12,7 @@ const apiToPageSection = (
         customerId: apiData.customerId,
         kind: apiData.kind as PageSection['kind'],
         title: apiData.title,
+        menuTitle: apiData.menuTitle,
         position: apiData.position,
       }
     : null
@@ -94,6 +91,23 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
   const { authorizationHeader } = useAuth()
   const loading = ref(false)
 
+  const updateHomeLayout = async (editSections: PageSectionEdit[]) => {
+    loading.value = true
+    try {
+      await $fetch<void>(apiPath, {
+        baseURL: backendBaseUrl,
+        method: 'PUT',
+        headers: authorizationHeader.value,
+        params: { customerId: customerId.value },
+        body: editSections,
+      })
+    } catch (e) {
+      throw createError(e as Error)
+    } finally {
+      loading.value = false
+    }
+  }
+
   const replaceHomeLayout = async (editSections: PageSectionEdit[]) => {
     let position = 0
     const modifiedData = editSections.map<PageSectionEdit>((s) => {
@@ -118,8 +132,47 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
   }
 
   return {
+    updateHomeLayout,
     replaceHomeLayout,
     loading,
+  }
+}
+
+/**
+ * セクションタイトル編集用フォームデータ
+ * @param customerId
+ */
+export type FormField = { [id: string]: string }
+export const usSectionTitleEdit = (customerId: Ref<number | null>) => {
+  const {
+    homeSections,
+    fetchHomeLayout,
+    loading: readLoading,
+  } = useHomeLayoutRead(customerId)
+
+  const { updateHomeLayout, loading: writeLoading } =
+    useHomeLayoutWrite(customerId)
+
+  const { addSnackber } = useSnackbars()
+
+  const update = async (formField: FormField) => {
+    const updatingSectionds =
+      homeSections.value?.map((s) => ({
+        ...s,
+        menuTitle: formField[`${s.id}`] ?? '',
+      })) ?? []
+
+    const id = await updateHomeLayout(updatingSectionds)
+    await fetchHomeLayout()
+    addSnackber?.('メニュータイトルを変更しました。')
+  }
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
+
+  return {
+    homeSections,
+    loading,
+    update,
   }
 }
 
@@ -139,40 +192,34 @@ export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
 
   const { addSnackber } = useSnackbars()
 
-  const baseSections: BasePageSection[] = [
-    {
-      baseId: 'type1-information',
-      kind: 'information',
-      title: 'Information',
-    },
-    {
-      baseId: 'type1-news',
-      kind: 'news',
-      title: 'News',
-    },
-    {
-      baseId: 'type1-service',
-      kind: 'service',
-      title: 'Service',
-    },
-    {
-      baseId: 'type1-contact',
-      kind: 'contact',
-      title: 'Contact',
-    },
+  const baseSectionsOrder: Pick<PageSection, 'baseId' | 'kind' | 'title'>[] = [
+    { baseId: 'type1-information', kind: 'information', title: 'information' },
+    { baseId: 'type1-news', kind: 'news', title: 'news' },
+    { baseId: 'type1-service', kind: 'service', title: 'service' },
+    { baseId: 'type1-contact', kind: 'contact', title: 'contact' },
   ]
-
+  const baseSections = ref<PageSectionEdit[]>([])
   const editSections = ref<PageSectionEdit[]>([])
   watch(
     homeSections,
     (sections) => {
-      if (!sections?.length) {
+      const cid = customerId.value
+      if (!cid || !sections?.length) {
+        baseSections.value = []
         editSections.value = []
         return
       }
+      baseSections.value = baseSectionsOrder.map((b) => {
+        const { id, ...section } = sections.find((s) => s.kind === b.kind) ?? {
+          ...b,
+          id: 0,
+          customerId: cid,
+        }
+        return section
+      })
       editSections.value = sections.map<PageSectionEdit>((s) => {
-        const { id, ...modified } = s
-        return modified
+        const { id, ...section } = s
+        return section
       })
     },
     {
@@ -182,7 +229,7 @@ export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
 
   const loading = computed(() => readLoading.value || writeLoading.value)
 
-  const onUpdateSections = async () => {
+  const replaceSections = async () => {
     await replaceHomeLayout(editSections.value)
     await fetchHomeLayout()
     addSnackber?.('ホームページのレイアウトを変更しました。')
@@ -192,7 +239,7 @@ export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
     baseSections,
     editSections,
     loading,
-    onUpdateSections,
+    replaceSections,
   }
 }
 
