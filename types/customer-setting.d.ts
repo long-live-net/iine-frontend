@@ -12,7 +12,6 @@ export type PageSection = {
   menuTitle?: string
 }
 
-export type BasePageSection = Omit<PageSection, 'id', 'customerId'>
 export type PageSectionEdit = Omit<PageSection, 'id'> & {
   id?: number
 }

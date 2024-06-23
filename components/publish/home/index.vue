@@ -22,8 +22,8 @@ const layoutTheme = computed<LayoutTheme>(
     >
       <template v-if="layoutTheme === 'type1'">
         <PublishHomeType1SectionTitle
-          v-if="section.title?.length"
-          :title="section.title"
+          v-if="section.menuTitle || section.title"
+          :title="section.menuTitle || section.title"
         />
         <PublishHomeType1Information v-if="section.kind === 'information'" />
         <PublishHomeType1Newses v-if="section.kind === 'news'" />

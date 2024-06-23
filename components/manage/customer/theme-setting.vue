@@ -34,7 +34,7 @@ const {
   >
     <div class="theme-setting">
       <section>
-        <h4>カラーテーマ選択</h4>
+        <h4>カラーテーマ</h4>
         <div class="theme-selection">
           <v-radio-group v-model="editColorTheme" inline>
             <v-radio
@@ -50,7 +50,7 @@ const {
       <section class="disabled">
         <h4>
           <v-icon icon="mdi-lock" />
-          レイアウトテーマ選択 (未サポート)
+          レイアウトテーマ (未サポート)
         </h4>
         <div class="theme-selection">
           <v-radio-group v-model="editLayoutTheme" inline disabled>
