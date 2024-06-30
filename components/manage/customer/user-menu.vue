@@ -1,23 +1,10 @@
 <script setup lang="ts">
 import type { MenuItem } from '@/components/base/dropdown.vue'
 
-const emit = defineEmits<{
-  userinfo: []
-  changePassword: []
-  logout: []
-}>()
-
-const { logout } = useAuth()
 const { user, isPreview, togglePreview } = useFoundation()
 const router = useRouter()
 
 const logoutDialog = ref(false)
-const onLogout = () => {
-  logoutDialog.value = false
-  logout()
-  router.push('/customer/logout')
-}
-
 const sectionTitleSettingDialog = ref(false)
 const homeLayoutSettingDialog = ref(false)
 const themeSettingDialog = ref(false)
@@ -28,12 +15,12 @@ const userMenuItems: MenuItem[] = [
   {
     title: 'メニュータイトル設定',
     value: 'sectionTitleSetting',
-    props: { prependIcon: 'mdi-layers-edit' },
+    props: { prependIcon: 'mdi-format-title' },
   },
   {
     title: 'ホームレイアウト設定',
     value: 'homeLayoutSetting',
-    props: { prependIcon: 'mdi-view-split-horizontal' },
+    props: { prependIcon: 'mdi-page-layout-header-footer' },
   },
   {
     title: 'テーマ設定',
@@ -89,7 +76,7 @@ const onSelectUserMenu = (value: number | string) => {
   <div class="g-block-lg">
     <BaseDropdown
       :items="userMenuItems"
-      location="bottom left"
+      location="bottom end"
       @select="onSelectUserMenu"
     >
       <template #activator="{ props }">
@@ -106,7 +93,11 @@ const onSelectUserMenu = (value: number | string) => {
     </BaseDropdown>
   </div>
   <div class="g-block-sm">
-    <BaseDropdown :items="userMenuItems" @select="onSelectUserMenu">
+    <BaseDropdown
+      :items="userMenuItems"
+      location="bottom end"
+      @select="onSelectUserMenu"
+    >
       <template #activator="{ props }">
         <v-btn v-bind="props" color="accent" rounded="lg">
           <v-icon icon="mdi-account" />
@@ -125,13 +116,7 @@ const onSelectUserMenu = (value: number | string) => {
   <ManageCustomerHomeLayoutSetting v-model:modal="homeLayoutSettingDialog" />
   <ManageCustomerThemeSetting v-model:modal="themeSettingDialog" />
   <ManageCustomerUserInfo v-model:modal="userInfoDialog" />
-  <BaseConfirm
-    v-model:comfirm="logoutDialog"
-    message="本当にログアウトしますか？"
-    exec-text="ログアウト"
-    @cancel="logoutDialog = false"
-    @confirm="onLogout"
-  />
+  <ManageCustomerLogout v-model:modal="logoutDialog" />
 </template>
 
 <style scoped lang="scss">
