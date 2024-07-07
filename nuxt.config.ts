@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   css: ['~/assets/css/main.scss'],
+
   app: {
     head: {
       title: 'iine-t',
@@ -16,7 +17,9 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     },
   },
+
   devtools: { enabled: true },
+
   vite: {
     ssr: {
       noExternal: ['vuetify'],
@@ -29,5 +32,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   modules: ['@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt'],
+  compatibilityDate: '2024-07-07',
 })
