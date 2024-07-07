@@ -1,4 +1,4 @@
-import { defineStore, storeToRefs } from 'pinia'
+import { defineStore } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import type { Customer } from '@/types/customer'
 
@@ -21,7 +21,6 @@ const useCustomerApi = (token: Ref<string | null>) => {
     return data.value
   }
   const fetch = async (id: number) => {
-    const key = `fetch_customer_${endpoint}_${keyExt.value}`
     const data = await $fetch<Customer>(`/customers/${id}`, {
       baseURL: backendBaseUrl,
       method: 'GET',

@@ -16,7 +16,7 @@ await onLoad()
   <CommonContentWrap
     class="type1-eyecatcher"
     :loading="loading"
-    loadingSize="large"
+    loading-size="large"
   >
     <CommonEyecatchImage
       :url="eyecatchRef?.image?.url"
@@ -49,7 +49,7 @@ await onLoad()
       <ManageContentEyecatcher
         v-else
         :eyecatch-data="eyecatchRef"
-        activaterLabel="トップ画像を登録してください"
+        activater-label="トップ画像を登録してください"
         @create="onCreate"
       />
     </div>

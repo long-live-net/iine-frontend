@@ -104,7 +104,7 @@ export const useUpdatePassword = () => {
   const updatePassword = async (newPassword: string) => {
     loading.value = true
     try {
-      const data = await $fetch(apiPath, {
+      await $fetch(apiPath, {
         baseURL: backendBaseUrl,
         headers: authorizationHeader.value,
         method: 'PUT',

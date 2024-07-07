@@ -55,7 +55,6 @@ export const useHomeLayoutRead = (customerId: Ref<number | null>) => {
 
   const fetchHomeLayout = async () => {
     loading.value = true
-    const key = `fetch_home_layout_${apiPath}_${keyExt.value}`
     try {
       const data = await $fetch<PageSectionApi[]>(apiPath, {
         baseURL: backendBaseUrl,
@@ -94,7 +93,7 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
   const updateHomeLayout = async (editSections: PageSectionEdit[]) => {
     loading.value = true
     try {
-      await $fetch<void>(apiPath, {
+      await $fetch(apiPath, {
         baseURL: backendBaseUrl,
         method: 'PUT',
         headers: authorizationHeader.value,
@@ -117,7 +116,7 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
     })
     loading.value = true
     try {
-      await $fetch<void>(apiPath, {
+      await $fetch(apiPath, {
         baseURL: backendBaseUrl,
         method: 'PUT',
         headers: authorizationHeader.value,
@@ -162,7 +161,7 @@ export const usSectionTitleEdit = (customerId: Ref<number | null>) => {
         menuTitle: formField[`${s.id}`] ?? '',
       })) ?? []
 
-    const id = await updateHomeLayout(updatingSectionds)
+    await updateHomeLayout(updatingSectionds)
     await fetchHomeLayout()
     addSnackber?.('メニュータイトルを変更しました。')
   }

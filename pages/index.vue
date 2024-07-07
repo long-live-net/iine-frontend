@@ -3,12 +3,14 @@ const topButtonImage = '/images/arrow-up2.png'
 </script>
 
 <template>
-  <div id="home-index-top">
-    <PublishHome />
+  <div>
+    <div id="home-index-top">
+      <PublishHome />
+    </div>
+    <client-only>
+      <CommonTopToButton :src="topButtonImage" />
+    </client-only>
   </div>
-  <client-only>
-    <CommonTopToButton :src="topButtonImage" />
-  </client-only>
 </template>
 
 <style scoped lang="scss">

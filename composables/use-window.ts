@@ -7,7 +7,7 @@ export const useWindowState = () => {
   const windowHeight = ref(2048)
   const scrollY = ref(0)
 
-  if (process.client) {
+  if (import.meta.client) {
     const getWindowHeight = debounce(() => {
       windowHeight.value = window.innerHeight
     }, 200)
@@ -38,7 +38,7 @@ export const useWindowState = () => {
 const isIOS: Ref<boolean | null> = ref(null)
 export const useDetectIOS = () => {
   onMounted(() => {
-    if (process.client) {
+    if (import.meta.client) {
       if (isIOS.value === null) {
         isIOS.value = /iPad|iPhone|iPod/.test(navigator.userAgent)
       }

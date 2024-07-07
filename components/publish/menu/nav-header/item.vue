@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = withDefaults(
+withDefaults(
   defineProps<{
     linkTo: string | { name: string; hash?: string }
     title?: string

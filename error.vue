@@ -3,7 +3,7 @@ const error = useError()
 
 const onClickBack = () => {
   clearError()
-  if (process.client) {
+  if (import.meta.client) {
     window.location.href = '/'
   }
 }

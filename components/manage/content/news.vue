@@ -64,7 +64,7 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!newsData?.id"
-    :activaterLabel="activaterLabel"
+    :activater-label="activaterLabel"
     :activater-size="activaterSize"
   />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!newsData?.id">
@@ -101,7 +101,7 @@ const onCancel = () => {
             :error-messages="formData.publishOn.errorMessage.value"
             label="公開日"
             placeholder="公開日を選択してください"
-            pickerTitle="公開日を選択してください"
+            picker-title="公開日を選択してください"
           />
         </div>
       </div>
@@ -115,7 +115,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :contentId="newsData?.id"
+        :content-id="newsData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"

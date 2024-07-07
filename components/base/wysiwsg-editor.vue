@@ -11,7 +11,13 @@ const props = withDefaults(
     clearable?: boolean
     errorMessages?: string | string[]
   }>(),
-  { clearable: false }
+  {
+    modelValue: undefined,
+    label: undefined,
+    placeholder: undefined,
+    clearable: false,
+    errorMessages: undefined,
+  }
 )
 const emit = defineEmits<{
   'update:modelValue': [value: string | null]
@@ -52,8 +58,8 @@ const editorClasses = computed(() => {
     return isFocus.value
       ? ['focused-error-state']
       : isHover.value
-      ? ['hovered', 'error-state']
-      : ['error-state']
+        ? ['hovered', 'error-state']
+        : ['error-state']
   } else {
     return isFocus.value ? ['focused'] : isHover.value ? ['hovered'] : []
   }
@@ -62,8 +68,8 @@ const labelClass = computed(() =>
   invalidMessages.value?.length
     ? ['wysiwyg-editor__label--error']
     : isFocus.value
-    ? ['wysiwyg-editor__label--focused']
-    : []
+      ? ['wysiwyg-editor__label--focused']
+      : []
 )
 
 const quillEditorRef = ref<typeof QuillEditor | null>(null)
@@ -92,7 +98,7 @@ const onClear = () => {
         <QuillEditor
           ref="quillEditorRef"
           v-model:content="valueData"
-          contentType="html"
+          content-type="html"
           theme="snow"
           :toolbar="wysiwygToolbar"
           :placeholder="placeholder"

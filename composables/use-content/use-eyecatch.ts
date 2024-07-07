@@ -1,4 +1,3 @@
-import { useForm, useField } from 'vee-validate'
 import type { EyecatchType, EyecatchForm, ImageSettings } from '@/types/content'
 import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/API/content-api'
 
@@ -137,7 +136,9 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
     await getEyecatch()
   }
 
-  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+  const onUpdateImageSetting = (
+    settings: Partial<ImageSettings>
+  ): ImageSettings | undefined => {
     if (!eyecatchRef.value?.id) return
 
     const newSettings = setEyecatchImageSettings(settings)

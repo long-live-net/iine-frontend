@@ -49,6 +49,7 @@ await onLoad(contentId)
             <span>{{ newsRef?.title ?? '' }}</span>
           </h5>
           <div v-if="newsRef?.body" class="ql-editor">
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="htmlSanitizer(newsRef?.body)" />
             <div class="inquire-activator">
               <PublishInquire />
@@ -58,7 +59,7 @@ await onLoad(contentId)
             <p>データがありません</p>
             <div v-if="canEdit">
               <ManageContentNews
-                activaterLabel="コンテンツを登録してください"
+                activater-label="コンテンツを登録してください"
                 @create="onCreate"
               />
             </div>

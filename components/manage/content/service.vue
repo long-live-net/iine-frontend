@@ -61,7 +61,7 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!serviceData?.id"
-    :activaterLabel="activaterLabel"
+    :activater-label="activaterLabel"
     :activater-size="activaterSize"
   />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!serviceData?.id">
@@ -102,7 +102,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :contentId="serviceData?.id"
+        :content-id="serviceData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"

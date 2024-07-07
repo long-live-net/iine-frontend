@@ -32,26 +32,26 @@ const headerItems = computed(
     <div class="g-block-lg">
       <div class="nav-header__menu">
         <PublishMenuNavHeaderTitle
-          :linkTo="headerTitle.to"
+          :link-to="headerTitle.to"
           :title="headerTitle.title"
           :color="headerTitle.color"
-          :hoverColor="headerTitle.hoverColor"
+          :hover-color="headerTitle.hoverColor"
         />
         <div class="row-direction">
           <PublishMenuNavHeaderItem
-            :linkTo="{ name: 'index', hash: '#home-index-top' }"
+            :link-to="{ name: 'index', hash: '#home-index-top' }"
             color="white"
-            hoverColor="orange"
+            hover-color="orange"
           >
             <v-icon icon="mdi-home" size="large" style="padding-bottom: 2px" />
           </PublishMenuNavHeaderItem>
           <PublishMenuNavHeaderItem
             v-for="item in headerItems"
             :key="item.id"
-            :linkTo="item.to"
+            :link-to="item.to"
             :title="item.menuTitle ?? item.title"
             :color="item.color"
-            :hoverColor="item.hoverColor"
+            :hover-color="item.hoverColor"
           />
           <ClientOnly>
             <ManageCustomerUserMenu v-if="isLoggedIn" />
@@ -71,7 +71,7 @@ const headerItems = computed(
           <PublishMenuNavHeaderTitle
             :title="headerTitle.title"
             color="white"
-            hoverColor="white"
+            hover-color="white"
             @click="sidebar = !sidebar"
           />
         </div>
@@ -86,18 +86,18 @@ const headerItems = computed(
           <BaseDrawer v-model:drawer="sidebar" color="#424242" theme="dark">
             <div class="column-direction">
               <PublishMenuNavHeaderTitle
-                :linkTo="headerTitle.to"
+                :link-to="headerTitle.to"
                 :title="headerTitle.title"
                 :color="headerTitle.color"
-                :hoverColor="headerTitle.hoverColor"
+                :hover-color="headerTitle.hoverColor"
               />
               <PublishMenuNavHeaderItem
                 v-for="item in headerItems"
                 :key="item.id"
-                :linkTo="item.to"
+                :link-to="item.to"
                 :title="item.menuTitle ?? item.title"
                 :color="item.color"
-                :hoverColor="item.hoverColor"
+                :hover-color="item.hoverColor"
               />
             </div>
           </BaseDrawer>
