@@ -39,6 +39,7 @@ await onLoad()
       </CommonEyecatchImage>
       <CommonContentCardBody>
         <div v-if="contactRef?.body" class="ql-editor">
+          <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="htmlSanitizer(contactRef?.body)" />
           <div class="inquire-activator">
             <PublishInquire />
@@ -48,7 +49,7 @@ await onLoad()
           <p>データがありません</p>
           <div v-if="canEdit">
             <ManageContentContact
-              activaterLabel="コンテンツを登録してください"
+              activater-label="コンテンツを登録してください"
               @create="onCreate"
             />
           </div>

@@ -1,8 +1,20 @@
 <script setup lang="ts">
-import type { InquireForm } from '@/composables/use-inquire'
+import type { InquireMail } from '@/types/inquire'
 
-defineProps<{ inquireForm: InquireForm }>()
-defineEmits<{ confirm: []; cancel: [] }>()
+const emit = defineEmits<{ confirm: [inquireMail: InquireMail]; cancel: [] }>()
+const { handleSubmit, handleReset, inquireForm } = useInquireForm()
+
+const onConfirm = handleSubmit((inquire) => {
+  emit('confirm', inquire)
+})
+const onCancel = () => {
+  emit('cancel')
+}
+const reset = () => {
+  handleReset()
+}
+
+defineExpose({ reset })
 </script>
 
 <template>
@@ -49,7 +61,7 @@ defineEmits<{ confirm: []; cancel: [] }>()
         prepend-icon="mdi-email-fast"
         color="primary"
         width="7.5rem"
-        @click="$emit('confirm')"
+        @click="onConfirm"
       >
         送信する
       </v-btn>
@@ -58,7 +70,7 @@ defineEmits<{ confirm: []; cancel: [] }>()
         color="secondary"
         width="7.5rem"
         class="ml-2"
-        @click="$emit('cancel')"
+        @click="onCancel"
       >
         キャンセル
       </v-btn>

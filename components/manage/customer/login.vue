@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import type { LoginFrom } from '@/types/auth'
 
-const props = defineProps<{
-  customerName: string
-}>()
+defineProps<{ customerName: string }>()
+
 const emit = defineEmits<{
   login: [credential: LoginFrom]
 }>()

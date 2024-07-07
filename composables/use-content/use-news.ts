@@ -57,7 +57,7 @@ const useNewsContent = (customerId: Ref<number | null>) => {
 
   const setNewsImageSettings = (
     settings: Partial<ImageSettings>
-  ): ImageSettings | void => {
+  ): ImageSettings | undefined => {
     if (!newsRef.value) return
     if (!newsRef.value.image?.settings) return
 

@@ -1,4 +1,4 @@
-import BaseSnackbars from '~/components/base/snackbars.vue'
+import type BaseSnackbars from '~/components/base/snackbars.vue'
 
 /**
  * Snackbar

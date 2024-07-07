@@ -37,7 +37,6 @@ const emit = defineEmits<{
   select: [value: number | string]
 }>()
 
-const selected = ref<number | string | null>(null)
 const onSelect = (value: { id: unknown; value: boolean; path: unknown[] }) => {
   emit('select', value.id as number | string)
 }

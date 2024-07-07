@@ -25,7 +25,7 @@ const activatorColor = computed(() => (props.isUpdate ? 'success' : 'info'))
 <template>
   <BaseActivator
     v-model:modal="dialog"
-    :activatorIcon="activatorIcon"
+    :activator-icon="activatorIcon"
     :activator-color="activatorColor"
     :activator-text="activaterLabel"
     :activator-size="activaterSize"

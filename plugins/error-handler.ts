@@ -23,6 +23,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleError = async (error: any) => {
     if ('statusCode' in error && 'message' in error) {
       handleNuxtError(error)
@@ -59,7 +60,7 @@ export default defineNuxtPlugin((nuxtApp) => {
    * が、念の為生かしておく
    *
    */
-  if (process.client) {
+  if (import.meta.client) {
     window.addEventListener('error', (event) => {
       console.error('--- window error ---', event.error)
       handleError(event.error)

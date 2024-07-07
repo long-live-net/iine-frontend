@@ -39,7 +39,7 @@ const {
           <v-radio-group v-model="editColorTheme" inline>
             <v-radio
               v-for="ct in colorThemeOptions"
-              key="ct.type"
+              :key="ct.type"
               color="primary"
               :label="ct.label"
               :value="ct.type"
@@ -56,7 +56,7 @@ const {
           <v-radio-group v-model="editLayoutTheme" inline disabled>
             <v-radio
               v-for="st in layoutThemeOptions"
-              key="st.type"
+              :key="st.type"
               color="primary"
               :label="st.label"
               :value="st.type"

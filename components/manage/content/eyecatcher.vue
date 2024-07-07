@@ -61,7 +61,7 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!eyecatchData?.id"
-    :activaterLabel="activaterLabel"
+    :activater-label="activaterLabel"
   />
   <CommonContentEditDialog
     v-model:modal="modal"
@@ -95,7 +95,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :contentId="eyecatchData?.id"
+        :content-id="eyecatchData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"

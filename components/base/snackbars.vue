@@ -23,8 +23,8 @@ defineExpose({ addSnackbar })
   <template v-for="(snack, i) in snackbars">
     <BaseSnackbar
       v-if="snack.snackbar"
+      :key="snack.id"
       v-model:snackbar="snack.snackbar"
-      :id="snack.id"
       :message="snack.message"
       :color="snack.color"
       :style="{ 'margin-bottom': `${i * 55 + 20}px` }"

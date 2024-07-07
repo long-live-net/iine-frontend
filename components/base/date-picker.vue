@@ -32,7 +32,7 @@ const formattedDate = computed(() =>
     :close-on-content-click="false"
     location="bottom"
   >
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props: on }">
       <v-text-field
         :model-value="formattedDate"
         :error-messages="errorMessages"
@@ -40,8 +40,8 @@ const formattedDate = computed(() =>
         :placeholder="placeholder"
         readonly
         prepend-inner-icon="mdi-calendar"
+        v-bind="on"
         @click:prepend-inner="datepickerMenu = !datepickerMenu"
-        v-bind="props"
       />
     </template>
     <v-date-picker
@@ -49,7 +49,7 @@ const formattedDate = computed(() =>
       :title="pickerTitle"
       color="primary"
     >
-      <template #header></template>
+      <template #header />
     </v-date-picker>
   </v-menu>
 </template>

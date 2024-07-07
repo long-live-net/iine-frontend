@@ -26,7 +26,7 @@ const pageLength = computed(() =>
 const windowWidth = ref(768)
 const isWidtLesshMd = ref(false)
 const getWindowWidth = () => {
-  if (process.client) {
+  if (import.meta.client) {
     windowWidth.value = window.innerWidth
     isWidtLesshMd.value = windowWidth.value < 768
   }
