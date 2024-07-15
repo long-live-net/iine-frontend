@@ -276,9 +276,9 @@ export const useThemeSettingsEdit = () => {
       }
     },
   })
-  const editColorTheme = computed<ColorTheme | undefined>({
-    get: () => customer.value?.colorTheme,
-    set: async (theme?: ColorTheme) => {
+  const editColorTheme = computed<ColorTheme>({
+    get: () => customer.value?.colorTheme ?? 'light',
+    set: async (theme: ColorTheme) => {
       if (!customer.value) {
         return
       }

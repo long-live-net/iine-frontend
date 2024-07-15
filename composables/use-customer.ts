@@ -31,7 +31,7 @@ export const useCustomer = () => {
   }
 
   return {
-    customer: readonly(customer),
+    customer,
     customerId,
     customerName,
     setCustomer,

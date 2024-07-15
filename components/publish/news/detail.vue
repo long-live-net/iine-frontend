@@ -12,7 +12,9 @@ const {
 } = useNewsActions(customerId)
 
 const route = useRoute()
-const contentId = route.params.id
+const contentId = parseInt(
+  Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+)
 await onLoad(contentId)
 </script>
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { customerId, canEdit } = useFoundation()
+
 const {
   contactRef,
   onLoad,
@@ -37,13 +38,14 @@ await onLoad()
           />
         </div>
       </CommonEyecatchImage>
-      <CommonContentCardBody>
+      <CommonContentCardBody class="type1-contact__body">
         <div v-if="contactRef?.body" class="ql-editor">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="htmlSanitizer(contactRef?.body)" />
           <div class="inquire-activator">
             <PublishInquire />
           </div>
+          <CommonServiceLinks class="type1-contact__body--links" />
         </div>
         <div v-else class="no-items">
           <p>データがありません</p>
@@ -80,6 +82,15 @@ $eyecatcher-height-sm: 600px;
   .inquire-activator {
     margin-top: 1.5rem;
     text-align: center;
+  }
+  &__body {
+    position: relative;
+    padding-top: 3.25rem;
+    &--links {
+      position: absolute;
+      top: 0.5rem;
+      right: 1rem;
+    }
   }
   .no-items {
     display: flex;

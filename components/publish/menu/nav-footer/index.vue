@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { accessSource } = useCustomerLinks()
+
 const inquireDialog = ref(false)
 const onInquire = () => {
   inquireDialog.value = true
@@ -15,7 +17,20 @@ const onInquire = () => {
         <v-btn prepend-icon="mdi-email" variant="text" @click="onInquire">
           お問い合わせ
         </v-btn>
-        <v-btn prepend-icon="mdi-earth" variant="text">アクセス</v-btn>
+        <v-btn v-if="accessSource" prepend-icon="mdi-earth" variant="text">
+          アクセス
+        </v-btn>
+        <CommonServiceLinks force-icon class="nav-footer__menu__sns" />
+      </div>
+    </div>
+    <div class="g-block-sm">
+      <div class="nav-footer__menu">
+        <v-btn icon variant="text" @click="onInquire">
+          <v-icon>mdi-email</v-icon>
+        </v-btn>
+        <v-btn v-if="accessSource" icon variant="text">
+          <v-icon>mdi-earth</v-icon>
+        </v-btn>
       </div>
     </div>
   </div>
@@ -39,7 +54,11 @@ const onInquire = () => {
   &__menu {
     display: flex;
     align-items: center;
-    padding-left: 2rem;
+    &__sns {
+      margin-left: 1rem;
+      border-left: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+    }
   }
 }
 </style>

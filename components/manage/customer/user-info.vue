@@ -32,10 +32,10 @@ const { user, customer } = useFoundation()
       <dl>
         <dt>お名前</dt>
         <dd>{{ user?.name ?? 'NA' }}</dd>
+        <dt>所属テナント</dt>
+        <dd>{{ customer?.name ?? 'NA' }}</dd>
         <dt>メールアドレス</dt>
         <dd>{{ user?.email ?? 'NA' }}</dd>
-        <dt>所属</dt>
-        <dd>{{ customer?.name ?? 'NA' }}</dd>
       </dl>
     </div>
   </CommonModalDialog>

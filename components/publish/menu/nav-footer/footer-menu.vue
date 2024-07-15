@@ -1,31 +1,42 @@
 <script setup lang="ts">
 import type { MenuItemType, MenuItem } from '@/components/base/dropdown.vue'
 
-const emit = defineEmits<{
-  inquire: []
-  access: []
-}>()
+defineEmits<{ inquire: [] }>()
 
 const router = useRouter()
 const { isLoggedIn } = useFoundation()
+const { snsLinks, getSnsTitle, getSnsIcon, getSnsColor, onClickLink } =
+  useCustomerLinks()
 const logoutDialog = ref(false)
 
+const snsLinkItems: MenuItem[] = snsLinks.value.reduce((acc, link) => {
+  acc.push({
+    title: getSnsTitle(link.serviceName),
+    value: link.serviceName,
+    props: {
+      prependIcon: getSnsIcon(link.serviceName),
+      color: getSnsColor(link.serviceName),
+    },
+  })
+  return acc
+}, [] as MenuItem[])
+const loginLogoutItems: MenuItem[] = isLoggedIn.value
+  ? [
+      {
+        title: 'ログアウト',
+        value: 'logout',
+        props: { prependIcon: 'mdi-logout' },
+      },
+    ]
+  : [
+      {
+        title: '管理者ログイン',
+        value: 'login',
+        props: { prependIcon: 'mdi-account-circle' },
+      },
+    ]
 const footerMenuItemsLarge: MenuItem[] = [
-  ...(isLoggedIn.value
-    ? [
-        {
-          title: 'ログアウト',
-          value: 'logout',
-          props: { prependIcon: 'mdi-logout' },
-        },
-      ]
-    : [
-        {
-          title: '管理者ログイン',
-          value: 'login',
-          props: { prependIcon: 'mdi-account-circle' },
-        },
-      ]),
+  ...loginLogoutItems,
   {
     type: 'divider' as MenuItemType,
   },
@@ -36,16 +47,7 @@ const footerMenuItemsLarge: MenuItem[] = [
   },
 ]
 const footerMenuItemsSmall: MenuItem[] = [
-  {
-    title: 'お問い合わせ',
-    value: 'contact',
-    props: { prependIcon: 'mdi-email' },
-  },
-  {
-    title: 'アクセス',
-    value: 'access',
-    props: { prependIcon: 'mdi-earth' },
-  },
+  ...snsLinkItems,
   {
     type: 'divider' as MenuItemType,
   },
@@ -60,12 +62,13 @@ const onSelectUserMenu = (value: number | string) => {
     case 'logout':
       logoutDialog.value = true
       break
-    case 'contact':
-      emit('inquire')
+    case 'facebook':
+    case 'instagram':
+    case 'twitter':
+    case 'youtube': {
+      onClickLink(value)
       break
-    case 'access':
-      emit('access')
-      break
+    }
   }
 }
 </script>
@@ -77,8 +80,8 @@ const onSelectUserMenu = (value: number | string) => {
       location="top start"
       @select="onSelectUserMenu"
     >
-      <template #activator="{ props }">
-        <v-btn v-bind="props" variant="text" icon="mdi-menu" />
+      <template #activator="{ props: on }">
+        <v-btn v-bind="on" variant="text" icon="mdi-menu" />
       </template>
     </BaseDropdown>
   </div>
@@ -88,8 +91,8 @@ const onSelectUserMenu = (value: number | string) => {
       location="top start"
       @select="onSelectUserMenu"
     >
-      <template #activator="{ props }">
-        <v-btn v-bind="props" variant="text" icon="mdi-menu" />
+      <template #activator="{ props: on }">
+        <v-btn v-bind="on" variant="text" icon="mdi-menu" />
       </template>
     </BaseDropdown>
   </div>
