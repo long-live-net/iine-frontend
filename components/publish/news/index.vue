@@ -50,11 +50,19 @@ watch(page, () => {
 watch(
   () => route.query,
   async () => {
-    if (page.value != route.query?.page) {
-      page.value = route.query?.page ?? 1
+    const quaryPageString = Array.isArray(route.query?.page)
+      ? route.query.page[0]?.toString()
+      : route.query?.page?.toString()
+    const quaryPage = quaryPageString ? parseInt(quaryPageString) : 1
+    if (page.value != quaryPage) {
+      page.value = quaryPage
     }
-    if (pageLimit.value != route.query?.limit) {
-      pageLimit.value = route.query?.limit ?? 20
+    const quaryLimitString = Array.isArray(route.query?.limit)
+      ? route.query.limit[0]?.toString()
+      : route.query?.limit?.toString()
+    const quaryLimit = quaryLimitString ? parseInt(quaryLimitString) : 20
+    if (pageLimit.value != quaryLimit) {
+      pageLimit.value = quaryLimit
     }
     await getNewses()
   }
