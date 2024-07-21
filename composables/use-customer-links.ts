@@ -56,7 +56,15 @@ export const useCustomerLinks = () => {
     }
   }
 
-  const accessSource = computed(() => customer.value?.accessSource)
+  const accessSource = computed(() =>
+    customer.value
+      ? {
+          zip: customer.value.zip,
+          address: customer.value.address,
+          mapSrc: customer.value.accessSource,
+        }
+      : null
+  )
 
   return {
     snsLinks,

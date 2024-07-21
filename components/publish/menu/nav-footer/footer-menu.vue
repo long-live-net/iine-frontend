@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { MenuItemType, MenuItem } from '@/components/base/dropdown.vue'
 
-defineEmits<{ inquire: [] }>()
-
 const router = useRouter()
 const { isLoggedIn } = useFoundation()
 const { snsLinks, getSnsTitle, getSnsIcon, getSnsColor, onClickLink } =

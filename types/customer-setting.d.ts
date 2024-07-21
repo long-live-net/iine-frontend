@@ -1,7 +1,13 @@
 /**
  * Page Layout Settings
  */
-export type SectionKind = 'top' | 'information' | 'news' | 'service' | 'contact'
+export type SectionKind =
+  | 'top'
+  | 'information'
+  | 'news'
+  | 'service'
+  | 'contact'
+  | 'access'
 export type PageSection = {
   baseId: string
   id: number
@@ -13,5 +19,5 @@ export type PageSection = {
 }
 
 export type PageSectionEdit = Omit<PageSection, 'id'> & {
-  id?: number
+  id?: number | null
 }

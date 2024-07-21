@@ -45,7 +45,7 @@ await onLoad()
           <div class="inquire-activator">
             <PublishInquire />
           </div>
-          <CommonServiceLinks class="type1-contact__body--links" />
+          <PublishCustomerServiceLinks class="type1-contact__body--links" />
         </div>
         <div v-else class="no-items">
           <p>データがありません</p>
