@@ -2,39 +2,52 @@
 const { accessSource } = useCustomerLinks()
 
 const inquireDialog = ref(false)
-const onInquire = () => {
-  inquireDialog.value = true
-}
+const accessDialog = ref(false)
 </script>
 
 <template>
   <div class="nav-footer g-theme-footer">
     <div class="nav-footer__activator">
-      <PublishMenuNavFooterMenu @inquire="onInquire" />
+      <PublishMenuNavFooterMenu />
     </div>
     <div class="g-block-lg">
       <div class="nav-footer__menu">
-        <v-btn prepend-icon="mdi-email" variant="text" @click="onInquire">
+        <v-btn
+          prepend-icon="mdi-email"
+          variant="text"
+          @click="inquireDialog = true"
+        >
           お問い合わせ
         </v-btn>
-        <v-btn v-if="accessSource" prepend-icon="mdi-earth" variant="text">
+        <v-btn
+          v-if="accessSource"
+          prepend-icon="mdi-earth"
+          variant="text"
+          @click="accessDialog = true"
+        >
           アクセス
         </v-btn>
-        <CommonServiceLinks force-icon class="nav-footer__menu__sns" />
+        <PublishCustomerServiceLinks force-icon class="nav-footer__menu__sns" />
       </div>
     </div>
     <div class="g-block-sm">
       <div class="nav-footer__menu">
-        <v-btn icon variant="text" @click="onInquire">
+        <v-btn icon variant="text" @click="inquireDialog = true">
           <v-icon>mdi-email</v-icon>
         </v-btn>
-        <v-btn v-if="accessSource" icon variant="text">
+        <v-btn
+          v-if="accessSource"
+          icon
+          variant="text"
+          @click="accessDialog = true"
+        >
           <v-icon>mdi-earth</v-icon>
         </v-btn>
       </div>
     </div>
   </div>
   <PublishInquireDialog v-model:modal="inquireDialog" />
+  <PublishCustomerAccessDialog v-model:modal="accessDialog" />
 </template>
 
 <style lang="scss" scoped>

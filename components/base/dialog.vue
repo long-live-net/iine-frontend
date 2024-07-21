@@ -2,10 +2,12 @@
 const props = withDefaults(
   defineProps<{
     modal: boolean
-    maxWidth?: number
+    width?: number | string
+    maxWidth?: number | string
     persistent?: boolean
   }>(),
   {
+    width: undefined,
     maxWidth: 800,
     persistent: false,
   }
@@ -25,6 +27,7 @@ const dialog = computed({
 <template>
   <v-dialog
     v-model="dialog"
+    :width="width"
     :max-width="maxWidth"
     :persistent="persistent"
     scrollable
