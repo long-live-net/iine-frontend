@@ -38,6 +38,20 @@ await onLoad(contentId)
             />
           </div>
         </CommonEyecatchImage>
+        <div class="nav-pre-next-link">
+          <div v-if="newsPreNextIdRefRef?.preId" class="nav-pre">
+            <nuxt-link :to="`/news/${newsPreNextIdRefRef.preId}`">
+              <v-icon icon="mdi-arrow-left-drop-circle" size="x-large" />
+            </nuxt-link>
+          </div>
+          <div v-else />
+          <div v-if="newsPreNextIdRefRef?.nextId" class="nav-next">
+            <nuxt-link :to="`/news/${newsPreNextIdRefRef.nextId}`">
+              <v-icon icon="mdi-arrow-right-drop-circle" size="x-large" />
+            </nuxt-link>
+          </div>
+          <div v-else />
+        </div>
         <CommonContentCardBody>
           <div v-if="newsRef?.id" class="news-detail__header">
             <PublishNewsCategoryBadge :category="newsRef.category" small />
@@ -53,9 +67,6 @@ await onLoad(contentId)
           <div v-if="newsRef?.body" class="ql-editor">
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="htmlSanitizer(newsRef?.body)" />
-            <div class="inquire-activator">
-              <PublishInquire />
-            </div>
           </div>
           <div v-else class="no-items">
             <p>データがありません</p>
@@ -73,18 +84,6 @@ await onLoad(contentId)
             @update="onUpdate"
             @remove="onRemove"
           />
-        </div>
-      </template>
-      <template #outsider>
-        <div v-if="newsPreNextIdRefRef?.preId" class="nav-pre">
-          <nuxt-link :to="`/news/${newsPreNextIdRefRef.preId}`">
-            <v-icon color="primary" icon="mdi-chevron-left" />前のNEWS
-          </nuxt-link>
-        </div>
-        <div v-if="newsPreNextIdRefRef?.nextId" class="nav-next">
-          <nuxt-link :to="`/news/${newsPreNextIdRefRef.nextId}`">
-            次のNEWS<v-icon color="primary" icon="mdi-chevron-right" />
-          </nuxt-link>
         </div>
       </template>
     </CommonContentCard>
@@ -112,10 +111,6 @@ $eyecatcher-height-sm: 600px;
     top: 1rem;
     right: 1rem;
   }
-  .inquire-activator {
-    margin-top: 1.5rem;
-    text-align: center;
-  }
   .no-items {
     display: flex;
     flex-direction: column;
@@ -125,16 +120,6 @@ $eyecatcher-height-sm: 600px;
       font-weight: bold;
       color: $accent;
     }
-  }
-  .nav-pre {
-    position: absolute;
-    bottom: -3.5rem;
-    left: 1rem;
-  }
-  .nav-next {
-    position: absolute;
-    bottom: -3.5rem;
-    right: 1rem;
   }
 }
 .eyecatcher {
@@ -155,15 +140,13 @@ $eyecatcher-height-sm: 600px;
   }
 }
 
+.nav-pre-next-link {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 1.5rem;
+}
+
 @media only screen and (max-width: $grid-breakpoint-md) {
-  .news-detail {
-    .nav-pre {
-      bottom: -2.75rem;
-    }
-    .nav-next {
-      bottom: -2.75rem;
-    }
-  }
   .eyecatcher {
     height: 50vh;
     max-height: $eyecatcher-height-sm;
@@ -173,5 +156,13 @@ $eyecatcher-height-sm: 600px;
       right: 0.5rem;
     }
   }
+  .nav-pre-next-link {
+    margin-bottom: 1.5rem;
+  }
+}
+
+:deep(.contents-card-body) {
+  padding-top: 0;
+  padding-bottom: 3rem;
 }
 </style>
