@@ -165,7 +165,8 @@ export const useCustomerActions = () => {
  * 顧客情報のテーマ設定関連
  */
 export const useThemeSettingsEdit = () => {
-  const { customer, setCustomer, updateCustomer, loading } = useCustomer()
+  const { customer, setCustomer, updateCustomer, fetchCustomer, loading } =
+    useCustomer()
   const { addSnackber } = useSnackbars()
 
   // Note:
@@ -180,36 +181,44 @@ export const useThemeSettingsEdit = () => {
   })
   const editLayoutTheme = computed<LayoutTheme>({
     get: () => customer.value?.layoutTheme ?? 'type1',
-    set: async (theme: LayoutTheme) => {
+    set: (theme: LayoutTheme) => {
       if (!customer.value) {
         return
       }
-      try {
-        error.value = null
-        const updateData = { ...customer.value, layoutTheme: theme }
-        setCustomer(updateData)
-        await updateCustomer(updateData)
-        addSnackber?.('レイアウトテーマを更新しました。')
-      } catch (e) {
-        error.value = e as Error
-      }
+      error.value = null
+      const updateData = { ...customer.value, layoutTheme: theme }
+      setCustomer(updateData)
+      updateCustomer(updateData)
+        .then(() => {
+          fetchCustomer(updateData.id).catch((e) => {
+            error.value = e as Error
+          })
+          addSnackber?.('レイアウトテーマを更新しました。')
+        })
+        .catch((e) => {
+          error.value = e as Error
+        })
     },
   })
   const editColorTheme = computed<ColorTheme>({
     get: () => customer.value?.colorTheme ?? 'light',
-    set: async (theme: ColorTheme) => {
+    set: (theme: ColorTheme) => {
       if (!customer.value) {
         return
       }
-      try {
-        error.value = null
-        const updateData = { ...customer.value, colorTheme: theme }
-        setCustomer(updateData)
-        await updateCustomer(updateData)
-        addSnackber?.('カラーテーマを更新しました。')
-      } catch (e) {
-        error.value = e as Error
-      }
+      error.value = null
+      const updateData = { ...customer.value, colorTheme: theme }
+      setCustomer(updateData)
+      updateCustomer(updateData)
+        .then(() => {
+          fetchCustomer(updateData.id).catch((e) => {
+            error.value = e as Error
+          })
+          addSnackber?.('カラーテーマを更新しました。')
+        })
+        .catch((e) => {
+          error.value = e as Error
+        })
     },
   })
 
