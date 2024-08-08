@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import type {
   LoginApiCredential,
-  LoginFrom,
+  LoginForm,
   ChangePasswordFrom,
 } from '@/types/auth'
 
@@ -70,7 +70,7 @@ export const useLoginForm = () => {
     password: (v: string | undefined) =>
       noBlank(v) || 'password を入力してください',
   }
-  const loginFormInitial: LoginFrom = {
+  const loginFormInitial: LoginForm = {
     username: '',
     password: '',
   }
@@ -81,8 +81,8 @@ export const useLoginForm = () => {
   })
 
   const formData = {
-    username: useField<LoginFrom['username']>('username'),
-    password: useField<LoginFrom['password']>('password'),
+    username: useField<LoginForm['username']>('username'),
+    password: useField<LoginForm['password']>('password'),
   }
 
   return {

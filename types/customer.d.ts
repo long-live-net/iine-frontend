@@ -28,3 +28,18 @@ export interface Customer {
   links: NetworkServiceink[] | null
   accessSource: string | null
 }
+
+/**
+ * Customer Form
+ */
+export type CustomerForm = {
+  name: string
+  defaultEmail: string
+  phone: string | null
+  address: string
+  note: string | null
+  facebook: string | null
+  instagram: string | null
+  twitter: string | null
+  youtube: string | null
+}

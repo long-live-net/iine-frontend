@@ -8,6 +8,7 @@ const logoutDialog = ref(false)
 const sectionTitleSettingDialog = ref(false)
 const homeLayoutSettingDialog = ref(false)
 const themeSettingDialog = ref(false)
+const customerInfoDialog = ref(false)
 const userInfoDialog = ref(false)
 
 const userMenuItems: MenuItem[] = [
@@ -28,6 +29,11 @@ const userMenuItems: MenuItem[] = [
     props: { prependIcon: 'mdi-cog' },
   },
   { type: 'divider' },
+  {
+    title: 'テナント情報',
+    value: 'customerinfo',
+    props: { prependIcon: 'mdi-domain' },
+  },
   {
     title: 'ユーザ情報',
     value: 'userinfo',
@@ -58,6 +64,9 @@ const onSelectUserMenu = (value: number | string) => {
       break
     case 'themeSetting':
       themeSettingDialog.value = true
+      break
+    case 'customerinfo':
+      customerInfoDialog.value = true
       break
     case 'userinfo':
       userInfoDialog.value = true
@@ -115,6 +124,7 @@ const onSelectUserMenu = (value: number | string) => {
   />
   <ManageCustomerHomeLayoutSetting v-model:modal="homeLayoutSettingDialog" />
   <ManageCustomerThemeSetting v-model:modal="themeSettingDialog" />
+  <ManageCustomerCustomerInfo v-model:modal="customerInfoDialog" />
   <ManageCustomerUserInfo v-model:modal="userInfoDialog" />
   <ManageCustomerLogout v-model:modal="logoutDialog" />
 </template>

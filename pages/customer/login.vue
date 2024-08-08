@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { LoginApiCredential, LoginFrom } from '@/types/auth'
+import type { LoginApiCredential, LoginForm } from '@/types/auth'
 
 definePageMeta({ layout: 'simple' })
 
@@ -10,7 +10,7 @@ const { addSnackber } = useSnackbars()
 const route = useRoute()
 const router = useRouter()
 
-const onLogin = async (form: LoginFrom) => {
+const onLogin = async (form: LoginForm) => {
   const credential: LoginApiCredential = {
     customerId: customerId.value ?? 0,
     username: form.username,
