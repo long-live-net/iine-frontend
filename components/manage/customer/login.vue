@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { LoginFrom } from '@/types/auth'
+import type { LoginForm } from '@/types/auth'
 
 defineProps<{ customerName: string }>()
 
 const emit = defineEmits<{
-  login: [credential: LoginFrom]
+  login: [credential: LoginForm]
 }>()
 
 const { handleSubmit, formData } = useLoginForm()

@@ -63,19 +63,22 @@ const useCustomerApi = (token: Ref<string | null>) => {
     return api2Appdata(data.value)
   }
   const fetch = async (id: number): Promise<Customer | null> => {
-    const data = await $fetch<CustomerApi>(`/customers/${id}`, {
+    const data = await $fetch<CustomerApi | null>(`${endpoint}/${id}`, {
       baseURL: backendBaseUrl,
       method: 'GET',
     })
     return api2Appdata(data)
   }
   const update = async (customer: Customer): Promise<Customer | null> => {
-    const data = await $fetch<CustomerApi>(`/customers/${customer.id}`, {
-      baseURL: backendBaseUrl,
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${token.value ?? 'notoken'}` },
-      body: app2Apidata(customer),
-    })
+    const data = await $fetch<CustomerApi | null>(
+      `${endpoint}/${customer.id}`,
+      {
+        baseURL: backendBaseUrl,
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token.value ?? 'notoken'}` },
+        body: app2Apidata(customer),
+      }
+    )
     return api2Appdata(data)
   }
 

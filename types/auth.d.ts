@@ -1,3 +1,5 @@
+import type { CustomerUser } from '~/types/customer-user'
+
 /**
  * User Login  Api Request Credential
  */
@@ -18,7 +20,7 @@ export type LoginApiError = {
 /**
  * Login Form
  */
-export type LoginFrom = {
+export type LoginForm = {
   username: string
   password: string
 }
@@ -34,10 +36,4 @@ export type ChangePasswordFrom = {
 /**
  * Login User 情報
  */
-export type LoginUser = {
-  id: number
-  customerId: number
-  email: string
-  name: string
-  note?: string
-}
+export type LoginUser = CustomerUser
