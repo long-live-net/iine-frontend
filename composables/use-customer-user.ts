@@ -124,7 +124,7 @@ export const useCustomerUserForm = () => {
   const customerUserFormInitial: CustomerUserForm = {
     email: '',
     name: '',
-    note: '',
+    note: null,
   }
 
   const { handleSubmit, handleReset, validate } = useForm({
@@ -147,7 +147,7 @@ export const useCustomerUserForm = () => {
 }
 
 /**
- *  アクションサービス
+ * Customer User 変更アクションサービス
  * @param customerId
  */
 export const useCustomerUserActions = (customer: Ref<Customer | null>) => {

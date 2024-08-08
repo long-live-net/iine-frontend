@@ -17,7 +17,7 @@ defineEmits<{
     <dl>
       <dt>お名前</dt>
       <dd>{{ customerUser?.name || '-' }}</dd>
-      <dt>所属</dt>
+      <dt>所属テナント</dt>
       <dd>{{ customerUser?.customerName || '-' }}</dd>
       <dt>メールアドレス</dt>
       <dd>{{ customerUser?.email || '-' }}</dd>
@@ -60,6 +60,7 @@ defineEmits<{
 
 @media only screen and (max-width: $grid-breakpoint-md) {
   .user-info-wrap {
+    padding: 1rem;
     dl {
       display: block;
       dt {

@@ -7,7 +7,7 @@ export type CustomerUser = {
   customerName?: string
   email: string
   name: string
-  note?: string
+  note?: string | null
 }
 
 /**
@@ -16,5 +16,5 @@ export type CustomerUser = {
 export type CustomerUserForm = {
   email: string
   name: string
-  note?: string
+  note?: string | null
 }

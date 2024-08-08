@@ -6,5 +6,5 @@ export type CustomerUserApi = {
   customerId: number
   email: string
   name: string
-  note?: string
+  note?: string | null
 }
