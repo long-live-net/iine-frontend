@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { formatLocalDate } from '@/utils/misc'
+import { htmlSanitizer } from '@/utils/sanitizer'
+
 const { customerId, canEdit } = useFoundation()
 const {
   newsRef,

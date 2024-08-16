@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import debounce from 'lodash/debounce'
 
 const props = withDefaults(
@@ -22,19 +20,6 @@ const props = withDefaults(
 const emit = defineEmits<{
   'update:modelValue': [value: string | null]
 }>()
-
-const wysiwygToolbar = [
-  [{ header: [1, 2, 3, 4, false] }],
-  ['bold', 'italic', 'underline'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  [
-    { align: '' },
-    { align: 'center' },
-    { align: 'right' },
-    { align: 'justify' },
-  ],
-  ['blockquote', { color: [] }, 'link', 'clean'],
-] as const
 
 const valueData = computed({
   get: () => props.modelValue ?? undefined,
@@ -72,15 +57,9 @@ const labelClass = computed(() =>
       : []
 )
 
-const quillEditorRef = ref<typeof QuillEditor | null>(null)
 const onClear = () => {
-  quillEditorRef.value?.setText('')
+  console.log('onClear')
 }
-
-// Note: とりあえず不要となりましたが、
-// また使用するかもしれないのでコメントアウトしておく
-// const getValueText = () => quillEditorRef.value?.getText().trim()
-// defineExpose({ getValueText })
 </script>
 
 <template>
@@ -95,12 +74,8 @@ const onClear = () => {
         {{ label }}
       </p>
       <div class="wysiwyg-editor__editor">
-        <QuillEditor
-          ref="quillEditorRef"
+        <BaseWysiwsgEditorTiptapEditor
           v-model:content="valueData"
-          content-type="html"
-          theme="snow"
-          :toolbar="wysiwygToolbar"
           :placeholder="placeholder"
           @focus="isFocus = true"
           @blur="isFocus = false"
@@ -200,25 +175,5 @@ const onClear = () => {
   .error-leave-to {
     transform: translateY(-10px);
   }
-}
-</style>
-
-<style deep lang="scss">
-.ql-toolbar.ql-snow {
-  background-color: $whitesmoke !important;
-}
-.ql-container {
-  font-family: inherit !important;
-  font-size: inherit !important;
-}
-.ql-container.ql-snow {
-  border: none !important;
-  padding-right: 2rem;
-  .ql-editor {
-    min-height: 7rem;
-  }
-}
-.ql-editor.ql-blank::before {
-  color: var(--g-theme-wysiwyg-editor-placeholder-color);
 }
 </style>

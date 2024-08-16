@@ -23,6 +23,17 @@ p {
   margin: 0;
   padding: 0;
 }
+@supports (height: 1lh) {
+  p:empty {
+    height: 1lh;
+  }
+}
+@supports not (height: 1lh) {
+  p:empty::after {
+    content: '\00A0';
+  }
+}
+
 div {
   margin: 0;
 }
@@ -51,6 +62,48 @@ blockquote {
   border-left: 5px solid #ddd;
   padding-left: 1rem !important;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  text-wrap: pretty;
+}
+
+h4,
+h5,
+h6 {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+// h1,
+// h2 {
+//   margin-top: 3.5rem;
+//   margin-bottom: 1.5rem;
+// }
+
+// h1 {
+//   font-size: 1.4rem;
+// }
+
+// h2 {
+//   font-size: 1.2rem;
+// }
+
+// h3 {
+//   font-size: 1.1rem;
+// }
+
+// h4,
+// h5,
+// h6 {
+//   font-size: 1rem;
+// }
 
 // 画面サイズに応じて表示したり非表示にしたりする
 // sm

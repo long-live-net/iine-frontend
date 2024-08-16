@@ -46,7 +46,7 @@ useHead({
     position: fixed;
     top: 0px;
     width: 100%;
-    z-index: 99;
+    z-index: 999;
   }
   main {
     flex-grow: 1;
