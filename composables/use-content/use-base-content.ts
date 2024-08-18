@@ -248,21 +248,7 @@ export const useContentWrite = <
 ) => {
   const loading = ref(false)
   const { authorizationHeader } = useAuth()
-
-  const postImageData = async (
-    imageFile: File
-  ): Promise<{ fileUrl: string }> => {
-    const formData = new FormData()
-    formData.append('imagefile', imageFile)
-    const response = await $fetch('/uploads/image', {
-      baseURL: backendBaseUrl,
-      method: 'POST',
-      headers: authorizationHeader.value,
-      params: { customerId: customerId.value },
-      body: formData,
-    })
-    return response as { fileUrl: string }
-  }
+  const { postImageData } = useFilePost()
 
   /**
    * create content data

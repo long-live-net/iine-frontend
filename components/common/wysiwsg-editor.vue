@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import debounce from 'lodash/debounce'
+import type TiptapEditor from '@/components/base/wysiwsg-editor/tiptap-editor.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -10,6 +9,7 @@ const props = withDefaults(
     placeholder?: string
     clearable?: boolean
     errorMessages?: string | string[]
+    noImage?: boolean
   }>(),
   {
     modelValue: undefined,
@@ -17,24 +17,13 @@ const props = withDefaults(
     placeholder: undefined,
     clearable: false,
     errorMessages: undefined,
+    noImage: false,
   }
 )
 const emit = defineEmits<{
   'update:modelValue': [value: string | null]
+  'input-image-file': [file: File]
 }>()
-
-const wysiwygToolbar = [
-  [{ header: [1, 2, 3, 4, false] }],
-  ['bold', 'italic', 'underline'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  [
-    { align: '' },
-    { align: 'center' },
-    { align: 'right' },
-    { align: 'justify' },
-  ],
-  ['blockquote', { color: [] }, 'link', 'clean'],
-] as const
 
 const valueData = computed({
   get: () => props.modelValue ?? undefined,
@@ -72,15 +61,23 @@ const labelClass = computed(() =>
       : []
 )
 
-const quillEditorRef = ref<typeof QuillEditor | null>(null)
+const tiptapEditorRef = ref<typeof TiptapEditor | null>(null)
 const onClear = () => {
-  quillEditorRef.value?.setText('')
+  tiptapEditorRef.value?.clearContent()
 }
 
-// Note: とりあえず不要となりましたが、
-// また使用するかもしれないのでコメントアウトしておく
-// const getValueText = () => quillEditorRef.value?.getText().trim()
-// defineExpose({ getValueText })
+const { compress } = useImageCompression()
+const { postImageData, loading: inputBodyImagePosting } = useFilePost()
+const onInputBodyImage = async (
+  imageFile: File
+): Promise<string | undefined> => {
+  if (!isImageFile(imageFile)) {
+    return
+  }
+  const { compressedImageFile } = await compress(imageFile)
+  const response = await postImageData(compressedImageFile)
+  return response.fileUrl
+}
 </script>
 
 <template>
@@ -94,18 +91,17 @@ const onClear = () => {
       <p v-if="label?.length" class="wysiwyg-editor__label" :class="labelClass">
         {{ label }}
       </p>
-      <div class="wysiwyg-editor__editor">
-        <QuillEditor
-          ref="quillEditorRef"
+      <CommonContentWrap :loading="inputBodyImagePosting">
+        <BaseWysiwsgEditorTiptapEditor
+          ref="tiptapEditorRef"
           v-model:content="valueData"
-          content-type="html"
-          theme="snow"
-          :toolbar="wysiwygToolbar"
           :placeholder="placeholder"
+          :no-image="noImage"
+          :on-input-body-image="onInputBodyImage"
           @focus="isFocus = true"
           @blur="isFocus = false"
         />
-      </div>
+      </CommonContentWrap>
       <div
         v-if="clearable && (isHover || isFocus)"
         class="wysiwyg-editor__icon"
@@ -151,7 +147,7 @@ const onClear = () => {
   }
   &__icon {
     position: absolute;
-    top: 94px;
+    top: 80px;
     right: 18px;
     padding-left: 0.5rem;
     min-width: 1.5rem;
@@ -200,25 +196,5 @@ const onClear = () => {
   .error-leave-to {
     transform: translateY(-10px);
   }
-}
-</style>
-
-<style deep lang="scss">
-.ql-toolbar.ql-snow {
-  background-color: $whitesmoke !important;
-}
-.ql-container {
-  font-family: inherit !important;
-  font-size: inherit !important;
-}
-.ql-container.ql-snow {
-  border: none !important;
-  padding-right: 2rem;
-  .ql-editor {
-    min-height: 7rem;
-  }
-}
-.ql-editor.ql-blank::before {
-  color: var(--g-theme-wysiwyg-editor-placeholder-color);
 }
 </style>

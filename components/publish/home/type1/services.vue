@@ -41,12 +41,10 @@ await onLoad()
               circle
               class="service-item__eyecatcher"
             />
-            <!-- eslint-disable vue/no-v-html -->
-            <div
-              class="service-item__caption ql-editor"
-              v-html="htmlSanitizer((content as ServiceType).caption)"
+            <CommonWysiwsgViewer
+              :value="(content as ServiceType).caption"
+              class="service-item__caption"
             />
-            <!-- eslint-enable vue/no-v-html -->
             <div class="edit-activator">
               <ManageContentService
                 :service-data="content as ServiceType"
@@ -88,12 +86,10 @@ await onLoad()
               circle
               class="service-item__eyecatcher"
             />
-            <!-- eslint-disable vue/no-v-html -->
-            <div
+            <CommonWysiwsgViewer
+              :value="(content as ServiceType).caption"
               class="service-item__caption"
-              v-html="htmlSanitizer((content as ServiceType).caption)"
             />
-            <!-- eslint-enable vue/no-v-html -->
           </div>
         </template>
       </CommonContentGrid>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { formatLocalDate } from '@/utils/misc'
+
 const { customerId, canEdit } = useFoundation()
 const {
   newsRef,
@@ -64,9 +66,8 @@ await onLoad(contentId)
           <h5 class="g-text-cl news-detail__title">
             <span>{{ newsRef?.title ?? '' }}</span>
           </h5>
-          <div v-if="newsRef?.body" class="ql-editor">
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="htmlSanitizer(newsRef?.body)" />
+          <div v-if="newsRef?.body">
+            <CommonWysiwsgViewer :value="newsRef?.body" />
           </div>
           <div v-else class="no-items">
             <p>データがありません</p>

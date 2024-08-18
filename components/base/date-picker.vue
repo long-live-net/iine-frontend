@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { formatLocalDate } from '@/utils/misc'
+
 const props = defineProps<{
   modelValue?: Date | string | null
   label?: string

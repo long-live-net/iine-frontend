@@ -84,16 +84,17 @@ const onCancel = () => {
         />
       </div>
       <div class="mt-3">
-        <BaseWysiwsgEditor
+        <CommonWysiwsgEditor
           v-model="formData.caption.value.value"
           :error-messages="formData.caption.errorMessage.value"
           clearable
           label="紹介文"
           placeholder="紹介文を入力してください"
+          no-image
         />
       </div>
       <div class="mt-3">
-        <BaseWysiwsgEditor
+        <CommonWysiwsgEditor
           v-model="formData.body.value.value"
           :error-messages="formData.body.errorMessage.value"
           clearable

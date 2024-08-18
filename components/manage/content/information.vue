@@ -94,7 +94,7 @@ const onCancel = () => {
         />
       </div>
       <div class="mt-3">
-        <BaseWysiwsgEditor
+        <CommonWysiwsgEditor
           v-model="formData.body.value.value"
           :error-messages="formData.body.errorMessage.value"
           clearable
