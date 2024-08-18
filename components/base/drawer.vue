@@ -8,6 +8,8 @@ const props = withDefaults(
   }>(),
   {
     location: 'start',
+    theme: undefined,
+    color: undefined,
   }
 )
 

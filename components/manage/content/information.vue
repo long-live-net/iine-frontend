@@ -60,7 +60,7 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!informationData?.id"
-    :activaterLabel="activaterLabel"
+    :activater-label="activaterLabel"
   />
   <CommonContentEditDialog
     v-model:modal="modal"
@@ -94,7 +94,7 @@ const onCancel = () => {
         />
       </div>
       <div class="mt-3">
-        <BaseWysiwsgEditor
+        <CommonWysiwsgEditor
           v-model="formData.body.value.value"
           :error-messages="formData.body.errorMessage.value"
           clearable
@@ -103,7 +103,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :contentId="informationData?.id"
+        :content-id="informationData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"

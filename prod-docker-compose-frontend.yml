@@ -1,15 +1,14 @@
-version: '3.8'
-
 services:
   frontend:
     environment:
+      NODE_ENV: 'production'
       VITE_BACKEND_BASEURL: ${VITE_BACKEND_BASEURL}
     build:
       context: ./
       dockerfile: Dockerfile
       args:
         - VITE_BACKEND_BASEURL=${VITE_BACKEND_BASEURL}
-    image: ngzm/iine-frontend:1.0.12
+    image: ngzm/iine-frontend:1.0.19
     tty: true
     stdin_open: true
     ports:

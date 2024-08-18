@@ -41,14 +41,14 @@ await onLoad()
               circle
               class="service-item__eyecatcher"
             />
-            <div
-              class="service-item__caption ql-editor"
-              v-html="htmlSanitizer((content as ServiceType).caption)"
+            <CommonWysiwsgViewer
+              :value="(content as ServiceType).caption"
+              class="service-item__caption"
             />
             <div class="edit-activator">
               <ManageContentService
-                :serviceData="content as ServiceType"
-                activaterSize="x-small"
+                :service-data="content as ServiceType"
+                activater-size="x-small"
                 @update="onUpdate"
                 @remove="onRemove"
               />
@@ -60,7 +60,7 @@ await onLoad()
         <p>データがありません</p>
         <div>
           <ManageContentService
-            activaterLabel="コンテンツを登録してください"
+            activater-label="コンテンツを登録してください"
             @create="onCreate"
           />
         </div>
@@ -86,9 +86,9 @@ await onLoad()
               circle
               class="service-item__eyecatcher"
             />
-            <div
+            <CommonWysiwsgViewer
+              :value="(content as ServiceType).caption"
               class="service-item__caption"
-              v-html="htmlSanitizer((content as ServiceType).caption)"
             />
           </div>
         </template>

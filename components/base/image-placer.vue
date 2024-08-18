@@ -56,7 +56,7 @@ const positionYComp = computed<number>({
           density="compact"
           hide-details
         >
-          <template v-slot:label>
+          <template #label>
             <small><b>固定表示</b></small>
           </template>
         </v-switch>
@@ -68,7 +68,7 @@ const positionYComp = computed<number>({
           density="compact"
           hide-details
         >
-          <template v-slot:label>
+          <template #label>
             <small><b>自動調整</b></small>
           </template>
         </v-switch>
@@ -90,8 +90,7 @@ const positionYComp = computed<number>({
           max="400"
           step="1"
           :disabled="autoComp"
-        >
-        </v-slider>
+        />
       </div>
     </li>
     <li>
@@ -110,8 +109,7 @@ const positionYComp = computed<number>({
           max="99"
           step="1"
           :disabled="autoComp"
-        >
-        </v-slider>
+        />
       </div>
     </li>
     <li>
@@ -130,8 +128,7 @@ const positionYComp = computed<number>({
           max="99"
           step="1"
           :disabled="autoComp"
-        >
-        </v-slider>
+        />
       </div>
     </li>
   </ul>

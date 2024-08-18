@@ -39,7 +39,7 @@ const useContactContent = (customerId: Ref<number | null>) => {
 
   const setContactImageSettings = (
     settings: Partial<ImageSettings>
-  ): ImageSettings | void => {
+  ): ImageSettings | undefined => {
     if (!contactRef.value) return
     if (!contactRef.value.image?.settings) return
 

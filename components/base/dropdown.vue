@@ -1,14 +1,18 @@
 <script setup lang="ts">
-export type MenuItem = {
-  type?: 'subheader' | 'divider'
-  title?: string
-  value?: number | string
-  props?: {
-    color?: string
-    prependIcon?: string
-    appendIcon?: string
-  }
-}
+export type MenuItemType = 'subheader' | 'divider' | undefined
+export type MenuItem =
+  | {
+      type: MenuItemType
+    }
+  | {
+      title: string
+      value: number | string
+      props?: {
+        color?: string
+        prependIcon?: string
+        appendIcon?: string
+      }
+    }
 
 withDefaults(
   defineProps<{
@@ -19,8 +23,10 @@ withDefaults(
       | 'start'
       | 'end'
       | 'center'
-      | 'bottom left'
-      | 'bottom right'
+      | 'top start'
+      | 'top end'
+      | 'bottom start'
+      | 'bottom end'
   }>(),
   {
     location: 'bottom',
@@ -31,7 +37,6 @@ const emit = defineEmits<{
   select: [value: number | string]
 }>()
 
-const selected = ref<number | string | null>(null)
 const onSelect = (value: { id: unknown; value: boolean; path: unknown[] }) => {
   emit('select', value.id as number | string)
 }

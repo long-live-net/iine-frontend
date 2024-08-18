@@ -38,8 +38,8 @@ await onLoad()
         </div>
       </CommonEyecatchImage>
       <CommonContentCardBody>
-        <div v-if="informationRef?.body" class="ql-editor">
-          <div v-html="htmlSanitizer(informationRef?.body)" />
+        <div v-if="informationRef?.body">
+          <CommonWysiwsgViewer :value="informationRef?.body" />
           <div class="inquire-activator">
             <PublishInquire />
           </div>
@@ -48,7 +48,7 @@ await onLoad()
           <p>データがありません</p>
           <div v-if="canEdit">
             <ManageContentInformation
-              activaterLabel="コンテンツを登録してください"
+              activater-label="コンテンツを登録してください"
               @create="onCreate"
             />
           </div>

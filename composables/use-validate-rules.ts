@@ -52,6 +52,17 @@ export const useValidateRules = () => {
   }
 
   /**
+   * url チェック
+   */
+  const validateUrl = (v: ValidateValueType) => {
+    if (!v?.length) {
+      return true
+    }
+    const format = /^(http|https):\/\/[-\w.]+(:\d+)?(\/[^\s]*)?$/
+    return format.test(v)
+  }
+
+  /**
    * email チェック
    */
   const validateEmail = (v: ValidateValueType) => {
@@ -103,6 +114,7 @@ export const useValidateRules = () => {
     noBlankForWysiwyg,
     minLength,
     maxLength,
+    validateUrl,
     validateEmail,
     validatePhone,
     passwordComplexity,

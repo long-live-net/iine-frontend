@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { customerId, canEdit } = useFoundation()
+
 const {
   contactRef,
   onLoad,
@@ -37,18 +38,19 @@ await onLoad()
           />
         </div>
       </CommonEyecatchImage>
-      <CommonContentCardBody>
-        <div v-if="contactRef?.body" class="ql-editor">
-          <div v-html="htmlSanitizer(contactRef?.body)" />
+      <CommonContentCardBody class="type1-contact__body">
+        <div v-if="contactRef?.body">
+          <CommonWysiwsgViewer :value="contactRef?.body" />
           <div class="inquire-activator">
             <PublishInquire />
           </div>
+          <PublishCustomerServiceLinks class="type1-contact__body--links" />
         </div>
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
             <ManageContentContact
-              activaterLabel="コンテンツを登録してください"
+              activater-label="コンテンツを登録してください"
               @create="onCreate"
             />
           </div>
@@ -79,6 +81,15 @@ $eyecatcher-height-sm: 600px;
   .inquire-activator {
     margin-top: 1.5rem;
     text-align: center;
+  }
+  &__body {
+    position: relative;
+    padding-top: 3.25rem;
+    &--links {
+      position: absolute;
+      top: 0.5rem;
+      right: 1rem;
+    }
   }
   .no-items {
     display: flex;

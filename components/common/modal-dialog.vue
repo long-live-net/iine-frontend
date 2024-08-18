@@ -5,13 +5,15 @@ const props = withDefaults(
     title?: string
     titleIcon?: string
     titleIconColor?: string
-    maxWidth?: number
+    width?: number | string
+    maxWidth?: number | string
     persistent?: boolean
   }>(),
   {
     title: '設定ダイアログ',
     titleIcon: 'mdi-cog',
     titleIconColor: 'primary',
+    width: undefined,
     maxWidth: 600,
     persistent: false,
   }
@@ -31,6 +33,7 @@ const dialog = computed({
 <template>
   <BaseDialog
     v-model:modal="dialog"
+    :width="width"
     :max-width="maxWidth"
     :persistent="persistent"
   >
@@ -86,6 +89,11 @@ const dialog = computed({
   }
   &__body {
     padding: 1.5rem;
+  }
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    &__body {
+      padding: 1rem;
+    }
   }
 }
 </style>

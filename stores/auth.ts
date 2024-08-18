@@ -70,13 +70,7 @@ export const useAuthStore = defineStore(
           onError(403)
           return
         }
-        userRef.value = {
-          id: user.id,
-          customerId: user.customerId,
-          email: user.email,
-          name: user.name,
-          note: user.note,
-        }
+        setUser(user)
         tokenRef.value = token
       } catch (error) {
         const loginError = error as NuxtError
@@ -92,12 +86,23 @@ export const useAuthStore = defineStore(
       clearRef()
     }
 
+    const setUser = (user: LoginUser) => {
+      userRef.value = {
+        id: user.id,
+        customerId: user.customerId,
+        email: user.email,
+        name: user.name,
+        note: user.note,
+      }
+    }
+
     return {
       userRef,
       tokenRef,
       errorRef,
       login,
       logout,
+      setUser,
     }
   },
   {

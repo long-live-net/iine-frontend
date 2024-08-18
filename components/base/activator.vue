@@ -14,9 +14,7 @@ const props = withDefaults(
     activatorText: '',
   }
 )
-const emit = defineEmits<{
-  'update:modal': [modal: boolean]
-}>()
+defineEmits<{ 'update:modal': [modal: boolean] }>()
 
 const iconSize = computed(() => {
   switch (props.activatorSize) {

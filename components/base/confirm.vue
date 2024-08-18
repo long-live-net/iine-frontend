@@ -28,7 +28,7 @@ const confirmDialog = computed({
 </script>
 
 <template>
-  <v-dialog v-model="confirmDialog" max-width="400">
+  <BaseDialog v-model:modal="confirmDialog" :max-width="400">
     <v-card>
       <v-card-text>
         <p>{{ message }}</p>
@@ -49,7 +49,7 @@ const confirmDialog = computed({
         </div>
       </v-card-text>
     </v-card>
-  </v-dialog>
+  </BaseDialog>
 </template>
 
 <style scoped lang="scss">

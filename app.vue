@@ -18,7 +18,7 @@ watch(
 watch(
   bodyClass,
   () => {
-    if (process.client) {
+    if (import.meta.client) {
       // NOTE: useHead でやると body class のリストに
       // 追加されてしまうため document.body.className
       // を直接書き直す

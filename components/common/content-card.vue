@@ -19,6 +19,7 @@ $contents-card-min-height: 240px;
   min-height: $contents-card-min-height;
   margin: 0 auto;
   .contents-card {
+    min-height: $contents-card-min-height;
     overflow: hidden;
   }
 }

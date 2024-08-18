@@ -61,7 +61,7 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!serviceData?.id"
-    :activaterLabel="activaterLabel"
+    :activater-label="activaterLabel"
     :activater-size="activaterSize"
   />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!serviceData?.id">
@@ -84,16 +84,17 @@ const onCancel = () => {
         />
       </div>
       <div class="mt-3">
-        <BaseWysiwsgEditor
+        <CommonWysiwsgEditor
           v-model="formData.caption.value.value"
           :error-messages="formData.caption.errorMessage.value"
           clearable
           label="紹介文"
           placeholder="紹介文を入力してください"
+          no-image
         />
       </div>
       <div class="mt-3">
-        <BaseWysiwsgEditor
+        <CommonWysiwsgEditor
           v-model="formData.body.value.value"
           :error-messages="formData.body.errorMessage.value"
           clearable
@@ -102,7 +103,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :contentId="serviceData?.id"
+        :content-id="serviceData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"

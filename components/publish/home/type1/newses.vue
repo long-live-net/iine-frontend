@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { NewsType } from '@/types/content'
+import { formatLocalDate } from '@/utils/misc'
 
 const { customerId, canEdit } = useFoundation()
 const {
@@ -59,8 +60,8 @@ await onLoad()
               </div>
               <div v-if="canEdit" class="edit-activator">
                 <ManageContentNews
-                  :newsData="content as NewsType"
-                  activaterSize="x-small"
+                  :news-data="content as NewsType"
+                  activater-size="x-small"
                   @update="onUpdate"
                   @remove="onRemove"
                 />
@@ -72,7 +73,7 @@ await onLoad()
           <p>データがありません</p>
           <div v-if="canEdit">
             <ManageContentNews
-              activaterLabel="ニュースを登録してください"
+              activater-label="ニュースを登録してください"
               @create="onCreate"
             />
           </div>

@@ -95,7 +95,7 @@ export interface ContentPreNextId {
 }
 
 /**
- * ContentListOption
+ * トップ画面表示位置 (position)
  */
 export interface ContentPosition {
   id: number

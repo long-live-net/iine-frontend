@@ -65,7 +65,7 @@ export const useInquireSend = (customerId: Ref<number | null>) => {
   const sendInquire = async (inquire: InquireMail) => {
     loading.value = true
     try {
-      const data = await $fetch(apiPath, {
+      await $fetch(apiPath, {
         baseURL: backendBaseUrl,
         method: 'POST',
         params: { customerId: customerId.value },

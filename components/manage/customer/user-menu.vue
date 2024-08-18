@@ -1,26 +1,14 @@
 <script setup lang="ts">
 import type { MenuItem } from '@/components/base/dropdown.vue'
 
-const emit = defineEmits<{
-  userinfo: []
-  changePassword: []
-  logout: []
-}>()
-
-const { logout } = useAuth()
 const { user, isPreview, togglePreview } = useFoundation()
 const router = useRouter()
 
 const logoutDialog = ref(false)
-const onLogout = () => {
-  logoutDialog.value = false
-  logout()
-  router.push('/customer/logout')
-}
-
 const sectionTitleSettingDialog = ref(false)
 const homeLayoutSettingDialog = ref(false)
 const themeSettingDialog = ref(false)
+const customerInfoDialog = ref(false)
 const userInfoDialog = ref(false)
 
 const userMenuItems: MenuItem[] = [
@@ -28,12 +16,12 @@ const userMenuItems: MenuItem[] = [
   {
     title: 'メニュータイトル設定',
     value: 'sectionTitleSetting',
-    props: { prependIcon: 'mdi-layers-edit' },
+    props: { prependIcon: 'mdi-format-title' },
   },
   {
     title: 'ホームレイアウト設定',
     value: 'homeLayoutSetting',
-    props: { prependIcon: 'mdi-view-split-horizontal' },
+    props: { prependIcon: 'mdi-page-layout-header-footer' },
   },
   {
     title: 'テーマ設定',
@@ -41,6 +29,11 @@ const userMenuItems: MenuItem[] = [
     props: { prependIcon: 'mdi-cog' },
   },
   { type: 'divider' },
+  {
+    title: 'テナント情報',
+    value: 'customerinfo',
+    props: { prependIcon: 'mdi-domain' },
+  },
   {
     title: 'ユーザ情報',
     value: 'userinfo',
@@ -72,6 +65,9 @@ const onSelectUserMenu = (value: number | string) => {
     case 'themeSetting':
       themeSettingDialog.value = true
       break
+    case 'customerinfo':
+      customerInfoDialog.value = true
+      break
     case 'userinfo':
       userInfoDialog.value = true
       break
@@ -89,7 +85,7 @@ const onSelectUserMenu = (value: number | string) => {
   <div class="g-block-lg">
     <BaseDropdown
       :items="userMenuItems"
-      location="bottom left"
+      location="bottom end"
       @select="onSelectUserMenu"
     >
       <template #activator="{ props }">
@@ -106,7 +102,11 @@ const onSelectUserMenu = (value: number | string) => {
     </BaseDropdown>
   </div>
   <div class="g-block-sm">
-    <BaseDropdown :items="userMenuItems" @select="onSelectUserMenu">
+    <BaseDropdown
+      :items="userMenuItems"
+      location="bottom end"
+      @select="onSelectUserMenu"
+    >
       <template #activator="{ props }">
         <v-btn v-bind="props" color="accent" rounded="lg">
           <v-icon icon="mdi-account" />
@@ -124,14 +124,9 @@ const onSelectUserMenu = (value: number | string) => {
   />
   <ManageCustomerHomeLayoutSetting v-model:modal="homeLayoutSettingDialog" />
   <ManageCustomerThemeSetting v-model:modal="themeSettingDialog" />
+  <ManageCustomerCustomerInfo v-model:modal="customerInfoDialog" />
   <ManageCustomerUserInfo v-model:modal="userInfoDialog" />
-  <BaseConfirm
-    v-model:comfirm="logoutDialog"
-    message="本当にログアウトしますか？"
-    exec-text="ログアウト"
-    @cancel="logoutDialog = false"
-    @confirm="onLogout"
-  />
+  <ManageCustomerLogout v-model:modal="logoutDialog" />
 </template>
 
 <style scoped lang="scss">

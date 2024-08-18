@@ -19,8 +19,14 @@ const titleData = {
   titleColor: 'accent',
 }
 const { customerId } = useFoundation()
-const { baseSections, editSections, loading, replaceSections } =
+const { baseSections, editSections, loading, reset, replaceSections } =
   useHomeLayoutEdit(customerId)
+
+watch(settingModal, () => {
+  if (settingModal.value) {
+    reset()
+  }
+})
 
 const clone = (data: PageSectionEdit): PageSectionEdit => ({ ...data })
 

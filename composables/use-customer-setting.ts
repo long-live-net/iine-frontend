@@ -1,6 +1,5 @@
 import type { PageSection, PageSectionEdit } from '@/types/customer-setting'
 import type { PageSectionApi } from '@/types/API/customer-setting-api'
-import type { ColorTheme, LayoutTheme } from '@/types/customer'
 
 const apiToPageSection = (
   apiData?: PageSectionApi | null
@@ -55,7 +54,6 @@ export const useHomeLayoutRead = (customerId: Ref<number | null>) => {
 
   const fetchHomeLayout = async () => {
     loading.value = true
-    const key = `fetch_home_layout_${apiPath}_${keyExt.value}`
     try {
       const data = await $fetch<PageSectionApi[]>(apiPath, {
         baseURL: backendBaseUrl,
@@ -94,7 +92,7 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
   const updateHomeLayout = async (editSections: PageSectionEdit[]) => {
     loading.value = true
     try {
-      await $fetch<void>(apiPath, {
+      await $fetch(apiPath, {
         baseURL: backendBaseUrl,
         method: 'PUT',
         headers: authorizationHeader.value,
@@ -117,7 +115,7 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
     })
     loading.value = true
     try {
-      await $fetch<void>(apiPath, {
+      await $fetch(apiPath, {
         baseURL: backendBaseUrl,
         method: 'PUT',
         headers: authorizationHeader.value,
@@ -135,6 +133,83 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
     updateHomeLayout,
     replaceHomeLayout,
     loading,
+  }
+}
+
+/**
+ * ホームレイアウト情報変更用フォームデータ
+ * @param customerId
+ */
+export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
+  const {
+    homeSections,
+    fetchHomeLayout,
+    loading: readLoading,
+  } = useHomeLayoutRead(customerId)
+
+  const { replaceHomeLayout, loading: writeLoading } =
+    useHomeLayoutWrite(customerId)
+
+  const { addSnackber } = useSnackbars()
+
+  const baseSectionsOrder: Pick<PageSection, 'baseId' | 'kind' | 'title'>[] = [
+    { baseId: 'type1-information', kind: 'information', title: 'information' },
+    { baseId: 'type1-news', kind: 'news', title: 'news' },
+    { baseId: 'type1-service', kind: 'service', title: 'service' },
+    { baseId: 'type1-contact', kind: 'contact', title: 'contact' },
+    { baseId: 'type1-access', kind: 'access', title: 'access' },
+  ]
+  const baseSections = ref<PageSectionEdit[]>([])
+  const editSections = ref<PageSectionEdit[]>([])
+
+  const reset = () => {
+    const cid = customerId.value
+    if (!customerId.value || !homeSections.value?.length) {
+      baseSections.value = []
+      editSections.value = []
+      return
+    }
+    if (cid && homeSections.value?.length) {
+      baseSections.value = baseSectionsOrder.map((b) => {
+        const { id, ...section } = homeSections.value?.find(
+          (s) => s.kind === b.kind
+        )
+          ? {
+              ...b,
+              id: 0,
+              customerId: cid,
+            }
+          : {
+              ...b,
+              id: 0,
+              customerId: cid,
+            }
+        return section
+      })
+      editSections.value = homeSections.value.map<PageSectionEdit>((s) => {
+        const { id, ...section } = s
+        return section
+      })
+    }
+  }
+  watch(homeSections, reset, {
+    immediate: true,
+  })
+
+  const loading = computed(() => readLoading.value || writeLoading.value)
+
+  const replaceSections = async () => {
+    await replaceHomeLayout(editSections.value)
+    await fetchHomeLayout()
+    addSnackber?.('ホームページのレイアウトを変更しました。')
+  }
+
+  return {
+    baseSections,
+    editSections,
+    loading,
+    reset,
+    replaceSections,
   }
 }
 
@@ -162,7 +237,7 @@ export const usSectionTitleEdit = (customerId: Ref<number | null>) => {
         menuTitle: formField[`${s.id}`] ?? '',
       })) ?? []
 
-    const id = await updateHomeLayout(updatingSectionds)
+    await updateHomeLayout(updatingSectionds)
     await fetchHomeLayout()
     addSnackber?.('メニュータイトルを変更しました。')
   }
@@ -173,160 +248,5 @@ export const usSectionTitleEdit = (customerId: Ref<number | null>) => {
     homeSections,
     loading,
     update,
-  }
-}
-
-/**
- * ホームレイアウト情報変更用フォームデータ
- * @param customerId
- */
-export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
-  const {
-    homeSections,
-    fetchHomeLayout,
-    loading: readLoading,
-  } = useHomeLayoutRead(customerId)
-
-  const { replaceHomeLayout, loading: writeLoading } =
-    useHomeLayoutWrite(customerId)
-
-  const { addSnackber } = useSnackbars()
-
-  const baseSectionsOrder: Pick<PageSection, 'baseId' | 'kind' | 'title'>[] = [
-    { baseId: 'type1-information', kind: 'information', title: 'information' },
-    { baseId: 'type1-news', kind: 'news', title: 'news' },
-    { baseId: 'type1-service', kind: 'service', title: 'service' },
-    { baseId: 'type1-contact', kind: 'contact', title: 'contact' },
-  ]
-  const baseSections = ref<PageSectionEdit[]>([])
-  const editSections = ref<PageSectionEdit[]>([])
-  watch(
-    homeSections,
-    (sections) => {
-      const cid = customerId.value
-      if (!cid || !sections?.length) {
-        baseSections.value = []
-        editSections.value = []
-        return
-      }
-      baseSections.value = baseSectionsOrder.map((b) => {
-        const { id, ...section } = sections.find((s) => s.kind === b.kind) ?? {
-          ...b,
-          id: 0,
-          customerId: cid,
-        }
-        return section
-      })
-      editSections.value = sections.map<PageSectionEdit>((s) => {
-        const { id, ...section } = s
-        return section
-      })
-    },
-    {
-      immediate: true,
-    }
-  )
-
-  const loading = computed(() => readLoading.value || writeLoading.value)
-
-  const replaceSections = async () => {
-    await replaceHomeLayout(editSections.value)
-    await fetchHomeLayout()
-    addSnackber?.('ホームページのレイアウトを変更しました。')
-  }
-
-  return {
-    baseSections,
-    editSections,
-    loading,
-    replaceSections,
-  }
-}
-
-/**
- * 顧客情報のテーマ設定関連
- */
-export const useThemeSettingsEdit = () => {
-  const { customer, setCustomer, updateCustomer, saving } = useCustomer()
-  const { addSnackber } = useSnackbars()
-
-  // Note:
-  // computed set のメソッドが promise の場合に throw errro すると
-  // unhandled promise rejection エラーとなりNuxt側でハンドリング
-  // しないため、computed set の外側で throw する形に実装した
-  const error = ref<Error | null>(null)
-  watch(error, () => {
-    if (error.value) {
-      throw error.value
-    }
-  })
-  const editLayoutTheme = computed<LayoutTheme>({
-    get: () => customer.value?.layoutTheme ?? 'type1',
-    set: async (theme: LayoutTheme) => {
-      if (!customer.value) {
-        return
-      }
-      try {
-        error.value = null
-        const updateData = { ...customer.value, layoutTheme: theme }
-        setCustomer(updateData)
-        await updateCustomer(updateData)
-        addSnackber?.('レイアウトテーマを更新しました。')
-      } catch (e) {
-        error.value = e as Error
-      }
-    },
-  })
-  const editColorTheme = computed<ColorTheme | undefined>({
-    get: () => customer.value?.colorTheme,
-    set: async (theme?: ColorTheme) => {
-      if (!customer.value) {
-        return
-      }
-      try {
-        error.value = null
-        const updateData = { ...customer.value, colorTheme: theme }
-        setCustomer(updateData)
-        await updateCustomer(updateData)
-        addSnackber?.('カラーテーマを更新しました。')
-      } catch (e) {
-        error.value = e as Error
-      }
-    },
-  })
-
-  const layoutThemeOptions: {
-    type: LayoutTheme
-    label: string
-  }[] = [
-    {
-      type: 'type1',
-      label: '標準',
-    },
-    {
-      type: 'type2',
-      label: 'シャープ',
-    },
-  ]
-  const colorThemeOptions: {
-    type: ColorTheme
-    label: string
-  }[] = [
-    {
-      type: 'light',
-      label: 'ライト',
-    },
-    {
-      type: 'dark',
-      label: 'ダーク',
-    },
-  ]
-
-  return {
-    editLayoutTheme,
-    editColorTheme,
-    layoutThemeOptions,
-    colorThemeOptions,
-    saving,
   }
 }

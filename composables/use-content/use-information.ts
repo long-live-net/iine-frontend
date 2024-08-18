@@ -1,4 +1,3 @@
-import { useForm, useField } from 'vee-validate'
 import type {
   InformationType,
   InformationForm,
@@ -47,7 +46,7 @@ const useInformationContent = (customerId: Ref<number | null>) => {
 
   const setInformationImageSettings = (
     settings: Partial<ImageSettings>
-  ): ImageSettings | void => {
+  ): ImageSettings | undefined => {
     if (!informationRef.value) return
     if (!informationRef.value.image?.settings) return
 

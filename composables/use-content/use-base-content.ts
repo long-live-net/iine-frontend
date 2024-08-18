@@ -248,27 +248,13 @@ export const useContentWrite = <
 ) => {
   const loading = ref(false)
   const { authorizationHeader } = useAuth()
-
-  const postImageData = async (
-    imageFile: File
-  ): Promise<{ fileUrl: string }> => {
-    const formData = new FormData()
-    formData.append('imagefile', imageFile)
-    const response = await $fetch('/uploads/image', {
-      baseURL: backendBaseUrl,
-      method: 'POST',
-      headers: authorizationHeader.value,
-      params: { customerId: customerId.value },
-      body: formData,
-    })
-    return response as { fileUrl: string }
-  }
+  const { postImageData } = useFilePost()
 
   /**
    * create content data
    * @param newData
    */
-  const create = async (newData: F): Promise<T | void> => {
+  const create = async (newData: F): Promise<T> => {
     const { imageFile, ...sendData } = newData
     try {
       loading.value = true
@@ -299,7 +285,7 @@ export const useContentWrite = <
    * @param contentId
    * @param modData
    */
-  const update = async (contentId: number, modData: F): Promise<T | void> => {
+  const update = async (contentId: number, modData: F): Promise<T> => {
     const { imageFile, ...sendData } = modData
     try {
       loading.value = true
@@ -331,7 +317,7 @@ export const useContentWrite = <
   const remove = async (contentId: number): Promise<void> => {
     try {
       loading.value = true
-      await $fetch<void>(`${apiPath}/${contentId}`, {
+      await $fetch(`${apiPath}/${contentId}`, {
         baseURL: backendBaseUrl,
         headers: authorizationHeader.value,
         method: 'DELETE',
@@ -387,59 +373,6 @@ export const useContentWrite = <
     }
   }
   const updateImageSettingsWithDebounced = debounce(updateImageSettings, 600)
-
-  // /**
-  //  * useUpdateImageSettings
-  //  *
-  //  * Note.
-  //  * lodash.debounce() は非同期に実行するので
-  //  * 実行する関数のリターン値を指定しても undefined
-  //  * となる。
-  //  * このため useAsyncData の結果をリアクティブな
-  //  * 変数にセットして、それを watch しつつ結果を
-  //  * 返すような形で実装するようにした。
-  //  */
-  // const useUpdateImageSettings = () => {
-  //   const data = ref<any>(null)
-  //   const error = ref<Error | null>(null)
-  //   const fatal = ref<Error | null>(null)
-
-  //   const debouncedFunc = debounce(
-  //     (contentId: number, imageSettings: ImageSettings) => {
-  //       useAsyncData<T>(() =>
-  //         $fetch(`${apiPath}/${contentId}/image-settings`, {
-  //           baseURL: backendBaseUrl,
-  //           method: 'PUT',
-  //           headers: authorizationHeader.value,
-  //           body: imageSettings,
-  //         })
-  //       )
-  //         .then((response) => {
-  //           data.value = response?.data?.value ?? null
-  //           error.value = response?.error?.value ?? null
-  //         })
-  //         .catch((e) => {
-  //           fatal.value = e
-  //         })
-  //     },
-  //     600
-  //   )
-  //   watch(error, () => {
-  //     if (error.value) {
-  //       throw error.value
-  //     }
-  //   })
-  //   watch(fatal, () => {
-  //     if (fatal.value) {
-  //       throw error.value
-  //     }
-  //   })
-
-  //   return {
-  //     debouncedFunc,
-  //     data,
-  //   }
-  // }
 
   const getDefaultImageSettings = (): ImageSettings => ({
     lgSize: 'cover',
