@@ -8,6 +8,7 @@ import TextStyle from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import Placeholder from '@tiptap/extension-placeholder'
 import ImageResize from 'tiptap-extension-resize-image'
+import Youtube from '@tiptap/extension-youtube'
 import { FontSize } from '@/utils/wysiwsg-editor/tip-tap'
 import type TiptapFrameWithInputImage from './tiptap-frame-with-input-image.vue'
 
@@ -55,6 +56,13 @@ onMounted(() => {
         placeholder: props.placeholder || 'Plase input',
       }),
       ImageResize,
+      Youtube.configure({
+        controls: false,
+        nocookie: true,
+        allowFullscreen: false,
+        width: 480,
+        height: 320,
+      }),
     ],
     content: props.content,
     onUpdate: () => {
@@ -172,6 +180,17 @@ defineExpose({ clearContent })
     float: left;
     height: 0;
     pointer-events: none;
+  }
+
+  div[data-youtube-video] {
+    iframe {
+      border: 0.5rem solid var(--black-contrast);
+      display: block;
+      max-width: 100%;
+      min-height: 200px;
+      min-width: 200px;
+      outline: 0px solid transparent;
+    }
   }
 
   /* Code and preformatted text styles */

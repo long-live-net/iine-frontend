@@ -36,6 +36,7 @@
     "@tiptap/extension-text-align": "^2.5.9",
     "@tiptap/extension-text-style": "^2.5.9",
     "@tiptap/extension-underline": "^2.5.9",
+    "@tiptap/extension-youtube": "^2.6.4",
     "@tiptap/pm": "^2.5.9",
     "@tiptap/starter-kit": "^2.5.9",
     "@tiptap/vue-3": "^2.5.9",

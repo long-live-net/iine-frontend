@@ -58,6 +58,8 @@ watch(inputLevel, (cur, pre) => {
           class="mr-2"
           @click="$emit('update:level', level)"
         />
+      </div>
+      <div>
         <v-btn
           variant="outlined"
           color="black"
@@ -73,13 +75,14 @@ watch(inputLevel, (cur, pre) => {
 <style scoped lang="scss">
 .sub-input-header {
   padding: 0;
+  color: $black;
   background-color: $white;
   border-radius: 4px;
 
   .actions {
     padding: 0.5rem 1rem;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 }
 </style>

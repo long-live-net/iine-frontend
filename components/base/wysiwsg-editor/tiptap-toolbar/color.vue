@@ -38,10 +38,7 @@ watch(
       />
     </div>
     <div class="actions">
-      <div>
-        <b :style="{ color: inputColor }">Font Color</b>
-      </div>
-      <div>
+      <div class="d-flex align-center">
         <v-btn
           v-if="color"
           :color="inputColor"
@@ -50,6 +47,11 @@ watch(
           class="mr-2"
           @click="$emit('delete')"
         />
+        <p :style="{ color: inputColor }">
+          <b>Font Color</b>
+        </p>
+      </div>
+      <div>
         <v-btn
           variant="outlined"
           color="black"
@@ -65,6 +67,7 @@ watch(
 <style scoped lang="scss">
 .sub-input-color {
   padding: 0;
+  color: $black;
   background-color: $white;
   border-radius: 4px;
 

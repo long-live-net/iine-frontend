@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const props = defineProps<{ url: string }>()
 const emit = defineEmits<{
   'update:url': [value: string]
   delete: []
@@ -7,22 +6,17 @@ const emit = defineEmits<{
 }>()
 
 const inputUrl = ref('')
-watch(
-  () => props.url,
-  () => {
-    if (inputUrl.value !== props.url) {
-      inputUrl.value = props.url
-    }
-  },
-  { immediate: true }
-)
-
 const errorMessage = ref('')
 const { validateUrl } = useValidateRules()
 
 const onUpdateUrl = () => {
   if (!validateUrl(inputUrl.value)) {
     errorMessage.value = 'URL形式で入力してください。'
+    return
+  }
+  const validUrl = new RegExp('^https://www.youtube.com/')
+  if (!validUrl.test(inputUrl.value)) {
+    errorMessage.value = 'youtube 以外の動画は設定できません。'
     return
   }
   errorMessage.value = ''
@@ -36,40 +30,28 @@ const onUpdateUrl = () => {
       <v-text-field
         v-model="inputUrl"
         type="url"
-        label="Link URL"
+        label="Youtube動画のURLを入力してください"
         variant="outlined"
         density="compact"
         :error-messages="errorMessage"
       />
     </div>
     <div class="actions">
-      <div>
-        <v-btn
-          v-if="url"
-          color="black"
-          icon="mdi-delete"
-          size="x-small"
-          class="mr-2"
-          @click="$emit('delete')"
-        />
-      </div>
-      <div>
-        <v-btn
-          color="success"
-          icon="mdi-content-save"
-          size="x-small"
-          :disabled="!inputUrl"
-          class="mr-2"
-          @click="onUpdateUrl"
-        />
-        <v-btn
-          variant="outlined"
-          color="black"
-          icon="mdi-close"
-          size="x-small"
-          @click="$emit('cancel')"
-        />
-      </div>
+      <v-btn
+        color="success"
+        icon="mdi-content-save"
+        size="x-small"
+        :disabled="!inputUrl"
+        class="mr-2"
+        @click="onUpdateUrl"
+      />
+      <v-btn
+        variant="outlined"
+        color="black"
+        icon="mdi-close"
+        size="x-small"
+        @click="$emit('cancel')"
+      />
     </div>
   </div>
 </template>
@@ -85,7 +67,7 @@ const onUpdateUrl = () => {
 
   .actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
   }
 }
 </style>

@@ -18,5 +18,14 @@ withDefaults(defineProps<{ value?: string | null }>(), {
     height: auto !important;
     cursor: auto !important;
   }
+
+  :deep(iframe) {
+    border: 0.5rem solid var(--black-contrast);
+    display: block;
+    max-width: 100%;
+    min-height: 200px;
+    min-width: 200px;
+    outline: 0px solid transparent;
+  }
 }
 </style>

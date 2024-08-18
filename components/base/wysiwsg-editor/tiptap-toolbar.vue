@@ -41,11 +41,16 @@ const onToggleBold = () => {
   props.editor.chain().focus().toggleBold().run()
 }
 
+const isHeaderInput = ref(false)
+const isTextSizeInput = ref(false)
+const isTextColorInput = ref(false)
+const isLinkInput = ref(false)
+const isYoutubeInput = ref(false)
+
 // ==== Header ====
 const inputHeader = computed<HeaderLebel>(
   () => props.editor.getAttributes('heading').level ?? null
 )
-const isHeaderInput = ref(false)
 const isHeader = computed(() => props.editor.isActive('heading'))
 const onInputHeader = () => {
   isHeaderInput.value = !isHeaderInput.value
@@ -53,6 +58,7 @@ const onInputHeader = () => {
     isTextSizeInput.value = false
     isTextColorInput.value = false
     isLinkInput.value = false
+    isYoutubeInput.value = false
   }
 }
 const onHeaderCancelled = () => {
@@ -71,13 +77,13 @@ const inputTextSize = computed<FontSize>(() => {
   const size = ret ? Number(ret) : 0
   return 10 <= size && size <= 36 ? size : null
 })
-const isTextSizeInput = ref(false)
 const onInputTextSize = () => {
   isTextSizeInput.value = !isTextSizeInput.value
   if (isTextSizeInput.value) {
     isHeaderInput.value = false
     isTextColorInput.value = false
     isLinkInput.value = false
+    isYoutubeInput.value = false
   }
 }
 const onTextSizeCancelled = () => {
@@ -98,13 +104,13 @@ const onTextSizeInputted = (size: FontSize) => {
 const inputTextColor = computed<string>(
   () => props.editor.getAttributes('textStyle').color ?? ''
 )
-const isTextColorInput = ref(false)
 const onInputTextColor = () => {
   isTextColorInput.value = !isTextColorInput.value
   if (isTextColorInput.value) {
     isTextSizeInput.value = false
     isHeaderInput.value = false
     isLinkInput.value = false
+    isYoutubeInput.value = false
   }
 }
 const onTextColorCancelled = () => {
@@ -125,7 +131,6 @@ const onTextColorInputted = (color: string) => {
 const inputUrl = computed<string>(
   () => props.editor.getAttributes('link').href ?? ''
 )
-const isLinkInput = ref(false)
 const isLink = computed(() => props.editor.isActive('link'))
 const onInputLink = () => {
   isLinkInput.value = !isLinkInput.value
@@ -133,6 +138,7 @@ const onInputLink = () => {
     isTextSizeInput.value = false
     isHeaderInput.value = false
     isTextColorInput.value = false
+    isYoutubeInput.value = false
   }
 }
 const onLinkCancelled = () => {
@@ -140,6 +146,7 @@ const onLinkCancelled = () => {
 }
 const onLinkDeleted = () => {
   props.editor.chain().focus().extendMarkRange('link').unsetLink().run()
+  isLinkInput.value = false
 }
 const onLinkInputted = (url: string) => {
   if (url) {
@@ -151,6 +158,28 @@ const onLinkInputted = (url: string) => {
       .run()
   } else {
     props.editor.chain().focus().extendMarkRange('link').unsetLink().run()
+  }
+  isLinkInput.value = false
+}
+
+// ==== Youtube ====
+const isYoutube = computed(() => props.editor.isActive('youtube'))
+const onInputYoutube = () => {
+  isYoutubeInput.value = !isYoutubeInput.value
+  if (isYoutubeInput.value) {
+    isTextSizeInput.value = false
+    isHeaderInput.value = false
+    isTextColorInput.value = false
+    isLinkInput.value = false
+  }
+}
+const onYoutubeCancelled = () => {
+  isYoutubeInput.value = false
+}
+const onYoutubeInputted = (url: string) => {
+  if (url) {
+    props.editor.chain().focus().setYoutubeVideo({ src: url }).run()
+    isYoutubeInput.value = false
   }
 }
 
@@ -209,6 +238,7 @@ const onToggleTextAlignJustify = () => {
   }
 }
 
+const isImage = computed(() => props.editor.isActive('image'))
 // ==== Unser Marks & Nnodes====
 const onClearNodesAndMarks = () => {
   props.editor.chain().focus().clearNodes().unsetAllMarks().run()
@@ -329,10 +359,16 @@ const onClearNodesAndMarks = () => {
       </button>
 
       <template v-if="!noImage">
-        <button @click.stop.prevent="$emit('image-setting')">
+        <button
+          :class="{ 'is-active': isImage }"
+          @click.stop.prevent="$emit('image-setting')"
+        >
           <v-icon size="small">mdi-image</v-icon>
         </button>
-        <button @click.stop.prevent="">
+        <button
+          :class="{ 'is-active': isYoutube }"
+          @click.stop.prevent="onInputYoutube"
+        >
           <v-icon size="small">mdi-youtube</v-icon>
         </button>
       </template>
@@ -367,6 +403,12 @@ const onClearNodesAndMarks = () => {
       @update:url="onLinkInputted"
       @delete="onLinkDeleted"
       @cancel="onLinkCancelled"
+    />
+    <base-wysiwsg-editor-tiptap-toolbar-youtube
+      v-if="isYoutubeInput"
+      class="sub-input"
+      @update:url="onYoutubeInputted"
+      @cancel="onYoutubeCancelled"
     />
   </div>
 </template>

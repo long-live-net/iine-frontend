@@ -49,10 +49,7 @@ watch(inputSize, (cur) => {
       </v-slider>
     </div>
     <div class="actions">
-      <div class="sample-title" :style="{ 'font-size': `${inputSize}px` }">
-        Font Size
-      </div>
-      <div class="buttons">
+      <div class="d-flex align-center">
         <v-btn
           v-if="size"
           color="black"
@@ -61,6 +58,11 @@ watch(inputSize, (cur) => {
           class="mr-2"
           @click="$emit('delete')"
         />
+        <p class="sample-title" :style="{ 'font-size': `${inputSize}px` }">
+          Font Size
+        </p>
+      </div>
+      <div class="buttons">
         <v-btn
           variant="outlined"
           color="black"
@@ -78,6 +80,7 @@ watch(inputSize, (cur) => {
   width: 98%;
   max-width: 600px;
   padding: 1rem;
+  color: $black;
   background-color: $white;
   border-radius: 4px;
 
