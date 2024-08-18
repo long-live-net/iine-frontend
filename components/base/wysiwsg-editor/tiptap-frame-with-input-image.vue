@@ -17,6 +17,7 @@ const onDropFile = async (ev: DragEvent) => {
     emit('input-image', ev.dataTransfer.files[0])
   }
 }
+const accesstable = getAccesstableImageTypes().join()
 const fileInput = ref<HTMLInputElement | null>(null)
 const onChangeFile = async (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -33,21 +34,31 @@ defineExpose({ clickFileInput })
 </script>
 
 <template>
-  <div
-    :class="{ 'drag-enter': isDragEnter }"
-    @dragenter="onDragEnter"
-    @dragleave="onDragLeave"
-    @dragover.prevent="onDragOver"
-    @drop.prevent="onDropFile"
-  >
-    <slot />
+  <div class="tiptap-frame">
+    <div
+      :class="{ 'drag-enter': isDragEnter }"
+      @dragenter="onDragEnter"
+      @dragleave="onDragLeave"
+      @dragover.prevent="onDragOver"
+      @drop.prevent="onDropFile"
+    >
+      <slot />
+    </div>
+    <input
+      ref="fileInput"
+      type="file"
+      hidden
+      :accept="accesstable"
+      @change="onChangeFile"
+    />
   </div>
-  <input ref="fileInput" type="file" hidden @change="onChangeFile" />
 </template>
 
 <style scoped lang="scss">
-.drag-enter {
-  opacity: 0.5;
-  cursor: copy;
+.tiptap-frame {
+  .drag-enter {
+    opacity: 0.5;
+    cursor: copy;
+  }
 }
 </style>

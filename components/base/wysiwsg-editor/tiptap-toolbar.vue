@@ -2,7 +2,15 @@
 import type { Editor } from '@tiptap/vue-3'
 import type { HeaderLebel, FontSize } from '@/utils/wysiwsg-editor/tip-tap'
 
-const props = defineProps<{ editor: Editor }>()
+const props = withDefaults(
+  defineProps<{
+    editor: Editor
+    noImage?: boolean
+  }>(),
+  {
+    noImage: false,
+  }
+)
 defineEmits<{
   'image-setting': []
 }>()
@@ -42,6 +50,7 @@ const isHeader = computed(() => props.editor.isActive('heading'))
 const onInputHeader = () => {
   isHeaderInput.value = !isHeaderInput.value
   if (isHeaderInput.value) {
+    isTextSizeInput.value = false
     isTextColorInput.value = false
     isLinkInput.value = false
   }
@@ -93,6 +102,7 @@ const isTextColorInput = ref(false)
 const onInputTextColor = () => {
   isTextColorInput.value = !isTextColorInput.value
   if (isTextColorInput.value) {
+    isTextSizeInput.value = false
     isHeaderInput.value = false
     isLinkInput.value = false
   }
@@ -120,6 +130,7 @@ const isLink = computed(() => props.editor.isActive('link'))
 const onInputLink = () => {
   isLinkInput.value = !isLinkInput.value
   if (isLinkInput.value) {
+    isTextSizeInput.value = false
     isHeaderInput.value = false
     isTextColorInput.value = false
   }
@@ -317,12 +328,14 @@ const onClearNodesAndMarks = () => {
         <v-icon size="small">mdi-format-clear</v-icon>
       </button>
 
-      <button @click.stop.prevent="$emit('image-setting')">
-        <v-icon size="small">mdi-image</v-icon>
-      </button>
-      <button @click.stop.prevent="">
-        <v-icon size="small">mdi-youtube</v-icon>
-      </button>
+      <template v-if="!noImage">
+        <button @click.stop.prevent="$emit('image-setting')">
+          <v-icon size="small">mdi-image</v-icon>
+        </button>
+        <button @click.stop.prevent="">
+          <v-icon size="small">mdi-youtube</v-icon>
+        </button>
+      </template>
     </nav>
     <base-wysiwsg-editor-tiptap-toolbar-header
       v-if="isHeaderInput"

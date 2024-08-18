@@ -6,6 +6,7 @@ import Link from '@tiptap/extension-link'
 import TextAlign from '@tiptap/extension-text-align'
 import TextStyle from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
+import Placeholder from '@tiptap/extension-placeholder'
 import ImageResize from 'tiptap-extension-resize-image'
 import { FontSize } from '@/utils/wysiwsg-editor/tip-tap'
 import type TiptapFrameWithInputImage from './tiptap-frame-with-input-image.vue'
@@ -14,30 +15,25 @@ const props = withDefaults(
   defineProps<{
     content: string | null
     placeholder?: string | null
+    noImage?: boolean
+    onInputBodyImage?: (imageFile: File) => Promise<string | undefined>
   }>(),
   {
     content: null,
     placeholder: null,
+    noImage: false,
+    onInputBodyImage: undefined,
   }
 )
 
 const emit = defineEmits<{
   'update:content': [value: string | null]
+  'input-image-file': [{ file: File; url: string }]
   focus: []
   blur: []
 }>()
 
 const editor = shallowRef<Editor | null>(null)
-
-watch(
-  () => props.content,
-  (value) => {
-    if (editor.value?.getHTML() === value) {
-      return
-    }
-    editor.value?.commands?.setContent(value, false)
-  }
-)
 
 onMounted(() => {
   editor.value = new Editor({
@@ -55,6 +51,9 @@ onMounted(() => {
       TextStyle,
       Color,
       FontSize,
+      Placeholder.configure({
+        placeholder: props.placeholder || 'Plase input',
+      }),
       ImageResize,
     ],
     content: props.content,
@@ -68,6 +67,16 @@ onMounted(() => {
       emit('blur')
     },
   })
+
+  watch(
+    () => props.content,
+    (value) => {
+      if (editor.value?.getHTML() === value) {
+        return
+      }
+      editor.value?.commands?.setContent(value, false)
+    }
+  )
 })
 
 onBeforeUnmount(() => {
@@ -75,32 +84,38 @@ onBeforeUnmount(() => {
 })
 
 const frameWithInputImage = ref<typeof TiptapFrameWithInputImage | null>(null)
-const { compress } = useImageCompression()
 const onInputImage = async (imageFile: File) => {
-  const { compressedImageFile: _, compressedImageUrl } =
-    await compress(imageFile)
-  if (compressedImageUrl) {
-    editor.value?.chain()?.focus()?.setImage({ src: compressedImageUrl }).run()
+  if (props.noImage) {
+    return
+  }
+  const imageUrl = await props.onInputBodyImage?.(imageFile)
+  if (imageUrl) {
+    editor.value?.chain()?.focus()?.setImage({ src: imageUrl }).run()
   }
 }
+
+const clearContent = () => {
+  editor.value?.commands.clearContent(true)
+}
+defineExpose({ clearContent })
 </script>
 
 <template>
-  <div v-if="editor" id="wysiwsg-editor-tiptap-toolbar">
-    <base-wysiwsg-editor-tiptap-toolbar
-      :editor="editor"
-      @image-setting="frameWithInputImage?.clickFileInput()"
-    />
-  </div>
-
-  <div v-if="editor" id="wysiwsg-editor-tiptap-editor">
-    <base-wysiwsg-editor-tiptap-frame-with-input-image
-      ref="frameWithInputImage"
-      @input-image="onInputImage"
-    >
-      <editor-content :editor="editor" />
-    </base-wysiwsg-editor-tiptap-frame-with-input-image>
-  </div>
+  <base-wysiwsg-editor-tiptap-toolbar
+    v-if="editor"
+    id="wysiwsg-editor-tiptap-toolbar"
+    :editor="editor"
+    :no-image="noImage"
+    @image-setting="frameWithInputImage?.clickFileInput()"
+  />
+  <base-wysiwsg-editor-tiptap-frame-with-input-image
+    v-if="editor"
+    id="wysiwsg-editor-tiptap-editor"
+    ref="frameWithInputImage"
+    @input-image="onInputImage"
+  >
+    <editor-content :editor="editor" />
+  </base-wysiwsg-editor-tiptap-frame-with-input-image>
 </template>
 
 <style scoped lang="scss">
@@ -121,6 +136,7 @@ const onInputImage = async (imageFile: File) => {
 
 :deep(.tiptap) {
   padding: 8px;
+  min-height: 4rem;
 
   :first-child {
     margin-top: 0;
@@ -143,6 +159,19 @@ const onInputImage = async (imageFile: File) => {
   a {
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
   }
 
   /* Code and preformatted text styles */

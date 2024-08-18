@@ -39,9 +39,8 @@ await onLoad()
         </div>
       </CommonEyecatchImage>
       <CommonContentCardBody class="type1-contact__body">
-        <div v-if="contactRef?.body" class="ql-editor">
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div v-html="htmlSanitizer(contactRef?.body)" />
+        <div v-if="contactRef?.body">
+          <CommonWysiwsgViewer :value="contactRef?.body" />
           <div class="inquire-activator">
             <PublishInquire />
           </div>

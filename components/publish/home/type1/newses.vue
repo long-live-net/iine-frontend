@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { NewsType } from '@/types/content'
+import { formatLocalDate } from '@/utils/misc'
 
 const { customerId, canEdit } = useFoundation()
 const {

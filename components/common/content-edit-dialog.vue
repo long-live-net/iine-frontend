@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const props = defineProps<{ modal: boolean; isUpdate?: boolean }>()
+const props = defineProps<{
+  modal: boolean
+  isUpdate?: boolean
+  loading?: boolean
+}>()
 const emit = defineEmits<{
   'update:modal': [modal: boolean]
 }>()
@@ -47,9 +51,9 @@ const dialog = computed({
           >
         </div>
       </header>
-      <div class="content-edit-dialog__body">
+      <CommonContentWrap :loading="loading" class="content-edit-dialog__body">
         <slot />
-      </div>
+      </CommonContentWrap>
     </div>
   </BaseDialog>
 </template>
