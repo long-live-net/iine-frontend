@@ -14,7 +14,7 @@ const onUpdateUrl = () => {
     errorMessage.value = 'URL形式で入力してください。'
     return
   }
-  const validUrl = new RegExp('^https://www.youtube.com/')
+  const validUrl = new RegExp('^https://www\\.youtube\\.com/')
   if (!validUrl.test(inputUrl.value)) {
     errorMessage.value = 'youtube 以外の動画は設定できません。'
     return
