@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NewsType, NewsForm } from '@/types/content'
 import { newsCategory2Label } from '@/types/news-category'
+import { getNewsKind } from '@/composables/use-content/use-news'
 
 const props = defineProps<{
   newsData?: NewsType | null
@@ -58,6 +59,8 @@ const onRemove = () => {
 const onCancel = () => {
   modal.value = false
 }
+
+const { customerId } = useFoundation()
 </script>
 
 <template>
@@ -112,6 +115,8 @@ const onCancel = () => {
           clearable
           label="本文"
           placeholder="本文を入力してください"
+          :customer-id="customerId"
+          :api-kind="getNewsKind()"
         />
       </div>
       <ManageContentFormActions

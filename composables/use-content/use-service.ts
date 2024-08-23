@@ -8,7 +8,9 @@ import type {
   ContentPosition,
 } from '@/types/API/content-api'
 
-const apiUrl = '/services'
+const apiKind = 'services'
+export const getServiceKind = () => apiKind
+
 const useServiceContent = (customerId: Ref<number | null>) => {
   const {
     loadData,
@@ -19,14 +21,14 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     contentDataRef,
     contentListRef,
     loadingRef: readLoading,
-  } = useContentRead<ServiceGetApi>(customerId, apiUrl)
+  } = useContentRead<ServiceGetApi>(customerId, apiKind)
   const {
     create,
     update,
     remove,
     updatePositions,
     loadingRef: writeLoading,
-  } = useContentWrite<ServiceSaveApi, ServiceGetApi>(customerId, apiUrl)
+  } = useContentWrite<ServiceSaveApi, ServiceGetApi>(customerId, apiKind)
 
   const apitypeToServiceType = (
     apiData?: ServiceGetApi | null

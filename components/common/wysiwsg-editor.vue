@@ -10,6 +10,8 @@ const props = withDefaults(
     clearable?: boolean
     errorMessages?: string | string[]
     noImage?: boolean
+    customerId: number | null
+    apiKind: string
   }>(),
   {
     modelValue: undefined,
@@ -66,8 +68,12 @@ const onClear = () => {
   tiptapEditorRef.value?.clearContent()
 }
 
+const { customerId, apiKind } = toRefs(props)
+const { postImageData, loading: inputBodyImagePosting } = useFilePost(
+  customerId,
+  apiKind.value
+)
 const { compress } = useImageCompression()
-const { postImageData, loading: inputBodyImagePosting } = useFilePost()
 const onInputBodyImage = async (
   imageFile: File
 ): Promise<string | undefined> => {

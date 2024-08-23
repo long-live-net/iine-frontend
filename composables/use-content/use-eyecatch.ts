@@ -1,7 +1,9 @@
 import type { EyecatchType, EyecatchForm, ImageSettings } from '@/types/content'
 import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/API/content-api'
 
-const apiUrl = '/eyecatches'
+const apiKind = 'eyecatches'
+export const getEyecatchKind = () => apiKind
+
 const useEyecatchContent = (customerId: Ref<number | null>) => {
   const {
     loadData,
@@ -9,14 +11,14 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     setImageSettings,
     contentDataRef,
     loadingRef: readLoading,
-  } = useContentRead<EyecatchGetApi>(customerId, apiUrl)
+  } = useContentRead<EyecatchGetApi>(customerId, apiKind)
   const {
     create,
     update,
     remove,
     updateImageSettingsWithDebounced,
     loadingRef: writeLoading,
-  } = useContentWrite<EyecatchSaveApi, EyecatchGetApi>(customerId, apiUrl)
+  } = useContentWrite<EyecatchSaveApi, EyecatchGetApi>(customerId, apiKind)
 
   const apitypeToEyecatchType = (
     apiData?: EyecatchGetApi | null

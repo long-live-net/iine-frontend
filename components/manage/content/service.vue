@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ServiceType, ServiceForm } from '@/types/content'
+import { getServiceKind } from '@/composables/use-content/use-service'
 
 const props = defineProps<{
   serviceData?: ServiceType | null
@@ -55,6 +56,8 @@ const onRemove = () => {
 const onCancel = () => {
   modal.value = false
 }
+
+const { customerId } = useFoundation()
 </script>
 
 <template>
@@ -91,6 +94,8 @@ const onCancel = () => {
           label="紹介文"
           placeholder="紹介文を入力してください"
           no-image
+          :customer-id="customerId"
+          :api-kind="getServiceKind()"
         />
       </div>
       <div class="mt-3">
@@ -100,6 +105,8 @@ const onCancel = () => {
           clearable
           label="本文"
           placeholder="本文を入力してください"
+          :customer-id="customerId"
+          :api-kind="getServiceKind()"
         />
       </div>
       <ManageContentFormActions

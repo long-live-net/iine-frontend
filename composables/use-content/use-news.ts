@@ -7,7 +7,9 @@ import type {
   ListPager,
 } from '@/types/API/content-api'
 
-const apiUrl = '/newses'
+const apiKind = 'newses'
+export const getNewsKind = () => apiKind
+
 const useNewsContent = (customerId: Ref<number | null>) => {
   const {
     loadData,
@@ -20,14 +22,14 @@ const useNewsContent = (customerId: Ref<number | null>) => {
     contentListRef,
     preNextIdRef,
     loadingRef: readLoading,
-  } = useContentRead<NewsGetApi>(customerId, apiUrl)
+  } = useContentRead<NewsGetApi>(customerId, apiKind)
   const {
     create,
     update,
     remove,
     updateImageSettingsWithDebounced,
     loadingRef: writeLoading,
-  } = useContentWrite<NewsSaveApi, NewsGetApi>(customerId, apiUrl)
+  } = useContentWrite<NewsSaveApi, NewsGetApi>(customerId, apiKind)
 
   const apitypeToNewsType = (apiData?: NewsGetApi | null): NewsType | null =>
     apiData
