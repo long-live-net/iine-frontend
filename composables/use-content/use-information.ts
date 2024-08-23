@@ -8,7 +8,9 @@ import type {
   InformationSaveApi,
 } from '@/types/API/content-api'
 
-const apiUrl = '/informations'
+const apiKind = 'informations'
+export const getInformationKind = () => apiKind
+
 const useInformationContent = (customerId: Ref<number | null>) => {
   const {
     loadData,
@@ -16,14 +18,17 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     setImageSettings,
     contentDataRef,
     loadingRef: readLoading,
-  } = useContentRead<InformationGetApi>(customerId, apiUrl)
+  } = useContentRead<InformationGetApi>(customerId, apiKind)
   const {
     create,
     update,
     remove,
     updateImageSettingsWithDebounced,
     loadingRef: writeLoading,
-  } = useContentWrite<InformationSaveApi, InformationGetApi>(customerId, apiUrl)
+  } = useContentWrite<InformationSaveApi, InformationGetApi>(
+    customerId,
+    apiKind
+  )
 
   const apitypeToInformationType = (
     apiData?: InformationGetApi | null

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { InformationType, InformationForm } from '@/types/content'
+import { getInformationKind } from '@/composables/use-content/use-information'
 
 const props = defineProps<{
   informationData?: InformationType | null
@@ -54,6 +55,8 @@ const onRemove = () => {
 const onCancel = () => {
   modal.value = false
 }
+
+const { customerId } = useFoundation()
 </script>
 
 <template>
@@ -100,6 +103,8 @@ const onCancel = () => {
           clearable
           label="本文"
           placeholder="本文を入力してください"
+          :customer-id="customerId"
+          :api-kind="getInformationKind()"
         />
       </div>
       <ManageContentFormActions

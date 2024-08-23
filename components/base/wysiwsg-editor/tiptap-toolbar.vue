@@ -41,148 +41,6 @@ const onToggleBold = () => {
   props.editor.chain().focus().toggleBold().run()
 }
 
-const isHeaderInput = ref(false)
-const isTextSizeInput = ref(false)
-const isTextColorInput = ref(false)
-const isLinkInput = ref(false)
-const isYoutubeInput = ref(false)
-
-// ==== Header ====
-const inputHeader = computed<HeaderLebel>(
-  () => props.editor.getAttributes('heading').level ?? null
-)
-const isHeader = computed(() => props.editor.isActive('heading'))
-const onInputHeader = () => {
-  isHeaderInput.value = !isHeaderInput.value
-  if (isHeaderInput.value) {
-    isTextSizeInput.value = false
-    isTextColorInput.value = false
-    isLinkInput.value = false
-    isYoutubeInput.value = false
-  }
-}
-const onHeaderCancelled = () => {
-  isHeaderInput.value = false
-}
-const onHeaderInputted = (level: HeaderLebel) => {
-  if (level) {
-    props.editor.chain().focus().toggleHeading({ level }).run()
-  }
-}
-
-// ==== Text Size ====
-const inputTextSize = computed<FontSize>(() => {
-  const sizeString = props.editor.getAttributes('textStyle').fontSize ?? ''
-  const ret = sizeString.match(/[0-9]+/)
-  const size = ret ? Number(ret) : 0
-  return 10 <= size && size <= 36 ? size : null
-})
-const onInputTextSize = () => {
-  isTextSizeInput.value = !isTextSizeInput.value
-  if (isTextSizeInput.value) {
-    isHeaderInput.value = false
-    isTextColorInput.value = false
-    isLinkInput.value = false
-    isYoutubeInput.value = false
-  }
-}
-const onTextSizeCancelled = () => {
-  isTextSizeInput.value = false
-}
-const onTextSizeDeleted = () => {
-  props.editor.chain().focus().unsetFontSize().run()
-}
-const onTextSizeInputted = (size: FontSize) => {
-  if (size) {
-    props.editor.chain().focus().setFontSize(`${size}px`).run()
-  } else {
-    props.editor.chain().focus().unsetFontSize().run()
-  }
-}
-
-// ==== Text Color ====
-const inputTextColor = computed<string>(
-  () => props.editor.getAttributes('textStyle').color ?? ''
-)
-const onInputTextColor = () => {
-  isTextColorInput.value = !isTextColorInput.value
-  if (isTextColorInput.value) {
-    isTextSizeInput.value = false
-    isHeaderInput.value = false
-    isLinkInput.value = false
-    isYoutubeInput.value = false
-  }
-}
-const onTextColorCancelled = () => {
-  isTextColorInput.value = false
-}
-const onTextColorDeleted = () => {
-  props.editor.chain().focus().unsetColor().run()
-}
-const onTextColorInputted = (color: string) => {
-  if (color) {
-    props.editor.chain().focus().setColor(color).run()
-  } else {
-    props.editor.chain().focus().unsetColor().run()
-  }
-}
-
-// ==== URL Link ====
-const inputUrl = computed<string>(
-  () => props.editor.getAttributes('link').href ?? ''
-)
-const isLink = computed(() => props.editor.isActive('link'))
-const onInputLink = () => {
-  isLinkInput.value = !isLinkInput.value
-  if (isLinkInput.value) {
-    isTextSizeInput.value = false
-    isHeaderInput.value = false
-    isTextColorInput.value = false
-    isYoutubeInput.value = false
-  }
-}
-const onLinkCancelled = () => {
-  isLinkInput.value = false
-}
-const onLinkDeleted = () => {
-  props.editor.chain().focus().extendMarkRange('link').unsetLink().run()
-  isLinkInput.value = false
-}
-const onLinkInputted = (url: string) => {
-  if (url) {
-    props.editor
-      .chain()
-      .focus()
-      .extendMarkRange('link')
-      .setLink({ href: url })
-      .run()
-  } else {
-    props.editor.chain().focus().extendMarkRange('link').unsetLink().run()
-  }
-  isLinkInput.value = false
-}
-
-// ==== Youtube ====
-const isYoutube = computed(() => props.editor.isActive('youtube'))
-const onInputYoutube = () => {
-  isYoutubeInput.value = !isYoutubeInput.value
-  if (isYoutubeInput.value) {
-    isTextSizeInput.value = false
-    isHeaderInput.value = false
-    isTextColorInput.value = false
-    isLinkInput.value = false
-  }
-}
-const onYoutubeCancelled = () => {
-  isYoutubeInput.value = false
-}
-const onYoutubeInputted = (url: string) => {
-  if (url) {
-    props.editor.chain().focus().setYoutubeVideo({ src: url }).run()
-    isYoutubeInput.value = false
-  }
-}
-
 // === nodes ===
 const isBlockquote = computed(() => props.editor.isActive('blockquote'))
 const onToggleBlockQuote = () => {
@@ -239,7 +97,155 @@ const onToggleTextAlignJustify = () => {
 }
 
 const isImage = computed(() => props.editor.isActive('image'))
-// ==== Unser Marks & Nnodes====
+
+// ==== Header ====
+// ==== Text Size ====
+// ==== Text Color ====
+// ==== URL Link ====
+// ==== Youtube ====
+const isHeaderInput = ref(false)
+const isTextSizeInput = ref(false)
+const isTextColorInput = ref(false)
+const isLinkInput = ref(false)
+const isYoutubeInput = ref(false)
+
+//  Header
+const inputHeader = computed<HeaderLebel>(
+  () => props.editor.getAttributes('heading').level ?? null
+)
+const isHeader = computed(() => props.editor.isActive('heading'))
+const onInputHeader = () => {
+  isHeaderInput.value = !isHeaderInput.value
+  if (isHeaderInput.value) {
+    isTextSizeInput.value = false
+    isTextColorInput.value = false
+    isLinkInput.value = false
+    isYoutubeInput.value = false
+  }
+}
+const onHeaderCancelled = () => {
+  isHeaderInput.value = false
+}
+const onHeaderInputted = (level: HeaderLebel) => {
+  if (level) {
+    props.editor.chain().focus().toggleHeading({ level }).run()
+  }
+}
+
+//  Text Size
+const inputTextSize = computed<FontSize>(() => {
+  const sizeString = props.editor.getAttributes('textStyle').fontSize ?? ''
+  const ret = sizeString.match(/[0-9]+/)
+  const size = ret ? Number(ret) : 0
+  return 10 <= size && size <= 36 ? size : null
+})
+const onInputTextSize = () => {
+  isTextSizeInput.value = !isTextSizeInput.value
+  if (isTextSizeInput.value) {
+    isHeaderInput.value = false
+    isTextColorInput.value = false
+    isLinkInput.value = false
+    isYoutubeInput.value = false
+  }
+}
+const onTextSizeCancelled = () => {
+  isTextSizeInput.value = false
+}
+const onTextSizeDeleted = () => {
+  props.editor.chain().focus().unsetFontSize().run()
+}
+const onTextSizeInputted = (size: FontSize) => {
+  if (size) {
+    props.editor.chain().focus().setFontSize(`${size}px`).run()
+  } else {
+    props.editor.chain().focus().unsetFontSize().run()
+  }
+}
+
+//  Text Color
+const inputTextColor = computed<string>(
+  () => props.editor.getAttributes('textStyle').color ?? ''
+)
+const onInputTextColor = () => {
+  isTextColorInput.value = !isTextColorInput.value
+  if (isTextColorInput.value) {
+    isTextSizeInput.value = false
+    isHeaderInput.value = false
+    isLinkInput.value = false
+    isYoutubeInput.value = false
+  }
+}
+const onTextColorCancelled = () => {
+  isTextColorInput.value = false
+}
+const onTextColorDeleted = () => {
+  props.editor.chain().focus().unsetColor().run()
+}
+const onTextColorInputted = (color: string) => {
+  if (color) {
+    props.editor.chain().focus().setColor(color).run()
+  } else {
+    props.editor.chain().focus().unsetColor().run()
+  }
+}
+
+//  URL Link
+const inputUrl = computed<string>(
+  () => props.editor.getAttributes('link').href ?? ''
+)
+const isLink = computed(() => props.editor.isActive('link'))
+const onInputLink = () => {
+  isLinkInput.value = !isLinkInput.value
+  if (isLinkInput.value) {
+    isTextSizeInput.value = false
+    isHeaderInput.value = false
+    isTextColorInput.value = false
+    isYoutubeInput.value = false
+  }
+}
+const onLinkCancelled = () => {
+  isLinkInput.value = false
+}
+const onLinkDeleted = () => {
+  props.editor.chain().focus().extendMarkRange('link').unsetLink().run()
+  isLinkInput.value = false
+}
+const onLinkInputted = (url: string) => {
+  if (url) {
+    props.editor
+      .chain()
+      .focus()
+      .extendMarkRange('link')
+      .setLink({ href: url })
+      .run()
+  } else {
+    props.editor.chain().focus().extendMarkRange('link').unsetLink().run()
+  }
+  isLinkInput.value = false
+}
+
+//  Youtube
+const isYoutube = computed(() => props.editor.isActive('youtube'))
+const onInputYoutube = () => {
+  isYoutubeInput.value = !isYoutubeInput.value
+  if (isYoutubeInput.value) {
+    isTextSizeInput.value = false
+    isHeaderInput.value = false
+    isTextColorInput.value = false
+    isLinkInput.value = false
+  }
+}
+const onYoutubeCancelled = () => {
+  isYoutubeInput.value = false
+}
+const onYoutubeInputted = (url: string) => {
+  if (url) {
+    props.editor.chain().focus().setYoutubeVideo({ src: url }).run()
+    isYoutubeInput.value = false
+  }
+}
+
+// ==== Unset Marks & Nnodes ====
 const onClearNodesAndMarks = () => {
   props.editor.chain().focus().clearNodes().unsetAllMarks().run()
 }

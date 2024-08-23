@@ -1,7 +1,9 @@
 import type { ContactType, ContactForm, ImageSettings } from '@/types/content'
 import type { ContactGetApi, ContactSaveApi } from '@/types/API/content-api'
 
-const apiUrl = '/contacts'
+const apiKind = 'contacts'
+export const getContactKind = () => apiKind
+
 const useContactContent = (customerId: Ref<number | null>) => {
   const {
     loadData,
@@ -9,14 +11,14 @@ const useContactContent = (customerId: Ref<number | null>) => {
     setImageSettings,
     contentDataRef,
     loadingRef: readLoading,
-  } = useContentRead<ContactGetApi>(customerId, apiUrl)
+  } = useContentRead<ContactGetApi>(customerId, apiKind)
   const {
     create,
     update,
     remove,
     updateImageSettingsWithDebounced,
     loadingRef: writeLoading,
-  } = useContentWrite<ContactSaveApi, ContactGetApi>(customerId, apiUrl)
+  } = useContentWrite<ContactSaveApi, ContactGetApi>(customerId, apiKind)
 
   const apitypeToContactType = (
     apiData?: ContactGetApi | null

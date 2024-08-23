@@ -1,6 +1,6 @@
-export const useFilePost = () => {
+export const useFilePost = (customerId: Ref<number | null>, kind: string) => {
   const loading = ref(false)
-  const { userCustomerId, authorizationHeader } = useAuth()
+  const { authorizationHeader } = useAuth()
 
   const postImageData = async (
     imageFile: File
@@ -13,7 +13,7 @@ export const useFilePost = () => {
         baseURL: backendBaseUrl,
         method: 'POST',
         headers: authorizationHeader.value,
-        params: { customerId: userCustomerId.value },
+        params: { customerId: customerId.value, kind },
         body: formData,
       })
       return response as { fileUrl: string }

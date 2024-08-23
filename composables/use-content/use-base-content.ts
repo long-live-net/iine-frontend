@@ -39,8 +39,8 @@ export const useContentRead = <T extends ContentGetApi>(
     const key = `get_content_${apiPath}_${keyExt.value++}`
     const url =
       contentId === undefined || contentId === null
-        ? `${apiPath}/recent`
-        : `${apiPath}/${contentId}`
+        ? `/${apiPath}/recent`
+        : `/${apiPath}/${contentId}`
 
     try {
       loading.value = true
@@ -85,7 +85,7 @@ export const useContentRead = <T extends ContentGetApi>(
     try {
       loading.value = true
       const { data, error } = await useAsyncData(key, () =>
-        $fetch(apiPath, {
+        $fetch(`/${apiPath}`, {
           baseURL: backendBaseUrl,
           method: 'GET',
           params: {
@@ -112,8 +112,8 @@ export const useContentRead = <T extends ContentGetApi>(
   const get = async (contentId?: number | null) => {
     const url =
       contentId === undefined || contentId === null
-        ? `${apiPath}/recent`
-        : `${apiPath}/${contentId}`
+        ? `/${apiPath}/recent`
+        : `/${apiPath}/${contentId}`
     try {
       loading.value = true
       const data = await $fetch<T>(url, {
@@ -142,7 +142,7 @@ export const useContentRead = <T extends ContentGetApi>(
   ) => {
     try {
       loading.value = true
-      const data = await $fetch<ContentListResponse<T>>(apiPath, {
+      const data = await $fetch<ContentListResponse<T>>(`/${apiPath}`, {
         baseURL: backendBaseUrl,
         method: 'GET',
         params: {
@@ -171,7 +171,7 @@ export const useContentRead = <T extends ContentGetApi>(
     filter: ListFilter = {},
     sort: ListSort = {}
   ) => {
-    const url = `${apiPath}/${currentId}/pre-next-id`
+    const url = `/${apiPath}/${currentId}/pre-next-id`
     try {
       loading.value = true
       const data = await $fetch<ContentPreNextId>(url, {
@@ -248,7 +248,7 @@ export const useContentWrite = <
 ) => {
   const loading = ref(false)
   const { authorizationHeader } = useAuth()
-  const { postImageData } = useFilePost()
+  const { postImageData } = useFilePost(customerId, apiPath)
 
   /**
    * create content data
@@ -265,7 +265,7 @@ export const useContentWrite = <
           settings: getDefaultImageSettings(),
         }
       }
-      const data = await $fetch<T>(apiPath, {
+      const data = await $fetch<T>(`/${apiPath}`, {
         baseURL: backendBaseUrl,
         method: 'POST',
         headers: authorizationHeader.value,
@@ -296,7 +296,7 @@ export const useContentWrite = <
           settings: getDefaultImageSettings(),
         }
       }
-      const data = await $fetch<T>(`${apiPath}/${contentId}`, {
+      const data = await $fetch<T>(`/${apiPath}/${contentId}`, {
         baseURL: backendBaseUrl,
         method: 'PUT',
         headers: authorizationHeader.value,
@@ -317,7 +317,7 @@ export const useContentWrite = <
   const remove = async (contentId: number): Promise<void> => {
     try {
       loading.value = true
-      await $fetch(`${apiPath}/${contentId}`, {
+      await $fetch(`/${apiPath}/${contentId}`, {
         baseURL: backendBaseUrl,
         headers: authorizationHeader.value,
         method: 'DELETE',
@@ -338,7 +338,7 @@ export const useContentWrite = <
   ): Promise<void> => {
     try {
       loading.value = true
-      await $fetch(`${apiPath}/positions`, {
+      await $fetch(`/${apiPath}/positions`, {
         baseURL: backendBaseUrl,
         method: 'PUT',
         headers: authorizationHeader.value,
@@ -360,7 +360,7 @@ export const useContentWrite = <
   ): Promise<void> => {
     try {
       loading.value = true
-      await $fetch(`${apiPath}/${contentId}/image-settings`, {
+      await $fetch(`/${apiPath}/${contentId}/image-settings`, {
         baseURL: backendBaseUrl,
         method: 'PUT',
         headers: authorizationHeader.value,
