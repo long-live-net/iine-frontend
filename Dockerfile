@@ -28,7 +28,7 @@ WORKDIR /app
 COPY . .
 
 # update npm yarn
-RUN npm update npm && npm update yarn && yarn install
+RUN echo "force=true" >> .npmrc  && npm update npm && npm update yarn && yarn install
 
 # build app
 RUN yarn build

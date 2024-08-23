@@ -43,8 +43,8 @@ export interface ServiceType extends ContentType {
 export interface WorkType extends ContentType {
   category?: string
 }
-export interface AboutType extends ContentType {}
-export interface ReasonType extends ContentType {}
+type AboutType = ContentType
+type ReasonType = ContentType
 export interface ContactType extends ContentType {
   body: string
 }

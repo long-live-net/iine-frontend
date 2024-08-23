@@ -26,7 +26,9 @@ const onDragOver = () => {
   isDragEnter.value = true
 }
 const onClick = () => {
-  fileInputInput.value && fileInputInput.value.click()
+  if (fileInputInput.value) {
+    fileInputInput.value.click()
+  }
 }
 
 const { compressing, compress } = useImageCompression()
