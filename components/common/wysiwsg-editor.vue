@@ -2,9 +2,9 @@
 import debounce from 'lodash/debounce'
 import type TiptapEditor from '@/components/base/wysiwsg-editor/tiptap-editor.vue'
 
+const model = defineModel<string | null>()
 const props = withDefaults(
   defineProps<{
-    modelValue?: string | null
     label?: string
     placeholder?: string
     clearable?: boolean
@@ -14,7 +14,6 @@ const props = withDefaults(
     apiKind: string
   }>(),
   {
-    modelValue: undefined,
     label: undefined,
     placeholder: undefined,
     clearable: false,
@@ -22,15 +21,12 @@ const props = withDefaults(
     noImage: false,
   }
 )
-const emit = defineEmits<{
-  'update:modelValue': [value: string | null]
-  'input-image-file': [file: File]
-}>()
+defineEmits<{ 'input-image-file': [file: File] }>()
 
 const valueData = computed({
-  get: () => props.modelValue ?? undefined,
+  get: () => model.value ?? undefined,
   set: debounce((value: string | undefined) => {
-    emit('update:modelValue', value ?? null)
+    model.value = value ?? null
   }, 300),
 })
 
@@ -74,7 +70,7 @@ const { postImageData, loading: inputBodyImagePosting } = useFilePost(
   apiKind.value
 )
 const { compress } = useImageCompression()
-const onInputBodyImage = async (
+const inputBodyImageFunction = async (
   imageFile: File
 ): Promise<string | undefined> => {
   if (!isImageFile(imageFile)) {
@@ -103,7 +99,7 @@ const onInputBodyImage = async (
           v-model:content="valueData"
           :placeholder="placeholder"
           :no-image="noImage"
-          :on-input-body-image="onInputBodyImage"
+          :input-body-image-function="inputBodyImageFunction"
           @focus="isFocus = true"
           @blur="isFocus = false"
         />

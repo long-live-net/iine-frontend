@@ -12,23 +12,21 @@ import Youtube from '@tiptap/extension-youtube'
 import { FontSize } from '@/utils/wysiwsg-editor/tip-tap'
 import type TiptapFrameWithInputImage from './tiptap-frame-with-input-image.vue'
 
+const content = defineModel<string | null>('content', { default: null })
 const props = withDefaults(
   defineProps<{
-    content: string | null
     placeholder?: string | null
     noImage?: boolean
-    onInputBodyImage?: (imageFile: File) => Promise<string | undefined>
+    inputBodyImageFunction?: (imageFile: File) => Promise<string | undefined>
   }>(),
   {
-    content: null,
     placeholder: null,
     noImage: false,
-    onInputBodyImage: undefined,
+    inputBodyImageFunction: undefined,
   }
 )
 
 const emit = defineEmits<{
-  'update:content': [value: string | null]
   'input-image-file': [{ file: File; url: string }]
   focus: []
   blur: []
@@ -64,9 +62,9 @@ onMounted(() => {
         height: 320,
       }),
     ],
-    content: props.content,
+    content: content.value,
     onUpdate: () => {
-      emit('update:content', editor.value?.getHTML() ?? null)
+      content.value = editor.value?.getHTML() ?? null
     },
     onFocus: () => {
       emit('focus')
@@ -76,15 +74,12 @@ onMounted(() => {
     },
   })
 
-  watch(
-    () => props.content,
-    (value) => {
-      if (editor.value?.getHTML() === value) {
-        return
-      }
-      editor.value?.commands?.setContent(value, false)
+  watch(content, (value) => {
+    if (editor.value?.getHTML() === value) {
+      return
     }
-  )
+    editor.value?.commands?.setContent(value, false)
+  })
 })
 
 onBeforeUnmount(() => {
@@ -96,7 +91,7 @@ const onInputImage = async (imageFile: File) => {
   if (props.noImage) {
     return
   }
-  const imageUrl = await props.onInputBodyImage?.(imageFile)
+  const imageUrl = await props.inputBodyImageFunction?.(imageFile)
   if (imageUrl) {
     editor.value?.chain()?.focus()?.setImage({ src: imageUrl }).run()
   }
