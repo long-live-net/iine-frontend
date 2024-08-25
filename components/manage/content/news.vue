@@ -14,9 +14,11 @@ const emit = defineEmits<{
   remove: [id: number]
 }>()
 
+const { customerId } = useFoundation()
+const apiKind = getNewsKind()
+
 const modal = ref(false)
-const { handleSubmit, handleReset, formData, resetNewsForm, changeImageFile } =
-  useNewsForm()
+const { handleSubmit, handleReset, formData, resetNewsForm } = useNewsForm()
 
 const categoryChoices = Object.entries(newsCategory2Label).map(
   ([key, value]) => ({
@@ -59,8 +61,6 @@ const onRemove = () => {
 const onCancel = () => {
   modal.value = false
 }
-
-const { customerId } = useFoundation()
 </script>
 
 <template>
@@ -73,11 +73,12 @@ const { customerId } = useFoundation()
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!newsData?.id">
     <v-form class="news-form">
       <div>
-        <BaseFileInput
-          :image-url="formData.image.value.value"
+        <CommonContentFileInput
+          v-model="formData.image.value.value"
           :error-messages="formData.image.errorMessage.value"
           label="タイトル画像"
-          @change-image-file="changeImageFile"
+          :customer-id="customerId"
+          :api-kind="apiKind"
         />
       </div>
       <div class="mt-3">
@@ -116,7 +117,7 @@ const { customerId } = useFoundation()
           label="本文"
           placeholder="本文を入力してください"
           :customer-id="customerId"
-          :api-kind="getNewsKind()"
+          :api-kind="apiKind"
         />
       </div>
       <ManageContentFormActions

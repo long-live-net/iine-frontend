@@ -3,15 +3,10 @@ const props = defineProps<{
   imageUrl?: string
   label?: string
   errorMessages?: string | string[]
+  accessables?: string[]
+  loading?: boolean | null
 }>()
-const emit = defineEmits<{
-  'change-image-file': [
-    {
-      file: File
-      url: string
-    },
-  ]
-}>()
+const emit = defineEmits<{ 'change-image-file': [File] }>()
 
 const isDragEnter = ref(false)
 const fileInputInput = ref<HTMLInputElement | null>(null)
@@ -31,29 +26,16 @@ const onClick = () => {
   }
 }
 
-const { compressing, compress } = useImageCompression()
 const onDropFile = async (ev: DragEvent) => {
   isDragEnter.value = false
   if (ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0]) {
-    const { compressedImageFile, compressedImageUrl } = await compress(
-      ev.dataTransfer.files[0]
-    )
-    emit('change-image-file', {
-      file: compressedImageFile,
-      url: compressedImageUrl,
-    })
+    emit('change-image-file', ev.dataTransfer.files[0])
   }
 }
 const onChangeFile = async (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target && target.files && target.files[0]) {
-    const { compressedImageFile, compressedImageUrl } = await compress(
-      target.files[0]
-    )
-    emit('change-image-file', {
-      file: compressedImageFile,
-      url: compressedImageUrl,
-    })
+    emit('change-image-file', target.files[0])
   }
 }
 
@@ -86,7 +68,7 @@ const imageSrc = computed(() =>
       >
         <div class="file-input__drag-drop--img">
           <img :src="imageSrc" :alt="imageUrl" />
-          <BaseOverlayLiner :overlay="compressing" />
+          <BaseOverlayLiner :overlay="loading ?? false" />
         </div>
         <div class="file-input__drag-drop--nav">
           <p>ここに画像ファイルを<br />ドラッグ＆ドロップできます</p>
@@ -102,7 +84,13 @@ const imageSrc = computed(() =>
           </div>
         </div>
       </div>
-      <input ref="fileInputInput" type="file" hidden @change="onChangeFile" />
+      <input
+        ref="fileInputInput"
+        type="file"
+        hidden
+        :accept="accessables ? accessables.join(',') : undefined"
+        @change="onChangeFile"
+      />
       <div
         v-if="label?.length"
         class="file-input__label"

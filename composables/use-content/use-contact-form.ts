@@ -20,14 +20,12 @@ export const useContactForm = () => {
       return true
     },
     image: () => true,
-    imageFile: () => true,
   }
   const contactFormInitial: ContactForm = {
     title: '',
     subtitle: '',
     body: '',
     image: '',
-    imageFile: null,
   }
 
   const { handleSubmit, handleReset, validate } = useForm({
@@ -40,7 +38,6 @@ export const useContactForm = () => {
     subtitle: useField<ContactForm['subtitle']>('subtitle'),
     body: useField<ContactForm['body']>('body'),
     image: useField<ContactForm['image']>('image'),
-    imageFile: useField<ContactForm['imageFile']>('imageFile'),
   }
 
   const resetContactForm = (contactData?: ContactType | null) => {
@@ -49,12 +46,6 @@ export const useContactForm = () => {
     formData.subtitle.value.value = contactData?.subtitle ?? ''
     formData.body.value.value = contactData?.body ?? ''
     formData.image.value.value = contactData?.image?.url ?? ''
-    formData.imageFile.value.value = null
-  }
-
-  const changeImageFile = async (params: { file: File; url: string }) => {
-    formData.image.value.value = params.url
-    formData.imageFile.value.value = params.file
   }
 
   return {
@@ -63,6 +54,5 @@ export const useContactForm = () => {
     validate,
     formData,
     resetContactForm,
-    changeImageFile,
   }
 }

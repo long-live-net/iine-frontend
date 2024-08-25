@@ -44,8 +44,8 @@ export const useContentRead = <T extends ContentGetApi>(
 
     try {
       loading.value = true
-      const { data, error } = await useAsyncData<T>(key, () =>
-        $fetch(url, {
+      const { data, error } = await useAsyncData(key, () =>
+        $fetch<T>(url, {
           baseURL: backendBaseUrl,
           method: 'GET',
           params: { customerId: customerId.value },
@@ -85,7 +85,7 @@ export const useContentRead = <T extends ContentGetApi>(
     try {
       loading.value = true
       const { data, error } = await useAsyncData(key, () =>
-        $fetch(`/${apiPath}`, {
+        $fetch<ContentListResponse<T>>(`/${apiPath}`, {
           baseURL: backendBaseUrl,
           method: 'GET',
           params: {
@@ -96,7 +96,7 @@ export const useContentRead = <T extends ContentGetApi>(
           },
         })
       )
-      contentListRef.value = (data.value as ContentListResponse<T>) ?? null
+      contentListRef.value = data.value ?? null
       if (error.value) {
         throw error.value
       }
@@ -248,23 +248,14 @@ export const useContentWrite = <
 ) => {
   const loading = ref(false)
   const { authorizationHeader } = useAuth()
-  const { postImageData } = useFilePost(customerId, apiPath)
 
   /**
    * create content data
    * @param newData
    */
-  const create = async (newData: F): Promise<T> => {
-    const { imageFile, ...sendData } = newData
+  const create = async (sendData: F): Promise<T> => {
     try {
       loading.value = true
-      if (imageFile) {
-        const response = await postImageData(imageFile)
-        sendData.image = {
-          url: response.fileUrl,
-          settings: getDefaultImageSettings(),
-        }
-      }
       const data = await $fetch<T>(`/${apiPath}`, {
         baseURL: backendBaseUrl,
         method: 'POST',
@@ -285,17 +276,9 @@ export const useContentWrite = <
    * @param contentId
    * @param modData
    */
-  const update = async (contentId: number, modData: F): Promise<T> => {
-    const { imageFile, ...sendData } = modData
+  const update = async (contentId: number, sendData: F): Promise<T> => {
     try {
       loading.value = true
-      if (imageFile) {
-        const response = await postImageData(imageFile)
-        sendData.image = {
-          url: response.fileUrl,
-          settings: getDefaultImageSettings(),
-        }
-      }
       const data = await $fetch<T>(`/${apiPath}/${contentId}`, {
         baseURL: backendBaseUrl,
         method: 'PUT',

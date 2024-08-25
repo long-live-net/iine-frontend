@@ -28,6 +28,7 @@ const useNewsContent = (customerId: Ref<number | null>) => {
     update,
     remove,
     updateImageSettingsWithDebounced,
+    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<NewsSaveApi, NewsGetApi>(customerId, apiKind)
 
@@ -78,7 +79,14 @@ const useNewsContent = (customerId: Ref<number | null>) => {
       category: formData.category ?? 'I',
       publishOn: formData.publishOn ?? localDate(),
       body: formData.body,
-      imageFile: formData.imageFile,
+      ...(formData.image
+        ? {
+            image: {
+              url: formData.image,
+              settings: getDefaultImageSettings(),
+            },
+          }
+        : {}),
     }
     const data = await create(inputData)
     return apitypeToNewsType(data ?? null)
@@ -88,13 +96,26 @@ const useNewsContent = (customerId: Ref<number | null>) => {
     contentId: number,
     formData: NewsForm
   ): Promise<NewsType | null> => {
+    const settings =
+      formData.image === newsRef.value?.image?.url
+        ? newsRef.value?.image
+          ? newsRef.value.image.settings
+          : getDefaultImageSettings()
+        : getDefaultImageSettings()
     const inputData: NewsSaveApi = {
       customerId: customerId.value ?? 0,
       title: formData.title,
       category: formData.category ?? 'I',
       publishOn: formData.publishOn ?? localDate(),
       body: formData.body,
-      imageFile: formData.imageFile,
+      ...(formData.image
+        ? {
+            image: {
+              url: formData.image,
+              settings,
+            },
+          }
+        : {}),
     }
     const data = await update(contentId, inputData)
     return apitypeToNewsType(data ?? null)

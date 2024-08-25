@@ -24,6 +24,7 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     update,
     remove,
     updateImageSettingsWithDebounced,
+    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<InformationSaveApi, InformationGetApi>(
     customerId,
@@ -71,7 +72,14 @@ const useInformationContent = (customerId: Ref<number | null>) => {
       title: formData.title,
       subtitle: formData.subtitle,
       body: formData.body,
-      imageFile: formData.imageFile,
+      ...(formData.image
+        ? {
+            image: {
+              url: formData.image,
+              settings: getDefaultImageSettings(),
+            },
+          }
+        : {}),
     }
     const data = await create(inputData)
     return apitypeToInformationType(data ?? null)
@@ -81,12 +89,25 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     contentId: number,
     formData: InformationForm
   ): Promise<InformationType | null> => {
+    const settings =
+      formData.image === informationRef.value?.image?.url
+        ? informationRef.value?.image
+          ? informationRef.value.image.settings
+          : getDefaultImageSettings()
+        : getDefaultImageSettings()
     const inputData: InformationSaveApi = {
       customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
       body: formData.body,
-      imageFile: formData.imageFile,
+      ...(formData.image
+        ? {
+            image: {
+              url: formData.image,
+              settings,
+            },
+          }
+        : {}),
     }
     const data = await update(contentId, inputData)
     return apitypeToInformationType(data ?? null)

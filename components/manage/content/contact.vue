@@ -13,14 +13,12 @@ const emit = defineEmits<{
   remove: [id: number]
 }>()
 
+const { customerId } = useFoundation()
+const apiKind = getContactKind()
+
 const modal = ref(false)
-const {
-  handleSubmit,
-  handleReset,
-  formData,
-  resetContactForm,
-  changeImageFile,
-} = useContactForm()
+const { handleSubmit, handleReset, formData, resetContactForm } =
+  useContactForm()
 
 watch(modal, (current) => {
   if (current) {
@@ -56,8 +54,6 @@ const onRemove = () => {
 const onCancel = () => {
   modal.value = false
 }
-
-const { customerId } = useFoundation()
 </script>
 
 <template>
@@ -69,11 +65,12 @@ const { customerId } = useFoundation()
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!contactData?.id">
     <v-form>
       <div>
-        <BaseFileInput
-          :image-url="formData.image.value.value"
+        <CommonContentFileInput
+          v-model="formData.image.value.value"
           :error-messages="formData.image.errorMessage.value"
           label="タイトル画像"
-          @change-image-file="changeImageFile"
+          :customer-id="customerId"
+          :api-kind="apiKind"
         />
       </div>
       <div class="mt-3">
@@ -102,7 +99,7 @@ const { customerId } = useFoundation()
           label="本文"
           placeholder="本文を入力してください"
           :customer-id="customerId"
-          :api-kind="getContactKind()"
+          :api-kind="apiKind"
         />
       </div>
       <ManageContentFormActions

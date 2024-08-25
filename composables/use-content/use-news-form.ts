@@ -17,7 +17,6 @@ export const useNewsForm = () => {
       return true
     },
     image: () => true,
-    imageFile: () => true,
   }
   const newsFormInitial: NewsForm = {
     title: '',
@@ -25,7 +24,6 @@ export const useNewsForm = () => {
     publishOn: null,
     body: '',
     image: '',
-    imageFile: null,
   }
 
   const { handleSubmit, handleReset, validate } = useForm({
@@ -39,7 +37,6 @@ export const useNewsForm = () => {
     publishOn: useField<NewsForm['publishOn']>('publishOn'),
     body: useField<NewsForm['body']>('body'),
     image: useField<NewsForm['image']>('image'),
-    imageFile: useField<NewsForm['imageFile']>('imageFile'),
   }
 
   const resetNewsForm = (newsData?: NewsType | null) => {
@@ -49,12 +46,6 @@ export const useNewsForm = () => {
     formData.publishOn.value.value = newsData?.publishOn ?? null
     formData.body.value.value = newsData?.body ?? ''
     formData.image.value.value = newsData?.image?.url ?? ''
-    formData.imageFile.value.value = null
-  }
-
-  const changeImageFile = async (params: { file: File; url: string }) => {
-    formData.image.value.value = params.url
-    formData.imageFile.value.value = params.file
   }
 
   return {
@@ -63,6 +54,5 @@ export const useNewsForm = () => {
     validate,
     formData,
     resetNewsForm,
-    changeImageFile,
   }
 }

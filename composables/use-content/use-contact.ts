@@ -17,6 +17,7 @@ const useContactContent = (customerId: Ref<number | null>) => {
     update,
     remove,
     updateImageSettingsWithDebounced,
+    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<ContactSaveApi, ContactGetApi>(customerId, apiKind)
 
@@ -61,7 +62,14 @@ const useContactContent = (customerId: Ref<number | null>) => {
       title: formData.title,
       subtitle: formData.subtitle,
       body: formData.body,
-      imageFile: formData.imageFile,
+      ...(formData.image
+        ? {
+            image: {
+              url: formData.image,
+              settings: getDefaultImageSettings(),
+            },
+          }
+        : {}),
     }
     const data = await create(inputData)
     return apitypeToContactType(data ?? null)
@@ -71,12 +79,25 @@ const useContactContent = (customerId: Ref<number | null>) => {
     contentId: number,
     formData: ContactForm
   ): Promise<ContactType | null> => {
+    const settings =
+      formData.image === contactRef.value?.image?.url
+        ? contactRef.value?.image
+          ? contactRef.value.image.settings
+          : getDefaultImageSettings()
+        : getDefaultImageSettings()
     const inputData: ContactSaveApi = {
       customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
       body: formData.body,
-      imageFile: formData.imageFile,
+      ...(formData.image
+        ? {
+            image: {
+              url: formData.image,
+              settings,
+            },
+          }
+        : {}),
     }
     const data = await update(contentId, inputData)
     return apitypeToContactType(data ?? null)

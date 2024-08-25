@@ -27,6 +27,7 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     update,
     remove,
     updatePositions,
+    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<ServiceSaveApi, ServiceGetApi>(customerId, apiKind)
 
@@ -77,8 +78,11 @@ const useServiceContent = (customerId: Ref<number | null>) => {
       title: formData.title,
       caption: formData.caption,
       body: formData.body,
-      imageFile: formData.imageFile,
       position: formData.position,
+      image: {
+        url: formData.image,
+        settings: getDefaultImageSettings(),
+      },
     }
     const data = await create(inputData)
     return apitypeToServiceType(data ?? null)
@@ -88,13 +92,20 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     contentId: number,
     formData: ServiceForm
   ): Promise<ServiceType | null> => {
+    const settings =
+      formData.image === serviceRef.value?.image?.url
+        ? serviceRef.value?.image?.settings
+        : getDefaultImageSettings()
     const inputData: ServiceSaveApi = {
       customerId: customerId.value ?? 0,
       title: formData.title,
       caption: formData.caption,
       body: formData.body,
-      imageFile: formData.imageFile,
       position: formData.position,
+      image: {
+        url: formData.image,
+        settings,
+      },
     }
     const data = await update(contentId, inputData)
     return apitypeToServiceType(data ?? null)

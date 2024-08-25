@@ -20,14 +20,12 @@ export const useInformationForm = () => {
       return true
     },
     image: () => true,
-    imageFile: () => true,
   }
   const informationFormInitial: InformationForm = {
     title: '',
     subtitle: '',
     body: '',
     image: '',
-    imageFile: null,
   }
 
   const { handleSubmit, handleReset, validate } = useForm({
@@ -40,7 +38,6 @@ export const useInformationForm = () => {
     subtitle: useField<InformationForm['subtitle']>('subtitle'),
     body: useField<InformationForm['body']>('body'),
     image: useField<InformationForm['image']>('image'),
-    imageFile: useField<InformationForm['imageFile']>('imageFile'),
   }
 
   const resetInformationForm = (informationData?: InformationType | null) => {
@@ -49,12 +46,6 @@ export const useInformationForm = () => {
     formData.subtitle.value.value = informationData?.subtitle ?? ''
     formData.body.value.value = informationData?.body ?? ''
     formData.image.value.value = informationData?.image?.url ?? ''
-    formData.imageFile.value.value = null
-  }
-
-  const changeImageFile = (params: { file: File; url: string }) => {
-    formData.image.value.value = params.url
-    formData.imageFile.value.value = params.file
   }
 
   return {
@@ -63,6 +54,5 @@ export const useInformationForm = () => {
     validate,
     formData,
     resetInformationForm,
-    changeImageFile,
   }
 }
