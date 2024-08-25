@@ -44,19 +44,18 @@ export type ContentSaveApi = {
   subtitle?: string
   body?: string
   image?: ImageData
-  imageFile?: File | null
 }
 
 export interface EyecatchSaveApi extends ContentSaveApi {
+  image: ImageData
   subtitle: string
-  imageFile: File | null
 }
 export interface InformationSaveApi extends ContentSaveApi {
   body: string
 }
 export interface ServiceSaveApi extends ContentSaveApi {
+  image: ImageData
   caption: string
-  imageFile: File | null
   position: number
 }
 export interface NewsSaveApi extends ContentSaveApi {

@@ -17,6 +17,7 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     update,
     remove,
     updateImageSettingsWithDebounced,
+    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<EyecatchSaveApi, EyecatchGetApi>(customerId, apiKind)
 
@@ -56,7 +57,10 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
       customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
-      imageFile: formData.imageFile,
+      image: {
+        url: formData.image,
+        settings: getDefaultImageSettings(),
+      },
     }
     const data = await create(inputData)
     return apitypeToEyecatchType(data ?? null)
@@ -66,11 +70,18 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     contentId: number,
     formData: EyecatchForm
   ): Promise<EyecatchType | null> => {
+    const settings =
+      formData.image === eyecatchRef.value?.image?.url
+        ? eyecatchRef.value?.image?.settings
+        : getDefaultImageSettings()
     const inputData: EyecatchSaveApi = {
       customerId: customerId.value ?? 0,
       title: formData.title,
       subtitle: formData.subtitle,
-      imageFile: formData.imageFile,
+      image: {
+        url: formData.image,
+        settings,
+      },
     }
     const data = await update(contentId, inputData)
     return apitypeToEyecatchType(data ?? null)

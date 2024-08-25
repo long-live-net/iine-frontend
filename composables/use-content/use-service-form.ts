@@ -24,7 +24,6 @@ export const useServiceForm = () => {
     },
     image: (v: string | undefined) =>
       noBlank(v) || 'タイトル画像ファイルを設定してください',
-    imageFile: () => true,
     position: () => true,
   }
   const serviceFormInitial: ServiceForm = {
@@ -32,7 +31,6 @@ export const useServiceForm = () => {
     caption: '',
     body: '',
     image: '',
-    imageFile: null,
     position: 0,
   }
 
@@ -46,7 +44,6 @@ export const useServiceForm = () => {
     caption: useField<ServiceForm['caption']>('caption'),
     body: useField<ServiceForm['body']>('body'),
     image: useField<ServiceForm['image']>('image'),
-    imageFile: useField<ServiceForm['imageFile']>('imageFile'),
     position: useField<ServiceForm['position']>('position'),
   }
 
@@ -56,13 +53,7 @@ export const useServiceForm = () => {
     formData.caption.value.value = serviceData?.caption ?? ''
     formData.body.value.value = serviceData?.body ?? ''
     formData.image.value.value = serviceData?.image?.url ?? ''
-    formData.imageFile.value.value = null
     formData.position.value.value = serviceData?.position ?? 0
-  }
-
-  const changeImageFile = (params: { file: File; url: string }) => {
-    formData.image.value.value = params.url
-    formData.imageFile.value.value = params.file
   }
 
   return {
@@ -71,6 +62,5 @@ export const useServiceForm = () => {
     validate,
     formData,
     resetServiceForm,
-    changeImageFile,
   }
 }

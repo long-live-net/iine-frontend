@@ -61,12 +61,10 @@ export interface ContentForm {
   subtitle?: string
   body?: string
   image?: string
-  imageFile?: File | null
 }
 export interface EyecatchForm extends ContentForm {
   subtitle: string
   image: string
-  imageFile: File | null
 }
 export interface InformationForm extends ContentForm {
   body: string
@@ -77,9 +75,8 @@ export interface NewsForm extends ContentForm {
   publishOn: Date | null
 }
 export interface ServiceForm extends ContentForm {
-  caption: string
   image: string
-  imageFile: File | null
+  caption: string
   position: number
 }
 export interface ContactForm extends ContentForm {

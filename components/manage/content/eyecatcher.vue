@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { EyecatchType, EyecatchForm } from '@/types/content'
+import { getEyecatchKind } from '@/composables/use-content/use-eyecatch'
 
 const props = defineProps<{
   eyecatchData?: EyecatchType | null
@@ -12,14 +13,12 @@ const emit = defineEmits<{
   remove: [id: number]
 }>()
 
+const { customerId } = useFoundation()
+const apiKind = getEyecatchKind()
+
 const modal = ref(false)
-const {
-  handleSubmit,
-  handleReset,
-  formData,
-  resetEyeCatchForm,
-  changeImageFile,
-} = useEyecatchForm()
+const { handleSubmit, handleReset, formData, resetEyeCatchForm } =
+  useEyecatchForm()
 
 watch(modal, (current) => {
   if (current) {
@@ -69,11 +68,12 @@ const onCancel = () => {
   >
     <v-form>
       <div>
-        <BaseFileInput
-          :image-url="formData.image.value.value"
+        <CommonContentFileInput
+          v-model="formData.image.value.value"
           :error-messages="formData.image.errorMessage.value"
           label="トップ画像"
-          @change-image-file="changeImageFile"
+          :customer-id="customerId"
+          :api-kind="apiKind"
         />
       </div>
       <div class="mt-3">
