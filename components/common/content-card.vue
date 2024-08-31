@@ -3,9 +3,6 @@
     <div class="contents-card g-theme-contents-card">
       <slot />
     </div>
-    <div v-if="$slots.outsider">
-      <slot name="outsider" />
-    </div>
   </div>
 </template>
 

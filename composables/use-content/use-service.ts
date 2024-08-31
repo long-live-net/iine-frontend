@@ -1,4 +1,4 @@
-import type { ServiceForm, ServiceType } from '@/types/content'
+import type { ServiceForm, ServiceType, ImageSettings } from '@/types/content'
 import type {
   ListFilter,
   ListPager,
@@ -15,8 +15,10 @@ const useServiceContent = (customerId: Ref<number | null>) => {
   const {
     loadData,
     loadList,
+    set,
     get,
     getList,
+    setImageSettings,
     setListPositions,
     contentDataRef,
     contentListRef,
@@ -27,6 +29,7 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     update,
     remove,
     updatePositions,
+    updateImageSettingsWithDebounced,
     getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<ServiceSaveApi, ServiceGetApi>(customerId, apiKind)
@@ -59,6 +62,20 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     () => contentListRef.value?.total ?? null
   )
   const loading = computed(() => readLoading.value || writeLoading.value)
+
+  const setServiceImageSettings = (
+    settings: Partial<ImageSettings>
+  ): ImageSettings | undefined => {
+    if (!serviceRef.value) return
+    if (!serviceRef.value.image?.settings) return
+
+    const newSettings: ImageSettings = {
+      ...serviceRef.value.image.settings,
+      ...settings,
+    }
+    setImageSettings(newSettings)
+    return newSettings
+  }
 
   const setServiceListPositions = (
     serviceList: ServiceType[]
@@ -114,12 +131,15 @@ const useServiceContent = (customerId: Ref<number | null>) => {
   return {
     loadService: loadData,
     loadServiceList: loadList,
+    setService: set,
     getService: get,
     getServiceList: getList,
     setServiceListPositions,
     createService,
     updateService,
     removeService: remove,
+    setServiceImageSettings,
+    updateServiceImageSettings: updateImageSettingsWithDebounced,
     updateServiceListPositions: updatePositions,
     serviceRef,
     serviceListRef,
@@ -198,5 +218,74 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
     onRemove,
     onUpdatePositions,
     loading,
+  }
+}
+
+/**
+ * service detail API アクションサービス
+ * @param customerId
+ */
+export const useServiceActions = (customerId: Ref<number | null>) => {
+  const {
+    loadService,
+    getService,
+    createService,
+    updateService,
+    removeService,
+    setServiceImageSettings,
+    updateServiceImageSettings,
+    serviceRef,
+    loading,
+  } = useServiceContent(customerId)
+
+  const { addSnackber } = useSnackbars()
+
+  const onLoad = async (id?: number) => {
+    await loadService(id)
+  }
+
+  const onCreate = async (formData: ServiceForm) => {
+    const savedData = await createService(formData)
+    addSnackber?.('Service を登録しました。')
+    await getService(savedData?.id)
+  }
+
+  const onUpdate = async ({
+    id,
+    formData,
+  }: {
+    id: number
+    formData: ServiceForm
+  }) => {
+    if (!id) return
+
+    const savedData = await updateService(id, formData)
+    addSnackber?.('Service を更新しました。')
+    await getService(savedData?.id)
+  }
+
+  const onRemove = async (id: number) => {
+    await removeService(id)
+    addSnackber?.('Service を削除しました。')
+    await getService()
+  }
+
+  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+    if (!serviceRef.value?.id) return
+
+    const newSettings = setServiceImageSettings(settings)
+    if (!newSettings) return
+
+    updateServiceImageSettings(serviceRef.value.id, newSettings)
+  }
+
+  return {
+    serviceRef,
+    loading,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdateImageSetting,
   }
 }

@@ -26,10 +26,8 @@ defineProps<{
 
 <style lang="scss" scoped>
 .eyecatch-title {
-  display: inline-block;
+  display: block;
   transform: translate(-50%, -50%);
-  text-align: center;
-  white-space: nowrap;
   h2 {
     padding: 0;
     margin: 0;
@@ -37,29 +35,31 @@ defineProps<{
 }
 
 .top-title {
-  color: rgba(255, 255, 255, 0.75);
-  text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.5);
   font-weight: bold;
+  color: rgb(255 255 255);
+  text-shadow: 1px 1px 5px rgb(255 255 255 / 0.5);
+  text-align: center;
   .maintitle {
-    font-size: 2rem;
+    font-size: 2.25rem;
+    white-space: nowrap;
   }
   .subtitle {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     margin-top: 1rem;
+    white-space: nowrap;
   }
 }
 .section-title {
-  background-color: rgba(0, 0, 0, 0.5);
   color: white;
-  padding: 1.5rem 2.5rem;
-  border-radius: 9999px;
   font-weight: bold;
+  padding: 0.75rem;
+  background-color: rgba(0, 0, 0, 0.3);
   .maintitle {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
   .subtitle {
-    font-size: 1rem;
-    margin-top: 0.25rem;
+    font-size: 1.25rem;
+    margin-top: 0.5rem;
   }
 }
 
@@ -67,10 +67,19 @@ defineProps<{
   .top-title {
     font-weight: bolder;
     .maintitle {
-      font-size: 1.8rem;
+      font-size: 1.9rem;
     }
     .subtitle {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
+    }
+  }
+
+  .section-title {
+    .maintitle {
+      font-size: 1.3rem;
+    }
+    .subtitle {
+      font-size: 1.1rem;
     }
   }
 }

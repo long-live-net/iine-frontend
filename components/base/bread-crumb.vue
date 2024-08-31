@@ -3,7 +3,7 @@ export type BreadCrumbsItem = {
   title: string
   disabled: boolean
   href?: string
-  to?: string | { name: string }
+  to?: string | { name: string; hash?: string }
 }
 defineProps<{
   items: BreadCrumbsItem[]

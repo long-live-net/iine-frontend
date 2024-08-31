@@ -12,7 +12,11 @@ export default <RouterOptions>{
     if (savedPosition) {
       position = savedPosition
     } else if (to.hash) {
-      position = { el: to.hash, behavior: 'smooth' }
+      if (to.path === from.path) {
+        position = { el: to.hash, behavior: 'smooth' }
+      } else {
+        position = { el: to.hash }
+      }
     } else {
       position = { top: 0 }
     }

@@ -106,6 +106,13 @@ export const useContentRead = <T extends ContentGetApi>(
   }
 
   /**
+   * set contentData
+   */
+  const set = (content: T | null) => {
+    contentDataRef.value = content
+  }
+
+  /**
    * get content data
    * @param contentId 未設定時は最新データを取得する
    */
@@ -227,6 +234,7 @@ export const useContentRead = <T extends ContentGetApi>(
   return {
     loadData,
     loadList,
+    set,
     get,
     getList,
     getPreNextId,
