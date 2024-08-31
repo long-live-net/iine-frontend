@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ServiceType } from '@/types/content'
+import type { ServiceType, ContentType } from '@/types/content'
 
 const { customerId, canEdit } = useFoundation()
 const {
@@ -19,6 +19,13 @@ filter.value = {}
 sort.value = { position: 1 }
 pager.value = { page: 1, limit: 12 }
 await onLoad()
+
+const router = useRouter()
+const onMovingDetailPage = (service: ContentType) => {
+  if (canEdit.value || service.body) {
+    router.push(`/services/${service.id}`)
+  }
+}
 </script>
 
 <template>
@@ -37,9 +44,9 @@ await onLoad()
             <CommonEyecatchImage
               v-if="content.image"
               :url="content.image.url"
-              :settings="content.image.settings"
               circle
               class="service-item__eyecatcher"
+              @click="onMovingDetailPage(content)"
             />
             <CommonWysiwsgViewer
               :value="(content as ServiceType).caption"
@@ -82,9 +89,9 @@ await onLoad()
             <CommonEyecatchImage
               v-if="content.image"
               :url="content.image.url"
-              :settings="content.image.settings"
               circle
               class="service-item__eyecatcher"
+              @click="onMovingDetailPage(content)"
             />
             <CommonWysiwsgViewer
               :value="(content as ServiceType).caption"
@@ -133,6 +140,11 @@ await onLoad()
   &__eyecatcher {
     margin-top: 1rem;
     aspect-ratio: 6 / 5;
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(#fff, 0.25);
+      background-blend-mode: overlay;
+    }
   }
   &__caption {
     text-align: left;

@@ -30,6 +30,11 @@ await onLoad(contentId)
           :settings="newsRef?.image?.settings"
           class="eyecatcher"
         >
+          <CommonEyecatchTitles
+            place="section"
+            :title="newsRef?.title"
+            class="eyecatcher__titles"
+          />
           <div
             v-if="canEdit && newsRef?.image?.settings"
             class="image-settings"
@@ -63,10 +68,10 @@ await onLoad(contentId)
               }}</small>
             </p>
           </div>
-          <h5 class="g-text-cl news-detail__title">
+          <h5 v-if="!newsRef?.image" class="g-text-cl news-detail__title">
             <span>{{ newsRef?.title ?? '' }}</span>
           </h5>
-          <div v-if="newsRef?.body">
+          <div v-if="newsRef?.body" class="news-detail__body">
             <CommonWysiwsgViewer :value="newsRef?.body" />
           </div>
           <div v-else class="no-items">
@@ -92,9 +97,6 @@ await onLoad(contentId)
 </template>
 
 <style scoped lang="scss">
-$eyecatcher-height: 500px;
-$eyecatcher-height-sm: 600px;
-
 .news-detail {
   position: relative;
   &__header {
@@ -103,9 +105,11 @@ $eyecatcher-height-sm: 600px;
     align-items: center;
   }
   &__title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
-    margin-bottom: 1.8rem;
+  }
+  &__body {
+    margin-top: 1.4rem;
   }
   .edit-activator {
     position: absolute;
@@ -123,10 +127,13 @@ $eyecatcher-height-sm: 600px;
     }
   }
 }
+
+$eyecatcher-height: 400px;
+$eyecatcher-height-sm: 400px;
+
 .eyecatcher {
   position: relative;
-  height: 30vh;
-  min-height: 400px;
+  height: 25vh;
   max-height: $eyecatcher-height;
   min-height: calc($eyecatcher-height * 0.5);
   &__titles {
@@ -149,7 +156,7 @@ $eyecatcher-height-sm: 600px;
 
 @media only screen and (max-width: $grid-breakpoint-md) {
   .eyecatcher {
-    height: 50vh;
+    height: 30vh;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
     .image-settings {

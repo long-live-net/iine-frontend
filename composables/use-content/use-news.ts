@@ -301,11 +301,11 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
   return {
     newsRef,
     newsPreNextIdRefRef,
+    loading,
     onLoad,
     onCreate,
     onUpdate,
     onRemove,
     onUpdateImageSetting,
-    loading,
   }
 }

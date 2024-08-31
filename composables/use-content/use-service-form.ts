@@ -18,12 +18,9 @@ export const useServiceForm = () => {
       if (!maxLength(v, 400)) return '400文字以内で入力してください'
       return true
     },
-    body: (v: string | undefined) => {
-      if (!noBlankForWysiwyg(v)) return '本文を入力してください'
-      return true
-    },
     image: (v: string | undefined) =>
       noBlank(v) || 'タイトル画像ファイルを設定してください',
+    body: () => true,
     position: () => true,
   }
   const serviceFormInitial: ServiceForm = {
