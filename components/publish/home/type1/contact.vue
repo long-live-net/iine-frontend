@@ -68,9 +68,6 @@ await onLoad()
 </template>
 
 <style scoped lang="scss">
-$eyecatcher-height: 500px;
-$eyecatcher-height-sm: 600px;
-
 .type1-contact {
   position: relative;
   .edit-activator {
@@ -102,12 +99,16 @@ $eyecatcher-height-sm: 600px;
     }
   }
 }
+
+$eyecatcher-height: 480px;
+$eyecatcher-height-sm: 600px;
+
 .eyecatcher {
   position: relative;
   height: 30vh;
   min-height: 400px;
   max-height: $eyecatcher-height;
-  min-height: calc($eyecatcher-height * 0.5);
+  min-height: calc($eyecatcher-height * 0.6);
   &__titles {
     position: absolute;
     top: 50%;

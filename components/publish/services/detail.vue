@@ -35,6 +35,7 @@ const bodyPlainString = computed(() => {
           <CommonEyecatchTitles
             place="section"
             :title="serviceRef?.title"
+            :title-background-tranparent="0.5"
             class="eyecatcher__titles"
           />
           <div
@@ -104,14 +105,14 @@ const bodyPlainString = computed(() => {
   }
 }
 
-$eyecatcher-height: 400px;
+$eyecatcher-height: 480px;
 $eyecatcher-height-sm: 400px;
 
 .eyecatcher {
   position: relative;
-  height: 25vh;
+  height: 30vh;
   max-height: $eyecatcher-height;
-  min-height: calc($eyecatcher-height * 0.5);
+  min-height: calc($eyecatcher-height * 0.6);
   &__titles {
     position: absolute;
     top: 50%;

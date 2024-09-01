@@ -1,9 +1,17 @@
 <script setup lang="ts">
-defineProps<{
-  place: 'top' | 'section'
-  title?: string
-  subtitle?: string
-}>()
+withDefaults(
+  defineProps<{
+    place: 'top' | 'section'
+    title?: string
+    subtitle?: string
+    titleBackgroundTranparent?: number
+  }>(),
+  {
+    title: '',
+    subtitle: '',
+    titleBackgroundTranparent: 0.25,
+  }
+)
 </script>
 
 <template>
@@ -25,12 +33,20 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
+$titleBackGroundTranparent: v-bind(titleBackgroundTranparent);
+
 .eyecatch-title {
   display: block;
   transform: translate(-50%, -50%);
-  h2 {
+  max-width: 90%;
+  h2,
+  p {
     padding: 0;
     margin: 0;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -41,19 +57,17 @@ defineProps<{
   text-align: center;
   .maintitle {
     font-size: 2.25rem;
-    white-space: nowrap;
   }
   .subtitle {
     font-size: 1.5rem;
     margin-top: 1rem;
-    white-space: nowrap;
   }
 }
 .section-title {
   color: white;
   font-weight: bold;
   padding: 0.75rem;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgb(0 0 0 / $titleBackGroundTranparent);
   .maintitle {
     font-size: 1.5rem;
   }

@@ -33,6 +33,7 @@ await onLoad(contentId)
           <CommonEyecatchTitles
             place="section"
             :title="newsRef?.title"
+            :title-background-tranparent="0.5"
             class="eyecatcher__titles"
           />
           <div
@@ -128,14 +129,14 @@ await onLoad(contentId)
   }
 }
 
-$eyecatcher-height: 400px;
+$eyecatcher-height: 480px;
 $eyecatcher-height-sm: 400px;
 
 .eyecatcher {
   position: relative;
-  height: 25vh;
+  height: 30vh;
   max-height: $eyecatcher-height;
-  min-height: calc($eyecatcher-height * 0.5);
+  min-height: calc($eyecatcher-height * 0.6);
   &__titles {
     position: absolute;
     top: 50%;
