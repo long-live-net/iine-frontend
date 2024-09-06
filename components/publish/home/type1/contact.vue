@@ -26,7 +26,8 @@ await onLoad()
           place="section"
           :title="contactRef?.title"
           :subtitle="contactRef?.subtitle"
-          class="eyecatcher__titles"
+          text-no-wrap
+          class="g-block-lg eyecatcher__titles"
         />
         <div
           v-if="canEdit && contactRef?.image?.settings"
@@ -38,13 +39,18 @@ await onLoad()
           />
         </div>
       </CommonEyecatchImage>
+      <PublishCustomerServiceLinks class="type1-contact__service-links" />
+      <CommonContentCardTitle
+        :title="contactRef?.title ?? ''"
+        :subtitle="contactRef?.subtitle"
+        class="g-block-sm type1-contact__title"
+      />
       <CommonContentCardBody class="type1-contact__body">
         <div v-if="contactRef?.body">
           <CommonWysiwsgViewer :value="contactRef?.body" />
           <div class="inquire-activator">
             <PublishInquire />
           </div>
-          <PublishCustomerServiceLinks class="type1-contact__body--links" />
         </div>
         <div v-else class="no-items">
           <p>データがありません</p>
@@ -79,14 +85,18 @@ await onLoad()
     margin-top: 1.5rem;
     text-align: center;
   }
+  &__service-links {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.25rem;
+    margin-right: 1rem;
+  }
+  &__title {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
   &__body {
-    position: relative;
-    padding-top: 3.25rem;
-    &--links {
-      position: absolute;
-      top: 0.5rem;
-      right: 1rem;
-    }
+    padding-top: 0.5rem;
   }
   .no-items {
     display: flex;
@@ -101,14 +111,13 @@ await onLoad()
 }
 
 $eyecatcher-height: 480px;
-$eyecatcher-height-sm: 600px;
+$eyecatcher-height-sm: 300px;
 
 .eyecatcher {
   position: relative;
   height: 30vh;
-  min-height: 400px;
   max-height: $eyecatcher-height;
-  min-height: calc($eyecatcher-height * 0.6);
+  min-height: calc($eyecatcher-height * 0.7);
   &__titles {
     position: absolute;
     top: 50%;
@@ -123,7 +132,7 @@ $eyecatcher-height-sm: 600px;
 
 @media only screen and (max-width: $grid-breakpoint-md) {
   .eyecatcher {
-    height: 50vh;
+    height: 50vw;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
     .image-settings {

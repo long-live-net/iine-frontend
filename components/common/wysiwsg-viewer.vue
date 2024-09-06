@@ -14,14 +14,15 @@ withDefaults(defineProps<{ value?: string | null }>(), {
 <style lang="scss" scoped>
 .wysiwsg-viewer {
   :deep(img) {
+    display: block;
     max-width: 100% !important;
     height: auto !important;
     cursor: auto !important;
   }
 
   :deep(iframe) {
-    border: 0.5rem solid var(--black-contrast);
     display: block;
+    border: 0.5rem solid var(--black-contrast);
     max-width: 100%;
     min-height: 200px;
     min-width: 200px;

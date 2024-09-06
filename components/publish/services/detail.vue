@@ -26,6 +26,10 @@ const bodyPlainString = computed(() => {
   <CommonContentWrap :loading="loading">
     <CommonContentCard class="service-detail">
       <template #default>
+        <CommonContentCardTitle
+          :title="serviceRef?.title ?? ''"
+          class="g-block-sm"
+        />
         <CommonEyecatchImage
           v-if="serviceRef?.image"
           :url="serviceRef?.image?.url"
@@ -35,8 +39,8 @@ const bodyPlainString = computed(() => {
           <CommonEyecatchTitles
             place="section"
             :title="serviceRef?.title"
-            :title-background-tranparent="0.5"
-            class="eyecatcher__titles"
+            :title-background-tranparent="0.4"
+            class="g-block-lg eyecatcher__titles"
           />
           <div
             v-if="canEdit && serviceRef?.image?.settings"
@@ -83,11 +87,6 @@ const bodyPlainString = computed(() => {
 <style scoped lang="scss">
 .service-detail {
   position: relative;
-  &__title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 1.8rem;
-  }
   .edit-activator {
     position: absolute;
     top: 1rem;
@@ -106,7 +105,7 @@ const bodyPlainString = computed(() => {
 }
 
 $eyecatcher-height: 480px;
-$eyecatcher-height-sm: 400px;
+$eyecatcher-height-sm: 300px;
 
 .eyecatcher {
   position: relative;
@@ -127,11 +126,11 @@ $eyecatcher-height-sm: 400px;
 
 @media only screen and (max-width: $grid-breakpoint-md) {
   .eyecatcher {
-    height: 30vh;
+    height: 30vw;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
     .image-settings {
-      bottom: 0.5rem;
+      bottom: 0.2rem;
       right: 0.5rem;
     }
   }

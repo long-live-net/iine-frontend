@@ -25,7 +25,8 @@ await onLoad()
           place="section"
           :title="informationRef?.title"
           :subtitle="informationRef?.subtitle"
-          class="eyecatcher__titles"
+          text-no-wrap
+          class="g-block-lg eyecatcher__titles"
         />
         <div
           v-if="canEdit && informationRef?.image?.settings"
@@ -37,7 +38,12 @@ await onLoad()
           />
         </div>
       </CommonEyecatchImage>
-      <CommonContentCardBody>
+      <CommonContentCardTitle
+        :title="informationRef?.title ?? ''"
+        :subtitle="informationRef?.subtitle"
+        class="g-block-sm"
+      />
+      <CommonContentCardBody class="type1-information__body">
         <div v-if="informationRef?.body">
           <CommonWysiwsgViewer :value="informationRef?.body" />
           <div class="inquire-activator">
@@ -90,14 +96,13 @@ await onLoad()
 }
 
 $eyecatcher-height: 480px;
-$eyecatcher-height-sm: 600px;
+$eyecatcher-height-sm: 300px;
 
 .eyecatcher {
   position: relative;
   height: 30vh;
-  min-height: 400px;
   max-height: $eyecatcher-height;
-  min-height: calc($eyecatcher-height * 0.6);
+  min-height: calc($eyecatcher-height * 0.7);
   &__titles {
     position: absolute;
     top: 50%;
@@ -110,8 +115,14 @@ $eyecatcher-height-sm: 600px;
   }
 }
 @media only screen and (max-width: $grid-breakpoint-md) {
+  .type1-information {
+    &__body {
+      padding-top: 0;
+    }
+  }
+
   .eyecatcher {
-    height: 50vh;
+    height: 50vw;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
     .image-settings {

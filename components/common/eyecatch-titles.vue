@@ -5,11 +5,13 @@ withDefaults(
     title?: string
     subtitle?: string
     titleBackgroundTranparent?: number
+    textNoWrap?: boolean
   }>(),
   {
     title: '',
     subtitle: '',
     titleBackgroundTranparent: 0.25,
+    textNoWrap: false,
   }
 )
 </script>
@@ -23,10 +25,18 @@ withDefaults(
       'section-title': place === 'section',
     }"
   >
-    <h2 v-show="title?.length" class="maintitle">
+    <h2
+      v-show="title?.length"
+      class="maintitle"
+      :class="{ 'text-no-wrap': textNoWrap }"
+    >
       {{ title }}
     </h2>
-    <p v-show="subtitle?.length" class="subtitle">
+    <p
+      v-show="subtitle?.length"
+      class="subtitle"
+      :class="{ 'text-no-wrap': textNoWrap }"
+    >
       {{ subtitle }}
     </p>
   </div>
@@ -36,7 +46,6 @@ withDefaults(
 $titleBackGroundTranparent: v-bind(titleBackgroundTranparent);
 
 .eyecatch-title {
-  display: block;
   transform: translate(-50%, -50%);
   max-width: 90%;
   h2,
@@ -44,6 +53,8 @@ $titleBackGroundTranparent: v-bind(titleBackgroundTranparent);
     padding: 0;
     margin: 0;
     max-width: 100%;
+  }
+  .text-no-wrap {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -63,6 +74,7 @@ $titleBackGroundTranparent: v-bind(titleBackgroundTranparent);
     margin-top: 1rem;
   }
 }
+
 .section-title {
   color: white;
   font-weight: bold;
@@ -77,23 +89,42 @@ $titleBackGroundTranparent: v-bind(titleBackgroundTranparent);
   }
 }
 
-@media only screen and (max-width: $grid-breakpoint-md) {
+@media only screen and (max-width: $grid-breakpoint-lg) {
   .top-title {
     font-weight: bolder;
     .maintitle {
-      font-size: 1.9rem;
+      font-size: 2rem;
     }
     .subtitle {
       font-size: 1.25rem;
     }
   }
-
   .section-title {
     .maintitle {
       font-size: 1.3rem;
     }
     .subtitle {
       font-size: 1.1rem;
+    }
+  }
+}
+
+@media only screen and (max-width: $grid-breakpoint-md) {
+  .top-title {
+    font-weight: bolder;
+    .maintitle {
+      font-size: 1.5rem;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+    }
+  }
+  .section-title {
+    .maintitle {
+      font-size: 1.25rem;
+    }
+    .subtitle {
+      font-size: 1rem;
     }
   }
 }
