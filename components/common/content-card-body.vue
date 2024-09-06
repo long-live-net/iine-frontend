@@ -13,7 +13,7 @@
 
 @media only screen and (max-width: $grid-breakpoint-md) {
   .contents-card-body {
-    padding: 2.5rem 1.5rem;
+    padding: 2.5rem 2rem;
   }
 }
 </style>

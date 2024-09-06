@@ -27,6 +27,7 @@ await onLoad()
         place="top"
         :title="eyecatchRef?.title"
         :subtitle="eyecatchRef?.subtitle"
+        text-no-wrap
         class="titles"
       />
       <div
@@ -83,8 +84,11 @@ await onLoad()
 }
 @media only screen and (max-width: $grid-breakpoint-md) {
   .eyecatcher {
-    height: 100vh;
+    height: 75vh;
     min-height: auto;
+    .titles {
+      top: 65%;
+    }
     .image-settings {
       bottom: 0.5rem;
       right: 0.5rem;

@@ -11,21 +11,22 @@ $contents-card-max-width: 1140px;
 $contents-card-min-height: 240px;
 
 .contents-card-wrap {
-  width: 100%;
+  width: 90%;
   max-width: $contents-card-max-width;
   min-height: $contents-card-min-height;
   margin: 0 auto;
   .contents-card {
     min-height: $contents-card-min-height;
     overflow: hidden;
+    border-radius: 12px;
   }
 }
 
-@media only screen and (min-width: $grid-breakpoint-md) {
+@media only screen and (max-width: $grid-breakpoint-md) {
   .contents-card-wrap {
-    width: 90%;
+    width: 100%;
     .contents-card {
-      border-radius: 12px;
+      border-radius: 0;
     }
   }
 }

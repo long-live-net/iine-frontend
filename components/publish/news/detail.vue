@@ -24,6 +24,10 @@ await onLoad(contentId)
   <CommonContentWrap :loading="loading">
     <CommonContentCard class="news-detail">
       <template #default>
+        <CommonContentCardTitle
+          :title="newsRef?.title ?? ''"
+          class="g-block-sm"
+        />
         <CommonEyecatchImage
           v-if="newsRef?.image"
           :url="newsRef?.image?.url"
@@ -33,7 +37,8 @@ await onLoad(contentId)
           <CommonEyecatchTitles
             place="section"
             :title="newsRef?.title"
-            class="eyecatcher__titles"
+            :title-background-tranparent="0.4"
+            class="g-block-lg eyecatcher__titles"
           />
           <div
             v-if="canEdit && newsRef?.image?.settings"
@@ -45,6 +50,11 @@ await onLoad(contentId)
             />
           </div>
         </CommonEyecatchImage>
+        <CommonContentCardTitle
+          v-else
+          :title="newsRef?.title ?? ''"
+          class="g-block-lg"
+        />
         <div class="nav-pre-next-link">
           <div v-if="newsPreNextIdRefRef?.preId" class="nav-pre">
             <nuxt-link :to="`/news/${newsPreNextIdRefRef.preId}`">
@@ -59,8 +69,8 @@ await onLoad(contentId)
           </div>
           <div v-else />
         </div>
-        <CommonContentCardBody>
-          <div v-if="newsRef?.id" class="news-detail__header">
+        <CommonContentCardBody class="news-detail__body">
+          <div v-if="newsRef?.id" class="news-detail__body--header">
             <PublishNewsCategoryBadge :category="newsRef.category" small />
             <p>
               <small>{{
@@ -68,10 +78,7 @@ await onLoad(contentId)
               }}</small>
             </p>
           </div>
-          <h5 v-if="!newsRef?.image" class="g-text-cl news-detail__title">
-            <span>{{ newsRef?.title ?? '' }}</span>
-          </h5>
-          <div v-if="newsRef?.body" class="news-detail__body">
+          <div v-if="newsRef?.body" class="news-detail__body--body">
             <CommonWysiwsgViewer :value="newsRef?.body" />
           </div>
           <div v-else class="no-items">
@@ -104,12 +111,17 @@ await onLoad(contentId)
     justify-content: space-between;
     align-items: center;
   }
-  &__title {
-    font-size: 1.3rem;
-    font-weight: bold;
-  }
   &__body {
-    margin-top: 1.4rem;
+    padding-top: 0;
+    padding-bottom: 3rem;
+    &--header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    &--body {
+      margin-top: 1.4rem;
+    }
   }
   .edit-activator {
     position: absolute;
@@ -128,14 +140,14 @@ await onLoad(contentId)
   }
 }
 
-$eyecatcher-height: 400px;
-$eyecatcher-height-sm: 400px;
+$eyecatcher-height: 480px;
+$eyecatcher-height-sm: 300px;
 
 .eyecatcher {
   position: relative;
-  height: 25vh;
+  height: 30vh;
   max-height: $eyecatcher-height;
-  min-height: calc($eyecatcher-height * 0.5);
+  min-height: calc($eyecatcher-height * 0.6);
   &__titles {
     position: absolute;
     top: 50%;
@@ -156,21 +168,16 @@ $eyecatcher-height-sm: 400px;
 
 @media only screen and (max-width: $grid-breakpoint-md) {
   .eyecatcher {
-    height: 30vh;
+    height: 30vw;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
     .image-settings {
-      bottom: 0.5rem;
+      bottom: 0.2rem;
       right: 0.5rem;
     }
   }
   .nav-pre-next-link {
     margin-bottom: 1.5rem;
   }
-}
-
-:deep(.contents-card-body) {
-  padding-top: 0;
-  padding-bottom: 3rem;
 }
 </style>

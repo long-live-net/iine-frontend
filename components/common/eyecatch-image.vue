@@ -39,10 +39,12 @@ const bkImage = computed(() => `url(${props.url.length ? props.url : noImage})`)
   background-position: v-bind('settings.lgPosition');
   background-attachment: v-bind('settings.lgParallax');
 }
+
 .circle {
   border-radius: 50%;
   overflow: hidden;
 }
+
 .round {
   border-radius: 12px;
   overflow: hidden;
