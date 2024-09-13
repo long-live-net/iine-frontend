@@ -22,9 +22,7 @@ await onLoad()
 
 const router = useRouter()
 const onMovingDetailPage = (service: ContentType) => {
-  if (canEdit.value || service.body) {
-    router.push(`/services/${service.id}`)
-  }
+  router.push(`/services/${service.id}`)
 }
 </script>
 
@@ -38,19 +36,9 @@ const onMovingDetailPage = (service: ContentType) => {
       >
         <template #default="{ content }">
           <div class="service-item">
-            <h5 class="service-item__title">
-              {{ content.title }}
-            </h5>
-            <CommonEyecatchImage
-              v-if="content.image"
-              :url="content.image.url"
-              circle
-              class="service-item__eyecatcher"
-              @click="onMovingDetailPage(content)"
-            />
-            <CommonWysiwsgViewer
-              :value="(content as ServiceType).caption"
-              class="service-item__caption"
+            <PublishServicesListItem
+              :item="content"
+              @select="onMovingDetailPage"
             />
             <div class="edit-activator">
               <ManageContentService
@@ -82,22 +70,10 @@ const onMovingDetailPage = (service: ContentType) => {
         :contents="serviceListRef"
       >
         <template #default="{ content }">
-          <div class="service-item">
-            <h5 class="service-item__title">
-              {{ content.title }}
-            </h5>
-            <CommonEyecatchImage
-              v-if="content.image"
-              :url="content.image.url"
-              circle
-              class="service-item__eyecatcher"
-              @click="onMovingDetailPage(content)"
-            />
-            <CommonWysiwsgViewer
-              :value="(content as ServiceType).caption"
-              class="service-item__caption"
-            />
-          </div>
+          <PublishServicesListItem
+            :item="content"
+            @select="onMovingDetailPage"
+          />
         </template>
       </CommonContentGrid>
       <div v-else class="no-items">
@@ -131,25 +107,6 @@ const onMovingDetailPage = (service: ContentType) => {
 
 .service-item {
   position: relative;
-  &__title {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin: 0;
-  }
-  &__eyecatcher {
-    margin-top: 1rem;
-    aspect-ratio: 6 / 5;
-    cursor: pointer;
-    &:hover {
-      background-color: rgba(#fff, 0.25);
-      background-blend-mode: overlay;
-    }
-  }
-  &__caption {
-    text-align: left;
-    margin-top: 1rem;
-  }
 
   .edit-activator {
     position: absolute;

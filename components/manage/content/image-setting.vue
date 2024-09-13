@@ -158,8 +158,8 @@ const pySm = computed<number>({
       v-model:parallax="parallaxLg"
       v-model:auto="autoLg"
       v-model:size="sizeLg"
-      v-model:positionX="pxLg"
-      v-model:positionY="pyLg"
+      v-model:position-x="pxLg"
+      v-model:position-y="pyLg"
     />
   </div>
   <!-- Small画面 -->
@@ -168,8 +168,8 @@ const pySm = computed<number>({
       v-model:parallax="parallaxSm"
       v-model:auto="autoSm"
       v-model:size="sizeSm"
-      v-model:positionX="pxSm"
-      v-model:positionY="pySm"
+      v-model:position-x="pxSm"
+      v-model:position-y="pySm"
     />
   </div>
 </template>

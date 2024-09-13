@@ -2,6 +2,7 @@
   <div id="news-detail-top">
     <PublishMenuNavBreadCrumb class="nav-bread-crumbs" />
     <PublishServicesDetail />
+    <PublishServicesList no-caption class="service-list-gap" />
   </div>
 </template>
 
@@ -13,6 +14,10 @@
 
 .nav-bread-crumbs {
   margin-bottom: 2.5rem;
+}
+
+.service-list-gap {
+  margin-top: 6rem;
 }
 
 @media only screen and (max-width: $grid-breakpoint-md) {

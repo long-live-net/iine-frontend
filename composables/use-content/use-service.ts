@@ -1,11 +1,16 @@
-import type { ServiceForm, ServiceType, ImageSettings } from '@/types/content'
+import type {
+  ServiceForm,
+  ServiceType,
+  ImageSettings,
+  ContentPosition,
+} from '@/types/content'
 import type {
   ListFilter,
   ListPager,
   ListSort,
   ServiceGetApi,
   ServiceSaveApi,
-  ContentPosition,
+  ContentPositionApi,
 } from '@/types/API/content-api'
 
 const apiKind = 'services'
@@ -80,9 +85,10 @@ const useServiceContent = (customerId: Ref<number | null>) => {
   const setServiceListPositions = (
     serviceList: ServiceType[]
   ): ContentPosition[] => {
-    const positions: ContentPosition[] = serviceList.map(
-      (d, i) => ({ id: d.id, position: i + 1 }) as ContentPosition
-    )
+    const positions = serviceList.map<ContentPositionApi>((d, i) => ({
+      id: d.id,
+      position: i + 1,
+    }))
     setListPositions(positions)
     return positions
   }

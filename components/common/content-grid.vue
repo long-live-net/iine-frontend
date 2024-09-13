@@ -1,7 +1,17 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends ContentType">
 import type { ContentType } from '@/types/content'
 
-defineProps<{ contents: Readonly<ContentType[]> }>()
+withDefaults(
+  defineProps<{
+    contents: Readonly<T[]>
+    gridMinWidth?: string
+    gridMaxWidth?: string
+  }>(),
+  {
+    gridMinWidth: '16rem',
+    gridMaxWidth: '22rem',
+  }
+)
 </script>
 
 <template>
@@ -21,7 +31,10 @@ defineProps<{ contents: Readonly<ContentType[]> }>()
 <style lang="scss" scoped>
 .content-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 22rem));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(v-bind(gridMinWidth), v-bind(gridMaxWidth))
+  );
   justify-items: center;
   justify-content: space-around;
   row-gap: 2rem;
