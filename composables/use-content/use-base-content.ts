@@ -7,8 +7,8 @@ import type {
   ListSort,
   ListPager,
   ContentListResponse,
-  ContentPreNextId,
-  ContentPosition,
+  ContentPreNextIdApi,
+  ContentPositionApi,
 } from '@/types/API/content-api'
 
 export const useContentRead = <T extends ContentGetApi>(
@@ -17,7 +17,7 @@ export const useContentRead = <T extends ContentGetApi>(
 ) => {
   const contentDataRef: Ref<T | null> = ref(null)
   const contentListRef: Ref<ContentListResponse<T> | null> = ref(null)
-  const preNextIdRef: Ref<ContentPreNextId | null> = ref(null)
+  const preNextIdRef: Ref<ContentPreNextIdApi | null> = ref(null)
   const loading = ref(false)
   const keyExt = ref(1)
 
@@ -181,7 +181,7 @@ export const useContentRead = <T extends ContentGetApi>(
     const url = `/${apiPath}/${currentId}/pre-next-id`
     try {
       loading.value = true
-      const data = await $fetch<ContentPreNextId>(url, {
+      const data = await $fetch<ContentPreNextIdApi>(url, {
         baseURL: backendBaseUrl,
         method: 'GET',
         params: {
@@ -202,7 +202,7 @@ export const useContentRead = <T extends ContentGetApi>(
    * contents list 配列の並び順を引数のIDリストに合わせて更新
    * @param list
    */
-  const setListPositions = (positions: ContentPosition[]) => {
+  const setListPositions = (positions: ContentPositionApi[]) => {
     if (!contentListRef.value) return
 
     const contentTotal = contentListRef.value.total
@@ -325,7 +325,7 @@ export const useContentWrite = <
    * @param updatedList
    */
   const updatePositions = async (
-    positions: ContentPosition[]
+    positions: ContentPositionApi[]
   ): Promise<void> => {
     try {
       loading.value = true

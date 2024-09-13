@@ -37,7 +37,7 @@ await onLoad(contentId)
           <CommonEyecatchTitles
             place="section"
             :title="newsRef?.title"
-            :title-background-tranparent="0.4"
+            :title-background-tranparent="0.6"
             class="g-block-lg eyecatcher__titles"
           />
           <div

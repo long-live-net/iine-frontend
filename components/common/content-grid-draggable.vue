@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends ContentType">
 import draggable from 'vuedraggable'
 import type { ContentType } from '@/types/content'
 
-const props = defineProps<{ contents: ContentType[] }>()
+const props = defineProps<{ contents: T[] }>()
 const emit = defineEmits<{
-  update: [contents: ContentType[]]
+  update: [contents: T[]]
 }>()
 
 const draggableContents = computed({
@@ -37,7 +37,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
           <section
             class="content-grid__column column-draggable g-theme-contents-item__draggable"
           >
-            <slot :content="element" />
+            <slot :content="element as T" />
             <div
               class="edit-position-top draggable g-theme-contents-item__draggable--notion"
             >

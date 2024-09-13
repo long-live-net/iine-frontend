@@ -1,4 +1,8 @@
-import type { ImageData } from '@/types/content'
+import type {
+  ImageData,
+  ContentPreNextId,
+  ContentPosition,
+} from '@/types/content'
 import type { NewsCategory2Label } from '@/types/news-category'
 
 /**
@@ -82,12 +86,9 @@ export type ContentListResponse<T> = { list: T[]; total: number }
 /*
  * Pre Next ID 取得時のレスポンスデータ
  */
-export type ContentPreNextId = {
-  preId: number | null
-  nextId: number | null
-}
+export type ContentPreNextIdApi = ContentPreNextId
 
 /**
  * リストポジション更新時で使用するPositionデータ
  */
-export type ContentPosition = { id: number; position: number }
+export type ContentPositionApi = ContentPosition

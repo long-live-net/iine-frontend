@@ -1,4 +1,9 @@
-import type { NewsType, NewsForm, ImageSettings } from '@/types/content'
+import type {
+  NewsType,
+  NewsForm,
+  ImageSettings,
+  ContentPreNextId,
+} from '@/types/content'
 import type {
   NewsGetApi,
   NewsSaveApi,
@@ -135,7 +140,7 @@ const useNewsContent = (customerId: Ref<number | null>) => {
     newsRef,
     newsListRef,
     newsTotalRef,
-    newsPreNextIdRefRef: preNextIdRef,
+    newsPreNextIdRefRef: preNextIdRef as Ref<ContentPreNextId>,
     loading,
   }
 }
