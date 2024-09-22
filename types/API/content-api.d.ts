@@ -1,5 +1,6 @@
 import type {
   ImageData,
+  MenuImageData,
   ContentPreNextId,
   ContentPosition,
 } from '@/types/content'
@@ -38,6 +39,12 @@ export interface NewsGetApi extends ContentGetApi {
 export interface ContactGetApi extends ContentGetApi {
   body: string
 }
+export interface MenuImageGetApi extends ContentGetApi {
+  caption: string
+  image: ImageData
+  position: number
+  menuImage: MenuImageData
+}
 
 /**
  * POST, PUT API で保存するデータ型
@@ -69,6 +76,12 @@ export interface NewsSaveApi extends ContentSaveApi {
 }
 export interface ContactSaveApi extends ContentSaveApi {
   body: string
+}
+export interface MenuImageSaveApi extends ContentSaveApi {
+  caption: string
+  image: ImageData
+  position: number
+  menuImage: MenuImageData
 }
 
 /**

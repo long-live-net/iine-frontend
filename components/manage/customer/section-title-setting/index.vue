@@ -46,6 +46,7 @@ const onUpdate = async (formField: FormField) => {
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
+    :width="600"
   >
     <ManageCustomerSectionTitleSettingTitleForm
       v-if="formMounting"

@@ -59,11 +59,12 @@ const titleData = {
 <template>
   <CommonModalDialog
     v-model:modal="inquireModal"
-    :max-width="800"
+    :width="800"
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
     persistent
+    theme="auto"
   >
     <PublishInquireForm
       v-if="pageMode === 'input'"

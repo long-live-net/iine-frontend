@@ -61,4 +61,12 @@
     --g-theme-wysiwyg-editor-hovered-background-color: #{variables.$gray-darken3};
     --g-theme-wysiwyg-editor-focused-background-color: #{variables.$gray-darken5};
   }
+
+  .g-theme-modal {
+    background-color: variables.$gray-darken2;
+    color: variables.$white;
+    .dismiss {
+      color: variables.$warning;
+    }
+  }
 }

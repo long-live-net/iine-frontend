@@ -158,43 +158,45 @@ export const useHomeLayoutEdit = (customerId: Ref<number | null>) => {
     { baseId: 'type1-service', kind: 'service', title: 'service' },
     { baseId: 'type1-contact', kind: 'contact', title: 'contact' },
     { baseId: 'type1-access', kind: 'access', title: 'access' },
+    { baseId: 'type1-menu-image', kind: 'menu-image', title: 'menu' },
   ]
   const baseSections = ref<PageSectionEdit[]>([])
   const editSections = ref<PageSectionEdit[]>([])
 
   const reset = () => {
-    const cid = customerId.value
-    if (!customerId.value || !homeSections.value?.length) {
-      baseSections.value = []
-      editSections.value = []
+    if (!homeSections.value?.length) {
       return
     }
-    if (cid && homeSections.value?.length) {
-      baseSections.value = baseSectionsOrder.map((b) => {
-        const { id, ...section } = homeSections.value?.find(
-          (s) => s.kind === b.kind
-        )
-          ? {
-              ...b,
-              id: 0,
-              customerId: cid,
-            }
-          : {
-              ...b,
-              id: 0,
-              customerId: cid,
-            }
-        return section
-      })
-      editSections.value = homeSections.value.map<PageSectionEdit>((s) => {
-        const { id, ...section } = s
-        return section
-      })
-    }
+    baseSections.value.forEach((b) => {
+      const hs = homeSections.value?.find((s) => s.kind === b.kind)
+      if (hs) {
+        b.menuTitle = hs.menuTitle
+        b.position = hs.position
+      }
+    })
+    editSections.value = homeSections.value.map<PageSectionEdit>((s) => {
+      const { id, ...section } = s
+      return section
+    })
   }
-  watch(homeSections, reset, {
-    immediate: true,
-  })
+
+  watch(
+    customerId,
+    () => {
+      if (customerId.value) {
+        baseSections.value = baseSectionsOrder.map((b) => ({
+          ...b,
+          customerId: customerId.value!,
+        }))
+      } else {
+        baseSections.value = []
+        editSections.value = []
+      }
+    },
+    {
+      immediate: true,
+    }
+  )
 
   const loading = computed(() => readLoading.value || writeLoading.value)
 

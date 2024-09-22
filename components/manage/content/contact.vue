@@ -65,8 +65,10 @@ const onCancel = () => {
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!contactData?.id">
     <v-form>
       <div>
-        <CommonContentFileInput
-          v-model="formData.image.value.value"
+        <CommonContentInputImage
+          v-model:url="formData.image.value.value"
+          v-model:name="formData.imageName.value.value"
+          v-model:type="formData.imageType.value.value"
           :error-messages="formData.image.errorMessage.value"
           label="タイトル画像"
           :customer-id="customerId"

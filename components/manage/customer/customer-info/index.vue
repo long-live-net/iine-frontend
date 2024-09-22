@@ -44,7 +44,7 @@ const onUpdate = async (customerForm: CustomerForm) => {
 <template>
   <CommonModalDialog
     v-model:modal="dialog"
-    :max-width="1024"
+    :width="1024"
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"

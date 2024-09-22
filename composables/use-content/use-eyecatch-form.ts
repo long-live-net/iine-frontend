@@ -16,11 +16,15 @@ export const useEyecatchForm = () => {
       maxLength(v, 50) || '50文字以内で入力してください',
     image: (v: string | undefined) =>
       noBlank(v) || 'トップ背景画像ファイルを設定してください',
+    imageName: () => true,
+    imageType: () => true,
   }
   const eyecatchFormInitial: EyecatchForm = {
     title: '',
     subtitle: '',
     image: '',
+    imageName: '',
+    imageType: '',
   }
 
   const { handleSubmit, handleReset, validate } = useForm({
@@ -32,6 +36,8 @@ export const useEyecatchForm = () => {
     title: useField<EyecatchForm['title']>('title'),
     subtitle: useField<EyecatchForm['subtitle']>('subtitle'),
     image: useField<EyecatchForm['image']>('image'),
+    imageName: useField<EyecatchForm['imageName']>('imageName'),
+    imageType: useField<EyecatchForm['imageType']>('imageType'),
   }
 
   const resetEyeCatchForm = (eyecatchData?: EyecatchType | null) => {

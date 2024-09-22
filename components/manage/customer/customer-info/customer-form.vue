@@ -199,6 +199,7 @@ const onCancel = () => {
 
 .actions {
   margin-top: 0.5rem;
+  padding: 0 1rem;
   text-align: right;
 }
 </style>

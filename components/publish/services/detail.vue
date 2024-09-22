@@ -62,7 +62,7 @@ const bodyPlainString = computed(() => {
               <ManageContentServiceBody
                 v-if="serviceRef"
                 :service-data="serviceRef"
-                activater-label="本文を登録してください`"
+                activater-label="本文を登録してください"
                 @update="onUpdate"
                 @remove="onRemove"
               />

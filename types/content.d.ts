@@ -14,7 +14,15 @@ export interface ImageSettings {
 
 export interface ImageData {
   url: string
+  type?: string
+  name?: string
   settings: ImageSettings
+}
+
+export interface MenuImageData {
+  url: string
+  type: string
+  name: string
 }
 
 export interface ContentType {
@@ -27,6 +35,9 @@ export interface ContentType {
   tags?: string[]
 }
 
+export interface EyecatchType extends ContentType {
+  image: ImageData
+}
 export interface InformationType extends ContentType {
   body: string
 }
@@ -40,16 +51,14 @@ export interface ServiceType extends ContentType {
   image: ImageData
   position: number
 }
-export interface WorkType extends ContentType {
-  category?: string
-}
-type AboutType = ContentType
-type ReasonType = ContentType
 export interface ContactType extends ContentType {
   body: string
 }
-export interface EyecatchType extends ContentType {
+export interface MenuImageType extends ContentType {
+  caption: string
   image: ImageData
+  position: number
+  menuImage: MenuImageData
 }
 
 /**
@@ -61,10 +70,14 @@ export interface ContentForm {
   subtitle?: string
   body?: string
   image?: string
+  imageName?: string
+  imageType?: string
 }
 export interface EyecatchForm extends ContentForm {
   subtitle: string
   image: string
+  imageName: string
+  imageType: string
 }
 export interface InformationForm extends ContentForm {
   body: string
@@ -76,11 +89,23 @@ export interface NewsForm extends ContentForm {
 }
 export interface ServiceForm extends ContentForm {
   image: string
+  imageName: string
+  imageType: string
   caption: string
   position: number
 }
 export interface ContactForm extends ContentForm {
   body: string
+}
+export interface MenuImageForm extends ContentForm {
+  caption: string
+  image: string
+  imageName: string
+  imageType: string
+  position: number
+  menuImageUrl: string
+  menuImageName: string
+  menuImageType: string
 }
 
 /*
