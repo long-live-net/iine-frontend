@@ -8,6 +8,8 @@ export type SectionKind =
   | 'service'
   | 'contact'
   | 'access'
+  | 'menu'
+  | 'menu-image'
 export type PageSection = {
   baseId: string
   id: number

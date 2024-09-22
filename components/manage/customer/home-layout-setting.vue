@@ -53,23 +53,26 @@ const removeItem = (baseId: string) => {
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
+    :width="600"
   >
     <ClientOnly>
-      <div class="page-layout-editor">
+      <div class="home-layout-editor">
         <div class="layout-setting base">
           <h4 class="mb-2">テンプレート</h4>
           <draggable
             :list="baseSections"
             :clone="clone"
-            :group="{ name: 'page-layouts', pull: 'clone', put: false }"
+            :group="{ name: 'home-layouts', pull: 'clone', put: false }"
             item-key="baseId"
-            handle=".draggable"
+            handle=".home-layout-draggable"
             class="drag-group"
           >
             <template #item="{ element }">
               <div
                 class="drag-group__item"
-                :class="{ draggable: !hasAssigned(element.baseId) }"
+                :class="{
+                  'home-layout-draggable': !hasAssigned(element.baseId),
+                }"
               >
                 <p class="drag-group__item--icon">
                   <v-icon
@@ -88,13 +91,13 @@ const removeItem = (baseId: string) => {
           <h4 class="mb-2">レイアウト</h4>
           <draggable
             :list="editSections"
-            group="page-layouts"
+            group="home-layouts"
             item-key="baseId"
-            handle=".draggable"
+            handle=".home-layout-draggable"
             class="drag-group"
           >
             <template #item="{ element }">
-              <div class="drag-group__item draggable">
+              <div class="drag-group__item home-layout-draggable">
                 <p class="drag-group__item--icon">
                   <v-icon icon="mdi-apps" color="accent" />
                 </p>
@@ -150,7 +153,7 @@ const removeItem = (baseId: string) => {
 </template>
 
 <style scoped lang="scss">
-.page-layout-editor {
+.home-layout-editor {
   display: flex;
   justify-content: space-between;
 
@@ -162,21 +165,15 @@ const removeItem = (baseId: string) => {
       padding: 0.6rem;
       display: flex;
       flex-direction: column;
-      row-gap: 0.5rem;
+      row-gap: 0.3rem;
       border-radius: 6px;
       &__item {
         position: relative;
-        line-height: 4rem;
+        line-height: 3.25rem;
         padding: 0 0.5rem;
         background-color: $gray-lighten1;
         color: $gray-lighten4;
         border: 2px solid $blue-darken2;
-      }
-      .draggable {
-        background-color: #ffffcc;
-        color: $black;
-        border: 2px dashed $orange;
-        cursor: grab;
       }
     }
   }
@@ -221,12 +218,12 @@ const removeItem = (baseId: string) => {
 }
 
 @media only screen and (max-width: $grid-breakpoint-md) {
-  .page-layout-editor {
+  .home-layout-editor {
     .page {
       .drag-group {
         &__item {
           &--icon {
-            top: 16px;
+            top: 14px;
             right: 6px;
           }
           &--action {
@@ -237,5 +234,14 @@ const removeItem = (baseId: string) => {
       }
     }
   }
+}
+</style>
+
+<style lang="scss">
+.home-layout-draggable {
+  background-color: #ffffcc !important;
+  color: $black !important;
+  border: 2px dashed $orange !important;
+  cursor: grab;
 }
 </style>

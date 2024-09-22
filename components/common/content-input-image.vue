@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const model = defineModel<string>()
+const imageUrl = defineModel<string>('url')
+const imageName = defineModel<string>('name')
+const imageType = defineModel<string>('type')
 const props = defineProps<{
   label?: string
   errorMessages?: string | string[]
@@ -20,7 +22,9 @@ const onChangeImageFile = async (imageFile: File) => {
   }
   const { compressedImageFile } = await compress(imageFile)
   const response = await postImageData(compressedImageFile)
-  model.value = response.fileUrl
+  imageUrl.value = response.fileUrl
+  imageName.value = imageFile.name
+  imageType.value = imageFile.type
 }
 const isLoading = computed(
   () => compressing.value || inputBodyImagePosting.value
@@ -28,8 +32,10 @@ const isLoading = computed(
 </script>
 
 <template>
-  <BaseFileInput
-    :image-url="model"
+  <BaseFileInputImage
+    :image-url="imageUrl"
+    :image-name="imageName"
+    :image-type="imageType"
     :label="label"
     :error-messages="errorMessages"
     :loading="isLoading"

@@ -34,6 +34,7 @@ const sectionTitle = (section: PageSection): string =>
         <PublishHomeType1Services v-if="section.kind === 'service'" />
         <PublishHomeType1Contact v-if="section.kind === 'contact'" />
         <PublishHomeType1Access v-if="section.kind === 'access'" />
+        <PublishHomeType1MenuImage v-if="section.kind === 'menu-image'" />
       </template>
     </section>
   </article>

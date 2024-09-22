@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const props = defineProps<{
   imageUrl?: string
+  imageName?: string
+  imageType?: string
   label?: string
   errorMessages?: string | string[]
   accessables?: string[]
@@ -26,16 +28,21 @@ const onClick = () => {
   }
 }
 
+const changeFile = (file: File) => {
+  if (props.accessables?.includes(file.type)) {
+    emit('change-image-file', file)
+  }
+}
 const onDropFile = async (ev: DragEvent) => {
   isDragEnter.value = false
   if (ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0]) {
-    emit('change-image-file', ev.dataTransfer.files[0])
+    changeFile(ev.dataTransfer.files[0])
   }
 }
 const onChangeFile = async (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target && target.files && target.files[0]) {
-    emit('change-image-file', target.files[0])
+    changeFile(target.files[0])
   }
 }
 
@@ -47,9 +54,21 @@ const invalidMessages = computed<string[] | null>(() =>
     : null
 )
 
-const imageSrc = computed(() =>
-  props.imageUrl?.length ? props.imageUrl : '/images/no-image.jpg'
-)
+const imageSrc = computed(() => {
+  // TODO: nagazumi
+  // props.imageType が BE含めてきちんと実装できたら
+  // 下記の式はもう一度きちんと再実装すること
+  if (!props.imageUrl) {
+    return '/images/no-image.jpg'
+  }
+  if (!props.imageType) {
+    return props.imageUrl?.length ? props.imageUrl : '/images/no-image.jpg'
+  }
+  return getAccesstableImageTypes().includes(props.imageType) &&
+    props.imageUrl?.length
+    ? props.imageUrl
+    : '/images/no-image.jpg'
+})
 </script>
 
 <template>
@@ -77,6 +96,7 @@ const imageSrc = computed(() =>
               prepend-icon="mdi-image"
               color="primary"
               variant="flat"
+              :loading="loading ?? false"
               @click="onClick"
             >
               背景画像ファイルを選択
@@ -137,14 +157,6 @@ const imageSrc = computed(() =>
         height: 200px;
         object-fit: cover;
       }
-      .on-buzy {
-        width: 240px;
-        height: 200px;
-        background-color: $white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
     }
     &--nav {
       padding: 1rem;
@@ -158,8 +170,8 @@ const imageSrc = computed(() =>
   }
   &__label {
     position: absolute;
-    top: 8px;
-    left: 16px;
+    top: 0.75rem;
+    left: 1rem;
     color: #7e7e7e;
     &--error {
       color: $error;

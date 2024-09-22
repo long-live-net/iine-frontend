@@ -8,14 +8,16 @@ const props = withDefaults(
     width?: number | string
     maxWidth?: number | string
     persistent?: boolean
+    theme?: 'white' | 'black' | 'auto'
   }>(),
   {
     title: '設定ダイアログ',
     titleIcon: 'mdi-cog',
     titleIconColor: 'primary',
-    width: undefined,
-    maxWidth: 600,
+    width: 'auto',
+    maxWidth: '90vw',
     persistent: false,
+    theme: 'white',
   }
 )
 const emit = defineEmits<{
@@ -37,8 +39,20 @@ const dialog = computed({
     :max-width="maxWidth"
     :persistent="persistent"
   >
-    <div class="modal-dialog">
-      <header class="modal-dialog__header">
+    <div
+      class="modal-dialog g-theme-modal"
+      :class="{
+        'theme-white': theme === 'white',
+        'theme-black': theme === 'black',
+      }"
+    >
+      <header
+        class="modal-dialog__header g-theme-modal"
+        :class="{
+          'theme-white': theme === 'white',
+          'theme-black': theme === 'black',
+        }"
+      >
         <div class="header-label">
           <slot name="header">
             <p class="mr-1">
@@ -56,7 +70,6 @@ const dialog = computed({
             variant="text"
             append-icon="mdi-close"
             size="small"
-            color="primary"
             @click="dialog = false"
             >閉じる</v-btn
           >
@@ -71,11 +84,14 @@ const dialog = computed({
 
 <style lang="scss" scoped>
 .modal-dialog {
-  background-color: $white;
-  color: $black;
+  position: relative;
   overflow-y: auto;
   border-radius: 6px;
   &__header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1999;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -89,11 +105,25 @@ const dialog = computed({
   }
   &__body {
     padding: 1.5rem;
-  }
-  @media only screen and (max-width: $grid-breakpoint-md) {
-    &__body {
+    @media only screen and (max-width: $grid-breakpoint-md) {
       padding: 1rem;
     }
+  }
+}
+
+.theme-white {
+  background-color: $white;
+  color: $black;
+  .dismiss {
+    color: $primary;
+  }
+}
+
+.theme-black {
+  background-color: $black;
+  color: $white;
+  .dismiss {
+    color: $accent;
   }
 }
 </style>
