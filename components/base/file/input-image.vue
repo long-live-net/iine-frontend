@@ -55,17 +55,15 @@ const invalidMessages = computed<string[] | null>(() =>
 )
 
 const imageSrc = computed(() => {
-  // TODO: nagazumi
-  // props.imageType が BE含めてきちんと実装できたら
-  // 下記の式はもう一度きちんと再実装すること
   if (!props.imageUrl) {
     return '/images/no-image.jpg'
   }
   if (!props.imageType) {
     return props.imageUrl?.length ? props.imageUrl : '/images/no-image.jpg'
   }
-  return getAccesstableImageTypes().includes(props.imageType) &&
-    props.imageUrl?.length
+  return (props.accessables || getAccesstableImageTypes()).includes(
+    props.imageType
+  ) && props.imageUrl?.length
     ? props.imageUrl
     : '/images/no-image.jpg'
 })
