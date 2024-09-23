@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
-// import sanitizeHtml from 'sanitize-html'
 
 // Day.js set default timezone
 dayjs.extend(utc)
@@ -43,3 +42,46 @@ export const sleep = (sleepms: number) => {
     }, sleepms)
   )
 }
+
+/**
+ * FILE 関連ユーティリティ
+ */
+export const getFileExtension = (filename: string) => {
+  const extention = filename.split('.').pop() ?? 'bad-file'
+  return extention.toLowerCase()
+}
+
+const acceptableImageExtensions = ['jpg', 'jpeg', 'png', 'gif', '.webp']
+export const getAccesstableImageExtensions = () => acceptableImageExtensions
+export const isImageFileByExt = (ext: string): boolean =>
+  acceptableImageExtensions.includes(ext)
+
+const accesstableImageTypes = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+]
+export const getAccesstableImageTypes = () => accesstableImageTypes
+export const isImageFileByType = (type: string): boolean =>
+  accesstableImageTypes.includes(type)
+
+export const isImageFile = (file: File): boolean => {
+  const ext = getFileExtension(file.name)
+  const type = file.type
+  return isImageFileByType(type) || isImageFileByExt(ext)
+}
+
+const accessiblePdfTypes = ['application/pdf']
+export const getAccesstablePdfTypes = () => accessiblePdfTypes
+
+const fileExtention2Type: { [k: string]: string } = {
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  gif: 'image/gif',
+  webp: 'image/webp',
+  pdf: 'application/pdf',
+}
+export const getFileTypeByExtention = (ext: string) =>
+  fileExtention2Type[ext] ?? 'application/octet-stream'

@@ -22,6 +22,7 @@ export const useServiceForm = () => {
       noBlank(v) || 'タイトル画像ファイルを設定してください',
     imageName: () => true,
     imageType: () => true,
+    imageSettings: () => true,
     body: () => true,
     position: () => true,
   }
@@ -32,6 +33,7 @@ export const useServiceForm = () => {
     image: '',
     imageName: '',
     imageType: '',
+    imageSettings: null,
     position: 0,
   }
 
@@ -47,6 +49,7 @@ export const useServiceForm = () => {
     image: useField<ServiceForm['image']>('image'),
     imageName: useField<ServiceForm['imageName']>('imageName'),
     imageType: useField<ServiceForm['imageType']>('imageType'),
+    imageSettings: useField<ServiceForm['imageSettings']>('imageSettings'),
     position: useField<ServiceForm['position']>('position'),
   }
 
@@ -56,6 +59,9 @@ export const useServiceForm = () => {
     formData.caption.value.value = serviceData?.caption ?? ''
     formData.body.value.value = serviceData?.body ?? ''
     formData.image.value.value = serviceData?.image?.url ?? ''
+    formData.imageName.value.value = serviceData?.image?.name ?? ''
+    formData.imageType.value.value = serviceData?.image?.type ?? ''
+    formData.imageSettings.value.value = serviceData?.image?.settings ?? null
     formData.position.value.value = serviceData?.position ?? 0
   }
 

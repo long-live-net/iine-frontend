@@ -19,6 +19,7 @@ export const useNewsForm = () => {
     image: () => true,
     imageName: () => true,
     imageType: () => true,
+    imageSettings: () => true,
   }
   const newsFormInitial: NewsForm = {
     title: '',
@@ -28,6 +29,7 @@ export const useNewsForm = () => {
     image: '',
     imageName: '',
     imageType: '',
+    imageSettings: null,
   }
 
   const { handleSubmit, handleReset, validate } = useForm({
@@ -43,15 +45,19 @@ export const useNewsForm = () => {
     image: useField<NewsForm['image']>('image'),
     imageName: useField<NewsForm['imageName']>('imageName'),
     imageType: useField<NewsForm['imageType']>('imageType'),
+    imageSettings: useField<NewsForm['imageSettings']>('imageSettings'),
   }
 
   const resetNewsForm = (newsData?: NewsType | null) => {
     if (!newsData) return
-    formData.title.value.value = newsData?.title ?? ''
-    formData.category.value.value = newsData?.category ?? null
-    formData.publishOn.value.value = newsData?.publishOn ?? null
-    formData.body.value.value = newsData?.body ?? ''
-    formData.image.value.value = newsData?.image?.url ?? ''
+    formData.title.value.value = newsData.title ?? ''
+    formData.category.value.value = newsData.category ?? null
+    formData.publishOn.value.value = newsData.publishOn ?? null
+    formData.body.value.value = newsData.body ?? ''
+    formData.image.value.value = newsData.image?.url ?? ''
+    formData.imageName.value.value = newsData.image?.name ?? ''
+    formData.imageType.value.value = newsData.image?.type ?? ''
+    formData.imageSettings.value.value = newsData.image?.settings ?? null
   }
 
   return {

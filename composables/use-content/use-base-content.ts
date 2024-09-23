@@ -227,8 +227,7 @@ export const useContentRead = <T extends ContentGetApi>(
     if (!contentDataRef.value) return
     if (!contentDataRef.value.image?.settings) return
 
-    const url = contentDataRef.value.image.url
-    contentDataRef.value.image = { url, settings }
+    contentDataRef.value.image.settings = { ...settings }
   }
 
   return {

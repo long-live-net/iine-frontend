@@ -22,6 +22,7 @@ export const useContactForm = () => {
     image: () => true,
     imageName: () => true,
     imageType: () => true,
+    imageSettings: () => true,
   }
   const contactFormInitial: ContactForm = {
     title: '',
@@ -30,6 +31,7 @@ export const useContactForm = () => {
     image: '',
     imageName: '',
     imageType: '',
+    imageSettings: null,
   }
 
   const { handleSubmit, handleReset, validate } = useForm({
@@ -44,14 +46,18 @@ export const useContactForm = () => {
     image: useField<ContactForm['image']>('image'),
     imageName: useField<ContactForm['imageName']>('imageName'),
     imageType: useField<ContactForm['imageType']>('imageType'),
+    imageSettings: useField<ContactForm['imageSettings']>('imageSettings'),
   }
 
   const resetContactForm = (contactData?: ContactType | null) => {
     if (!contactData) return
-    formData.title.value.value = contactData?.title ?? ''
-    formData.subtitle.value.value = contactData?.subtitle ?? ''
-    formData.body.value.value = contactData?.body ?? ''
-    formData.image.value.value = contactData?.image?.url ?? ''
+    formData.title.value.value = contactData.title ?? ''
+    formData.subtitle.value.value = contactData.subtitle ?? ''
+    formData.body.value.value = contactData.body ?? ''
+    formData.image.value.value = contactData.image?.url ?? ''
+    formData.imageName.value.value = contactData.image?.name ?? ''
+    formData.imageType.value.value = contactData.image?.type ?? ''
+    formData.imageSettings.value.value = contactData.image?.settings ?? null
   }
 
   return {

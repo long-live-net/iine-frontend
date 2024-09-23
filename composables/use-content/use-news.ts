@@ -46,9 +46,21 @@ const useNewsContent = (customerId: Ref<number | null>) => {
           category: apiData.category,
           publishOn: apiData.publishOn,
           body: apiData.body,
-          image: apiData.image,
+          ...(apiData.image
+            ? {
+                image: {
+                  url: apiData.image.url,
+                  name: apiData.image.name ?? 'dummy_name',
+                  type:
+                    apiData.image.type ??
+                    getFileTypeByExtention(getFileExtension(apiData.image.url)),
+                  settings: apiData.image.settings,
+                },
+              }
+            : {}),
         }
       : null
+
   const newsRef = computed<NewsType | null>(() =>
     apitypeToNewsType(contentDataRef.value)
   )
@@ -63,6 +75,39 @@ const useNewsContent = (customerId: Ref<number | null>) => {
   )
   const loading = computed(() => readLoading.value || writeLoading.value)
 
+  const formToNewsSaveApi = (formData: NewsForm): NewsSaveApi => ({
+    customerId: customerId.value ?? 0,
+    title: formData.title,
+    category: formData.category ?? 'I',
+    publishOn: formData.publishOn ?? localDate(),
+    body: formData.body,
+    ...(formData.image && formData.imageName && formData.imageType
+      ? {
+          image: {
+            url: formData.image,
+            name: formData.imageName,
+            type: formData.imageType,
+            settings: formData.imageSettings ?? getDefaultImageSettings(),
+          },
+        }
+      : {}),
+  })
+
+  const createNews = async (formData: NewsForm): Promise<NewsType | null> => {
+    const inputData: NewsSaveApi = formToNewsSaveApi(formData)
+    const data = await create(inputData)
+    return apitypeToNewsType(data ?? null)
+  }
+
+  const updateNews = async (
+    contentId: number,
+    formData: NewsForm
+  ): Promise<NewsType | null> => {
+    const inputData: NewsSaveApi = formToNewsSaveApi(formData)
+    const data = await update(contentId, inputData)
+    return apitypeToNewsType(data ?? null)
+  }
+
   const setNewsImageSettings = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
@@ -75,55 +120,6 @@ const useNewsContent = (customerId: Ref<number | null>) => {
     }
     setImageSettings(newSettings)
     return newSettings
-  }
-
-  const createNews = async (formData: NewsForm): Promise<NewsType | null> => {
-    const inputData: NewsSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      category: formData.category ?? 'I',
-      publishOn: formData.publishOn ?? localDate(),
-      body: formData.body,
-      ...(formData.image
-        ? {
-            image: {
-              url: formData.image,
-              settings: getDefaultImageSettings(),
-            },
-          }
-        : {}),
-    }
-    const data = await create(inputData)
-    return apitypeToNewsType(data ?? null)
-  }
-
-  const updateNews = async (
-    contentId: number,
-    formData: NewsForm
-  ): Promise<NewsType | null> => {
-    const settings =
-      formData.image === newsRef.value?.image?.url
-        ? newsRef.value?.image
-          ? newsRef.value.image.settings
-          : getDefaultImageSettings()
-        : getDefaultImageSettings()
-    const inputData: NewsSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      category: formData.category ?? 'I',
-      publishOn: formData.publishOn ?? localDate(),
-      body: formData.body,
-      ...(formData.image
-        ? {
-            image: {
-              url: formData.image,
-              settings,
-            },
-          }
-        : {}),
-    }
-    const data = await update(contentId, inputData)
-    return apitypeToNewsType(data ?? null)
   }
 
   return {

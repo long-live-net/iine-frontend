@@ -30,13 +30,50 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
           customerId: apiData.customerId,
           title: apiData.title,
           subtitle: apiData.subtitle,
-          image: apiData.image,
+          image: {
+            url: apiData.image.url,
+            name: apiData.image.name ?? 'dummy_name',
+            type:
+              apiData.image.type ??
+              getFileTypeByExtention(getFileExtension(apiData.image.url)),
+            settings: apiData.image.settings,
+          },
         }
       : null
+
   const eyecatchRef = computed<EyecatchType | null>(() =>
     apitypeToEyecatchType(contentDataRef.value)
   )
   const loading = computed(() => readLoading.value || writeLoading.value)
+
+  const formToEyecatchSaveApi = (formData: EyecatchForm): EyecatchSaveApi => ({
+    customerId: customerId.value ?? 0,
+    title: formData.title,
+    subtitle: formData.subtitle,
+    image: {
+      url: formData.image,
+      name: formData.imageName,
+      type: formData.imageType,
+      settings: formData.imageSettings ?? getDefaultImageSettings(),
+    },
+  })
+
+  const createEyecatch = async (
+    formData: EyecatchForm
+  ): Promise<EyecatchType | null> => {
+    const inputData: EyecatchSaveApi = formToEyecatchSaveApi(formData)
+    const data = await create(inputData)
+    return apitypeToEyecatchType(data ?? null)
+  }
+
+  const updateEyecatch = async (
+    contentId: number,
+    formData: EyecatchForm
+  ): Promise<EyecatchType | null> => {
+    const inputData: EyecatchSaveApi = formToEyecatchSaveApi(formData)
+    const data = await update(contentId, inputData)
+    return apitypeToEyecatchType(data ?? null)
+  }
 
   const setEyecatchImageSettings = (settings: Partial<ImageSettings>) => {
     if (!eyecatchRef.value) return
@@ -50,50 +87,13 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     return newSettings
   }
 
-  const createEyecatch = async (
-    formData: EyecatchForm
-  ): Promise<EyecatchType | null> => {
-    const inputData: EyecatchSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      subtitle: formData.subtitle,
-      image: {
-        url: formData.image,
-        settings: getDefaultImageSettings(),
-      },
-    }
-    const data = await create(inputData)
-    return apitypeToEyecatchType(data ?? null)
-  }
-
-  const updateEyecatch = async (
-    contentId: number,
-    formData: EyecatchForm
-  ): Promise<EyecatchType | null> => {
-    const settings =
-      formData.image === eyecatchRef.value?.image?.url
-        ? eyecatchRef.value?.image?.settings
-        : getDefaultImageSettings()
-    const inputData: EyecatchSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      subtitle: formData.subtitle,
-      image: {
-        url: formData.image,
-        settings,
-      },
-    }
-    const data = await update(contentId, inputData)
-    return apitypeToEyecatchType(data ?? null)
-  }
-
   return {
     loadEyecatch: loadData,
     getEyecatch: get,
-    setEyecatchImageSettings,
     createEyecatch,
     updateEyecatch,
     removeEyecatch: remove,
+    setEyecatchImageSettings,
     updateEyecatchImageSettings: updateImageSettingsWithDebounced,
     eyecatchRef,
     loading,
