@@ -22,6 +22,7 @@ export const useInformationForm = () => {
     image: () => true,
     imageName: () => true,
     imageType: () => true,
+    imageSettings: () => true,
   }
   const informationFormInitial: InformationForm = {
     title: '',
@@ -30,6 +31,7 @@ export const useInformationForm = () => {
     image: '',
     imageName: '',
     imageType: '',
+    imageSettings: null,
   }
 
   const { handleSubmit, handleReset, validate } = useForm({
@@ -44,14 +46,18 @@ export const useInformationForm = () => {
     image: useField<InformationForm['image']>('image'),
     imageName: useField<InformationForm['imageName']>('imageName'),
     imageType: useField<InformationForm['imageType']>('imageType'),
+    imageSettings: useField<InformationForm['imageSettings']>('imageSettings'),
   }
 
   const resetInformationForm = (informationData?: InformationType | null) => {
     if (!informationData) return
-    formData.title.value.value = informationData?.title ?? ''
-    formData.subtitle.value.value = informationData?.subtitle ?? ''
-    formData.body.value.value = informationData?.body ?? ''
-    formData.image.value.value = informationData?.image?.url ?? ''
+    formData.title.value.value = informationData.title ?? ''
+    formData.subtitle.value.value = informationData.subtitle ?? ''
+    formData.body.value.value = informationData.body ?? ''
+    formData.image.value.value = informationData.image?.url ?? ''
+    formData.imageName.value.value = informationData.image?.name ?? ''
+    formData.imageType.value.value = informationData.image?.type ?? ''
+    formData.imageSettings.value.value = informationData.image?.settings ?? null
   }
 
   return {

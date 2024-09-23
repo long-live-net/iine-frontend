@@ -20,7 +20,6 @@ export interface ContentGetApi {
 }
 
 export interface EyecatchGetApi extends ContentGetApi {
-  subtitle: string
   image: ImageData
 }
 export interface InformationGetApi extends ContentGetApi {
@@ -59,7 +58,6 @@ export type ContentSaveApi = {
 
 export interface EyecatchSaveApi extends ContentSaveApi {
   image: ImageData
-  subtitle: string
 }
 export interface InformationSaveApi extends ContentSaveApi {
   body: string

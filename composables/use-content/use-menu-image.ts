@@ -46,40 +46,22 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
           customerId: apiData.customerId,
           title: apiData.title,
           caption: apiData.caption,
-          image: apiData.image,
+          image: {
+            url: apiData.image.url,
+            name: apiData.image.name ?? 'dummy_name',
+            type:
+              apiData.image.type ??
+              getFileTypeByExtention(getFileExtension(apiData.image.url)),
+            settings: apiData.image.settings,
+          },
           position: apiData.position,
           menuImage: {
-            name: apiData.menuImage?.name ?? '',
-            type: apiData.menuImage?.type ?? '',
-            url: apiData.menuImage?.url ?? '',
+            name: apiData.menuImage.name,
+            type: apiData.menuImage.type,
+            url: apiData.menuImage.url,
           },
         }
       : null
-
-  const formToMenuImageSaveApi = (
-    formData: MenuImageForm
-  ): MenuImageSaveApi => {
-    const settings =
-      formData.image === menuImageRef.value?.image?.url
-        ? menuImageRef.value?.image?.settings
-        : getDefaultImageSettings()
-    return {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      caption: formData.caption,
-      body: formData.body,
-      position: formData.position,
-      image: {
-        url: formData.image,
-        settings,
-      },
-      menuImage: {
-        url: formData.menuImageUrl,
-        name: formData.menuImageName,
-        type: formData.menuImageType,
-      },
-    }
-  }
 
   const menuImageRef = computed<MenuImageType | null>(() =>
     apiToMenuImageType(contentDataRef.value)
@@ -95,16 +77,26 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
   )
   const loading = computed(() => readLoading.value || writeLoading.value)
 
-  const setMenuImageListPositions = (
-    menuImageList: MenuImageType[]
-  ): ContentPosition[] => {
-    const positions = menuImageList.map<ContentPositionApi>((d, i) => ({
-      id: d.id,
-      position: i + 1,
-    }))
-    setListPositions(positions)
-    return positions
-  }
+  const formToMenuImageSaveApi = (
+    formData: MenuImageForm
+  ): MenuImageSaveApi => ({
+    customerId: customerId.value ?? 0,
+    title: formData.title,
+    caption: formData.caption,
+    body: formData.body,
+    position: formData.position,
+    image: {
+      url: formData.image,
+      name: formData.imageName,
+      type: formData.imageType,
+      settings: formData.imageSettings ?? getDefaultImageSettings(),
+    },
+    menuImage: {
+      url: formData.menuImageUrl,
+      name: formData.menuImageName,
+      type: formData.menuImageType,
+    },
+  })
 
   const createMenuImage = async (
     formData: MenuImageForm
@@ -119,6 +111,17 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
   ): Promise<MenuImageType | null> => {
     const data = await update(contentId, formToMenuImageSaveApi(formData))
     return apiToMenuImageType(data ?? null)
+  }
+
+  const setMenuImageListPositions = (
+    menuImageList: MenuImageType[]
+  ): ContentPosition[] => {
+    const positions = menuImageList.map<ContentPositionApi>((d, i) => ({
+      id: d.id,
+      position: i + 1,
+    }))
+    setListPositions(positions)
+    return positions
   }
 
   return {

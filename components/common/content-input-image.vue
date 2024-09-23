@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import type { ImageSettings } from '@/types/content'
+
 const imageUrl = defineModel<string>('url')
 const imageName = defineModel<string>('name')
 const imageType = defineModel<string>('type')
+const imageSetting = defineModel<ImageSettings | null>('settings')
+
 const props = defineProps<{
   label?: string
   errorMessages?: string | string[]
@@ -25,6 +29,7 @@ const onChangeImageFile = async (imageFile: File) => {
   imageUrl.value = response.fileUrl
   imageName.value = imageFile.name
   imageType.value = imageFile.type
+  imageSetting.value = null
 }
 const isLoading = computed(
   () => compressing.value || inputBodyImagePosting.value

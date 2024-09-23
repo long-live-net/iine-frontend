@@ -77,6 +77,7 @@ const onCancel = () => {
           v-model:url="formData.image.value.value"
           v-model:name="formData.imageName.value.value"
           v-model:type="formData.imageType.value.value"
+          v-model:settings="formData.imageSettings.value.value"
           :error-messages="formData.image.errorMessage.value"
           label="タイトル画像"
           :customer-id="customerId"

@@ -41,7 +41,18 @@ const useInformationContent = (customerId: Ref<number | null>) => {
           title: apiData.title,
           subtitle: apiData.subtitle,
           body: apiData.body,
-          image: apiData.image,
+          ...(apiData.image
+            ? {
+                image: {
+                  url: apiData.image.url,
+                  name: apiData.image.name ?? 'dummy_name',
+                  type:
+                    apiData.image.type ??
+                    getFileTypeByExtention(getFileExtension(apiData.image.url)),
+                  settings: apiData.image.settings,
+                },
+              }
+            : {}),
         }
       : null
 
@@ -49,6 +60,42 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     apitypeToInformationType(contentDataRef.value)
   )
   const loading = computed(() => readLoading.value || writeLoading.value)
+
+  const formToInformationSaveApi = (
+    formData: InformationForm
+  ): InformationSaveApi => ({
+    customerId: customerId.value ?? 0,
+    title: formData.title,
+    subtitle: formData.subtitle,
+    body: formData.body,
+    ...(formData.image && formData.imageName && formData.imageType
+      ? {
+          image: {
+            url: formData.image,
+            name: formData.imageName,
+            type: formData.imageType,
+            settings: formData.imageSettings ?? getDefaultImageSettings(),
+          },
+        }
+      : {}),
+  })
+
+  const createInformation = async (
+    formData: InformationForm
+  ): Promise<InformationType | null> => {
+    const inputData: InformationSaveApi = formToInformationSaveApi(formData)
+    const data = await create(inputData)
+    return apitypeToInformationType(data ?? null)
+  }
+
+  const updateInformation = async (
+    contentId: number,
+    formData: InformationForm
+  ): Promise<InformationType | null> => {
+    const inputData: InformationSaveApi = formToInformationSaveApi(formData)
+    const data = await update(contentId, inputData)
+    return apitypeToInformationType(data ?? null)
+  }
 
   const setInformationImageSettings = (
     settings: Partial<ImageSettings>
@@ -64,55 +111,6 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     return newSettings
   }
 
-  const createInformation = async (
-    formData: InformationForm
-  ): Promise<InformationType | null> => {
-    const inputData: InformationSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      subtitle: formData.subtitle,
-      body: formData.body,
-      ...(formData.image
-        ? {
-            image: {
-              url: formData.image,
-              settings: getDefaultImageSettings(),
-            },
-          }
-        : {}),
-    }
-    const data = await create(inputData)
-    return apitypeToInformationType(data ?? null)
-  }
-
-  const updateInformation = async (
-    contentId: number,
-    formData: InformationForm
-  ): Promise<InformationType | null> => {
-    const settings =
-      formData.image === informationRef.value?.image?.url
-        ? informationRef.value?.image
-          ? informationRef.value.image.settings
-          : getDefaultImageSettings()
-        : getDefaultImageSettings()
-    const inputData: InformationSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      subtitle: formData.subtitle,
-      body: formData.body,
-      ...(formData.image
-        ? {
-            image: {
-              url: formData.image,
-              settings,
-            },
-          }
-        : {}),
-    }
-    const data = await update(contentId, inputData)
-    return apitypeToInformationType(data ?? null)
-  }
-
   const updateInformationImageSettings = (
     contentId: number,
     imageSettings: ImageSettings
@@ -123,10 +121,10 @@ const useInformationContent = (customerId: Ref<number | null>) => {
   return {
     loadInformation: loadData,
     getInformation: get,
-    setInformationImageSettings,
     createInformation,
     updateInformation,
     removeInformation: remove,
+    setInformationImageSettings,
     updateInformationImageSettings,
     informationRef,
     loading,

@@ -22,6 +22,7 @@ export const useMenuImageForm = () => {
       noBlank(v) || 'タイトル画像ファイルを設定してください',
     imageName: () => true,
     imageType: () => true,
+    imageSettings: () => true,
     position: () => true,
     menuImageUrl: (v: string | undefined) =>
       noBlank(v) || 'メニュー用ファイルを設定してください',
@@ -34,6 +35,7 @@ export const useMenuImageForm = () => {
     image: '',
     imageName: '',
     imageType: '',
+    imageSettings: null,
     position: 0,
     menuImageUrl: '',
     menuImageName: '',
@@ -51,6 +53,7 @@ export const useMenuImageForm = () => {
     image: useField<MenuImageForm['image']>('image'),
     imageName: useField<MenuImageForm['imageName']>('imageName'),
     imageType: useField<MenuImageForm['imageType']>('imageType'),
+    imageSettings: useField<MenuImageForm['imageSettings']>('imageSettings'),
     position: useField<MenuImageForm['position']>('position'),
     menuImageUrl: useField<MenuImageForm['menuImageUrl']>('menuImageUrl'),
     menuImageName: useField<MenuImageForm['menuImageName']>('menuImageName'),
@@ -62,6 +65,9 @@ export const useMenuImageForm = () => {
     formData.title.value.value = menuImageData.title ?? ''
     formData.caption.value.value = menuImageData.caption ?? ''
     formData.image.value.value = menuImageData.image?.url ?? ''
+    formData.imageName.value.value = menuImageData.image?.name ?? ''
+    formData.imageType.value.value = menuImageData.image?.type ?? ''
+    formData.imageSettings.value.value = menuImageData.image?.settings ?? null
     formData.position.value.value = menuImageData.position ?? 0
     formData.menuImageUrl.value.value = menuImageData.menuImage.url ?? ''
     formData.menuImageName.value.value = menuImageData.menuImage.name ?? ''

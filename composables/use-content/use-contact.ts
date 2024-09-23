@@ -31,7 +31,18 @@ const useContactContent = (customerId: Ref<number | null>) => {
           title: apiData.title,
           subtitle: apiData.subtitle,
           body: apiData.body,
-          image: apiData.image,
+          ...(apiData.image
+            ? {
+                image: {
+                  url: apiData.image.url,
+                  name: apiData.image.name ?? 'dummy_name',
+                  type:
+                    apiData.image.type ??
+                    getFileTypeByExtention(getFileExtension(apiData.image.url)),
+                  settings: apiData.image.settings,
+                },
+              }
+            : {}),
         }
       : null
 
@@ -39,6 +50,40 @@ const useContactContent = (customerId: Ref<number | null>) => {
     apitypeToContactType(contentDataRef.value)
   )
   const loading = computed(() => readLoading.value || writeLoading.value)
+
+  const formToContactSaveApi = (formData: ContactForm): ContactSaveApi => ({
+    customerId: customerId.value ?? 0,
+    title: formData.title,
+    subtitle: formData.subtitle,
+    body: formData.body,
+    ...(formData.image && formData.imageName && formData.imageType
+      ? {
+          image: {
+            url: formData.image,
+            name: formData.imageName,
+            type: formData.imageType,
+            settings: formData.imageSettings ?? getDefaultImageSettings(),
+          },
+        }
+      : {}),
+  })
+
+  const createContact = async (
+    formData: ContactForm
+  ): Promise<ContactType | null> => {
+    const inputData: ContactSaveApi = formToContactSaveApi(formData)
+    const data = await create(inputData)
+    return apitypeToContactType(data ?? null)
+  }
+
+  const updateContact = async (
+    contentId: number,
+    formData: ContactForm
+  ): Promise<ContactType | null> => {
+    const inputData: ContactSaveApi = formToContactSaveApi(formData)
+    const data = await update(contentId, inputData)
+    return apitypeToContactType(data ?? null)
+  }
 
   const setContactImageSettings = (
     settings: Partial<ImageSettings>
@@ -54,55 +99,6 @@ const useContactContent = (customerId: Ref<number | null>) => {
     return newSettings
   }
 
-  const createContact = async (
-    formData: ContactForm
-  ): Promise<ContactType | null> => {
-    const inputData: ContactSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      subtitle: formData.subtitle,
-      body: formData.body,
-      ...(formData.image
-        ? {
-            image: {
-              url: formData.image,
-              settings: getDefaultImageSettings(),
-            },
-          }
-        : {}),
-    }
-    const data = await create(inputData)
-    return apitypeToContactType(data ?? null)
-  }
-
-  const updateContact = async (
-    contentId: number,
-    formData: ContactForm
-  ): Promise<ContactType | null> => {
-    const settings =
-      formData.image === contactRef.value?.image?.url
-        ? contactRef.value?.image
-          ? contactRef.value.image.settings
-          : getDefaultImageSettings()
-        : getDefaultImageSettings()
-    const inputData: ContactSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      subtitle: formData.subtitle,
-      body: formData.body,
-      ...(formData.image
-        ? {
-            image: {
-              url: formData.image,
-              settings,
-            },
-          }
-        : {}),
-    }
-    const data = await update(contentId, inputData)
-    return apitypeToContactType(data ?? null)
-  }
-
   const updateContactImageSettings = (
     contentId: number,
     imageSettings: ImageSettings
@@ -113,10 +109,10 @@ const useContactContent = (customerId: Ref<number | null>) => {
   return {
     loadContact: loadData,
     getContact: get,
-    setContactImageSettings,
     createContact,
     updateContact,
     removeContact: remove,
+    setContactImageSettings,
     updateContactImageSettings,
     contactRef,
     loading,

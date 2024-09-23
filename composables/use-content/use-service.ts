@@ -49,7 +49,14 @@ const useServiceContent = (customerId: Ref<number | null>) => {
           title: apiData.title,
           caption: apiData.caption,
           body: apiData.body,
-          image: apiData.image,
+          image: {
+            url: apiData.image.url,
+            name: apiData.image.name ?? 'dummy_name',
+            type:
+              apiData.image.type ??
+              getFileTypeByExtention(getFileExtension(apiData.image.url)),
+            settings: apiData.image.settings,
+          },
           position: apiData.position,
         }
       : null
@@ -67,6 +74,37 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     () => contentListRef.value?.total ?? null
   )
   const loading = computed(() => readLoading.value || writeLoading.value)
+
+  const formToServiceSaveApi = (formData: ServiceForm): ServiceSaveApi => ({
+    customerId: customerId.value ?? 0,
+    title: formData.title,
+    caption: formData.caption,
+    body: formData.body,
+    position: formData.position,
+    image: {
+      url: formData.image,
+      name: formData.imageName,
+      type: formData.imageType,
+      settings: formData.imageSettings ?? getDefaultImageSettings(),
+    },
+  })
+
+  const createService = async (
+    formData: ServiceForm
+  ): Promise<ServiceType | null> => {
+    const inputData: ServiceSaveApi = formToServiceSaveApi(formData)
+    const data = await create(inputData)
+    return apitypeToServiceType(data ?? null)
+  }
+
+  const updateService = async (
+    contentId: number,
+    formData: ServiceForm
+  ): Promise<ServiceType | null> => {
+    const inputData: ServiceSaveApi = formToServiceSaveApi(formData)
+    const data = await update(contentId, inputData)
+    return apitypeToServiceType(data ?? null)
+  }
 
   const setServiceImageSettings = (
     settings: Partial<ImageSettings>
@@ -91,47 +129,6 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     }))
     setListPositions(positions)
     return positions
-  }
-
-  const createService = async (
-    formData: ServiceForm
-  ): Promise<ServiceType | null> => {
-    const inputData: ServiceSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      caption: formData.caption,
-      body: formData.body,
-      position: formData.position,
-      image: {
-        url: formData.image,
-        settings: getDefaultImageSettings(),
-      },
-    }
-    const data = await create(inputData)
-    return apitypeToServiceType(data ?? null)
-  }
-
-  const updateService = async (
-    contentId: number,
-    formData: ServiceForm
-  ): Promise<ServiceType | null> => {
-    const settings =
-      formData.image === serviceRef.value?.image?.url
-        ? serviceRef.value?.image?.settings
-        : getDefaultImageSettings()
-    const inputData: ServiceSaveApi = {
-      customerId: customerId.value ?? 0,
-      title: formData.title,
-      caption: formData.caption,
-      body: formData.body,
-      position: formData.position,
-      image: {
-        url: formData.image,
-        settings,
-      },
-    }
-    const data = await update(contentId, inputData)
-    return apitypeToServiceType(data ?? null)
   }
 
   return {

@@ -14,8 +14,8 @@ export interface ImageSettings {
 
 export interface ImageData {
   url: string
-  type?: string
-  name?: string
+  type: string
+  name: string
   settings: ImageSettings
 }
 
@@ -72,9 +72,9 @@ export interface ContentForm {
   image?: string
   imageName?: string
   imageType?: string
+  imageSettings?: ImageSettings | null
 }
 export interface EyecatchForm extends ContentForm {
-  subtitle: string
   image: string
   imageName: string
   imageType: string
