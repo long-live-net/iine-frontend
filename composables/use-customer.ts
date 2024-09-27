@@ -189,10 +189,8 @@ export const useThemeSettingsEdit = () => {
       const updateData = { ...customer.value, layoutTheme: theme }
       setCustomer(updateData)
       updateCustomer(updateData)
+        .then(() => fetchCustomer(updateData.id))
         .then(() => {
-          fetchCustomer(updateData.id).catch((e) => {
-            error.value = e as Error
-          })
           addSnackber?.('レイアウトテーマを更新しました。')
         })
         .catch((e) => {
@@ -210,10 +208,8 @@ export const useThemeSettingsEdit = () => {
       const updateData = { ...customer.value, colorTheme: theme }
       setCustomer(updateData)
       updateCustomer(updateData)
+        .then(() => fetchCustomer(updateData.id))
         .then(() => {
-          fetchCustomer(updateData.id).catch((e) => {
-            error.value = e as Error
-          })
           addSnackber?.('カラーテーマを更新しました。')
         })
         .catch((e) => {

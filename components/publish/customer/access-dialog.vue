@@ -20,13 +20,12 @@ const titleData = {
 <template>
   <CommonModalDialog
     v-model:modal="accessModal"
-    width="95vw"
-    max-width="1024px"
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
+    width="90dvw"
+    theme="auto"
   >
     <PublishCustomerAccessMap />
   </CommonModalDialog>
 </template>
-:watch

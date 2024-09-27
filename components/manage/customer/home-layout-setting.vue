@@ -53,7 +53,6 @@ const removeItem = (baseId: string) => {
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
-    :width="600"
   >
     <ClientOnly>
       <div class="home-layout-editor">
@@ -156,6 +155,8 @@ const removeItem = (baseId: string) => {
 .home-layout-editor {
   display: flex;
   justify-content: space-between;
+  width: 600px;
+  max-width: 100%;
 
   .layout-setting {
     width: calc(50% - 0.4rem);

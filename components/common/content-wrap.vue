@@ -33,6 +33,5 @@ const overlayWidth =
 .content-wrap {
   position: relative;
   width: 100%;
-  min-width: 18rem;
 }
 </style>
