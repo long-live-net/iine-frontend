@@ -40,10 +40,9 @@ const {
             <v-radio
               v-for="ct in colorThemeOptions"
               :key="ct.type"
-              color="primary"
               :label="ct.label"
               :value="ct.type"
-            ></v-radio>
+            />
           </v-radio-group>
         </div>
       </section>
@@ -57,10 +56,9 @@ const {
             <v-radio
               v-for="st in layoutThemeOptions"
               :key="st.type"
-              color="primary"
               :label="st.label"
               :value="st.type"
-            ></v-radio>
+            />
           </v-radio-group>
         </div>
       </section>
