@@ -57,15 +57,3 @@ const onUpdate = async (formField: FormField) => {
     />
   </CommonModalDialog>
 </template>
-
-<style scoped lang="scss">
-.section-title-setting {
-  .section-titles {
-    display: flex;
-    flex-direction: column;
-    row-gap: 0.25rem;
-    margin-top: 1rem;
-    padding: 0.25rem 1rem;
-  }
-}
-</style>

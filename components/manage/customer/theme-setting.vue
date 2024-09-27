@@ -31,7 +31,6 @@ const {
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
-    :width="600"
   >
     <div class="theme-setting">
       <section>
@@ -75,6 +74,8 @@ const {
   flex-direction: column;
   row-gap: 0.5rem;
   padding: 0.25rem 1rem;
+  width: 600px;
+  max-width: 100%;
 
   .disabled {
     h3,

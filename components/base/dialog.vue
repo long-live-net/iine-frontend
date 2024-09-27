@@ -1,32 +1,22 @@
 <script setup lang="ts">
-const props = withDefaults(
+const modal = defineModel<boolean>('modal', { required: true })
+withDefaults(
   defineProps<{
-    modal: boolean
     width?: number | string
     maxWidth?: number | string
     persistent?: boolean
   }>(),
   {
-    width: undefined,
-    maxWidth: 800,
+    width: 'auto',
+    maxWidth: 'auto',
     persistent: false,
   }
 )
-const emit = defineEmits<{
-  'update:modal': [modal: boolean]
-}>()
-
-const dialog = computed({
-  get: () => props.modal,
-  set: (modal: boolean) => {
-    emit('update:modal', modal)
-  },
-})
 </script>
 
 <template>
   <v-dialog
-    v-model="dialog"
+    v-model="modal"
     :width="width"
     :max-width="maxWidth"
     :persistent="persistent"

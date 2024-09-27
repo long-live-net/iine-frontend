@@ -25,42 +25,6 @@ const titleValidationRule = (v: string | undefined): boolean | string => {
   return true
 }
 const formContext = useForm()
-// const formFieldsOrder = ref<
-//   {
-//     id: string
-//     label: string
-//   }[]
-// >([])
-// const formFields = ref<{
-//   [id: string]: FieldContext<string> | FieldContext<string | undefined>
-// }>({})
-
-// watch(
-//   () => props.homeSections,
-//   () => {
-//     formFieldsOrder.value =
-//       props.homeSections?.map((s) => ({
-//         id: `${s.id}`,
-//         label: s.menuTitle ?? s.title,
-//       })) ?? []
-
-//     formFields.value =
-//       props.homeSections?.reduce<{
-//         [id: string]: FieldContext<string> | FieldContext<string | undefined>
-//       }>(
-//         (pre, s) => ({
-//           ...pre,
-//           [`${s.id}`]: useField(`${s.id}`, titleValidationRule, {
-//             initialValue: s.menuTitle ?? s.title,
-//           }),
-//         }),
-//         {}
-//       ) ?? {}
-//   },
-//   {
-//     immediate: true,
-//   }
-// )
 const formFieldsOrder = props.homeSections?.map((s) => ({
   id: `${s.id}`,
   label: s.menuTitle ?? s.title,

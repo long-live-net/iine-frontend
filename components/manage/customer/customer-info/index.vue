@@ -44,18 +44,17 @@ const onUpdate = async (customerForm: CustomerForm) => {
 <template>
   <CommonModalDialog
     v-model:modal="dialog"
-    :width="1024"
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
   >
-    <div v-if="operationMode === 'display'">
+    <div v-if="operationMode === 'display'" class="customer-info">
       <ManageCustomerCustomerInfoCustomerDisplay
         :customer="customer"
         @edit="operationMode = 'edit'"
       />
     </div>
-    <div v-else-if="operationMode === 'edit'">
+    <div v-else-if="operationMode === 'edit'" class="customer-info">
       <ManageCustomerCustomerInfoCustomerForm
         :customer="customer"
         :loading="loading"
@@ -65,3 +64,10 @@ const onUpdate = async (customerForm: CustomerForm) => {
     </div>
   </CommonModalDialog>
 </template>
+
+<style scoped lang="scss">
+.customer-info {
+  width: 1024px;
+  max-width: 100%;
+}
+</style>

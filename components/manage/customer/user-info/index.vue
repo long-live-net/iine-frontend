@@ -55,18 +55,17 @@ const onUpdate = async (userForm: CustomerUserForm) => {
 <template>
   <CommonModalDialog
     v-model:modal="dialog"
-    :width="640"
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
   >
-    <div v-if="operationMode === 'display'">
+    <div v-if="operationMode === 'display'" class="user-info">
       <ManageCustomerUserInfoUserDisplay
         :customer-user="customerUserRef"
         @edit="operationMode = 'edit'"
       />
     </div>
-    <div v-else-if="operationMode === 'edit'">
+    <div v-else-if="operationMode === 'edit'" class="user-info">
       <ManageCustomerUserInfoUserForm
         :customer-user="customerUserRef"
         :loading="loadingRef"
@@ -76,3 +75,10 @@ const onUpdate = async (userForm: CustomerUserForm) => {
     </div>
   </CommonModalDialog>
 </template>
+
+<style scoped lang="scss">
+.user-info {
+  width: 640px;
+  max-width: 100%;
+}
+</style>

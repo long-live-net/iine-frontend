@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const props = withDefaults(
+const modal = defineModel<boolean>('modal', { required: true })
+withDefaults(
   defineProps<{
-    modal: boolean
     title?: string
     titleIcon?: string
     titleIconColor?: string
@@ -15,26 +15,16 @@ const props = withDefaults(
     titleIcon: 'mdi-cog',
     titleIconColor: 'primary',
     width: 'auto',
-    maxWidth: '90vw',
+    maxWidth: 'auto',
     persistent: false,
     theme: 'white',
   }
 )
-const emit = defineEmits<{
-  'update:modal': [modal: boolean]
-}>()
-
-const dialog = computed({
-  get: () => props.modal,
-  set: (modal: boolean) => {
-    emit('update:modal', modal)
-  },
-})
 </script>
 
 <template>
   <BaseDialog
-    v-model:modal="dialog"
+    v-model:modal="modal"
     :width="width"
     :max-width="maxWidth"
     :persistent="persistent"
@@ -70,7 +60,7 @@ const dialog = computed({
             variant="text"
             append-icon="mdi-close"
             size="small"
-            @click="dialog = false"
+            @click="modal = false"
             >閉じる</v-btn
           >
         </div>
