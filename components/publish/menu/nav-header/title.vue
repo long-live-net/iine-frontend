@@ -36,16 +36,16 @@ defineEmits<{ click: [] }>()
   :deep(a) {
     display: inline-block;
     font-weight: 900;
-    color: v-bind(color) !important;
+    color: v-bind('color') !important;
   }
   :deep(a:hover) {
-    color: v-bind(hoverColor) !important;
+    color: v-bind('hoverColor') !important;
   }
   span {
-    color: v-bind(color) !important;
+    color: v-bind('color') !important;
     cursor: pointer;
     &:hover {
-      color: v-bind(hoverColor) !important;
+      color: v-bind('hoverColor') !important;
     }
   }
 }
