@@ -43,8 +43,6 @@ withDefaults(
 </template>
 
 <style lang="scss" scoped>
-$titleBackGroundTranparent: v-bind(titleBackgroundTranparent);
-
 .eyecatch-title {
   transform: translate(-50%, -50%);
   max-width: 90%;
@@ -79,7 +77,7 @@ $titleBackGroundTranparent: v-bind(titleBackgroundTranparent);
   color: white;
   font-weight: bold;
   padding: 0.75rem;
-  background-color: rgb(0 0 0 / $titleBackGroundTranparent);
+  background-color: v-bind('`rgb(0 0 0 / ${titleBackgroundTranparent})`');
   .maintitle {
     font-size: 1.5rem;
   }

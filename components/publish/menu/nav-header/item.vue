@@ -30,10 +30,10 @@ withDefaults(
   :deep(a) {
     display: inline-block;
     font-weight: bold;
-    color: v-bind(color) !important;
+    color: v-bind('color') !important;
   }
   :deep(a:hover) {
-    color: v-bind(hoverColor) !important;
+    color: v-bind('hoverColor') !important;
   }
 }
 </style>

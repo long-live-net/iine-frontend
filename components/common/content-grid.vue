@@ -33,7 +33,7 @@ withDefaults(
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(v-bind(gridMinWidth), v-bind(gridMaxWidth))
+    minmax(v-bind('gridMinWidth'), v-bind('gridMaxWidth'))
   );
   justify-items: center;
   justify-content: space-around;
