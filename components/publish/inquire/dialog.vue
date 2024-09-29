@@ -10,7 +10,7 @@ const emit = defineEmits<{
 const { customerId } = useFoundation()
 const confirmDialog = ref(false)
 const pageMode = ref<'input' | 'done'>('input')
-const inquireFormRef = ref<typeof PublishInquireForm | null>(null)
+const inquireFormRef = ref<InstanceType<typeof PublishInquireForm> | null>(null)
 
 const { sendInquire, loading: sending } = useInquireSend(customerId)
 const inquireMail = ref<InquireMail | null>(null)

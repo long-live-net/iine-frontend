@@ -11,7 +11,7 @@ const snackbarInjectionKey = Symbol()
  * @param snackbarsRef
  */
 export const useProvideSnackbars = (
-  snackbarsRef: Ref<typeof BaseSnackbars>
+  snackbarsRef: Ref<InstanceType<typeof BaseSnackbars>>
 ) => {
   const addSnackber: AddSnackbarFunc = (message: string, color?: string) => {
     if (snackbarsRef.value) {

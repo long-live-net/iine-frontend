@@ -16,18 +16,20 @@ const contentId = parseInt(
 )
 
 const { customerId } = useFoundation()
-const { filter, sort, pager, serviceListRef, loading, onLoad } =
+const { filter, sort, pager, serviceListRef, loading, onLoad, onGetList } =
   useServiceListActions(customerId)
-
-filter.value = {}
-sort.value = { position: 1 }
-pager.value = { page: 1, limit: 12 }
-await onLoad()
 
 const router = useRouter()
 const onMovingDetailPage = (service: ContentType) => {
   router.push(`/services/${service.id}`)
 }
+
+defineExpose({ onGetList })
+
+filter.value = {}
+sort.value = { position: 1 }
+pager.value = { page: 1, limit: 12 }
+await onLoad()
 </script>
 
 <template>
