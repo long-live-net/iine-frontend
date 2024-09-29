@@ -174,9 +174,8 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
 
   const { addSnackber } = useSnackbars()
 
-  const onLoad = async () => {
-    await loadServiceList(filter.value, sort.value, pager.value)
-  }
+  const onLoad = () => loadServiceList(filter.value, sort.value, pager.value)
+  const onGetList = () => getServiceList(filter.value, sort.value, pager.value)
 
   const onCreate = async (formData: ServiceForm) => {
     await createService(formData)
@@ -216,6 +215,7 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
     pager,
     serviceListRef,
     onLoad,
+    onGetList,
     onCreate,
     onUpdate,
     onRemove,

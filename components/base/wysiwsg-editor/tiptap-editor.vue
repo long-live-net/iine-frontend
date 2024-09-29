@@ -86,7 +86,9 @@ onBeforeUnmount(() => {
   editor.value?.destroy()
 })
 
-const frameWithInputImage = ref<typeof TiptapFrameWithInputImage | null>(null)
+const frameWithInputImage = ref<InstanceType<
+  typeof TiptapFrameWithInputImage
+> | null>(null)
 const onInputImage = async (imageFile: File) => {
   if (props.noImage) {
     return

@@ -1,8 +1,17 @@
+<script setup lang="ts">
+import type ServicesList from '@/components/publish/services/list/index.vue'
+const servicesListRef = ref<InstanceType<typeof ServicesList> | null>(null)
+</script>
+
 <template>
   <div id="news-detail-top">
     <PublishMenuNavBreadCrumb class="nav-bread-crumbs" />
-    <PublishServicesDetail />
-    <PublishServicesList no-caption class="service-list-gap" />
+    <PublishServicesDetail @update:data="servicesListRef?.onGetList" />
+    <PublishServicesList
+      ref="servicesListRef"
+      no-caption
+      class="service-list-gap"
+    />
   </div>
 </template>
 

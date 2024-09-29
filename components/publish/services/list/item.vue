@@ -77,7 +77,7 @@ defineEmits<{
   }
 
   section.current-item {
-    color: $dimgray;
+    color: $blue-lighten2;
     .eyecatcher {
       background-color: rgba(0 0 0 / 0.5);
       background-blend-mode: overlay;

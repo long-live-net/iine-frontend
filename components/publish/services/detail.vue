@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import type { ServiceForm } from '@/types/content'
+
+const emit = defineEmits<{ 'update:data': [] }>()
+
 const { customerId, canEdit } = useFoundation()
 const {
   serviceRef,
@@ -9,17 +13,26 @@ const {
   onUpdateImageSetting,
 } = useServiceActions(customerId)
 
-const route = useRoute()
-const contentId = parseInt(
-  Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-)
-await onLoad(contentId)
-
 const bodyPlainString = computed(() => {
   const plainString =
     serviceRef.value?.body?.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') ?? ''
   return plainString
 })
+
+const onUpdateData = async (params: { id: number; formData: ServiceForm }) => {
+  await onUpdate(params)
+  emit('update:data')
+}
+const onRemoveData = async (id: number) => {
+  await onRemove(id)
+  emit('update:data')
+}
+
+const route = useRoute()
+const contentId = parseInt(
+  Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+)
+await onLoad(contentId)
 </script>
 
 <template>
@@ -63,8 +76,8 @@ const bodyPlainString = computed(() => {
                 v-if="serviceRef"
                 :service-data="serviceRef"
                 activater-label="本文を登録してください"
-                @update="onUpdate"
-                @remove="onRemove"
+                @update="onUpdateData"
+                @remove="onRemoveData"
               />
               <p v-else class="mt-9">
                 <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
@@ -75,8 +88,8 @@ const bodyPlainString = computed(() => {
         <div v-if="canEdit && serviceRef?.id" class="edit-activator">
           <ManageContentServiceBody
             :service-data="serviceRef"
-            @update="onUpdate"
-            @remove="onRemove"
+            @update="onUpdateData"
+            @remove="onRemoveData"
           />
         </div>
       </template>

@@ -59,7 +59,7 @@ const labelClass = computed(() =>
       : []
 )
 
-const tiptapEditorRef = ref<typeof TiptapEditor | null>(null)
+const tiptapEditorRef = ref<InstanceType<typeof TiptapEditor> | null>(null)
 const onClear = () => {
   tiptapEditorRef.value?.clearContent()
 }
