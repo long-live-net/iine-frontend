@@ -22,6 +22,7 @@ export interface Customer {
   phone: string | null
   zip: string
   address: string
+  availContentsKind: string[]
   layoutTheme: LayoutTheme
   colorTheme: ColorTheme
   note: string | null

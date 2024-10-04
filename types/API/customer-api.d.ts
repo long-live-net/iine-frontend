@@ -15,6 +15,7 @@ export interface CustomerApi {
   phone?: string | null
   zip: string
   address: string
+  availContentsKind?: string[] | null
   layoutTheme: LayoutTheme
   colorTheme?: ColorTheme | null
   note?: string | null
