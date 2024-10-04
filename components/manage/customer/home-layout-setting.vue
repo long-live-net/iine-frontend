@@ -18,9 +18,9 @@ const titleData = {
   titleIcon: 'mdi-view-split-horizontal',
   titleColor: 'accent',
 }
-const { customerId } = useFoundation()
+const { customer } = useFoundation()
 const { baseSections, editSections, loading, reset, replaceSections } =
-  useHomeLayoutEdit(customerId)
+  useHomeLayoutEdit(customer)
 
 watch(settingModal, () => {
   if (settingModal.value) {
