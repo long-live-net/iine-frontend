@@ -1,5 +1,5 @@
-export const useFoundation = () => {
-  const { customer, customerId } = useCustomer()
+export const useCustomerPageContext = () => {
+  const { customerId } = useCustomer()
   const { authToken, authUser, userCustomerId } = useAuth()
 
   const isLoggedIn = computed(
@@ -28,24 +28,22 @@ export const useFoundation = () => {
   })
 
   return {
-    customerId,
+    authUser,
     isLoggedIn,
     isPreview: readonly(isPreview),
     togglePreview,
     canEdit,
-    user: authUser,
-    customer,
   }
 }
 
-export const usePageHeadInfo = () => {
+export const useCustomerPageHeadInfo = () => {
   const { customer } = useCustomer()
-  const headInfo = {
+  const headInfoRef = computed(() => ({
     title: customer.value?.name ?? 'IINE',
     description: `${customer.value?.name ?? 'IINE'} Website`,
     favicon: customer.value?.nickName
       ? `favicon-${customer.value?.nickName}.ico`
       : 'favicon.ico',
-  }
-  return { headInfo }
+  }))
+  return { headInfoRef }
 }

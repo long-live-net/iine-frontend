@@ -15,7 +15,7 @@ const contentId = parseInt(
   Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
 )
 
-const { customerId } = useFoundation()
+const { customerId } = useCustomer()
 const { filter, sort, pager, serviceListRef, loading, onLoad, onGetList } =
   useServiceListActions(customerId)
 

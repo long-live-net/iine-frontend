@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { ServiceType, ContentType } from '@/types/content'
 
-const { customerId, canEdit } = useFoundation()
+const { customerId } = useCustomer()
+const { canEdit } = useCustomerPageContext()
 const {
   filter,
   sort,

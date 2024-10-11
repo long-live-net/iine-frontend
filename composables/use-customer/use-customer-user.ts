@@ -1,12 +1,15 @@
 import { useForm, useField } from 'vee-validate'
-import type { Customer } from '@/types/customer'
-import type { CustomerUser, CustomerUserForm } from '@/types/customer-user'
+import type {
+  CustomerUser,
+  CustomerUserForm,
+  ChangePasswordFrom,
+} from '@/types/customer-user'
 import type { CustomerUserApi } from '@/types/API/customer-user-api'
 
 /**
  * 顧客ユーザ情報API通信処理
  */
-export const useCustomerUserApi = () => {
+const useCustomerUserApi = () => {
   const endpoint = '/customer-users'
   const { authorizationHeader } = useAuth()
 
@@ -150,7 +153,8 @@ export const useCustomerUserForm = () => {
  * Customer User 変更アクションサービス
  * @param customerId
  */
-export const useCustomerUserActions = (customer: Ref<Customer | null>) => {
+export const useCustomerUserActions = () => {
+  const { customer } = useCustomer()
   const customerUserRef = ref<CustomerUser | null>(null)
   const {
     fetchCustomerUser,
@@ -208,5 +212,94 @@ export const useCustomerUserActions = (customer: Ref<Customer | null>) => {
     fetch,
     update,
     checkEmail,
+  }
+}
+
+/**
+ * update user password
+ */
+export const useUpdatePassword = () => {
+  const { authorizationHeader } = useAuth()
+  const apiPath = '/auth/customer-user/password'
+  const loading = ref(false)
+
+  const updatePassword = async (newPassword: string) => {
+    loading.value = true
+    try {
+      await $fetch(apiPath, {
+        baseURL: backendBaseUrl,
+        headers: authorizationHeader.value,
+        method: 'PUT',
+        body: { password: newPassword },
+      })
+    } catch (e) {
+      throw createError(e as Error)
+    } finally {
+      loading.value = false
+    }
+  }
+  return {
+    updatePassword,
+    loading,
+  }
+}
+
+/**
+ * change password Form
+ */
+export const useChangePasswordForm = () => {
+  const {
+    noBlank,
+    minLength,
+    passwordComplexity,
+    setCustomValidatorFunc,
+    customValidator,
+  } = useValidateRules()
+
+  const changePasswordSchema = {
+    password: (v: string | undefined) => {
+      if (!noBlank(v)) return 'パスワードを入力してください'
+      if (!minLength(v, 8)) return '8文字以上で設定してください'
+      if (!passwordComplexity(v))
+        return '英字大文字・小文字・数字を全て含めてください'
+      return true
+    },
+    passwordConfirm: (v: string | undefined) => {
+      if (!noBlank(v)) return 'パスワード確認用を入力してください'
+      if (!customValidator()) return 'password と確認用が一致しません'
+      return true
+    },
+  }
+  const changePasswordInitial: ChangePasswordFrom = {
+    password: '',
+    passwordConfirm: '',
+  }
+
+  const { handleSubmit, handleReset, validate } = useForm({
+    validationSchema: changePasswordSchema,
+    initialValues: changePasswordInitial,
+  })
+
+  const formData = {
+    password: useField<ChangePasswordFrom['password']>('password'),
+    passwordConfirm:
+      useField<ChangePasswordFrom['passwordConfirm']>('passwordConfirm'),
+  }
+
+  const valdateSame = () => {
+    const pwd = formData.password.value.value
+    const cfm = formData.passwordConfirm.value.value
+    if (!pwd?.length || !cfm?.length) {
+      return true
+    }
+    return pwd === cfm
+  }
+  setCustomValidatorFunc(valdateSame)
+
+  return {
+    handleSubmit,
+    handleReset,
+    validate,
+    formData,
   }
 }

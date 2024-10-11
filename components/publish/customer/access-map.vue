@@ -1,20 +1,21 @@
 <script setup lang="ts">
-const { accessSource } = useCustomerLinks()
+const { customer } = useCustomer()
+const { customerSetting } = useCustomerSetting()
 </script>
 
 <template>
-  <div v-if="accessSource?.mapSrc" class="access-map">
+  <div v-if="customerSetting?.accessSource" class="access-map">
     <iframe
-      :src="accessSource.mapSrc"
+      :src="customerSetting.accessSource"
       style="border: 0"
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
       class="map"
     />
-    <div v-if="accessSource" class="address">
+    <div v-if="customer" class="address">
       <div>
-        <p>〒 {{ accessSource.zip }}</p>
-        <p>{{ accessSource.address }}</p>
+        <p>〒 {{ customer.zip }}</p>
+        <p>{{ customer.address }}</p>
       </div>
     </div>
   </div>

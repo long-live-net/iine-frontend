@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { accessSource } = useCustomerLinks()
+const { customerSetting } = useCustomerSetting()
 
 const inquireDialog = ref(false)
 const accessDialog = ref(false)
@@ -20,7 +20,7 @@ const accessDialog = ref(false)
           お問い合わせ
         </v-btn>
         <v-btn
-          v-if="accessSource"
+          v-if="customerSetting?.accessSource"
           prepend-icon="mdi-earth"
           variant="text"
           @click="accessDialog = true"
@@ -36,7 +36,7 @@ const accessDialog = ref(false)
           <v-icon>mdi-email</v-icon>
         </v-btn>
         <v-btn
-          v-if="accessSource"
+          v-if="customerSetting?.accessSource"
           icon
           variant="text"
           @click="accessDialog = true"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { customerId, isLoggedIn } = useFoundation()
+const { customerId } = useCustomer()
+const { isLoggedIn } = useCustomerPageContext()
 const sidebar = ref(false)
 
 // Todo: 適当

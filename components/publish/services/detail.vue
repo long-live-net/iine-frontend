@@ -3,7 +3,8 @@ import type { ServiceForm } from '@/types/content'
 
 const emit = defineEmits<{ 'update:data': [] }>()
 
-const { customerId, canEdit } = useFoundation()
+const { customerId } = useCustomer()
+const { canEdit } = useCustomerPageContext()
 const {
   serviceRef,
   loading,

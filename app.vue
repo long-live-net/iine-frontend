@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const { customer } = useFoundation()
+const { customerSetting } = useCustomerSetting()
 const bodyClass = ref('g-theme-default')
 
 watch(
-  customer,
+  customerSetting,
   () => {
-    if (customer.value?.colorTheme === 'dark') {
+    if (customerSetting.value?.colorTheme === 'dark') {
       bodyClass.value = 'g-theme-dark'
     } else {
       bodyClass.value = 'g-theme-default'

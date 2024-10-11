@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { customerId, canEdit } = useFoundation()
+const { customerId } = useCustomer()
+const { canEdit } = useCustomerPageContext()
 const {
   eyecatchRef,
   onLoad,

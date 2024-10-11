@@ -10,8 +10,6 @@ withDefaults(
 defineEmits<{
   edit: []
 }>()
-
-const { getSnsTitle, getSnsIcon, getSnsColor, onClickLink } = useCustomerLinks()
 </script>
 
 <template>
@@ -27,19 +25,6 @@ const { getSnsTitle, getSnsIcon, getSnsColor, onClickLink } = useCustomerLinks()
       <dd>{{ customer?.address || '-' }}</dd>
       <dt>備考</dt>
       <dd>{{ customer?.note || '-' }}</dd>
-      <template v-for="link in customer?.links ?? []" :key="link.serviceName">
-        <dt>
-          {{ getSnsTitle(link.serviceName) }}
-          <v-icon :color="getSnsColor(link.serviceName)">
-            {{ getSnsIcon(link.serviceName) }}
-          </v-icon>
-        </dt>
-        <dd class="text-url">
-          <a href="" @click.stop.prevent="onClickLink(link.serviceName)">
-            {{ link.url || '-' }}
-          </a>
-        </dd>
-      </template>
     </dl>
     <div class="actions">
       <v-btn
@@ -94,11 +79,5 @@ const { getSnsTitle, getSnsIcon, getSnsColor, onClickLink } = useCustomerLinks()
 .actions {
   margin-top: 1rem;
   text-align: right;
-}
-
-.text-url {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 </style>

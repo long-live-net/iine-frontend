@@ -30,7 +30,7 @@ const titleData = {
   titleColor: 'accent',
 }
 
-const { customerId } = useFoundation()
+const { customerId } = useCustomer()
 const { homeSections, loading, update } = usSectionTitleEdit(customerId)
 
 type FormField = { [id: string]: string }

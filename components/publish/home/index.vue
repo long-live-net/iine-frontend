@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { LayoutTheme } from '@/types/customer'
-import type { PageSection } from '@/types/customer-setting'
+import type { DesignTheme, PageSection } from '@/types/customer-setting'
 
-const { customerId, customer } = useFoundation()
+const { customerId } = useCustomer()
+const { customerSetting } = useCustomerSetting()
 const { domidPrefix, homeSections } = useHomeLayoutRead(customerId)
 
-const layoutTheme = computed<LayoutTheme>(
-  () => customer.value?.layoutTheme ?? 'type1'
+const designTheme = computed<DesignTheme>(
+  () => customerSetting.value?.designTheme ?? 'type1'
 )
 
 const sectionTitle = (section: PageSection): string =>
@@ -24,7 +24,7 @@ const sectionTitle = (section: PageSection): string =>
       :key="section.id"
       class="section-margin"
     >
-      <template v-if="layoutTheme === 'type1'">
+      <template v-if="designTheme === 'type1'">
         <PublishHomeType1SectionTitle
           v-if="sectionTitle(section).length"
           :title="sectionTitle(section)"

@@ -18,9 +18,9 @@ const titleData = {
 }
 
 const {
-  editLayoutTheme,
+  editDesignTheme,
   editColorTheme,
-  layoutThemeOptions,
+  DesignThemeOptions,
   colorThemeOptions,
 } = useThemeSettingsEdit()
 </script>
@@ -52,9 +52,9 @@ const {
           レイアウトテーマ (未サポート)
         </h4>
         <div class="theme-selection">
-          <v-radio-group v-model="editLayoutTheme" inline disabled>
+          <v-radio-group v-model="editDesignTheme" inline disabled>
             <v-radio
-              v-for="st in layoutThemeOptions"
+              v-for="st in DesignThemeOptions"
               :key="st.type"
               :label="st.label"
               :value="st.type"

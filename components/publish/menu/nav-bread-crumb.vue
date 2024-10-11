@@ -2,7 +2,7 @@
 import type { SectionKind } from '@/types/customer-setting'
 import type { BreadCrumbsItem } from '@/components/base/bread-crumb.vue'
 
-const { customerId } = useFoundation()
+const { customerId } = useCustomer()
 const { domidPrefix, homeSections } = useHomeLayoutRead(customerId)
 const newsItem = computed(() => {
   const kind: SectionKind = 'news'

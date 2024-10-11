@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { MenuItem } from '@/components/base/dropdown.vue'
 
-const { user, isPreview, togglePreview } = useFoundation()
+const { authUser, isPreview, togglePreview } = useCustomerPageContext()
 const router = useRouter()
 
 const logoutDialog = ref(false)
@@ -96,7 +96,7 @@ const onSelectUserMenu = (value: number | string) => {
           rounded="lg"
           style="text-transform: none; min-width: 8rem"
         >
-          {{ user?.name ?? 'No Name' }}
+          {{ authUser?.name ?? 'No Name' }}
         </v-btn>
       </template>
     </BaseDropdown>

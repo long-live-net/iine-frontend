@@ -20,15 +20,15 @@ const titleData = {
 type OperationMode = 'none' | 'display' | 'edit'
 const operationMode = ref<OperationMode>('none')
 
-const { user, customer } = useFoundation()
+const { authUser } = useCustomerPageContext()
 const { customerUserRef, loadingRef, fetch, update, checkEmail } =
-  useCustomerUserActions(customer)
+  useCustomerUserActions()
 
 watch(dialog, () => {
   if (dialog.value) {
     operationMode.value = 'display'
-    if (user.value?.id) {
-      fetch(user.value?.id)
+    if (authUser.value?.id) {
+      fetch(authUser.value?.id)
     }
   } else {
     // Note:
@@ -41,13 +41,13 @@ watch(dialog, () => {
 })
 
 const onUpdate = async (userForm: CustomerUserForm) => {
-  if (!user.value?.id) {
+  if (!authUser.value?.id) {
     return
   }
-  if (!(await checkEmail(user.value.id, userForm))) {
+  if (!(await checkEmail(authUser.value.id, userForm))) {
     return
   }
-  await update(user.value.id, userForm)
+  await update(authUser.value.id, userForm)
   operationMode.value = 'display'
 }
 </script>

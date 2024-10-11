@@ -1,6 +1,10 @@
-import type { PageSection, PageSectionEdit } from '@/types/customer-setting'
+import type {
+  CustomerSetting,
+  PageSection,
+  PageSectionEdit,
+} from '@/types/customer-setting'
 import type { PageSectionApi } from '@/types/API/customer-setting-api'
-import type { Customer } from '@/types/customer'
+// import type { Customer } from '@/types/customer'
 
 const apiToPageSection = (
   apiData?: PageSectionApi | null
@@ -141,8 +145,10 @@ export const useHomeLayoutWrite = (customerId: Ref<number | null>) => {
  * ホームレイアウト情報変更用フォームデータ
  * @param customerId
  */
-export const useHomeLayoutEdit = (customer: Ref<Customer | null>) => {
-  const customerId = computed(() => customer.value?.id ?? null)
+export const useHomeLayoutEdit = (
+  customerSetting: Ref<CustomerSetting | null>
+) => {
+  const customerId = computed(() => customerSetting.value?.customerId ?? null)
   const {
     homeSections,
     fetchHomeLayout,
@@ -183,11 +189,11 @@ export const useHomeLayoutEdit = (customer: Ref<Customer | null>) => {
   }
 
   watch(
-    customer,
+    customerSetting,
     () => {
-      if (customer.value) {
-        const availContentsKind = customer.value.availContentsKind
-        const cid = customer.value.id
+      if (customerSetting.value) {
+        const availContentsKind = customerSetting.value.availContentsKind
+        const cid = customerSetting.value.customerId
         baseSections.value = baseSectionsOrder
           .filter((b) => availContentsKind.includes(b.kind))
           .map((b) => ({
