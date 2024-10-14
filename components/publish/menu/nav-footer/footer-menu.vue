@@ -2,9 +2,9 @@
 import type { MenuItemType, MenuItem } from '@/components/base/dropdown.vue'
 
 const router = useRouter()
-const { isLoggedIn } = useFoundation()
+const { isLoggedIn } = useCustomerPageContext()
 const { snsLinks, getSnsTitle, getSnsIcon, getSnsColor, onClickLink } =
-  useCustomerLinks()
+  useCustomerSnsLinks()
 const logoutDialog = ref(false)
 
 const snsLinkItems: MenuItem[] = snsLinks.value.reduce((acc, link) => {

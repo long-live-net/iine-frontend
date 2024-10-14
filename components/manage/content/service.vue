@@ -13,7 +13,7 @@ const emit = defineEmits<{
   remove: [id: number]
 }>()
 
-const { customerId } = useFoundation()
+const { customerId } = useCustomer()
 const apiKind = getServiceKind()
 
 const modal = ref(false)

@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { useForm, useField } from 'vee-validate'
 import type { FieldContext } from 'vee-validate'
-import type { PageSection } from '@/types/customer-setting'
-import type { FormField } from '@/composables/use-customer-setting'
+import type { PageLayout } from '@/types/customer-setting'
 
 const props = withDefaults(
   defineProps<{
-    homeSections: PageSection[] | null
+    homeSections: PageLayout[] | null
     loading: boolean
   }>(),
   {
@@ -15,7 +14,7 @@ const props = withDefaults(
 )
 const emit = defineEmits<{
   cancel: []
-  update: [formField: FormField]
+  update: [sections: PageLayout[]]
 }>()
 
 const { noBlank, maxLength } = useValidateRules()
@@ -26,7 +25,7 @@ const titleValidationRule = (v: string | undefined): boolean | string => {
 }
 const formContext = useForm()
 const formFieldsOrder = props.homeSections?.map((s) => ({
-  id: `${s.id}`,
+  kind: `${s.kind}`,
   label: s.menuTitle ?? s.title,
 }))
 const formFields = props.homeSections?.reduce<{
@@ -34,7 +33,7 @@ const formFields = props.homeSections?.reduce<{
 }>(
   (pre, s) => ({
     ...pre,
-    [`${s.id}`]: useField(`${s.id}`, titleValidationRule, {
+    [`${s.kind}`]: useField(`${s.kind}`, titleValidationRule, {
       initialValue: s.menuTitle ?? s.title,
     }),
   }),
@@ -44,8 +43,15 @@ const formFields = props.homeSections?.reduce<{
 const onCancel = () => {
   emit('cancel')
 }
+
 const onUpdate = formContext.handleSubmit((formField) => {
-  emit('update', formField)
+  emit(
+    'update',
+    props.homeSections?.map((s) => ({
+      ...s,
+      menuTitle: formField[s.kind],
+    })) ?? []
+  )
 })
 </script>
 
@@ -60,12 +66,12 @@ const onUpdate = formContext.handleSubmit((formField) => {
           </small>
         </p>
         <template v-if="formContext && formFields">
-          <div v-for="field in formFieldsOrder" :key="field.id">
+          <div v-for="field in formFieldsOrder" :key="field.kind">
             <v-text-field
-              v-model="formFields[field.id].value.value"
+              v-model="formFields[field.kind].value.value"
               clearable
               density="comfortable"
-              :error-messages="formFields[field.id].errorMessage.value"
+              :error-messages="formFields[field.kind].errorMessage.value"
               :label="field.label"
               placeholder="入力してください"
             />

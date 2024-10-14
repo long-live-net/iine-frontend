@@ -4,7 +4,7 @@ withDefaults(defineProps<{ forceIcon?: boolean }>(), {
 })
 
 const { snsLinks, getSnsTitle, getSnsIcon, getSnsColor, onClickLink } =
-  useCustomerLinks()
+  useCustomerSnsLinks()
 </script>
 <template>
   <div>

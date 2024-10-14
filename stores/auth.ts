@@ -107,7 +107,7 @@ export const useAuthStore = defineStore(
   },
   {
     persist: {
-      paths: ['userRef', 'tokenRef'],
+      pick: ['userRef', 'tokenRef'],
       storage: persistedState.sessionStorage,
     },
   }

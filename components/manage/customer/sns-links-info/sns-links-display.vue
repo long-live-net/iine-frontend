@@ -1,33 +1,27 @@
 <script setup lang="ts">
-import type { Customer } from '@/types/customer'
+import type { CustomerSetting } from '@/types/customer-setting'
 
 withDefaults(
   defineProps<{
-    customer: Customer | null
+    customerSetting: CustomerSetting | null
   }>(),
-  { customer: null }
+  { customerSetting: null }
 )
 defineEmits<{
   edit: []
 }>()
 
-const { getSnsTitle, getSnsIcon, getSnsColor, onClickLink } = useCustomerLinks()
+const { getSnsTitle, getSnsIcon, getSnsColor, onClickLink } =
+  useCustomerSnsLinks()
 </script>
 
 <template>
   <div class="customer-info-wrap">
     <dl>
-      <dt>テナント名称</dt>
-      <dd>{{ customer?.name || '-' }}</dd>
-      <dt>代表メールアドレス</dt>
-      <dd>{{ customer?.defaultEmail || '-' }}</dd>
-      <dt>代表電話番号</dt>
-      <dd>{{ customer?.phone || '-' }}</dd>
-      <dt>所在地</dt>
-      <dd>{{ customer?.address || '-' }}</dd>
-      <dt>備考</dt>
-      <dd>{{ customer?.note || '-' }}</dd>
-      <template v-for="link in customer?.links ?? []" :key="link.serviceName">
+      <template
+        v-for="link in customerSetting?.snsLinks ?? []"
+        :key="link.serviceName"
+      >
         <dt>
           {{ getSnsTitle(link.serviceName) }}
           <v-icon :color="getSnsColor(link.serviceName)">
@@ -94,11 +88,5 @@ const { getSnsTitle, getSnsIcon, getSnsColor, onClickLink } = useCustomerLinks()
 .actions {
   margin-top: 1rem;
   text-align: right;
-}
-
-.text-url {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 </style>

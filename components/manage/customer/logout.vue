@@ -1,31 +1,19 @@
 <script setup lang="ts">
-const props = defineProps<{ modal: boolean }>()
-const emit = defineEmits<{
-  'update:modal': [modal: boolean]
-}>()
-
-const confirmDialog = computed({
-  get: () => props.modal,
-  set: (modal: boolean) => {
-    emit('update:modal', modal)
-  },
-})
-
+const modal = defineModel<boolean>('modal', { required: true })
 const router = useRouter()
 const { logout } = useAuth()
-
 const onLogout = () => {
-  confirmDialog.value = false
+  modal.value = false
   logout()
   router.push('/customer/logout')
 }
 </script>
 <template>
   <BaseConfirm
-    v-model:comfirm="confirmDialog"
+    v-model:comfirm="modal"
     message="本当にログアウトしますか？"
     exec-text="ログアウト"
-    @cancel="confirmDialog = false"
+    @cancel="modal = false"
     @confirm="onLogout"
   />
 </template>

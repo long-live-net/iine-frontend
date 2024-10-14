@@ -7,7 +7,7 @@ const emit = defineEmits<{
   'update:modal': [modal: boolean]
 }>()
 
-const { customerId } = useFoundation()
+const { customerId } = useCustomer()
 const confirmDialog = ref(false)
 const pageMode = ref<'input' | 'done'>('input')
 const inquireFormRef = ref<InstanceType<typeof PublishInquireForm> | null>(null)

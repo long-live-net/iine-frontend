@@ -55,6 +55,7 @@
   .g-theme-edit-contents {
     color: variables.$black;
   }
+
   .g-theme-wysiwyg-editor {
     background-color: whitesmoke;
     border-color: variables.$gray-lighten23;
@@ -70,6 +71,19 @@
     border-color: variables.$gray-lighten23;
     .dismiss {
       color: variables.$primary;
+    }
+  }
+
+  .g-theme-profile {
+    dl {
+      dt {
+        color: variables.$gray-darken2;
+        background-color: variables.$gray-lighten2;
+      }
+      dd {
+        color: variables.$gray-darken5;
+        background-color: variables.$gray-lighten4;
+      }
     }
   }
 }

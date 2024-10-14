@@ -25,30 +25,13 @@ watch(
       formData.defaultEmail.value.value = props.customer.defaultEmail
       formData.phone.value.value = props.customer.phone
       formData.address.value.value = props.customer.address
-      props.customer.links?.forEach((l) => {
-        switch (l.serviceName) {
-          case 'facebook':
-            formData.facebook.value.value = l.url
-            break
-          case 'instagram':
-            formData.instagram.value.value = l.url
-            break
-          case 'twitter':
-            formData.twitter.value.value = l.url
-            break
-          case 'youtube':
-            formData.youtube.value.value = l.url
-            break
-        }
-      })
+      formData.note.value.value = props.customer.note
     }
   },
   {
     immediate: true,
   }
 )
-
-const { getSnsTitle, getSnsIcon, getSnsColor } = useCustomerLinks()
 
 const onUpdate = handleSubmit((userForm) => {
   emit('update', userForm)
@@ -104,63 +87,6 @@ const onCancel = () => {
           clearable
           label="備考"
           placeholder="備考を入力してください"
-        />
-      </div>
-      <h4>SNSページ設定</h4>
-      <div class="d-flex align-center">
-        <div class="g-block-lg pb-6 mr-2">
-          <v-icon :color="getSnsColor('facebook')" size="large">
-            {{ getSnsIcon('facebook') }}
-          </v-icon>
-        </div>
-        <v-text-field
-          v-model="formData.facebook.value.value"
-          :error-messages="formData.facebook.errorMessage.value"
-          clearable
-          :label="getSnsTitle('facebook')"
-          placeholder="URLを入力してください"
-        />
-      </div>
-      <div class="d-flex align-center">
-        <div class="g-block-lg pb-6 mr-2">
-          <v-icon :color="getSnsColor('instagram')" size="large">
-            {{ getSnsIcon('instagram') }}
-          </v-icon>
-        </div>
-        <v-text-field
-          v-model="formData.instagram.value.value"
-          :error-messages="formData.instagram.errorMessage.value"
-          clearable
-          :label="getSnsTitle('instagram')"
-          placeholder="URLを入力してください"
-        />
-      </div>
-      <div class="d-flex align-center">
-        <div class="g-block-lg pb-6 mr-2">
-          <v-icon :color="getSnsColor('twitter')" size="large">
-            {{ getSnsIcon('twitter') }}
-          </v-icon>
-        </div>
-        <v-text-field
-          v-model="formData.twitter.value.value"
-          :error-messages="formData.twitter.errorMessage.value"
-          clearable
-          :label="getSnsTitle('twitter')"
-          placeholder="URLを入力してください"
-        />
-      </div>
-      <div class="d-flex align-center">
-        <div class="g-block-lg pb-6 mr-2">
-          <v-icon :color="getSnsColor('youtube')" size="large">
-            {{ getSnsIcon('youtube') }}
-          </v-icon>
-        </div>
-        <v-text-field
-          v-model="formData.youtube.value.value"
-          :error-messages="formData.youtube.errorMessage.value"
-          clearable
-          :label="getSnsTitle('youtube')"
-          placeholder="URLを入力してください"
         />
       </div>
     </v-form>

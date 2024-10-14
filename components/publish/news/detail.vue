@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { formatLocalDate } from '@/utils/misc'
 
-const { customerId, canEdit } = useFoundation()
+const { customerId } = useCustomer()
+const { canEdit } = useCustomerPageContext()
 const {
   newsRef,
   newsPreNextIdRefRef,

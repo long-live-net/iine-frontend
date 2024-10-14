@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import type { CustomerApi } from '@/types/API/customer-api'
 import type { Customer } from '@/types/customer'
@@ -18,16 +18,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
       phone: apiData.phone ?? '',
       zip: apiData.zip,
       address: apiData.address,
-      availContentsKind: apiData.availContentsKind ?? [],
-      layoutTheme: apiData.layoutTheme,
-      colorTheme: apiData.colorTheme ?? 'light',
       note: apiData.note ?? null,
-      links:
-        apiData.links?.map((l) => ({
-          serviceName: l.serviceName,
-          url: l.url,
-        })) ?? null,
-      accessSource: apiData.accessSource ?? null,
     }
   }
   const app2Apidata = (appData: Customer): CustomerApi => ({
@@ -38,16 +29,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
     ...(appData.phone ? { phone: appData.phone } : {}),
     zip: appData.zip,
     address: appData.address,
-    availContentsKind: appData.availContentsKind,
-    layoutTheme: appData.layoutTheme,
-    colorTheme: appData.colorTheme,
     ...(appData.note ? { note: appData.note } : {}),
-    links:
-      appData.links?.map((l) => ({
-        serviceName: l.serviceName,
-        url: l.url,
-      })) ?? [],
-    ...(appData.accessSource ? { accessSource: appData.accessSource } : {}),
   })
 
   const loadByUrl = async (hostname: string): Promise<Customer | null> => {
@@ -92,8 +74,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
 }
 
 export const useCustomerStore = defineStore('customer', () => {
-  const authStore = useAuthStore()
-  const tokenRef = computed(() => authStore.tokenRef)
+  const { tokenRef } = storeToRefs(useAuthStore())
   const { loadByUrl, fetch, update } = useCustomerApi(tokenRef)
 
   const customerRef = ref<Customer | null>(null)

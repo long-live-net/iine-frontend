@@ -1,16 +1,9 @@
 <script setup lang="ts">
-const props = defineProps<{ modal: boolean }>()
-const emit = defineEmits<{
-  'update:modal': [modal: boolean]
-}>()
+import type { PageLayout } from '@/types/customer-setting'
 
-const settingModal = computed({
-  get: () => props.modal,
-  set: (modal: boolean) => {
-    emit('update:modal', modal)
-  },
-})
+const settingModal = defineModel<boolean>('modal', { required: true })
 const formMounting = ref(false)
+
 watch(settingModal, (value) => {
   if (value) {
     formMounting.value = value
@@ -30,13 +23,13 @@ const titleData = {
   titleColor: 'accent',
 }
 
-const { customerId } = useFoundation()
-const { homeSections, loading, update } = usSectionTitleEdit(customerId)
+const { homeSections, loading, onUpdateTitles } = useHomeLayoutTitleEdit()
 
-type FormField = { [id: string]: string }
-const onUpdate = async (formField: FormField) => {
-  await update(formField)
-  settingModal.value = false
+const onUpdate = async (sections: PageLayout[]) => {
+  if (sections.length) {
+    await onUpdateTitles(sections)
+    settingModal.value = false
+  }
 }
 </script>
 
@@ -47,6 +40,7 @@ const onUpdate = async (formField: FormField) => {
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
     :width="600"
+    theme="white"
   >
     <ManageCustomerSectionTitleSettingTitleForm
       v-if="formMounting"

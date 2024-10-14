@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import type { LayoutTheme } from '@/types/customer'
-import type { PageSection } from '@/types/customer-setting'
+import type { DesignTheme, PageLayout } from '@/types/customer-setting'
 
-const { customerId, customer } = useFoundation()
-const { domidPrefix, homeSections } = useHomeLayoutRead(customerId)
+const { domidPrefix, customerSetting } = useCustomerSetting()
 
-const layoutTheme = computed<LayoutTheme>(
-  () => customer.value?.layoutTheme ?? 'type1'
+const designTheme = computed<DesignTheme>(
+  () => customerSetting.value?.designTheme ?? 'type1'
 )
 
-const sectionTitle = (section: PageSection): string =>
+const sectionTitle = (section: PageLayout): string =>
   section.menuTitle ?? section.title
 </script>
 
@@ -19,12 +17,12 @@ const sectionTitle = (section: PageSection): string =>
       <PublishHomeType1Eyecatcher />
     </section>
     <section
-      v-for="section in homeSections"
+      v-for="section in customerSetting?.homeLayout ?? []"
       :id="`${domidPrefix}-${section.kind}`"
-      :key="section.id"
+      :key="section.kind"
       class="section-margin"
     >
-      <template v-if="layoutTheme === 'type1'">
+      <template v-if="designTheme === 'type1'">
         <PublishHomeType1SectionTitle
           v-if="sectionTitle(section).length"
           :title="sectionTitle(section)"

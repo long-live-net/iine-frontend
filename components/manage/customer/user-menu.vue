@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import type { MenuItem } from '@/components/base/dropdown.vue'
 
-const { user, isPreview, togglePreview } = useFoundation()
+const { authUser, isPreview, togglePreview } = useCustomerPageContext()
 const router = useRouter()
 
 const logoutDialog = ref(false)
 const sectionTitleSettingDialog = ref(false)
 const homeLayoutSettingDialog = ref(false)
 const themeSettingDialog = ref(false)
-const customerInfoDialog = ref(false)
-const userInfoDialog = ref(false)
+const snsLinksInfoDialog = ref(false)
 
 const userMenuItems: MenuItem[] = [
   { title: 'プレビュー', value: 'preview', props: { prependIcon: 'mdi-eye' } },
+  { type: 'divider' },
   {
     title: 'メニュータイトル設定',
     value: 'sectionTitleSetting',
@@ -28,15 +28,15 @@ const userMenuItems: MenuItem[] = [
     value: 'themeSetting',
     props: { prependIcon: 'mdi-cog' },
   },
-  { type: 'divider' },
   {
-    title: 'テナント情報',
-    value: 'customerinfo',
+    title: 'SNSページ情報',
+    value: 'snslinksinfo',
     props: { prependIcon: 'mdi-domain' },
   },
+  { type: 'divider' },
   {
-    title: 'ユーザ情報',
-    value: 'userinfo',
+    title: 'プロファイル',
+    value: 'profile',
     props: { prependIcon: 'mdi-account' },
   },
   {
@@ -65,11 +65,11 @@ const onSelectUserMenu = (value: number | string) => {
     case 'themeSetting':
       themeSettingDialog.value = true
       break
-    case 'customerinfo':
-      customerInfoDialog.value = true
+    case 'snslinksinfo':
+      snsLinksInfoDialog.value = true
       break
-    case 'userinfo':
-      userInfoDialog.value = true
+    case 'profile':
+      router.push('/customer/profile')
       break
     case 'changePassword':
       router.push('/customer/change-password')
@@ -96,7 +96,7 @@ const onSelectUserMenu = (value: number | string) => {
           rounded="lg"
           style="text-transform: none; min-width: 8rem"
         >
-          {{ user?.name ?? 'No Name' }}
+          {{ authUser?.name ?? 'No Name' }}
         </v-btn>
       </template>
     </BaseDropdown>
@@ -124,8 +124,7 @@ const onSelectUserMenu = (value: number | string) => {
   />
   <ManageCustomerHomeLayoutSetting v-model:modal="homeLayoutSettingDialog" />
   <ManageCustomerThemeSetting v-model:modal="themeSettingDialog" />
-  <ManageCustomerCustomerInfo v-model:modal="customerInfoDialog" />
-  <ManageCustomerUserInfo v-model:modal="userInfoDialog" />
+  <ManageCustomerSnsLinksInfo v-model:modal="snsLinksInfoDialog" />
   <ManageCustomerLogout v-model:modal="logoutDialog" />
 </template>
 

@@ -18,3 +18,11 @@ export type CustomerUserForm = {
   name: string
   note?: string | null
 }
+
+/**
+ * Change Password Form
+ */
+export type ChangePasswordFrom = {
+  password: string
+  passwordConfirm: string
+}

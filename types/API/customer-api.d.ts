@@ -1,13 +1,7 @@
-import type {
-  ColorTheme,
-  LayoutTheme,
-  NetworkServiceink,
-} from '~/types/customer'
-
 /**
  * Customer Data Types
  */
-export interface CustomerApi {
+export type CustomerApi = {
   id: number
   nickName: string
   name: string
@@ -15,10 +9,5 @@ export interface CustomerApi {
   phone?: string | null
   zip: string
   address: string
-  availContentsKind?: string[] | null
-  layoutTheme: LayoutTheme
-  colorTheme?: ColorTheme | null
   note?: string | null
-  links?: NetworkServiceink[] | null
-  accessSource?: string | null
 }

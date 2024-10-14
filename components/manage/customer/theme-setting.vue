@@ -1,15 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{ modal: boolean }>()
-const emit = defineEmits<{
-  'update:modal': [modal: boolean]
-}>()
-
-const settingModal = computed({
-  get: () => props.modal,
-  set: (modal: boolean) => {
-    emit('update:modal', modal)
-  },
-})
+const modal = defineModel<boolean>('modal', { required: true })
 
 const titleData = {
   title: 'テーマ設定',
@@ -18,16 +8,18 @@ const titleData = {
 }
 
 const {
-  editLayoutTheme,
+  editDesignTheme,
   editColorTheme,
-  layoutThemeOptions,
+  DesignThemeOptions,
   colorThemeOptions,
+  onChengeDesignTheme,
+  onChengeColorTheme,
 } = useThemeSettingsEdit()
 </script>
 
 <template>
   <CommonModalDialog
-    v-model:modal="settingModal"
+    v-model:modal="modal"
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
@@ -36,7 +28,11 @@ const {
       <section>
         <h4>カラーテーマ</h4>
         <div class="theme-selection">
-          <v-radio-group v-model="editColorTheme" inline>
+          <v-radio-group
+            :model-value="editColorTheme"
+            inline
+            @update:model-value="onChengeColorTheme($event)"
+          >
             <v-radio
               v-for="ct in colorThemeOptions"
               :key="ct.type"
@@ -52,9 +48,14 @@ const {
           レイアウトテーマ (未サポート)
         </h4>
         <div class="theme-selection">
-          <v-radio-group v-model="editLayoutTheme" inline disabled>
+          <v-radio-group
+            :model-value="editDesignTheme"
+            inline
+            disabled
+            @update:model-value="onChengeDesignTheme($event)"
+          >
             <v-radio
-              v-for="st in layoutThemeOptions"
+              v-for="st in DesignThemeOptions"
               :key="st.type"
               :label="st.label"
               :value="st.type"

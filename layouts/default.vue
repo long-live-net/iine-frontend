@@ -3,21 +3,21 @@ defineOptions({
   name: 'DefaultLayout',
 })
 
-const { headInfo } = usePageHeadInfo()
+const { headInfoRef } = useCustomerPageHeadInfo()
 useHead({
-  title: headInfo.title,
+  title: headInfoRef.value.title,
   meta: [
     {
       hid: 'description',
       name: 'description',
-      content: headInfo.description,
+      content: headInfoRef.value.description,
     },
   ],
   link: [
     {
       rel: 'icon',
       type: 'image/x-icon',
-      href: `/${headInfo.favicon}`,
+      href: `/${headInfoRef.value.favicon}`,
     },
   ],
 })

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const modal = defineModel<boolean>('modal', { required: true })
+
 withDefaults(
   defineProps<{
     title?: string
@@ -17,7 +18,7 @@ withDefaults(
     width: 'auto',
     maxWidth: 'auto',
     persistent: false,
-    theme: 'white',
+    theme: 'auto',
   }
 )
 </script>

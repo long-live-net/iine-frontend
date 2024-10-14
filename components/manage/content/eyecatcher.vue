@@ -13,7 +13,7 @@ const emit = defineEmits<{
   remove: [id: number]
 }>()
 
-const { customerId } = useFoundation()
+const { customerId } = useCustomer()
 const apiKind = getEyecatchKind()
 
 const modal = ref(false)

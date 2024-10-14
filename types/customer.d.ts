@@ -1,33 +1,15 @@
-export type ColorTheme = 'light' | 'dark'
-export type LayoutTheme = 'type1' | 'type2'
-
-export type NetworkServiceNames =
-  | 'facebook'
-  | 'instagram'
-  | 'twitter'
-  | 'youtube'
-export type NetworkServiceink = {
-  serviceName: NetworkServiceNames
-  url: string
-}
-
 /**
  * Customer Data Types
  */
-export interface Customer {
+export type Customer = {
   id: number
-  nickName: string
   name: string
+  nickName: string
   defaultEmail: string
   phone: string | null
   zip: string
   address: string
-  availContentsKind: string[]
-  layoutTheme: LayoutTheme
-  colorTheme: ColorTheme
   note: string | null
-  links: NetworkServiceink[] | null
-  accessSource: string | null
 }
 
 /**
@@ -39,8 +21,4 @@ export type CustomerForm = {
   phone: string | null
   address: string
   note: string | null
-  facebook: string | null
-  instagram: string | null
-  twitter: string | null
-  youtube: string | null
 }
