@@ -1,4 +1,4 @@
-import debounce from 'lodash/debounce'
+import { debounce } from 'es-toolkit/compat'
 import type { ImageSettings } from '@/types/content'
 import type {
   ContentGetApi,
