@@ -1,4 +1,14 @@
 <script setup lang="ts">
+const { isLoggedIn } = useCustomerPageContext()
+watch(
+  isLoggedIn,
+  (logined) => {
+    if (!logined) {
+      useRouter().replace({ name: 'index' })
+    }
+  },
+  { immediate: true }
+)
 const { handleSubmit, formData } = useChangePasswordForm()
 const { updatePassword, loading } = useUpdatePassword()
 

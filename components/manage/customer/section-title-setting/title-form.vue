@@ -2,7 +2,7 @@
 import { useForm, useField } from 'vee-validate'
 import type { FieldContext } from 'vee-validate'
 import type { PageSection } from '@/types/customer-setting'
-import type { FormField } from '~/composables/use-customer-setting-layout'
+import type { FormField } from '~/composables/use-customer/use-customer-setting-layout'
 
 const props = withDefaults(
   defineProps<{

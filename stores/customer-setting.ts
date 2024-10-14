@@ -1,4 +1,5 @@
 import { defineStore, storeToRefs } from 'pinia'
+import { cloneDeep } from 'lodash'
 import { useAuthStore } from '@/stores/auth'
 import type { CustomerSettingApi } from '@/types/API/customer-setting-api'
 import type { CustomerSetting } from '@/types/customer-setting'
@@ -112,7 +113,7 @@ export const useCustomerSettingStore = defineStore('customerSetting', () => {
 
   function setCustomerSetting(customerSetting: CustomerSetting | null) {
     customerSettingRef.value = customerSetting
-      ? structuredClone(customerSetting)
+      ? cloneDeep(customerSetting) // structuredClone だと Failed to execute となるので cloneDeep に戻す
       : null
   }
 

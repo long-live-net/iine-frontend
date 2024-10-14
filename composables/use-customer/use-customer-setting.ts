@@ -1,9 +1,10 @@
-// import { useForm, useField } from 'vee-validate'
+import { useForm, useField } from 'vee-validate'
 import { storeToRefs } from 'pinia'
 import { useCustomerSettingStore } from '@/stores/customer-setting'
 import type {
   CustomerSetting,
   NetworkServiceink,
+  SnsLinksForm,
   ColorTheme,
   DesignTheme,
 } from '@/types/customer-setting'
@@ -60,73 +61,7 @@ export const useCustomerSetting = () => {
 }
 
 /**
- * Customer Form
- */
-/*
-export const useCustomerForm = () => {
-  const { noBlank, validateEmail, validatePhone, validateUrl } =
-    useValidateRules()
-
-  const customerFormSchema = {
-    name: (v: string | undefined) => noBlank(v) || '名称を入力してください',
-    defaultEmail: (v: string | undefined) => {
-      if (!noBlank(v)) return '代表メールアドレスを入力してください'
-      if (!validateEmail(v)) return 'メールアドレスの形式で入力してください'
-      return true
-    },
-    phone: (v: string | undefined) =>
-      validatePhone(v) || '電話番号の形式で入力してください',
-    address: (v: string | undefined) => noBlank(v) || '住所を入力してください',
-    note: () => true,
-    facebook: (v: string | undefined) =>
-      validateUrl(v) || 'URL の形式で入力してください',
-    instagram: (v: string | undefined) =>
-      validateUrl(v) || 'URL の形式で入力してください',
-    twitter: (v: string | undefined) =>
-      validateUrl(v) || 'URL の形式で入力してください',
-    youtube: (v: string | undefined) =>
-      validateUrl(v) || 'URL の形式で入力してください',
-  }
-  const customerFormInitial: CustomerForm = {
-    name: '',
-    defaultEmail: '',
-    phone: null,
-    address: '',
-    note: null,
-    facebook: null,
-    instagram: null,
-    twitter: null,
-    youtube: null,
-  }
-
-  const { handleSubmit, handleReset, validate } = useForm({
-    validationSchema: customerFormSchema,
-    initialValues: customerFormInitial,
-  })
-
-  const formData = {
-    name: useField<CustomerForm['name']>('name'),
-    defaultEmail: useField<CustomerForm['defaultEmail']>('defaultEmail'),
-    phone: useField<CustomerForm['phone']>('phone'),
-    address: useField<CustomerForm['address']>('address'),
-    note: useField<CustomerForm['note']>('note'),
-    facebook: useField<CustomerForm['facebook']>('facebook'),
-    instagram: useField<CustomerForm['instagram']>('instagram'),
-    twitter: useField<CustomerForm['twitter']>('twitter'),
-    youtube: useField<CustomerForm['youtube']>('youtube'),
-  }
-
-  return {
-    handleSubmit,
-    handleReset,
-    validate,
-    formData,
-  }
-}
-  */
-
-/**
- * 顧客情報のテーマ設定関連
+ * 顧客設定情報のテーマ設定関連
  */
 export const useThemeSettingsEdit = () => {
   const {
@@ -150,8 +85,8 @@ export const useThemeSettingsEdit = () => {
     { immediate: true }
   )
 
-  const onChengeDesignTheme = async (designTheme: DesignTheme) => {
-    if (!customerSetting.value) {
+  const onChengeDesignTheme = async (designTheme: DesignTheme | null) => {
+    if (!customerSetting.value || !designTheme) {
       return
     }
     const updateData = { ...customerSetting.value, designTheme }
@@ -166,8 +101,8 @@ export const useThemeSettingsEdit = () => {
       })
   }
 
-  const onChengeColorTheme = async (colorTheme: ColorTheme) => {
-    if (!customerSetting.value) {
+  const onChengeColorTheme = async (colorTheme: ColorTheme | null) => {
+    if (!customerSetting.value || !colorTheme) {
       return
     }
     const updateData = { ...customerSetting.value, colorTheme }
@@ -208,6 +143,9 @@ export const useThemeSettingsEdit = () => {
   }
 }
 
+/**
+ * Customer setting sns links 関連
+ */
 export const useCustomerSnsLinks = () => {
   const { customerSetting } = useCustomerSetting()
   const snsLinks = computed<NetworkServiceink[]>(
@@ -270,5 +208,87 @@ export const useCustomerSnsLinks = () => {
     getSnsIcon,
     getSnsColor,
     onClickLink,
+  }
+}
+
+export const useCustomerSnsLinksForm = () => {
+  const { validateUrl } = useValidateRules()
+
+  const customerFormSchema = {
+    facebook: (v: string | undefined) =>
+      validateUrl(v) || 'URL の形式で入力してください',
+    instagram: (v: string | undefined) =>
+      validateUrl(v) || 'URL の形式で入力してください',
+    twitter: (v: string | undefined) =>
+      validateUrl(v) || 'URL の形式で入力してください',
+    youtube: (v: string | undefined) =>
+      validateUrl(v) || 'URL の形式で入力してください',
+  }
+  const customerFormInitial: SnsLinksForm = {
+    facebook: null,
+    instagram: null,
+    twitter: null,
+    youtube: null,
+  }
+
+  const { handleSubmit, handleReset, validate } = useForm({
+    validationSchema: customerFormSchema,
+    initialValues: customerFormInitial,
+  })
+
+  const formData = {
+    facebook: useField<SnsLinksForm['facebook']>('facebook'),
+    instagram: useField<SnsLinksForm['instagram']>('instagram'),
+    twitter: useField<SnsLinksForm['twitter']>('twitter'),
+    youtube: useField<SnsLinksForm['youtube']>('youtube'),
+  }
+
+  return {
+    handleSubmit,
+    handleReset,
+    validate,
+    formData,
+  }
+}
+
+export const useCustomerSnsLinksUpdate = () => {
+  const {
+    customerSetting,
+    updateCustomerSetting,
+    fetchCustomerSetting,
+    loading,
+  } = useCustomerSetting()
+  const { addSnackber } = useSnackbars()
+
+  const update = async (form: SnsLinksForm) => {
+    if (!customerSetting.value || !customerSetting.value.id) {
+      return
+    }
+    const links: NetworkServiceink[] = []
+    if (form.facebook) {
+      links.push({ serviceName: 'facebook', url: form.facebook })
+    }
+    if (form.instagram) {
+      links.push({ serviceName: 'instagram', url: form.instagram })
+    }
+    if (form.twitter) {
+      links.push({ serviceName: 'twitter', url: form.twitter })
+    }
+    if (form.youtube) {
+      links.push({ serviceName: 'youtube', url: form.youtube })
+    }
+
+    const customerSettingData: CustomerSetting = {
+      ...customerSetting.value,
+      snsLinks: links.length ? links : null,
+    }
+    await updateCustomerSetting(customerSettingData)
+    await fetchCustomerSetting()
+    addSnackber?.('SNSページ情報を更新しました。')
+  }
+  return {
+    customerSetting,
+    loading,
+    update,
   }
 }

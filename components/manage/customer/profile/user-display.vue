@@ -13,7 +13,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="user-info-wrap">
+  <div class="user-info-wrap g-theme-profile">
     <dl>
       <dt>お名前</dt>
       <dd>{{ customerUser?.name || '-' }}</dd>
@@ -27,7 +27,7 @@ defineEmits<{
     <div class="actions">
       <v-btn
         prepend-icon="mdi-account-edit"
-        color="accent"
+        color="primary"
         variant="flat"
         width="8rem"
         @click="$emit('edit')"
@@ -40,27 +40,23 @@ defineEmits<{
 
 <style scoped lang="scss">
 .user-info-wrap {
-  padding: 1rem 2rem;
   dl {
     display: grid;
     grid-template-columns: 11rem auto;
     gap: 4px;
     dt {
       padding: 0.5rem 1rem;
-      background-color: $gray-lighten2;
       font-weight: bold;
       text-align: right;
     }
     dd {
       padding: 0.5rem 1rem;
-      background-color: $gray-lighten4;
     }
   }
 }
 
 @media only screen and (max-width: $grid-breakpoint-md) {
   .user-info-wrap {
-    padding: 1rem;
     dl {
       display: block;
       dt {

@@ -2,17 +2,7 @@
 import draggable from 'vuedraggable'
 import type { PageSectionEdit } from '@/types/customer-setting'
 
-const props = defineProps<{ modal: boolean }>()
-const emit = defineEmits<{
-  'update:modal': [modal: boolean]
-}>()
-const settingModal = computed({
-  get: () => props.modal,
-  set: (modal: boolean) => {
-    emit('update:modal', modal)
-  },
-})
-
+const settingModal = defineModel<boolean>('modal', { required: true })
 const titleData = {
   title: 'ホームレイアウト変更',
   titleIcon: 'mdi-view-split-horizontal',
@@ -22,9 +12,18 @@ const { customerSetting } = useCustomerSetting()
 const { baseSections, editSections, loading, reset, replaceSections } =
   useHomeLayoutEdit(customerSetting)
 
+const formMounting = ref(false)
 watch(settingModal, () => {
   if (settingModal.value) {
     reset()
+    formMounting.value = true
+  } else {
+    // Note:
+    // フォームコンポーネントは少しだけ遅れて unmount する
+    // ダイアログが閉じる時にチラチラするため
+    setTimeout(() => {
+      formMounting.value = false
+    }, 300)
   }
 })
 
@@ -53,9 +52,10 @@ const removeItem = (baseId: string) => {
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
+    theme="white"
   >
     <ClientOnly>
-      <div class="home-layout-editor">
+      <div v-if="formMounting" class="home-layout-editor">
         <div class="layout-setting base">
           <h4 class="mb-2">テンプレート</h4>
           <draggable

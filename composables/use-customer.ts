@@ -8,6 +8,8 @@ export {
   useCustomerSetting,
   useThemeSettingsEdit,
   useCustomerSnsLinks,
+  useCustomerSnsLinksForm,
+  useCustomerSnsLinksUpdate,
 } from './use-customer/use-customer-setting'
 
 export {

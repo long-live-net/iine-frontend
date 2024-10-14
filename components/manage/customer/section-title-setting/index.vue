@@ -1,15 +1,6 @@
 <script setup lang="ts">
-const props = defineProps<{ modal: boolean }>()
-const emit = defineEmits<{
-  'update:modal': [modal: boolean]
-}>()
+const settingModal = defineModel<boolean>('modal', { required: true })
 
-const settingModal = computed({
-  get: () => props.modal,
-  set: (modal: boolean) => {
-    emit('update:modal', modal)
-  },
-})
 const formMounting = ref(false)
 watch(settingModal, (value) => {
   if (value) {
@@ -47,6 +38,7 @@ const onUpdate = async (formField: FormField) => {
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
     :width="600"
+    theme="white"
   >
     <ManageCustomerSectionTitleSettingTitleForm
       v-if="formMounting"
