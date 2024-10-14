@@ -1,5 +1,5 @@
 import { defineStore, storeToRefs } from 'pinia'
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'es-toolkit/object'
 import { useAuthStore } from '@/stores/auth'
 import type { CustomerSettingApi } from '@/types/API/customer-setting-api'
 import type { CustomerSetting } from '@/types/customer-setting'

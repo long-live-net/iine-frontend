@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import debounce from 'lodash/debounce'
+import { debounce } from 'es-toolkit/compat'
 import type { FontSize } from '@/utils/wysiwsg-editor/tip-tap'
 
 const props = defineProps<{ size: FontSize }>()

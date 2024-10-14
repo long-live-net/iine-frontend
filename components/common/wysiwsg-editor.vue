@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import debounce from 'lodash/debounce'
+import { debounce } from 'es-toolkit/compat'
 import type TiptapEditor from '@/components/base/wysiwsg-editor/tiptap-editor.vue'
 
 const model = defineModel<string | null>()
