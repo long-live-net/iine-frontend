@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import type { PageSectionEdit } from '@/types/customer-setting'
+import type { SectionKind, PageLayout } from '@/types/customer-setting'
 
 const settingModal = defineModel<boolean>('modal', { required: true })
 const titleData = {
@@ -8,9 +8,8 @@ const titleData = {
   titleIcon: 'mdi-view-split-horizontal',
   titleColor: 'accent',
 }
-const { customerSetting } = useCustomerSetting()
-const { baseSections, editSections, loading, reset, replaceSections } =
-  useHomeLayoutEdit(customerSetting)
+const { baseSections, editSections, loading, reset, onChengeHomeLayouts } =
+  useHomeLayoutEdit()
 
 const formMounting = ref(false)
 watch(settingModal, () => {
@@ -27,22 +26,26 @@ watch(settingModal, () => {
   }
 })
 
-const clone = (data: PageSectionEdit): PageSectionEdit => ({ ...data })
+const clone = (data: PageLayout): PageLayout => ({
+  kind: data.kind,
+  title: data.title,
+  menuTitle: data.menuTitle ?? null,
+})
 
 const onCancel = () => {
   settingModal.value = false
 }
 
 const onUpdate = async () => {
-  await replaceSections()
+  await onChengeHomeLayouts()
   settingModal.value = false
 }
 
-const hasAssigned = (baseId: string) =>
-  editSections.value.some((ec) => ec.baseId === baseId)
+const hasAssigned = (kind: SectionKind) =>
+  editSections.value.some((ec) => ec.kind === kind)
 
-const removeItem = (baseId: string) => {
-  editSections.value = editSections.value.filter((ec) => ec.baseId !== baseId)
+const removeItem = (kind: SectionKind) => {
+  editSections.value = editSections.value.filter((ec) => ec.kind !== kind)
 }
 </script>
 
@@ -70,14 +73,11 @@ const removeItem = (baseId: string) => {
               <div
                 class="drag-group__item"
                 :class="{
-                  'home-layout-draggable': !hasAssigned(element.baseId),
+                  'home-layout-draggable': !hasAssigned(element.kind),
                 }"
               >
                 <p class="drag-group__item--icon">
-                  <v-icon
-                    v-if="hasAssigned(element.baseId)"
-                    icon="mdi-cancel"
-                  />
+                  <v-icon v-if="hasAssigned(element.kind)" icon="mdi-cancel" />
                   <v-icon v-else icon="mdi-apps" color="accent" />
                 </p>
                 <p>{{ element.menuTitle || element.title }}</p>
@@ -108,7 +108,7 @@ const removeItem = (baseId: string) => {
                     size="small"
                     density="comfortable"
                     flat
-                    @click="removeItem(element.baseId)"
+                    @click="removeItem(element.kind)"
                   />
                 </p>
               </div>

@@ -2,11 +2,12 @@
 import type { SectionKind } from '@/types/customer-setting'
 import type { BreadCrumbsItem } from '@/components/base/bread-crumb.vue'
 
-const { customerId } = useCustomer()
-const { domidPrefix, homeSections } = useHomeLayoutRead(customerId)
+const { domidPrefix, customerSetting } = useCustomerSetting()
 const newsItem = computed(() => {
   const kind: SectionKind = 'news'
-  const newsSection = homeSections.value?.find((s) => s.kind === kind)
+  const newsSection = customerSetting.value?.homeLayout?.find(
+    (s) => s.kind === kind
+  )
   return {
     title: newsSection?.menuTitle ?? newsSection?.title ?? 'News',
     hash: `#${domidPrefix}-${kind}`,
@@ -14,7 +15,9 @@ const newsItem = computed(() => {
 })
 const serviceItem = computed(() => {
   const kind: SectionKind = 'service'
-  const servicceSection = homeSections.value?.find((s) => s.kind === kind)
+  const servicceSection = customerSetting.value?.homeLayout?.find(
+    (s) => s.kind === kind
+  )
   return {
     title: servicceSection?.menuTitle ?? servicceSection?.title ?? 'Service',
     hash: `#${domidPrefix}-${kind}`,

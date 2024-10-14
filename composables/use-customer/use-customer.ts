@@ -100,6 +100,13 @@ export const useCustomerActions = () => {
   const { customer, loading, fetchCustomer, updateCustomer } = useCustomer()
   const { addSnackber } = useSnackbars()
 
+  const fetch = async () => {
+    if (!customer.value || !customer.value.id) {
+      return
+    }
+    await fetchCustomer(customer.value.id)
+  }
+
   const update = async (form: CustomerForm) => {
     if (!customer.value || !customer.value.id) {
       return
@@ -120,6 +127,7 @@ export const useCustomerActions = () => {
   return {
     customer,
     loading,
+    fetch,
     update,
   }
 }

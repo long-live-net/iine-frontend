@@ -1,7 +1,9 @@
 <script setup lang="ts">
-const settingModal = defineModel<boolean>('modal', { required: true })
+import type { PageLayout } from '@/types/customer-setting'
 
+const settingModal = defineModel<boolean>('modal', { required: true })
 const formMounting = ref(false)
+
 watch(settingModal, (value) => {
   if (value) {
     formMounting.value = value
@@ -21,13 +23,13 @@ const titleData = {
   titleColor: 'accent',
 }
 
-const { customerId } = useCustomer()
-const { homeSections, loading, update } = usSectionTitleEdit(customerId)
+const { homeSections, loading, onUpdateTitles } = useHomeLayoutTitleEdit()
 
-type FormField = { [id: string]: string }
-const onUpdate = async (formField: FormField) => {
-  await update(formField)
-  settingModal.value = false
+const onUpdate = async (sections: PageLayout[]) => {
+  if (sections.length) {
+    await onUpdateTitles(sections)
+    settingModal.value = false
+  }
 }
 </script>
 

@@ -15,17 +15,7 @@ const {
   update: updateUser,
   checkEmail,
 } = useCustomerUserActions()
-watch(
-  authUser,
-  async (user) => {
-    if (user?.id) {
-      await fetchUser(user.id)
-    }
-  },
-  {
-    immediate: true,
-  }
-)
+
 const onUpdateUser = async (userForm: CustomerUserForm) => {
   if (!authUser.value?.id) {
     return
@@ -39,6 +29,7 @@ const onUpdateUser = async (userForm: CustomerUserForm) => {
 
 // 顧客情報
 const {
+  fetch: fetchCustomer,
   customer,
   loading: loadingCustomer,
   update: updateCustomer,
@@ -48,6 +39,18 @@ const onUpdateCUstomer = async (customerForm: CustomerForm) => {
   await updateCustomer(customerForm)
   customerOperationMode.value = 'display'
 }
+
+watch(
+  authUser,
+  async (user) => {
+    if (user?.id) {
+      await Promise.all([fetchCustomer(), fetchUser(user.id)])
+    }
+  },
+  {
+    immediate: true,
+  }
+)
 </script>
 
 <template>
@@ -60,6 +63,7 @@ const onUpdateCUstomer = async (customerForm: CustomerForm) => {
         </div>
         <ManageCustomerProfileUserDisplay
           :customer-user="customerUserRef"
+          :loading="loadingUser"
           @edit="userOperationMode = 'edit'"
         />
       </div>
@@ -85,6 +89,7 @@ const onUpdateCUstomer = async (customerForm: CustomerForm) => {
         </div>
         <ManageCustomerProfileCustomerDisplay
           :customer="customer"
+          :loading="loadingCustomer"
           @edit="customerOperationMode = 'edit'"
         />
       </div>

@@ -14,9 +14,5 @@ export default defineNuxtPlugin(async () => {
   if (customerIdRef.value) {
     const customerSettingStore = useCustomerSettingStore()
     await customerSettingStore.loadCustomerSetting(customerIdRef.value)
-
-    // customer-layout は後々 customer-setting に含める
-    const { loadHomeLayout } = useHomeLayoutRead(customerIdRef)
-    await loadHomeLayout()
   }
 })

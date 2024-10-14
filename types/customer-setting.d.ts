@@ -20,6 +20,11 @@ export type NetworkServiceink = {
   serviceName: NetworkServiceNames
   url: string
 }
+export type PageLayout = {
+  kind: SectionKind
+  title: string
+  menuTitle?: string | null
+}
 
 /**
  * Customer Setting
@@ -34,11 +39,7 @@ export type CustomerSetting = {
   }
   colorTheme: ColorTheme
   designTheme: DesignTheme
-  homeLayout: {
-    kind: SectionKind
-    title: string
-    menuTitle?: string | null
-  }[]
+  homeLayout: PageLayout[]
   snsLinks: NetworkServiceink[] | null
   accessSource: string | null
 }

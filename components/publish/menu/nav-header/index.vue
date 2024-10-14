@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const { customerId } = useCustomer()
 const { isLoggedIn } = useCustomerPageContext()
 const sidebar = ref(false)
 
@@ -11,11 +10,11 @@ const headerTitle = {
   to: { name: 'index', hash: '#home-index-top' },
 }
 
-const { domidPrefix, homeSections } = useHomeLayoutRead(customerId)
+const { domidPrefix, customerSetting } = useCustomerSetting()
 const headerItems = computed(
   () =>
-    homeSections.value?.map((s) => ({
-      id: s.id,
+    customerSetting.value?.homeLayout?.map((s) => ({
+      kind: s.kind,
       title: s.title,
       menuTitle: s.menuTitle,
       color: 'white',
@@ -48,7 +47,7 @@ const headerItems = computed(
           </PublishMenuNavHeaderItem>
           <PublishMenuNavHeaderItem
             v-for="item in headerItems"
-            :key="item.id"
+            :key="item.kind"
             :link-to="item.to"
             :title="item.menuTitle ?? item.title"
             :color="item.color"
@@ -94,7 +93,7 @@ const headerItems = computed(
               />
               <PublishMenuNavHeaderItem
                 v-for="item in headerItems"
-                :key="item.id"
+                :key="item.kind"
                 :link-to="item.to"
                 :title="item.menuTitle ?? item.title"
                 :color="item.color"

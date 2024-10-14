@@ -3,15 +3,17 @@ import { storeToRefs } from 'pinia'
 import { useCustomerSettingStore } from '@/stores/customer-setting'
 import type {
   CustomerSetting,
-  NetworkServiceink,
-  SnsLinksForm,
+  PageLayout,
   ColorTheme,
   DesignTheme,
+  NetworkServiceink,
+  SnsLinksForm,
 } from '@/types/customer-setting'
 
 /**
  * 顧客情報
  */
+const domidPrefix = 'home-index'
 export const useCustomerSetting = () => {
   const customerId = computed(
     () => storeToRefs(useCustomerStore()).customerRef.value?.id ?? null
@@ -52,11 +54,150 @@ export const useCustomerSetting = () => {
   }
 
   return {
+    domidPrefix,
     customerSetting: customerSettingRef,
     loading,
     fetchCustomerSetting,
     updateCustomerSetting,
     setCustomerSetting,
+  }
+}
+
+/**
+ * ホームレイアウト情報変更用フォームデータ
+ * @param customerId
+ */
+export const useHomeLayoutEdit = () => {
+  const {
+    customerSetting,
+    setCustomerSetting,
+    updateCustomerSetting,
+    fetchCustomerSetting,
+    loading,
+  } = useCustomerSetting()
+  const { addSnackber } = useSnackbars()
+
+  const homeLayouts = computed(() => customerSetting.value?.homeLayout ?? [])
+  const baseLayoutsOrder: PageLayout[] = [
+    { kind: 'information', title: 'information' },
+    { kind: 'news', title: 'news' },
+    { kind: 'service', title: 'service' },
+    { kind: 'contact', title: 'contact' },
+    { kind: 'access', title: 'access' },
+    { kind: 'menu-image', title: 'menu' },
+  ]
+  const baseSections = ref<PageLayout[]>([])
+  const editSections = ref<PageLayout[]>([])
+
+  const reset = () => {
+    if (!customerSetting.value) {
+      return
+    }
+    const availContentsKind = customerSetting.value.availContentsKind
+    baseSections.value = baseLayoutsOrder
+      .filter((b) => availContentsKind.includes(b.kind))
+      .map<PageLayout>((b) => {
+        const hs = homeLayouts.value?.find((s) => s.kind === b.kind)
+        if (hs) {
+          b.menuTitle = hs.menuTitle
+        }
+        return { ...b }
+      })
+    editSections.value = homeLayouts.value.map<PageLayout>((s) => ({ ...s }))
+  }
+
+  watch(
+    customerSetting,
+    () => {
+      reset()
+    },
+    {
+      immediate: true,
+    }
+  )
+
+  const onChengeHomeLayouts = async () => {
+    if (!customerSetting.value) {
+      return
+    }
+    const updateData: CustomerSetting = {
+      ...customerSetting.value,
+      homeLayout: editSections.value,
+    }
+    setCustomerSetting(updateData)
+    await updateCustomerSetting(updateData)
+      .then(() => {
+        addSnackber?.('ホームページのレイアウトを変更しました')
+        return fetchCustomerSetting()
+      })
+      .catch((e: Error) => {
+        throw e
+      })
+  }
+
+  return {
+    baseSections,
+    editSections,
+    loading,
+    reset,
+    onChengeHomeLayouts,
+  }
+}
+
+export const useHomeLayoutTitleEdit = () => {
+  const {
+    customerSetting,
+    setCustomerSetting,
+    updateCustomerSetting,
+    fetchCustomerSetting,
+    loading,
+  } = useCustomerSetting()
+
+  const { addSnackber } = useSnackbars()
+
+  const homeLayouts = computed(() => customerSetting.value?.homeLayout ?? [])
+  const homeSections = ref<PageLayout[]>([])
+
+  const reset = () => {
+    if (!customerSetting.value) {
+      return
+    }
+    homeSections.value = homeLayouts.value.map<PageLayout>((s) => ({ ...s }))
+  }
+
+  watch(
+    customerSetting,
+    () => {
+      reset()
+    },
+    {
+      immediate: true,
+    }
+  )
+
+  const onUpdateTitles = async (sections: PageLayout[]) => {
+    if (!customerSetting.value) {
+      return
+    }
+    const updateData: CustomerSetting = {
+      ...customerSetting.value,
+      homeLayout: sections,
+    }
+    setCustomerSetting(updateData)
+    await updateCustomerSetting(updateData)
+      .then(() => {
+        addSnackber?.('メニュータイトルを変更しました。')
+        return fetchCustomerSetting()
+      })
+      .catch((e: Error) => {
+        throw e
+      })
+  }
+
+  return {
+    homeSections,
+    loading,
+    onUpdateTitles,
   }
 }
 
