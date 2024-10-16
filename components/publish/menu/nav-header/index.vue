@@ -1,16 +1,18 @@
 <script setup lang="ts">
 const { isLoggedIn } = useCustomerPageContext()
+const { customer } = useCustomer()
+const { domidPrefix, customerSetting } = useCustomerSetting()
 const sidebar = ref(false)
 
-// Todo: 適当
-const headerTitle = {
-  title: 'ロングリブネット',
+const headerTitle = computed(() => ({
+  title:
+    customerSetting.value?.pageTitle?.title ??
+    customer.value?.name ??
+    'ページタイトル',
   color: 'yellow',
   hoverColor: 'orange',
   to: { name: 'index', hash: '#home-index-top' },
-}
-
-const { domidPrefix, customerSetting } = useCustomerSetting()
+}))
 const headerItems = computed(
   () =>
     customerSetting.value?.homeLayout?.map((s) => ({

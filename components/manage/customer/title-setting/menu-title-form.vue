@@ -25,7 +25,7 @@ const titleValidationRule = (v: string | undefined): boolean | string => {
 }
 const formContext = useForm()
 const formFieldsOrder = props.homeSections?.map((s) => ({
-  kind: `${s.kind}`,
+  kind: s.kind,
   label: s.menuTitle ?? s.title,
 }))
 const formFields = props.homeSections?.reduce<{
@@ -33,16 +33,12 @@ const formFields = props.homeSections?.reduce<{
 }>(
   (pre, s) => ({
     ...pre,
-    [`${s.kind}`]: useField(`${s.kind}`, titleValidationRule, {
+    [s.kind]: useField(s.kind, titleValidationRule, {
       initialValue: s.menuTitle ?? s.title,
     }),
   }),
   {}
 )
-
-const onCancel = () => {
-  emit('cancel')
-}
 
 const onUpdate = formContext.handleSubmit((formField) => {
   emit(
@@ -56,31 +52,24 @@ const onUpdate = formContext.handleSubmit((formField) => {
 </script>
 
 <template>
-  <div class="section-title-setting">
-    <section>
-      <h4>メニュータイトル</h4>
-      <div class="section-titles">
-        <p class="font-weight-bold mb-2">
-          <small class="text-blue-darken-1">
-            メニュータイトルを変更できます
-          </small>
-        </p>
-        <template v-if="formContext && formFields">
-          <div v-for="field in formFieldsOrder" :key="field.kind">
-            <v-text-field
-              v-model="formFields[field.kind].value.value"
-              clearable
-              density="comfortable"
-              :error-messages="formFields[field.kind].errorMessage.value"
-              :label="field.label"
-              placeholder="入力してください"
-            />
-          </div>
-        </template>
-      </div>
-    </section>
+  <div class="menu-title-setting">
+    <h4>メニュータイトル</h4>
+    <div class="menu-titles">
+      <template v-if="formContext && formFields">
+        <div v-for="field in formFieldsOrder" :key="field.kind">
+          <v-text-field
+            v-model="formFields[field.kind].value.value"
+            clearable
+            density="comfortable"
+            :error-messages="formFields[field.kind].errorMessage.value"
+            :label="field.label"
+            placeholder="入力してください"
+          />
+        </div>
+      </template>
+    </div>
   </div>
-  <div class="d-flex justify-end mt-4">
+  <div class="d-flex justify-end mt-1">
     <div>
       <v-btn
         prepend-icon="mdi-content-save"
@@ -92,28 +81,18 @@ const onUpdate = formContext.handleSubmit((formField) => {
       >
         変更する
       </v-btn>
-      <v-btn
-        prepend-icon="mdi-cancel"
-        color="secondary"
-        variant="flat"
-        width="8rem"
-        class="ml-1"
-        @click="onCancel"
-      >
-        キャンセル
-      </v-btn>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.section-title-setting {
-  .section-titles {
+.menu-title-setting {
+  .menu-titles {
     display: flex;
     flex-direction: column;
     row-gap: 0.25rem;
     margin-top: 1rem;
-    padding: 0.25rem 1rem;
+    padding: 0.25rem 0 0.25rem 1rem;
   }
 }
 </style>

@@ -8,13 +8,19 @@ const titleData = {
   titleIcon: 'mdi-view-split-horizontal',
   titleColor: 'accent',
 }
-const { baseSections, editSections, loading, reset, onChengeHomeLayouts } =
-  useHomeLayoutEdit()
+const {
+  baseSections,
+  editSections,
+  initialLoading,
+  loading,
+  init,
+  chengeHomeLayouts,
+} = useHomeLayoutEdit()
 
 const formMounting = ref(false)
-watch(settingModal, () => {
+watch(settingModal, async () => {
   if (settingModal.value) {
-    reset()
+    await init()
     formMounting.value = true
   } else {
     // Note:
@@ -32,13 +38,8 @@ const clone = (data: PageLayout): PageLayout => ({
   menuTitle: data.menuTitle ?? null,
 })
 
-const onCancel = () => {
-  settingModal.value = false
-}
-
 const onUpdate = async () => {
-  await onChengeHomeLayouts()
-  settingModal.value = false
+  await chengeHomeLayouts()
 }
 
 const hasAssigned = (kind: SectionKind) =>
@@ -55,6 +56,7 @@ const removeItem = (kind: SectionKind) => {
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
+    :loading="initialLoading"
     theme="white"
   >
     <ClientOnly>
@@ -135,16 +137,6 @@ const removeItem = (kind: SectionKind) => {
           @click="onUpdate"
         >
           変更する
-        </v-btn>
-        <v-btn
-          prepend-icon="mdi-cancel"
-          color="secondary"
-          variant="flat"
-          width="8rem"
-          class="ml-1"
-          @click="onCancel"
-        >
-          キャンセル
         </v-btn>
       </div>
     </div>

@@ -10,6 +10,7 @@ withDefaults(
     maxWidth?: number | string
     persistent?: boolean
     theme?: 'white' | 'black' | 'auto'
+    loading?: boolean
   }>(),
   {
     title: '設定ダイアログ',
@@ -19,6 +20,7 @@ withDefaults(
     maxWidth: 'auto',
     persistent: false,
     theme: 'auto',
+    loading: false,
   }
 )
 </script>
@@ -69,6 +71,7 @@ withDefaults(
       <div class="modal-dialog__body">
         <slot />
       </div>
+      <BaseOverlayLiner :overlay="loading" />
     </div>
   </BaseDialog>
 </template>

@@ -5,17 +5,16 @@ const { authUser, isPreview, togglePreview } = useCustomerPageContext()
 const router = useRouter()
 
 const logoutDialog = ref(false)
-const sectionTitleSettingDialog = ref(false)
+const titleSettingDialog = ref(false)
 const homeLayoutSettingDialog = ref(false)
 const themeSettingDialog = ref(false)
-const snsLinksInfoDialog = ref(false)
 
 const userMenuItems: MenuItem[] = [
   { title: 'プレビュー', value: 'preview', props: { prependIcon: 'mdi-eye' } },
   { type: 'divider' },
   {
-    title: 'メニュータイトル設定',
-    value: 'sectionTitleSetting',
+    title: 'タイトル設定',
+    value: 'titleSetting',
     props: { prependIcon: 'mdi-format-title' },
   },
   {
@@ -27,11 +26,6 @@ const userMenuItems: MenuItem[] = [
     title: 'テーマ設定',
     value: 'themeSetting',
     props: { prependIcon: 'mdi-cog' },
-  },
-  {
-    title: 'SNSページ情報',
-    value: 'snslinksinfo',
-    props: { prependIcon: 'mdi-domain' },
   },
   { type: 'divider' },
   {
@@ -56,17 +50,14 @@ const onSelectUserMenu = (value: number | string) => {
     case 'preview':
       togglePreview()
       break
-    case 'sectionTitleSetting':
-      sectionTitleSettingDialog.value = true
+    case 'titleSetting':
+      titleSettingDialog.value = true
       break
     case 'homeLayoutSetting':
       homeLayoutSettingDialog.value = true
       break
     case 'themeSetting':
       themeSettingDialog.value = true
-      break
-    case 'snslinksinfo':
-      snsLinksInfoDialog.value = true
       break
     case 'profile':
       router.push('/customer/profile')
@@ -119,12 +110,9 @@ const onSelectUserMenu = (value: number | string) => {
     id="on-preview-button"
     @click="togglePreview"
   />
-  <ManageCustomerSectionTitleSetting
-    v-model:modal="sectionTitleSettingDialog"
-  />
+  <ManageCustomerTitleSetting v-model:modal="titleSettingDialog" />
   <ManageCustomerHomeLayoutSetting v-model:modal="homeLayoutSettingDialog" />
   <ManageCustomerThemeSetting v-model:modal="themeSettingDialog" />
-  <ManageCustomerSnsLinksInfo v-model:modal="snsLinksInfoDialog" />
   <ManageCustomerLogout v-model:modal="logoutDialog" />
 </template>
 
