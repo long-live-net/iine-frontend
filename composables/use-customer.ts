@@ -6,12 +6,13 @@ export {
 
 export {
   useCustomerSetting,
-  useHomeLayoutEdit,
+  usePageTitleEdit,
   useHomeLayoutTitleEdit,
+  useHomeLayoutEdit,
   useThemeSettingsEdit,
   useCustomerSnsLinks,
   useCustomerSnsLinksForm,
-  useCustomerSnsLinksUpdate,
+  useCustomerSnsLinksActions,
 } from './use-customer/use-customer-setting'
 
 export { useAuth, useLoginForm } from './use-customer/use-auth'

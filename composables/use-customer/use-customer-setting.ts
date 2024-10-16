@@ -3,10 +3,11 @@ import { storeToRefs } from 'pinia'
 import { useCustomerSettingStore } from '@/stores/customer-setting'
 import type {
   CustomerSetting,
+  PageTitle,
   PageLayout,
   ColorTheme,
   DesignTheme,
-  NetworkServiceink,
+  NetworkServiceLink,
   SnsLinksForm,
 } from '@/types/customer-setting'
 
@@ -64,7 +65,100 @@ export const useCustomerSetting = () => {
 }
 
 /**
- * ホームレイアウト情報変更用フォームデータ
+ * ページタイトル変更処理
+ */
+export const usePageTitleEdit = () => {
+  const {
+    customerSetting,
+    setCustomerSetting,
+    updateCustomerSetting,
+    fetchCustomerSetting,
+    loading,
+  } = useCustomerSetting()
+  const { addSnackber } = useSnackbars()
+
+  const pageTitle = computed(() => customerSetting.value?.pageTitle ?? null)
+  const initialLoading = ref(false)
+  const init = async () => {
+    try {
+      initialLoading.value = true
+      await fetchCustomerSetting()
+    } finally {
+      initialLoading.value = false
+    }
+  }
+  const updatePageTitle = async (title: PageTitle) => {
+    if (!customerSetting.value) {
+      return
+    }
+    const updateData: CustomerSetting = {
+      ...customerSetting.value,
+      pageTitle: { ...title },
+    }
+    setCustomerSetting(updateData)
+    await updateCustomerSetting(updateData)
+    addSnackber?.('ページタイトルを変更しました。')
+    await fetchCustomerSetting()
+  }
+
+  return {
+    pageTitle,
+    loading,
+    initialLoading,
+    init,
+    updatePageTitle,
+  }
+}
+
+/**
+ * ページセクションタイトル変更処理
+ */
+export const useHomeLayoutTitleEdit = () => {
+  const {
+    customerSetting,
+    setCustomerSetting,
+    updateCustomerSetting,
+    fetchCustomerSetting,
+    loading,
+  } = useCustomerSetting()
+  const { addSnackber } = useSnackbars()
+
+  const homeSections = computed(() => customerSetting.value?.homeLayout ?? [])
+  const initialLoading = ref(false)
+  const init = async () => {
+    try {
+      initialLoading.value = true
+      await fetchCustomerSetting()
+    } finally {
+      initialLoading.value = false
+    }
+  }
+
+  const updateMenuTitles = async (sections: PageLayout[]) => {
+    if (!customerSetting.value) {
+      return
+    }
+    const updateData: CustomerSetting = {
+      ...customerSetting.value,
+      homeLayout: [...sections],
+    }
+    setCustomerSetting(updateData)
+    await updateCustomerSetting(updateData)
+    addSnackber?.('メニュータイトルを変更しました。')
+    await fetchCustomerSetting()
+  }
+
+  return {
+    homeSections,
+    initialLoading,
+    loading,
+    init,
+    updateMenuTitles,
+  }
+}
+
+/**
+ * ホームレイアウト変更
  * @param customerId
  */
 export const useHomeLayoutEdit = () => {
@@ -116,7 +210,18 @@ export const useHomeLayoutEdit = () => {
     }
   )
 
-  const onChengeHomeLayouts = async () => {
+  const initialLoading = ref(false)
+  const init = async () => {
+    try {
+      initialLoading.value = true
+      await fetchCustomerSetting()
+      reset()
+    } finally {
+      initialLoading.value = false
+    }
+  }
+
+  const chengeHomeLayouts = async () => {
     if (!customerSetting.value) {
       return
     }
@@ -126,78 +231,17 @@ export const useHomeLayoutEdit = () => {
     }
     setCustomerSetting(updateData)
     await updateCustomerSetting(updateData)
-      .then(() => {
-        addSnackber?.('ホームページのレイアウトを変更しました')
-        return fetchCustomerSetting()
-      })
-      .catch((e: Error) => {
-        throw e
-      })
+    addSnackber?.('ホームページのレイアウトを変更しました')
+    await fetchCustomerSetting()
   }
 
   return {
     baseSections,
     editSections,
+    initialLoading,
     loading,
-    reset,
-    onChengeHomeLayouts,
-  }
-}
-
-export const useHomeLayoutTitleEdit = () => {
-  const {
-    customerSetting,
-    setCustomerSetting,
-    updateCustomerSetting,
-    fetchCustomerSetting,
-    loading,
-  } = useCustomerSetting()
-
-  const { addSnackber } = useSnackbars()
-
-  const homeLayouts = computed(() => customerSetting.value?.homeLayout ?? [])
-  const homeSections = ref<PageLayout[]>([])
-
-  const reset = () => {
-    if (!customerSetting.value) {
-      return
-    }
-    homeSections.value = homeLayouts.value.map<PageLayout>((s) => ({ ...s }))
-  }
-
-  watch(
-    customerSetting,
-    () => {
-      reset()
-    },
-    {
-      immediate: true,
-    }
-  )
-
-  const onUpdateTitles = async (sections: PageLayout[]) => {
-    if (!customerSetting.value) {
-      return
-    }
-    const updateData: CustomerSetting = {
-      ...customerSetting.value,
-      homeLayout: sections,
-    }
-    setCustomerSetting(updateData)
-    await updateCustomerSetting(updateData)
-      .then(() => {
-        addSnackber?.('メニュータイトルを変更しました。')
-        return fetchCustomerSetting()
-      })
-      .catch((e: Error) => {
-        throw e
-      })
-  }
-
-  return {
-    homeSections,
-    loading,
-    onUpdateTitles,
+    init,
+    chengeHomeLayouts,
   }
 }
 
@@ -226,36 +270,36 @@ export const useThemeSettingsEdit = () => {
     { immediate: true }
   )
 
-  const onChengeDesignTheme = async (designTheme: DesignTheme | null) => {
+  const initialLoading = ref(false)
+  const init = async () => {
+    try {
+      initialLoading.value = true
+      await fetchCustomerSetting()
+    } finally {
+      initialLoading.value = false
+    }
+  }
+
+  const chengeDesignTheme = async (designTheme: DesignTheme | null) => {
     if (!customerSetting.value || !designTheme) {
       return
     }
     const updateData = { ...customerSetting.value, designTheme }
     setCustomerSetting(updateData)
     await updateCustomerSetting(updateData)
-      .then(() => {
-        addSnackber?.('デザインテーマを更新しました。')
-        return fetchCustomerSetting()
-      })
-      .catch((e: Error) => {
-        throw e
-      })
+    addSnackber?.('デザインテーマを更新しました。')
+    await fetchCustomerSetting()
   }
 
-  const onChengeColorTheme = async (colorTheme: ColorTheme | null) => {
+  const chengeColorTheme = async (colorTheme: ColorTheme | null) => {
     if (!customerSetting.value || !colorTheme) {
       return
     }
     const updateData = { ...customerSetting.value, colorTheme }
     setCustomerSetting(updateData)
     await updateCustomerSetting(updateData)
-      .then(() => {
-        addSnackber?.('カラーテーマを更新しました。')
-        return fetchCustomerSetting()
-      })
-      .catch((e: Error) => {
-        throw e
-      })
+    addSnackber?.('カラーテーマを更新しました。')
+    await fetchCustomerSetting()
   }
 
   const DesignThemeOptions: {
@@ -278,9 +322,11 @@ export const useThemeSettingsEdit = () => {
     editColorTheme,
     DesignThemeOptions,
     colorThemeOptions,
+    initialLoading,
     loading,
-    onChengeDesignTheme,
-    onChengeColorTheme,
+    init,
+    chengeDesignTheme,
+    chengeColorTheme,
   }
 }
 
@@ -289,7 +335,7 @@ export const useThemeSettingsEdit = () => {
  */
 export const useCustomerSnsLinks = () => {
   const { customerSetting } = useCustomerSetting()
-  const snsLinks = computed<NetworkServiceink[]>(
+  const snsLinks = computed<NetworkServiceLink[]>(
     () => customerSetting.value?.snsLinks ?? []
   )
   const getSnsTitle = (serviceName: string) => {
@@ -327,7 +373,7 @@ export const useCustomerSnsLinks = () => {
       case 'instagram':
         return '#dd2a7b'
       case 'twitter':
-        return 'black'
+        return '#1D96EA'
       case 'youtube':
         return 'red'
       default:
@@ -392,7 +438,7 @@ export const useCustomerSnsLinksForm = () => {
   }
 }
 
-export const useCustomerSnsLinksUpdate = () => {
+export const useCustomerSnsLinksActions = () => {
   const {
     customerSetting,
     updateCustomerSetting,
@@ -401,11 +447,18 @@ export const useCustomerSnsLinksUpdate = () => {
   } = useCustomerSetting()
   const { addSnackber } = useSnackbars()
 
+  const fetch = async () => {
+    if (!customerSetting.value || !customerSetting.value.customerId) {
+      return
+    }
+    await fetchCustomerSetting()
+  }
+
   const update = async (form: SnsLinksForm) => {
     if (!customerSetting.value || !customerSetting.value.id) {
       return
     }
-    const links: NetworkServiceink[] = []
+    const links: NetworkServiceLink[] = []
     if (form.facebook) {
       links.push({ serviceName: 'facebook', url: form.facebook })
     }
@@ -430,6 +483,7 @@ export const useCustomerSnsLinksUpdate = () => {
   return {
     customerSetting,
     loading,
+    fetch,
     update,
   }
 }

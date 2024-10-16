@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { CustomerUserForm } from '@/types/customer-user'
 import type { CustomerForm } from '@/types/customer'
+import type { SnsLinksForm } from '@/types/customer-setting'
 
 type OperationMode = 'display' | 'edit'
-const userOperationMode = ref<OperationMode>('display')
-const customerOperationMode = ref<OperationMode>('display')
 
 // ユーザ情報
+const userOperationMode = ref<OperationMode>('display')
 const { authUser } = useCustomerPageContext()
 const {
   customerUserRef,
@@ -28,6 +28,7 @@ const onUpdateUser = async (userForm: CustomerUserForm) => {
 }
 
 // 顧客情報
+const customerOperationMode = ref<OperationMode>('display')
 const {
   fetch: fetchCustomer,
   customer,
@@ -40,17 +41,40 @@ const onUpdateCUstomer = async (customerForm: CustomerForm) => {
   customerOperationMode.value = 'display'
 }
 
-watch(
-  authUser,
-  async (user) => {
-    if (user?.id) {
-      await Promise.all([fetchCustomer(), fetchUser(user.id)])
+// SNS リンク設定情報
+const snsLinksOperationMode = ref<OperationMode>('display')
+const {
+  fetch: fetchCustomerSetting,
+  update: updateSnsLinks,
+  customerSetting,
+  loading: loadingCustomerSetting,
+} = useCustomerSnsLinksActions()
+
+const onUpdateCUstomerSnsLinks = async (snsLinksForm: SnsLinksForm) => {
+  await updateSnsLinks(snsLinksForm)
+  snsLinksOperationMode.value = 'display'
+}
+
+onMounted(() => {
+  // Note:
+  // fetch すると Server と client で Hydration Error が生じるので
+  // onMounted で watch して fetch すること
+  watch(
+    authUser,
+    async (user) => {
+      if (user?.id) {
+        await Promise.all([
+          fetchCustomer(),
+          fetchUser(user.id),
+          fetchCustomerSetting(),
+        ])
+      }
+    },
+    {
+      immediate: true,
     }
-  },
-  {
-    immediate: true,
-  }
-)
+  )
+})
 </script>
 
 <template>
@@ -103,6 +127,32 @@ watch(
           :loading="loadingCustomer"
           @update="onUpdateCUstomer"
           @cancel="customerOperationMode = 'display'"
+        />
+      </div>
+    </CommonContentCard>
+
+    <CommonContentCard class="mt-12">
+      <div v-if="snsLinksOperationMode === 'display'" class="customer-info">
+        <div class="header">
+          <p><v-icon icon="mdi-link" /></p>
+          <h3>テナント SNS ページ URL</h3>
+        </div>
+        <ManageCustomerProfileSnsLinksDisplay
+          :customer-setting="customerSetting"
+          :loading="loadingCustomerSetting"
+          @edit="snsLinksOperationMode = 'edit'"
+        />
+      </div>
+      <div v-else-if="snsLinksOperationMode === 'edit'" class="customer-info">
+        <div class="header">
+          <p><v-icon icon="mdi-domain" /></p>
+          <h3>テナント SNS ページ URL 編集</h3>
+        </div>
+        <ManageCustomerProfileSnsLinksForm
+          :customer-setting="customerSetting"
+          :loading="loadingCustomerSetting"
+          @update="onUpdateCUstomerSnsLinks"
+          @cancel="snsLinksOperationMode = 'display'"
         />
       </div>
     </CommonContentCard>

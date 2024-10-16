@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const modal = defineModel<boolean>('modal', { required: true })
+const settingModal = defineModel<boolean>('modal', { required: true })
 
 const titleData = {
   title: 'テーマ設定',
@@ -12,17 +12,26 @@ const {
   editColorTheme,
   DesignThemeOptions,
   colorThemeOptions,
-  onChengeDesignTheme,
-  onChengeColorTheme,
+  initialLoading,
+  init,
+  chengeDesignTheme,
+  chengeColorTheme,
 } = useThemeSettingsEdit()
+
+watch(settingModal, async () => {
+  if (settingModal.value) {
+    await init()
+  }
+})
 </script>
 
 <template>
   <CommonModalDialog
-    v-model:modal="modal"
+    v-model:modal="settingModal"
     :title="titleData.title"
     :title-icon="titleData.titleIcon"
     :title-icon-color="titleData.titleColor"
+    :loading="initialLoading"
   >
     <div class="theme-setting">
       <section>
@@ -31,7 +40,7 @@ const {
           <v-radio-group
             :model-value="editColorTheme"
             inline
-            @update:model-value="onChengeColorTheme($event)"
+            @update:model-value="chengeColorTheme($event)"
           >
             <v-radio
               v-for="ct in colorThemeOptions"
@@ -52,7 +61,7 @@ const {
             :model-value="editDesignTheme"
             inline
             disabled
-            @update:model-value="onChengeDesignTheme($event)"
+            @update:model-value="chengeDesignTheme($event)"
           >
             <v-radio
               v-for="st in DesignThemeOptions"

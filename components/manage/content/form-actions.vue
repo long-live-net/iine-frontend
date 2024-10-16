@@ -25,7 +25,7 @@ const onRemove = () => {
         v-if="contentId"
         prepend-icon="mdi-delete"
         color="error"
-        variant="outlined"
+        variant="flat"
         stacked
         @click="onRemove"
       >
@@ -69,7 +69,7 @@ const onRemove = () => {
         v-if="contentId"
         prepend-icon="mdi-delete"
         color="error"
-        variant="outlined"
+        variant="flat"
         width="8rem"
         @click="onRemove"
       >
