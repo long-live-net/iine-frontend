@@ -11,6 +11,15 @@ import type {
   SnsLinksForm,
 } from '@/types/customer-setting'
 
+export const pageFontFamily: { [key: string]: string } = {
+  notoSansJp: '"Noto Sans JP", "sans-serif"',
+  zenKakuGothic: '"Zen Kaku Gothic New", "sans-serif"',
+  notoSerifJp: '"Noto Serif JP", "serif"',
+  zenOldMincho: '"Zen Old Mincho", "serif"',
+  mPlusRounded1c: '"M PLUS Rounded 1c", "sans-serif"',
+  zenMaruGothic: '"Zen Maru Gothic", "sans-serif"',
+}
+
 /**
  * 顧客情報
  */

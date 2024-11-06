@@ -23,7 +23,7 @@ await onLoad()
         :settings="contactRef?.image?.settings"
         class="eyecatcher"
       >
-        <CommonEyecatchTitles
+        <CommonEyecatchTitle
           place="section"
           :title="contactRef?.title"
           :subtitle="contactRef?.subtitle"

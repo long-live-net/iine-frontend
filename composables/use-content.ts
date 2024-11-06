@@ -1,4 +1,8 @@
-export { useContentRead, useContentWrite } from './use-content/use-base-content'
+export {
+  useContentInit,
+  useContentRead,
+  useContentWrite,
+} from './use-content/use-base-content'
 
 export { useEyecatchActions } from './use-content/use-eyecatch'
 export { useEyecatchForm } from './use-content/use-eyecatch-form'

@@ -50,7 +50,7 @@ await onLoad(contentId)
           :settings="serviceRef?.image?.settings"
           class="eyecatcher"
         >
-          <CommonEyecatchTitles
+          <CommonEyecatchTitle
             place="section"
             :title="serviceRef?.title"
             :title-background-tranparent="0.6"

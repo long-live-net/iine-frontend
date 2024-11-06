@@ -35,7 +35,7 @@ await onLoad(contentId)
           :settings="newsRef?.image?.settings"
           class="eyecatcher"
         >
-          <CommonEyecatchTitles
+          <CommonEyecatchTitle
             place="section"
             :title="newsRef?.title"
             :title-background-tranparent="0.6"

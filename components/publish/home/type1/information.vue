@@ -22,7 +22,7 @@ await onLoad()
         :settings="informationRef?.image?.settings"
         class="eyecatcher"
       >
-        <CommonEyecatchTitles
+        <CommonEyecatchTitle
           place="section"
           :title="informationRef?.title"
           :subtitle="informationRef?.subtitle"
