@@ -23,43 +23,42 @@ await onLoad()
         :settings="informationRef?.image?.settings"
         class="eyecatcher"
       >
-        <CommonEyecatchTitleSettingPositionFrame
-          :settings="informationRef?.titleSettings"
-          :can-edit="canEdit"
-          class="g-block-lg"
-          @update="onUpdateTitleSetting"
-        >
-          <template #default>
-            <CommonEyecatchTitle
-              place="section"
-              :title="informationRef?.title"
-              :subtitle="informationRef?.subtitle"
-              :settings="informationRef?.titleSettings"
-              text-no-wrap
-            />
-          </template>
-          <template #sideSettings>
-            <CommonEyecatchTitleSetting
-              :settings="informationRef?.titleSettings"
-              @update="onUpdateTitleSetting"
-            />
-          </template>
-          <template v-if="informationRef?.subtitle" #topSettings>
-            <CommonEyecatchTitleSettingAlign
-              :settings="informationRef?.titleSettings"
-              @update="onUpdateTitleSetting"
-            />
-          </template>
-        </CommonEyecatchTitleSettingPositionFrame>
-        <div
-          v-if="canEdit && informationRef?.image?.settings"
-          class="image-settings"
-        >
+        <template #default>
+          <CommonEyecatchTitleSettingPositionFrame
+            :settings="informationRef?.titleSettings"
+            :can-edit="canEdit"
+            class="g-block-lg"
+            @update="onUpdateTitleSetting"
+          >
+            <template #default>
+              <CommonEyecatchTitle
+                place="section"
+                :title="informationRef?.title"
+                :subtitle="informationRef?.subtitle"
+                :settings="informationRef?.titleSettings"
+                text-no-wrap
+              />
+            </template>
+            <template #sideSettings>
+              <CommonEyecatchTitleSetting
+                :settings="informationRef?.titleSettings"
+                @update="onUpdateTitleSetting"
+              />
+            </template>
+            <template v-if="informationRef?.subtitle" #topSettings>
+              <CommonEyecatchTitleSettingAlign
+                :settings="informationRef?.titleSettings"
+                @update="onUpdateTitleSetting"
+              />
+            </template>
+          </CommonEyecatchTitleSettingPositionFrame>
+        </template>
+        <template v-if="canEdit && informationRef?.image?.settings" #settings>
           <ManageContentImageSetting
             :settings="informationRef.image.settings"
             @update="onUpdateImageSetting"
           />
-        </div>
+        </template>
       </CommonEyecatchImage>
       <CommonContentCardTitle
         :title="informationRef?.title ?? ''"
@@ -120,39 +119,26 @@ await onLoad()
       color: $accent;
     }
   }
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    &__body {
+      padding-top: 0;
+    }
+  }
 }
 
 $eyecatcher-height: 480px;
 $eyecatcher-height-sm: 300px;
 
 .eyecatcher {
-  position: relative;
   height: 30vh;
   max-height: $eyecatcher-height;
   min-height: calc($eyecatcher-height * 0.7);
 
-  .image-settings {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-  }
-}
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .type1-information {
-    &__body {
-      padding-top: 0;
-    }
-  }
-
-  .eyecatcher {
+  @media only screen and (max-width: $grid-breakpoint-md) {
     height: 50vw;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
-
-    .image-settings {
-      bottom: 0.5rem;
-      right: 0.5rem;
-    }
   }
 }
 </style>

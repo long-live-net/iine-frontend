@@ -28,16 +28,39 @@ const bkImage = computed(() => `url(${props.url.length ? props.url : noImage})`)
 <template>
   <div class="eyecatch-image" :class="{ circle: circle, round: round }">
     <slot />
+    <div v-if="$slots.settings" class="settings">
+      <slot name="settings" />
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .eyecatch-image {
+  position: relative;
   background-repeat: no-repeat;
   background-image: v-bind('bkImage');
   background-size: v-bind('settings.lgSize');
   background-position: v-bind('settings.lgPosition');
   background-attachment: v-bind('settings.lgParallax');
+
+  .settings {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+@media only screen and (max-width: $grid-breakpoint-md) {
+  .eyecatch-image {
+    background-size: v-bind('settings.smSize');
+    background-position: v-bind('settings.smPosition');
+    background-attachment: v-bind('settings.smParallax');
+
+    .settings {
+      bottom: 0.5rem;
+      right: 0.5rem;
+    }
+  }
 }
 
 .circle {
@@ -48,13 +71,5 @@ const bkImage = computed(() => `url(${props.url.length ? props.url : noImage})`)
 .round {
   border-radius: 12px;
   overflow: hidden;
-}
-
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .eyecatch-image {
-    background-size: v-bind('settings.smSize');
-    background-position: v-bind('settings.smPosition');
-    background-attachment: v-bind('settings.smParallax');
-  }
 }
 </style>

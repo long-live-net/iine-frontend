@@ -36,36 +36,35 @@ await onLoad(contentId)
           :settings="newsRef?.image?.settings"
           class="eyecatcher"
         >
-          <CommonEyecatchTitleSettingPositionFrame
-            :settings="newsRef?.titleSettings"
-            :can-edit="canEdit"
-            class="g-block-lg"
-            @update="onUpdateTitleSetting"
-          >
-            <template #default>
-              <CommonEyecatchTitle
-                place="section"
-                :title="newsRef?.title"
-                :settings="newsRef?.titleSettings"
-                text-no-wrap
-              />
-            </template>
-            <template #sideSettings>
-              <CommonEyecatchTitleSetting
-                :settings="newsRef?.titleSettings"
-                @update="onUpdateTitleSetting"
-              />
-            </template>
-          </CommonEyecatchTitleSettingPositionFrame>
-          <div
-            v-if="canEdit && newsRef?.image?.settings"
-            class="image-settings"
-          >
+          <template #default>
+            <CommonEyecatchTitleSettingPositionFrame
+              :settings="newsRef?.titleSettings"
+              :can-edit="canEdit"
+              class="g-block-lg"
+              @update="onUpdateTitleSetting"
+            >
+              <template #default>
+                <CommonEyecatchTitle
+                  place="section"
+                  :title="newsRef?.title"
+                  :settings="newsRef?.titleSettings"
+                  text-no-wrap
+                />
+              </template>
+              <template #sideSettings>
+                <CommonEyecatchTitleSetting
+                  :settings="newsRef?.titleSettings"
+                  @update="onUpdateTitleSetting"
+                />
+              </template>
+            </CommonEyecatchTitleSettingPositionFrame>
+          </template>
+          <template v-if="canEdit && newsRef?.image?.settings" #settings>
             <ManageContentImageSetting
               :settings="newsRef.image.settings"
               @update="onUpdateImageSetting"
             />
-          </div>
+          </template>
         </CommonEyecatchImage>
         <CommonContentCardTitle
           v-else
@@ -159,15 +158,14 @@ $eyecatcher-height: 480px;
 $eyecatcher-height-sm: 300px;
 
 .eyecatcher {
-  position: relative;
   height: 30vh;
   max-height: $eyecatcher-height;
   min-height: calc($eyecatcher-height * 0.6);
 
-  .image-settings {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    height: 30vw;
+    max-height: $eyecatcher-height-sm;
+    min-height: calc($eyecatcher-height-sm * 0.5);
   }
 }
 
@@ -175,22 +173,5 @@ $eyecatcher-height-sm: 300px;
   display: flex;
   justify-content: space-between;
   margin: 1rem 1.5rem;
-}
-
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .eyecatcher {
-    height: 30vw;
-    max-height: $eyecatcher-height-sm;
-    min-height: calc($eyecatcher-height-sm * 0.5);
-
-    .image-settings {
-      bottom: 0.2rem;
-      right: 0.5rem;
-    }
-  }
-
-  .nav-pre-next-link {
-    margin-bottom: 1.5rem;
-  }
 }
 </style>

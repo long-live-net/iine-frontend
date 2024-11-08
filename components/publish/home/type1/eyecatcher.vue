@@ -25,42 +25,41 @@ await onLoad()
       :settings="eyecatchRef?.image?.settings"
       class="eyecatcher"
     >
-      <CommonEyecatchTitleSettingPositionFrame
-        :settings="eyecatchRef?.titleSettings"
-        :can-edit="canEdit"
-        @update="onUpdateTitleSetting"
-      >
-        <template #default>
-          <CommonEyecatchTitle
-            place="top"
-            :title="eyecatchRef?.title"
-            :subtitle="eyecatchRef?.subtitle"
-            :settings="eyecatchRef?.titleSettings"
-            text-no-wrap
-          />
-        </template>
-        <template #sideSettings>
-          <CommonEyecatchTitleSetting
-            :settings="eyecatchRef?.titleSettings"
-            @update="onUpdateTitleSetting"
-          />
-        </template>
-        <template v-if="eyecatchRef?.subtitle" #topSettings>
-          <CommonEyecatchTitleSettingAlign
-            :settings="eyecatchRef?.titleSettings"
-            @update="onUpdateTitleSetting"
-          />
-        </template>
-      </CommonEyecatchTitleSettingPositionFrame>
-      <div
-        v-if="canEdit && eyecatchRef?.image?.settings"
-        class="image-settings"
-      >
+      <template #default>
+        <CommonEyecatchTitleSettingPositionFrame
+          :settings="eyecatchRef?.titleSettings"
+          :can-edit="canEdit"
+          @update="onUpdateTitleSetting"
+        >
+          <template #default>
+            <CommonEyecatchTitle
+              place="top"
+              :title="eyecatchRef?.title"
+              :subtitle="eyecatchRef?.subtitle"
+              :settings="eyecatchRef?.titleSettings"
+              text-no-wrap
+            />
+          </template>
+          <template #sideSettings>
+            <CommonEyecatchTitleSetting
+              :settings="eyecatchRef?.titleSettings"
+              @update="onUpdateTitleSetting"
+            />
+          </template>
+          <template v-if="eyecatchRef?.subtitle" #topSettings>
+            <CommonEyecatchTitleSettingAlign
+              :settings="eyecatchRef?.titleSettings"
+              @update="onUpdateTitleSetting"
+            />
+          </template>
+        </CommonEyecatchTitleSettingPositionFrame>
+      </template>
+      <template v-if="canEdit && eyecatchRef?.image?.settings" #settings>
         <ManageContentImageSetting
           :settings="eyecatchRef.image.settings"
           @update="onUpdateImageSetting"
         />
-      </div>
+      </template>
     </CommonEyecatchImage>
     <div v-if="canEdit" class="edit-activator">
       <ManageContentEyecatcher
@@ -91,26 +90,12 @@ await onLoad()
 }
 
 .eyecatcher {
-  position: relative;
   height: 100vh;
   min-height: 400px;
 
-  .image-settings {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-  }
-}
-
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .eyecatcher {
+  @media only screen and (max-width: $grid-breakpoint-md) {
     height: 75vh;
     min-height: auto;
-
-    .image-settings {
-      bottom: 0.5rem;
-      right: 0.5rem;
-    }
   }
 }
 </style>
