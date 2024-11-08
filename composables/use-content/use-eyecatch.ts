@@ -1,13 +1,20 @@
-import type { EyecatchType, EyecatchForm, ImageSettings } from '@/types/content'
+import type {
+  EyecatchType,
+  EyecatchForm,
+  TitleSettings,
+  ImageSettings,
+} from '@/types/content'
 import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/API/content-api'
 
 const apiKind = 'eyecatches'
 export const getEyecatchKind = () => apiKind
 
 const useEyecatchContent = (customerId: Ref<number | null>) => {
+  const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
     get,
+    setTitleSettings,
     setImageSettings,
     contentDataRef,
     loadingRef: readLoading,
@@ -16,8 +23,8 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     create,
     update,
     remove,
+    updateTitleSettingsWithDebounced,
     updateImageSettingsWithDebounced,
-    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<EyecatchSaveApi, EyecatchGetApi>(customerId, apiKind)
 
@@ -30,13 +37,20 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
           customerId: apiData.customerId,
           title: apiData.title,
           subtitle: apiData.subtitle,
+          titleSettings: {
+            ...getDefaultTitleSettings(),
+            ...(apiData.titleSettings ? apiData.titleSettings : {}),
+          },
           image: {
             url: apiData.image.url,
             name: apiData.image.name ?? 'dummy_name',
             type:
               apiData.image.type ??
               getFileTypeByExtention(getFileExtension(apiData.image.url)),
-            settings: apiData.image.settings,
+            settings: {
+              ...getDefaultImageSettings(),
+              ...(apiData.image.settings ? apiData.image.settings : {}),
+            },
           },
         }
       : null
@@ -50,11 +64,15 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     customerId: customerId.value ?? 0,
     title: formData.title,
     subtitle: formData.subtitle,
+    titleSettings: formData.titleSettings,
     image: {
       url: formData.image,
       name: formData.imageName,
       type: formData.imageType,
-      settings: formData.imageSettings ?? getDefaultImageSettings(),
+      settings: {
+        ...getDefaultImageSettings(),
+        ...(formData.imageSettings ? formData.imageSettings : {}),
+      },
     },
   })
 
@@ -75,10 +93,22 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     return apitypeToEyecatchType(data ?? null)
   }
 
-  const setEyecatchImageSettings = (settings: Partial<ImageSettings>) => {
-    if (!eyecatchRef.value) return
-    if (!eyecatchRef.value.image?.settings) return
+  const setEyecatchTitleSettings = (settings: Partial<TitleSettings>) => {
+    if (!eyecatchRef.value?.titleSettings) {
+      return
+    }
+    const newSettings: TitleSettings = {
+      ...eyecatchRef.value.titleSettings,
+      ...settings,
+    }
+    setTitleSettings(newSettings)
+    return newSettings
+  }
 
+  const setEyecatchImageSettings = (settings: Partial<ImageSettings>) => {
+    if (!eyecatchRef.value?.image?.settings) {
+      return
+    }
     const newSettings: ImageSettings = {
       ...eyecatchRef.value.image.settings,
       ...settings,
@@ -93,7 +123,9 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     createEyecatch,
     updateEyecatch,
     removeEyecatch: remove,
+    setEyecatchTitleSettings,
     setEyecatchImageSettings,
+    updateEyecatchTitleSettings: updateTitleSettingsWithDebounced,
     updateEyecatchImageSettings: updateImageSettingsWithDebounced,
     eyecatchRef,
     loading,
@@ -108,10 +140,12 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
   const {
     loadEyecatch,
     getEyecatch,
-    setEyecatchImageSettings,
     createEyecatch,
     updateEyecatch,
     removeEyecatch,
+    setEyecatchTitleSettings,
+    updateEyecatchTitleSettings,
+    setEyecatchImageSettings,
     updateEyecatchImageSettings,
     eyecatchRef,
     loading,
@@ -149,14 +183,29 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
     await getEyecatch()
   }
 
+  const onUpdateTitleSetting = (
+    settings: Partial<TitleSettings>
+  ): TitleSettings | undefined => {
+    if (!eyecatchRef.value?.id) {
+      return
+    }
+    const newSettings = setEyecatchTitleSettings(settings)
+    if (!newSettings) {
+      return
+    }
+    updateEyecatchTitleSettings(eyecatchRef.value.id, newSettings)
+  }
+
   const onUpdateImageSetting = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
-    if (!eyecatchRef.value?.id) return
-
+    if (!eyecatchRef.value?.id) {
+      return
+    }
     const newSettings = setEyecatchImageSettings(settings)
-    if (!newSettings) return
-
+    if (!newSettings) {
+      return
+    }
     updateEyecatchImageSettings(eyecatchRef.value.id, newSettings)
   }
 
@@ -166,6 +215,7 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
     onCreate,
     onUpdate,
     onRemove,
+    onUpdateTitleSetting,
     onUpdateImageSetting,
     loading,
   }

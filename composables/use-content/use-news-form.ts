@@ -1,7 +1,9 @@
+import { cloneDeep } from 'es-toolkit'
 import { useForm, useField } from 'vee-validate'
 import type { NewsType, NewsForm } from '@/types/content'
 
 export const useNewsForm = () => {
+  const { getDefaultTitleSettings } = useContentInit()
   const { required, noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
 
   const newsFormSchema = {
@@ -10,6 +12,7 @@ export const useNewsForm = () => {
       if (!maxLength(v, 40)) return '40文字以内で入力してください'
       return true
     },
+    titleSettings: () => true,
     category: (v: string | null) => noBlank(v) || 'カテゴリを入力してください',
     publishOn: (v: Date | null) => required(v) || '公開日を入力してください',
     body: (v: string | undefined) => {
@@ -23,6 +26,7 @@ export const useNewsForm = () => {
   }
   const newsFormInitial: NewsForm = {
     title: '',
+    titleSettings: getDefaultTitleSettings(),
     category: null,
     publishOn: null,
     body: '',
@@ -39,6 +43,7 @@ export const useNewsForm = () => {
 
   const formData = {
     title: useField<NewsForm['title']>('title'),
+    titleSettings: useField<NewsForm['titleSettings']>('titleSettings'),
     category: useField<NewsForm['category']>('category'),
     publishOn: useField<NewsForm['publishOn']>('publishOn'),
     body: useField<NewsForm['body']>('body'),
@@ -51,13 +56,16 @@ export const useNewsForm = () => {
   const resetNewsForm = (newsData?: NewsType | null) => {
     if (!newsData) return
     formData.title.value.value = newsData.title ?? ''
+    formData.titleSettings.value.value = cloneDeep(newsData.titleSettings)
     formData.category.value.value = newsData.category ?? null
     formData.publishOn.value.value = newsData.publishOn ?? null
     formData.body.value.value = newsData.body ?? ''
     formData.image.value.value = newsData.image?.url ?? ''
     formData.imageName.value.value = newsData.image?.name ?? ''
     formData.imageType.value.value = newsData.image?.type ?? ''
-    formData.imageSettings.value.value = newsData.image?.settings ?? null
+    formData.imageSettings.value.value = newsData.image?.settings
+      ? cloneDeep(newsData.image.settings)
+      : null
   }
 
   return {

@@ -1,3 +1,4 @@
+import { cloneDeep } from 'es-toolkit'
 import { useForm, useField } from 'vee-validate'
 import type { ContactType, ContactForm } from '@/types/content'
 
@@ -5,6 +6,7 @@ import type { ContactType, ContactForm } from '@/types/content'
  * contact Form
  */
 export const useContactForm = () => {
+  const { getDefaultTitleSettings } = useContentInit()
   const { noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
 
   const contactFormSchema = {
@@ -15,6 +17,7 @@ export const useContactForm = () => {
     },
     subtitle: (v: string | undefined) =>
       maxLength(v, 50) || '50文字以内で入力してください',
+    titleSettings: () => true,
     body: (v: string | undefined) => {
       if (!noBlankForWysiwyg(v)) return '本文を入力してください'
       return true
@@ -27,6 +30,7 @@ export const useContactForm = () => {
   const contactFormInitial: ContactForm = {
     title: '',
     subtitle: '',
+    titleSettings: getDefaultTitleSettings(),
     body: '',
     image: '',
     imageName: '',
@@ -42,6 +46,7 @@ export const useContactForm = () => {
   const formData = {
     title: useField<ContactForm['title']>('title'),
     subtitle: useField<ContactForm['subtitle']>('subtitle'),
+    titleSettings: useField<ContactForm['titleSettings']>('titleSettings'),
     body: useField<ContactForm['body']>('body'),
     image: useField<ContactForm['image']>('image'),
     imageName: useField<ContactForm['imageName']>('imageName'),
@@ -53,11 +58,14 @@ export const useContactForm = () => {
     if (!contactData) return
     formData.title.value.value = contactData.title ?? ''
     formData.subtitle.value.value = contactData.subtitle ?? ''
+    formData.titleSettings.value.value = cloneDeep(contactData.titleSettings)
     formData.body.value.value = contactData.body ?? ''
     formData.image.value.value = contactData.image?.url ?? ''
     formData.imageName.value.value = contactData.image?.name ?? ''
     formData.imageType.value.value = contactData.image?.type ?? ''
-    formData.imageSettings.value.value = contactData.image?.settings ?? null
+    formData.imageSettings.value.value = contactData.image?.settings
+      ? cloneDeep(contactData.image.settings)
+      : null
   }
 
   return {

@@ -1,6 +1,7 @@
 import type {
   InformationType,
   InformationForm,
+  TitleSettings,
   ImageSettings,
 } from '@/types/content'
 import type {
@@ -12,9 +13,11 @@ const apiKind = 'informations'
 export const getInformationKind = () => apiKind
 
 const useInformationContent = (customerId: Ref<number | null>) => {
+  const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
     get,
+    setTitleSettings,
     setImageSettings,
     contentDataRef,
     loadingRef: readLoading,
@@ -23,8 +26,8 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     create,
     update,
     remove,
+    updateTitleSettingsWithDebounced,
     updateImageSettingsWithDebounced,
-    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<InformationSaveApi, InformationGetApi>(
     customerId,
@@ -40,6 +43,10 @@ const useInformationContent = (customerId: Ref<number | null>) => {
           customerId: apiData.customerId,
           title: apiData.title,
           subtitle: apiData.subtitle,
+          titleSettings: {
+            ...getDefaultTitleSettings(),
+            ...(apiData.titleSettings ? apiData.titleSettings : {}),
+          },
           body: apiData.body,
           ...(apiData.image
             ? {
@@ -67,6 +74,7 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     customerId: customerId.value ?? 0,
     title: formData.title,
     subtitle: formData.subtitle,
+    titleSettings: formData.titleSettings,
     body: formData.body,
     ...(formData.image && formData.imageName && formData.imageType
       ? {
@@ -97,12 +105,24 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     return apitypeToInformationType(data ?? null)
   }
 
+  const setInformationTitleSettings = (settings: Partial<TitleSettings>) => {
+    if (!informationRef.value?.titleSettings) {
+      return
+    }
+    const newSettings: TitleSettings = {
+      ...informationRef.value.titleSettings,
+      ...settings,
+    }
+    setTitleSettings(newSettings)
+    return newSettings
+  }
+
   const setInformationImageSettings = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
-    if (!informationRef.value) return
-    if (!informationRef.value.image?.settings) return
-
+    if (!informationRef.value?.image?.settings) {
+      return
+    }
     const newSettings: ImageSettings = {
       ...informationRef.value.image.settings,
       ...settings,
@@ -111,21 +131,16 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     return newSettings
   }
 
-  const updateInformationImageSettings = (
-    contentId: number,
-    imageSettings: ImageSettings
-  ) => {
-    updateImageSettingsWithDebounced(contentId, imageSettings)
-  }
-
   return {
     loadInformation: loadData,
     getInformation: get,
     createInformation,
     updateInformation,
     removeInformation: remove,
+    setInformationTitleSettings,
     setInformationImageSettings,
-    updateInformationImageSettings,
+    updateInformationTitleSettings: updateTitleSettingsWithDebounced,
+    updateInformationImageSettings: updateImageSettingsWithDebounced,
     informationRef,
     loading,
   }
@@ -139,10 +154,12 @@ export const useInformationActions = (customerId: Ref<number | null>) => {
   const {
     loadInformation,
     getInformation,
-    setInformationImageSettings,
     createInformation,
     updateInformation,
     removeInformation,
+    setInformationTitleSettings,
+    updateInformationTitleSettings,
+    setInformationImageSettings,
     updateInformationImageSettings,
     informationRef,
     loading,
@@ -180,11 +197,27 @@ export const useInformationActions = (customerId: Ref<number | null>) => {
     getInformation()
   }
 
-  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
-    if (!informationRef.value?.id) return
+  const onUpdateTitleSetting = (
+    settings: Partial<TitleSettings>
+  ): TitleSettings | undefined => {
+    if (!informationRef.value?.id) {
+      return
+    }
+    const newSettings = setInformationTitleSettings(settings)
+    if (!newSettings) {
+      return
+    }
+    updateInformationTitleSettings(informationRef.value.id, newSettings)
+  }
 
+  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
+    if (!informationRef.value?.id) {
+      return
+    }
     const newSettings = setInformationImageSettings(settings)
-    if (!newSettings) return
+    if (!newSettings) {
+      return
+    }
 
     updateInformationImageSettings(informationRef.value.id, newSettings)
   }
@@ -195,6 +228,7 @@ export const useInformationActions = (customerId: Ref<number | null>) => {
     onCreate,
     onUpdate,
     onRemove,
+    onUpdateTitleSetting,
     onUpdateImageSetting,
     loading,
   }

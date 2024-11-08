@@ -1,3 +1,4 @@
+import { cloneDeep } from 'es-toolkit'
 import type { MenuImageForm, MenuImageType } from '@/types/content'
 import { useField, useForm } from 'vee-validate'
 
@@ -5,6 +6,7 @@ import { useField, useForm } from 'vee-validate'
  * menuImage Form
  */
 export const useMenuImageForm = () => {
+  const { getDefaultTitleSettings } = useContentInit()
   const { noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
 
   const menuImageFormSchema = {
@@ -13,6 +15,7 @@ export const useMenuImageForm = () => {
       if (!maxLength(v, 40)) return '40文字以内で入力してください'
       return true
     },
+    titleSettings: () => true,
     caption: (v: string | undefined) => {
       if (!noBlankForWysiwyg(v)) return '紹介文を入力してください'
       if (!maxLength(v, 400)) return '400文字以内で入力してください'
@@ -31,6 +34,7 @@ export const useMenuImageForm = () => {
   }
   const menuImageFormInitial: MenuImageForm = {
     title: '',
+    titleSettings: getDefaultTitleSettings(),
     caption: '',
     image: '',
     imageName: '',
@@ -49,6 +53,7 @@ export const useMenuImageForm = () => {
 
   const formData = {
     title: useField<MenuImageForm['title']>('title'),
+    titleSettings: useField<MenuImageForm['titleSettings']>('titleSettings'),
     caption: useField<MenuImageForm['caption']>('caption'),
     image: useField<MenuImageForm['image']>('image'),
     imageName: useField<MenuImageForm['imageName']>('imageName'),
@@ -63,11 +68,14 @@ export const useMenuImageForm = () => {
   const resetMenuImageForm = (menuImageData?: MenuImageType | null) => {
     if (!menuImageData) return
     formData.title.value.value = menuImageData.title ?? ''
+    formData.titleSettings.value.value = cloneDeep(menuImageData.titleSettings)
     formData.caption.value.value = menuImageData.caption ?? ''
     formData.image.value.value = menuImageData.image?.url ?? ''
     formData.imageName.value.value = menuImageData.image?.name ?? ''
     formData.imageType.value.value = menuImageData.image?.type ?? ''
-    formData.imageSettings.value.value = menuImageData.image?.settings ?? null
+    formData.imageSettings.value.value = menuImageData.image?.settings
+      ? cloneDeep(menuImageData.image.settings)
+      : null
     formData.position.value.value = menuImageData.position ?? 0
     formData.menuImageUrl.value.value = menuImageData.menuImage.url ?? ''
     formData.menuImageName.value.value = menuImageData.menuImage.name ?? ''

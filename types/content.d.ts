@@ -1,6 +1,18 @@
 import type { NewsCategory2Label } from '@/types/news-category'
 
 /**
+ * Title Settings
+ */
+export type TextAlignValue = 'left' | 'center' | 'right'
+export interface TitleSettings {
+  fontFamily: string
+  color: string
+  bgColor: string
+  position: string
+  align: TextAlignValue
+}
+
+/**
  * Image Data Types
  */
 export interface ImageSettings {
@@ -30,6 +42,7 @@ export interface ContentType {
   customerId?: number
   title: string
   subtitle?: string
+  titleSettings: TitleSettings
   body?: string
   image?: ImageData
   tags?: string[]
@@ -68,6 +81,7 @@ export interface ContentForm {
   id?: number
   title: string
   subtitle?: string
+  titleSettings: TitleSettings
   body?: string
   image?: string
   imageName?: string

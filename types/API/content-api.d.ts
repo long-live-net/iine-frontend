@@ -1,4 +1,5 @@
 import type {
+  TitleSettings,
   ImageData,
   MenuImageData,
   ContentPreNextId,
@@ -15,6 +16,7 @@ export interface ContentGetApi {
   customerId: number
   title: string
   subtitle?: string
+  titleSettings?: TitleSettings
   body?: string
   image?: ImageData
 }
@@ -52,6 +54,7 @@ export type ContentSaveApi = {
   customerId: number
   title: string
   subtitle?: string
+  titleSettings: TitleSettings
   body?: string
   image?: ImageData
 }

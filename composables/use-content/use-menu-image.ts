@@ -16,6 +16,7 @@ const apiKind = 'menu-images'
 export const getMenuImageKind = () => apiKind
 
 const useMenuImageContent = (customerId: Ref<number | null>) => {
+  const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
     loadList,
@@ -32,8 +33,6 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
     update,
     remove,
     updatePositions,
-    updateImageSettingsWithDebounced,
-    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<MenuImageSaveApi, MenuImageGetApi>(customerId, apiKind)
 
@@ -45,6 +44,10 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
           id: apiData.id,
           customerId: apiData.customerId,
           title: apiData.title,
+          titleSettings: {
+            ...getDefaultTitleSettings(),
+            ...(apiData.titleSettings ? apiData.titleSettings : {}),
+          },
           caption: apiData.caption,
           image: {
             url: apiData.image.url,
@@ -82,6 +85,7 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
   ): MenuImageSaveApi => ({
     customerId: customerId.value ?? 0,
     title: formData.title,
+    titleSettings: formData.titleSettings,
     caption: formData.caption,
     body: formData.body,
     position: formData.position,
@@ -130,12 +134,11 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
     setMenuImage: set,
     getMenuImage: get,
     getMenuImageList: getList,
-    setMenuImageListPositions,
     createMenuImage,
     updateMenuImage,
     removeMenuImage: remove,
-    updateMenuImageImageSettings: updateImageSettingsWithDebounced,
     updateMenuImageListPositions: updatePositions,
+    setMenuImageListPositions,
     menuImageRef,
     menuImageListRef,
     menuImageTotalRef,
