@@ -1,6 +1,7 @@
 import type {
   ServiceForm,
   ServiceType,
+  TitleSettings,
   ImageSettings,
   ContentPosition,
 } from '@/types/content'
@@ -17,12 +18,14 @@ const apiKind = 'services'
 export const getServiceKind = () => apiKind
 
 const useServiceContent = (customerId: Ref<number | null>) => {
+  const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
     loadList,
     set,
     get,
     getList,
+    setTitleSettings,
     setImageSettings,
     setListPositions,
     contentDataRef,
@@ -34,8 +37,8 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     update,
     remove,
     updatePositions,
+    updateTitleSettingsWithDebounced,
     updateImageSettingsWithDebounced,
-    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<ServiceSaveApi, ServiceGetApi>(customerId, apiKind)
 
@@ -47,6 +50,10 @@ const useServiceContent = (customerId: Ref<number | null>) => {
           id: apiData.id,
           customerId: apiData.customerId,
           title: apiData.title,
+          titleSettings: {
+            ...getDefaultTitleSettings(),
+            ...(apiData.titleSettings ? apiData.titleSettings : {}),
+          },
           caption: apiData.caption,
           body: apiData.body,
           image: {
@@ -78,6 +85,7 @@ const useServiceContent = (customerId: Ref<number | null>) => {
   const formToServiceSaveApi = (formData: ServiceForm): ServiceSaveApi => ({
     customerId: customerId.value ?? 0,
     title: formData.title,
+    titleSettings: formData.titleSettings,
     caption: formData.caption,
     body: formData.body,
     position: formData.position,
@@ -106,12 +114,24 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     return apitypeToServiceType(data ?? null)
   }
 
+  const setServiceTitleSettings = (settings: Partial<TitleSettings>) => {
+    if (!serviceRef.value?.titleSettings) {
+      return
+    }
+    const newSettings: TitleSettings = {
+      ...serviceRef.value.titleSettings,
+      ...settings,
+    }
+    setTitleSettings(newSettings)
+    return newSettings
+  }
+
   const setServiceImageSettings = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
-    if (!serviceRef.value) return
-    if (!serviceRef.value.image?.settings) return
-
+    if (!serviceRef.value?.image?.settings) {
+      return
+    }
     const newSettings: ImageSettings = {
       ...serviceRef.value.image.settings,
       ...settings,
@@ -141,9 +161,11 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     createService,
     updateService,
     removeService: remove,
+    setServiceTitleSettings,
     setServiceImageSettings,
-    updateServiceImageSettings: updateImageSettingsWithDebounced,
     updateServiceListPositions: updatePositions,
+    updateServiceTitleSettings: updateTitleSettingsWithDebounced,
+    updateServiceImageSettings: updateImageSettingsWithDebounced,
     serviceRef,
     serviceListRef,
     serviceTotalRef,
@@ -235,6 +257,8 @@ export const useServiceActions = (customerId: Ref<number | null>) => {
     createService,
     updateService,
     removeService,
+    setServiceTitleSettings,
+    updateServiceTitleSettings,
     setServiceImageSettings,
     updateServiceImageSettings,
     serviceRef,
@@ -273,6 +297,19 @@ export const useServiceActions = (customerId: Ref<number | null>) => {
     await getService()
   }
 
+  const onUpdateTitleSetting = (
+    settings: Partial<TitleSettings>
+  ): TitleSettings | undefined => {
+    if (!serviceRef.value?.id) {
+      return
+    }
+    const newSettings = setServiceTitleSettings(settings)
+    if (!newSettings) {
+      return
+    }
+    updateServiceTitleSettings(serviceRef.value.id, newSettings)
+  }
+
   const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
     if (!serviceRef.value?.id) return
 
@@ -289,6 +326,7 @@ export const useServiceActions = (customerId: Ref<number | null>) => {
     onCreate,
     onUpdate,
     onRemove,
+    onUpdateTitleSetting,
     onUpdateImageSetting,
   }
 }

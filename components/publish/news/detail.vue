@@ -11,6 +11,7 @@ const {
   onCreate,
   onUpdate,
   onRemove,
+  onUpdateTitleSetting,
   onUpdateImageSetting,
 } = useNewsActions(customerId)
 
@@ -35,12 +36,27 @@ await onLoad(contentId)
           :settings="newsRef?.image?.settings"
           class="eyecatcher"
         >
-          <CommonEyecatchTitle
-            place="section"
-            :title="newsRef?.title"
-            :title-background-tranparent="0.6"
-            class="g-block-lg eyecatcher__titles"
-          />
+          <CommonEyecatchTitleSettingPositionFrame
+            :settings="newsRef?.titleSettings"
+            :can-edit="canEdit"
+            class="g-block-lg"
+            @update="onUpdateTitleSetting"
+          >
+            <template #default>
+              <CommonEyecatchTitle
+                place="section"
+                :title="newsRef?.title"
+                :settings="newsRef?.titleSettings"
+                text-no-wrap
+              />
+            </template>
+            <template #sideSettings>
+              <CommonEyecatchTitleSetting
+                :settings="newsRef?.titleSettings"
+                @update="onUpdateTitleSetting"
+              />
+            </template>
+          </CommonEyecatchTitleSettingPositionFrame>
           <div
             v-if="canEdit && newsRef?.image?.settings"
             class="image-settings"
@@ -107,11 +123,6 @@ await onLoad(contentId)
 <style scoped lang="scss">
 .news-detail {
   position: relative;
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
   &__body {
     padding-top: 0;
     padding-bottom: 3rem;
@@ -124,16 +135,19 @@ await onLoad(contentId)
       margin-top: 1.4rem;
     }
   }
+
   .edit-activator {
     position: absolute;
     top: 1rem;
     right: 1rem;
   }
+
   .no-items {
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 1rem;
+
     p {
       font-weight: bold;
       color: $accent;
@@ -149,11 +163,7 @@ $eyecatcher-height-sm: 300px;
   height: 30vh;
   max-height: $eyecatcher-height;
   min-height: calc($eyecatcher-height * 0.6);
-  &__titles {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-  }
+
   .image-settings {
     position: absolute;
     bottom: 1rem;
@@ -172,11 +182,13 @@ $eyecatcher-height-sm: 300px;
     height: 30vw;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
+
     .image-settings {
       bottom: 0.2rem;
       right: 0.5rem;
     }
   }
+
   .nav-pre-next-link {
     margin-bottom: 1.5rem;
   }

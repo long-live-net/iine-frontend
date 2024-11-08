@@ -28,6 +28,7 @@ const fontFamily = computed(() => props.settings?.fontFamily ?? 'inherit')
 const isNeedTransform = computed(() =>
   /M PLUS Rounded 1c/.test(props.settings?.fontFamily ?? '')
 )
+const titleAlign = computed(() => props.settings?.align ?? 'left')
 </script>
 
 <template>
@@ -55,12 +56,14 @@ const isNeedTransform = computed(() =>
   color: v-bind('titleColor') !important;
   background-color: v-bind('titleBgColor');
   font-family: v-bind('fontFamily');
+  border-radius: 0.75rem;
 
   h2,
   p {
     padding: 0;
     margin: 0;
     max-width: 100%;
+    text-align: v-bind('titleAlign');
   }
 
   .text-no-wrap {

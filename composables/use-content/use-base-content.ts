@@ -11,12 +11,48 @@ import type {
   ContentPositionApi,
 } from '@/types/API/content-api'
 
+export const useContentUtils = () => {
+  const positionStringToValues = (
+    positionString?: string | null
+  ): { x: number; y: number } => {
+    if (!positionString) {
+      return { x: 50, y: 50 }
+    }
+    const ret = positionString.match(
+      /^(?<posx>[\d]+\.?[\d]*)%\s+(?<posy>[\d]+\.?[\d]*)%$/
+    )
+    const x = ret?.groups?.posx ? parseInt(ret.groups.posx) : 50
+    const y = ret?.groups?.posy ? parseInt(ret.groups.posy) : 50
+    return { x, y }
+  }
+
+  const positionValuesToString = (x: number, y: number): string => `${x}% ${y}%`
+
+  const colorStringToUiColor = (colorString?: string | null): string => {
+    if (!colorString) {
+      return '#FFFFFF84'
+    }
+    return colorString === 'transparent'
+      ? '#FFFFFF84'
+      : /^#[\dabcdef]{8}$/i.test(colorString)
+        ? colorString.slice(0, 7)
+        : colorString
+  }
+
+  return {
+    positionStringToValues,
+    positionValuesToString,
+    colorStringToUiColor,
+  }
+}
+
 export const useContentInit = () => {
   const getDefaultTitleSettings = (): TitleSettings => ({
     fontFamily: 'inherit',
     color: '#FFFFFF',
     bgColor: 'transparent',
     position: '50% 50%',
+    align: 'left',
   })
 
   const getDefaultImageSettings = (): ImageSettings => ({
@@ -33,34 +69,6 @@ export const useContentInit = () => {
     getDefaultImageSettings,
   }
 }
-
-export const positionStringToValues = (
-  positionString?: string | null
-): { x: number; y: number } => {
-  if (!positionString) {
-    return { x: 50, y: 50 }
-  }
-  const ret = positionString.match(
-    /^(?<posx>[\d]+\.?[\d]*)%\s+(?<posy>[\d]+\.?[\d]*)%$/
-  )
-  const x = ret?.groups?.posx ? parseInt(ret.groups.posx) : 50
-  const y = ret?.groups?.posy ? parseInt(ret.groups.posy) : 50
-  return { x, y }
-}
-
-export const colorStringToValues = (colorString?: string | null): string => {
-  if (!colorString) {
-    return ''
-  }
-  return colorString === 'transparent'
-    ? ''
-    : /^#[\dabcdef]{8}$/i.test(colorString)
-      ? colorString.slice(0, 7)
-      : colorString
-}
-
-export const positionValuesToString = (x: number, y: number): string =>
-  `${x}% ${y}%`
 
 export const useContentRead = <T extends ContentGetApi>(
   customerId: Ref<number | null>,

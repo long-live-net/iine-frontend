@@ -1,13 +1,20 @@
-import type { ContactType, ContactForm, ImageSettings } from '@/types/content'
+import type {
+  ContactType,
+  ContactForm,
+  TitleSettings,
+  ImageSettings,
+} from '@/types/content'
 import type { ContactGetApi, ContactSaveApi } from '@/types/API/content-api'
 
 const apiKind = 'contacts'
 export const getContactKind = () => apiKind
 
 const useContactContent = (customerId: Ref<number | null>) => {
+  const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
     get,
+    setTitleSettings,
     setImageSettings,
     contentDataRef,
     loadingRef: readLoading,
@@ -16,8 +23,8 @@ const useContactContent = (customerId: Ref<number | null>) => {
     create,
     update,
     remove,
+    updateTitleSettingsWithDebounced,
     updateImageSettingsWithDebounced,
-    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<ContactSaveApi, ContactGetApi>(customerId, apiKind)
 
@@ -30,6 +37,10 @@ const useContactContent = (customerId: Ref<number | null>) => {
           customerId: apiData.customerId,
           title: apiData.title,
           subtitle: apiData.subtitle,
+          titleSettings: {
+            ...getDefaultTitleSettings(),
+            ...(apiData.titleSettings ? apiData.titleSettings : {}),
+          },
           body: apiData.body,
           ...(apiData.image
             ? {
@@ -55,6 +66,7 @@ const useContactContent = (customerId: Ref<number | null>) => {
     customerId: customerId.value ?? 0,
     title: formData.title,
     subtitle: formData.subtitle,
+    titleSettings: formData.titleSettings,
     body: formData.body,
     ...(formData.image && formData.imageName && formData.imageType
       ? {
@@ -85,12 +97,24 @@ const useContactContent = (customerId: Ref<number | null>) => {
     return apitypeToContactType(data ?? null)
   }
 
+  const setContactTitleSettings = (settings: Partial<TitleSettings>) => {
+    if (!contactRef.value?.titleSettings) {
+      return
+    }
+    const newSettings: TitleSettings = {
+      ...contactRef.value.titleSettings,
+      ...settings,
+    }
+    setTitleSettings(newSettings)
+    return newSettings
+  }
+
   const setContactImageSettings = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
-    if (!contactRef.value) return
-    if (!contactRef.value.image?.settings) return
-
+    if (!contactRef.value?.image?.settings) {
+      return
+    }
     const newSettings: ImageSettings = {
       ...contactRef.value.image.settings,
       ...settings,
@@ -99,21 +123,16 @@ const useContactContent = (customerId: Ref<number | null>) => {
     return newSettings
   }
 
-  const updateContactImageSettings = (
-    contentId: number,
-    imageSettings: ImageSettings
-  ) => {
-    updateImageSettingsWithDebounced(contentId, imageSettings)
-  }
-
   return {
     loadContact: loadData,
     getContact: get,
     createContact,
     updateContact,
     removeContact: remove,
+    setContactTitleSettings,
     setContactImageSettings,
-    updateContactImageSettings,
+    updateContactTitleSettings: updateTitleSettingsWithDebounced,
+    updateContactImageSettings: updateImageSettingsWithDebounced,
     contactRef,
     loading,
   }
@@ -127,10 +146,12 @@ export const useContactActions = (customerId: Ref<number | null>) => {
   const {
     loadContact,
     getContact,
-    setContactImageSettings,
     createContact,
     updateContact,
     removeContact,
+    setContactTitleSettings,
+    updateContactTitleSettings,
+    setContactImageSettings,
     updateContactImageSettings,
     contactRef,
     loading,
@@ -168,12 +189,27 @@ export const useContactActions = (customerId: Ref<number | null>) => {
     await getContact()
   }
 
+  const onUpdateTitleSetting = (
+    settings: Partial<TitleSettings>
+  ): TitleSettings | undefined => {
+    if (!contactRef.value?.id) {
+      return
+    }
+    const newSettings = setContactTitleSettings(settings)
+    if (!newSettings) {
+      return
+    }
+    updateContactTitleSettings(contactRef.value.id, newSettings)
+  }
+
   const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
-    if (!contactRef.value?.id) return
-
+    if (!contactRef.value?.id) {
+      return
+    }
     const newSettings = setContactImageSettings(settings)
-    if (!newSettings) return
-
+    if (!newSettings) {
+      return
+    }
     updateContactImageSettings(contactRef.value.id, newSettings)
   }
 
@@ -183,6 +219,7 @@ export const useContactActions = (customerId: Ref<number | null>) => {
     onCreate,
     onUpdate,
     onRemove,
+    onUpdateTitleSetting,
     onUpdateImageSetting,
     loading,
   }

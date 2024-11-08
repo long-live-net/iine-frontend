@@ -11,7 +11,7 @@ import type {
   SnsLinksForm,
 } from '@/types/customer-setting'
 
-export const pageFontFamily: { [key: string]: string } = {
+export const pageFontFamilies: { [key: string]: string } = {
   notoSansJp: '"Noto Sans JP", "sans-serif"',
   zenKakuGothic: '"Zen Kaku Gothic New", "sans-serif"',
   notoSerifJp: '"Noto Serif JP", "serif"',

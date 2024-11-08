@@ -25,12 +25,10 @@ await onLoad()
       :settings="eyecatchRef?.image?.settings"
       class="eyecatcher"
     >
-      <CommonContentItemMovable
-        :position-string="eyecatchRef?.titleSettings?.position"
+      <CommonEyecatchTitleSettingPositionFrame
+        :settings="eyecatchRef?.titleSettings"
         :can-edit="canEdit"
-        @update:position-string="
-          onUpdateTitleSetting({ position: $event ?? '' })
-        "
+        @update="onUpdateTitleSetting"
       >
         <template #default>
           <CommonEyecatchTitle
@@ -41,13 +39,19 @@ await onLoad()
             text-no-wrap
           />
         </template>
-        <template #setting>
+        <template #sideSettings>
           <CommonEyecatchTitleSetting
             :settings="eyecatchRef?.titleSettings"
             @update="onUpdateTitleSetting"
           />
         </template>
-      </CommonContentItemMovable>
+        <template v-if="eyecatchRef?.subtitle" #topSettings>
+          <CommonEyecatchTitleSettingAlign
+            :settings="eyecatchRef?.titleSettings"
+            @update="onUpdateTitleSetting"
+          />
+        </template>
+      </CommonEyecatchTitleSettingPositionFrame>
       <div
         v-if="canEdit && eyecatchRef?.image?.settings"
         class="image-settings"

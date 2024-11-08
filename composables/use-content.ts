@@ -1,4 +1,5 @@
 export {
+  useContentUtils,
   useContentInit,
   useContentRead,
   useContentWrite,

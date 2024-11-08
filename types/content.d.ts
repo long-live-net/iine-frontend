@@ -3,11 +3,13 @@ import type { NewsCategory2Label } from '@/types/news-category'
 /**
  * Title Settings
  */
+export type TextAlignValue = 'left' | 'center' | 'right'
 export interface TitleSettings {
   fontFamily: string
   color: string
   bgColor: string
   position: string
+  align: TextAlignValue
 }
 
 /**

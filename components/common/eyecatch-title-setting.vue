@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { TitleSettings } from '@/types/content'
-import { positionStringToValues } from '@/composables/use-content/use-base-content'
 
 const props = defineProps<{ settings?: TitleSettings | null }>()
 const emit = defineEmits<{
@@ -8,7 +7,9 @@ const emit = defineEmits<{
 }>()
 
 const subMenuLocation = computed(() => {
-  const posx = positionStringToValues(props.settings?.position).x
+  const posx = useContentUtils().positionStringToValues(
+    props.settings?.position
+  ).x
   if (posx > 50) {
     return 'left'
   } else {
@@ -43,23 +44,23 @@ const bgColor = computed<string>({
 </script>
 
 <template>
-  <div>
+  <div @mousedown.stop>
     <div>
-      <CommonMenuFontSelector
+      <BaseFontSelectorMenu
         v-model:font-family="fontFamily"
         activater-label="フォント"
         :location="subMenuLocation"
       />
     </div>
     <div>
-      <CommonMenuColorPicker
+      <BaseColorPickerMenu
         v-model:color="txColor"
         activater-label="文字色"
         :location="subMenuLocation"
       />
     </div>
     <div>
-      <CommonMenuColorPicker
+      <BaseColorPickerMenu
         v-model:color="bgColor"
         activater-label="背景色"
         :location="subMenuLocation"

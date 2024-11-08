@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { debounce } from 'es-toolkit'
-import {
-  positionStringToValues,
-  positionValuesToString,
-} from '@/composables/use-content/use-base-content'
 
-const positionString = defineModel<string | null | undefined>('positionString')
+const position = defineModel<{ x: number; y: number }>('position', {
+  required: true,
+})
 const props = withDefaults(defineProps<{ canEdit?: boolean }>(), {
   canEdit: false,
 })
@@ -19,16 +17,14 @@ const offsetY = ref(0)
 const positionX = ref(50)
 const positionY = ref(50)
 watch(
-  () => positionString,
+  position,
   () => {
-    if (positionString.value) {
-      const pos = positionStringToValues(positionString.value)
-      positionX.value = pos.x
-      positionY.value = pos.y
-    }
+    positionX.value = position.value.x
+    positionY.value = position.value.y
   },
   {
     immediate: true,
+    deep: true,
   }
 )
 
@@ -64,55 +60,68 @@ onBeforeUnmount(() => {
 })
 
 const onMouseDown = (event: MouseEvent) => {
-  if (!isDragging.value && props.canEdit) {
-    startX.value = event.pageX
-    startY.value = event.pageY
-    isDragging.value = true
+  if (!props.canEdit) {
+    return
   }
+  if (isDragging.value) {
+    return
+  }
+  startX.value = event.pageX
+  startY.value = event.pageY
+  isDragging.value = true
 }
 const onMouseUp = () => {
-  if (isDragging.value && props.canEdit) {
-    positionX.value += getPercentOfWidth(offsetX.value)
-    positionY.value += getPercentOfHeight(offsetY.value)
-    offsetX.value = 0
-    offsetY.value = 0
-    positionString.value = positionValuesToString(
-      positionX.value,
-      positionY.value
-    )
+  if (!props.canEdit) {
+    return
+  }
+  if (!isDragging.value) {
+    return
   }
   isDragging.value = false
+
+  if (offsetX.value === 0 && offsetY.value == 0) {
+    return
+  }
+  positionX.value += getPercentOfWidth(offsetX.value)
+  positionY.value += getPercentOfHeight(offsetY.value)
+  offsetX.value = 0
+  offsetY.value = 0
+  position.value = {
+    x: positionX.value,
+    y: positionY.value,
+  }
 }
 const onMouseLeave = () => {
-  if (isDragging.value && props.canEdit) {
-    positionX.value += getPercentOfWidth(offsetX.value)
-    positionY.value += getPercentOfHeight(offsetY.value)
-    offsetX.value = 0
-    offsetY.value = 0
-    positionString.value = positionValuesToString(
-      positionX.value,
-      positionY.value
-    )
+  if (!props.canEdit) {
+    return
+  }
+  if (!isDragging.value) {
+    return
   }
   isDragging.value = false
+
+  if (offsetX.value === 0 && offsetY.value == 0) {
+    return
+  }
+  positionX.value += getPercentOfWidth(offsetX.value)
+  positionY.value += getPercentOfHeight(offsetY.value)
+  offsetX.value = 0
+  offsetY.value = 0
+  position.value = {
+    x: positionX.value,
+    y: positionY.value,
+  }
 }
 const onMouseMove = (event: MouseEvent) => {
-  if (isDragging.value && props.canEdit) {
-    offsetX.value = event.pageX - startX.value
-    offsetY.value = event.pageY - startY.value
+  if (!props.canEdit) {
+    return
   }
+  if (!isDragging.value) {
+    return
+  }
+  offsetX.value = event.pageX - startX.value
+  offsetY.value = event.pageY - startY.value
 }
-
-const settingsLeft = computed(() => {
-  if (positionX.value > 50) {
-    return '-3.5rem'
-  } else {
-    return 'auto'
-  }
-})
-const settingsRight = computed(() =>
-  settingsLeft.value === 'auto' ? '-3.5rem' : 'auto'
-)
 </script>
 
 <template>
@@ -122,13 +131,13 @@ const settingsRight = computed(() =>
     @mousemove="onMouseMove"
     @mouseleave="onMouseLeave"
   >
-    <div class="item-dragable" @mousedown="onMouseDown" @mouseup="onMouseUp">
-      <div class="item-container" :class="{ 'can-edit': canEdit }">
-        <slot />
-        <div v-if="canEdit" class="item-container__settings">
-          <slot name="setting" />
-        </div>
-      </div>
+    <div
+      class="item-dragable"
+      :class="{ 'can-edit': canEdit }"
+      @mousedown="onMouseDown"
+      @mouseup="onMouseUp"
+    >
+      <slot />
     </div>
   </div>
 </template>
@@ -144,23 +153,12 @@ const settingsRight = computed(() =>
     top: calc(v-bind('`${positionY}% + ${offsetY}px`'));
     left: calc(v-bind('`${positionX}% + ${offsetX}px`'));
     transform: translate(-50%, -50%);
+  }
 
-    .item-container {
-      position: relative;
-
-      &__settings {
-        position: absolute;
-        top: -0.5rem;
-        left: v-bind('settingsLeft');
-        right: v-bind('settingsRight');
-      }
-    }
-
-    .can-edit {
-      border: 0.25rem dashed lightgrey;
-      border-radius: 1rem;
-      cursor: v-bind('columnCursor');
-    }
+  .can-edit {
+    border: 0.25rem dashed lightgrey;
+    border-radius: 1rem;
+    cursor: v-bind('columnCursor');
   }
 }
 </style>

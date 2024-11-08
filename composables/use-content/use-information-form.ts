@@ -1,3 +1,4 @@
+import { cloneDeep } from 'es-toolkit'
 import { useForm, useField } from 'vee-validate'
 import type { InformationType, InformationForm } from '@/types/content'
 
@@ -5,6 +6,7 @@ import type { InformationType, InformationForm } from '@/types/content'
  * Information Form
  */
 export const useInformationForm = () => {
+  const { getDefaultTitleSettings } = useContentInit()
   const { noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
 
   const informationFormSchema = {
@@ -15,6 +17,7 @@ export const useInformationForm = () => {
     },
     subtitle: (v: string | undefined) =>
       maxLength(v, 50) || '50文字以内で入力してください',
+    titleSettings: () => true,
     body: (v: string | undefined) => {
       if (!noBlankForWysiwyg(v)) return '本文を入力してください'
       return true
@@ -27,6 +30,7 @@ export const useInformationForm = () => {
   const informationFormInitial: InformationForm = {
     title: '',
     subtitle: '',
+    titleSettings: getDefaultTitleSettings(),
     body: '',
     image: '',
     imageName: '',
@@ -42,6 +46,7 @@ export const useInformationForm = () => {
   const formData = {
     title: useField<InformationForm['title']>('title'),
     subtitle: useField<InformationForm['subtitle']>('subtitle'),
+    titleSettings: useField<InformationForm['titleSettings']>('titleSettings'),
     body: useField<InformationForm['body']>('body'),
     image: useField<InformationForm['image']>('image'),
     imageName: useField<InformationForm['imageName']>('imageName'),
@@ -53,11 +58,16 @@ export const useInformationForm = () => {
     if (!informationData) return
     formData.title.value.value = informationData.title ?? ''
     formData.subtitle.value.value = informationData.subtitle ?? ''
+    formData.titleSettings.value.value = cloneDeep(
+      informationData.titleSettings
+    )
     formData.body.value.value = informationData.body ?? ''
     formData.image.value.value = informationData.image?.url ?? ''
     formData.imageName.value.value = informationData.image?.name ?? ''
     formData.imageType.value.value = informationData.image?.type ?? ''
-    formData.imageSettings.value.value = informationData.image?.settings ?? null
+    formData.imageSettings.value.value = informationData.image?.settings
+      ? cloneDeep(informationData.image.settings)
+      : null
   }
 
   return {

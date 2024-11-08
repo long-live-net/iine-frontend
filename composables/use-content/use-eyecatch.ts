@@ -94,7 +94,7 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
   }
 
   const setEyecatchTitleSettings = (settings: Partial<TitleSettings>) => {
-    if (!eyecatchRef.value) {
+    if (!eyecatchRef.value?.titleSettings) {
       return
     }
     const newSettings: TitleSettings = {
@@ -124,8 +124,8 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     updateEyecatch,
     removeEyecatch: remove,
     setEyecatchTitleSettings,
-    updateEyecatchTitleSettings: updateTitleSettingsWithDebounced,
     setEyecatchImageSettings,
+    updateEyecatchTitleSettings: updateTitleSettingsWithDebounced,
     updateEyecatchImageSettings: updateImageSettingsWithDebounced,
     eyecatchRef,
     loading,

@@ -8,6 +8,7 @@ const {
   onCreate,
   onUpdate,
   onRemove,
+  onUpdateTitleSetting,
   onUpdateImageSetting,
   loading,
 } = useContactActions(customerId)
@@ -23,13 +24,34 @@ await onLoad()
         :settings="contactRef?.image?.settings"
         class="eyecatcher"
       >
-        <CommonEyecatchTitle
-          place="section"
-          :title="contactRef?.title"
-          :subtitle="contactRef?.subtitle"
-          text-no-wrap
-          class="g-block-lg eyecatcher__titles"
-        />
+        <CommonEyecatchTitleSettingPositionFrame
+          :settings="contactRef?.titleSettings"
+          :can-edit="canEdit"
+          class="g-block-lg"
+          @update="onUpdateTitleSetting"
+        >
+          <template #default>
+            <CommonEyecatchTitle
+              place="section"
+              :title="contactRef?.title"
+              :subtitle="contactRef?.subtitle"
+              :settings="contactRef?.titleSettings"
+              text-no-wrap
+            />
+          </template>
+          <template #sideSettings>
+            <CommonEyecatchTitleSetting
+              :settings="contactRef?.titleSettings"
+              @update="onUpdateTitleSetting"
+            />
+          </template>
+          <template v-if="contactRef?.subtitle" #topSettings>
+            <CommonEyecatchTitleSettingAlign
+              :settings="contactRef?.titleSettings"
+              @update="onUpdateTitleSetting"
+            />
+          </template>
+        </CommonEyecatchTitleSettingPositionFrame>
         <div
           v-if="canEdit && contactRef?.image?.settings"
           class="image-settings"
@@ -77,15 +99,18 @@ await onLoad()
 <style scoped lang="scss">
 .type1-contact {
   position: relative;
+
   .edit-activator {
     position: absolute;
     top: 1rem;
     right: 1rem;
   }
+
   .inquire-activator {
     margin-top: 1.5rem;
     text-align: center;
   }
+
   &__service-links {
     display: flex;
     justify-content: flex-end;
@@ -99,11 +124,13 @@ await onLoad()
   &__body {
     padding-top: 0.5rem;
   }
+
   .no-items {
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 1rem;
+
     p {
       font-weight: bold;
       color: $accent;
@@ -119,11 +146,7 @@ $eyecatcher-height-sm: 300px;
   height: 30vh;
   max-height: $eyecatcher-height;
   min-height: calc($eyecatcher-height * 0.7);
-  &__titles {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-  }
+
   .image-settings {
     position: absolute;
     bottom: 1rem;
@@ -136,6 +159,7 @@ $eyecatcher-height-sm: 300px;
     height: 50vw;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
+
     .image-settings {
       bottom: 0.5rem;
       right: 0.5rem;

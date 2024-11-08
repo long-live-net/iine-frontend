@@ -11,14 +11,14 @@ const {
   onLoad,
   onUpdate,
   onRemove,
+  onUpdateTitleSetting,
   onUpdateImageSetting,
 } = useServiceActions(customerId)
 
-const bodyPlainString = computed(() => {
-  const plainString =
+const bodyPlainString = computed(
+  () =>
     serviceRef.value?.body?.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') ?? ''
-  return plainString
-})
+)
 
 const onUpdateData = async (params: { id: number; formData: ServiceForm }) => {
   await onUpdate(params)
@@ -50,12 +50,27 @@ await onLoad(contentId)
           :settings="serviceRef?.image?.settings"
           class="eyecatcher"
         >
-          <CommonEyecatchTitle
-            place="section"
-            :title="serviceRef?.title"
-            :title-background-tranparent="0.6"
-            class="g-block-lg eyecatcher__titles"
-          />
+          <CommonEyecatchTitleSettingPositionFrame
+            :settings="serviceRef?.titleSettings"
+            :can-edit="canEdit"
+            class="g-block-lg"
+            @update="onUpdateTitleSetting"
+          >
+            <template #default>
+              <CommonEyecatchTitle
+                place="section"
+                :title="serviceRef?.title"
+                :settings="serviceRef?.titleSettings"
+                text-no-wrap
+              />
+            </template>
+            <template #sideSettings>
+              <CommonEyecatchTitleSetting
+                :settings="serviceRef?.titleSettings"
+                @update="onUpdateTitleSetting"
+              />
+            </template>
+          </CommonEyecatchTitleSettingPositionFrame>
           <div
             v-if="canEdit && serviceRef?.image?.settings"
             class="image-settings"
@@ -101,16 +116,19 @@ await onLoad(contentId)
 <style scoped lang="scss">
 .service-detail {
   position: relative;
+
   .edit-activator {
     position: absolute;
     top: 1rem;
     right: 1rem;
   }
+
   .no-items {
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 1rem;
+
     p {
       font-weight: bold;
       color: $accent;
@@ -126,11 +144,7 @@ $eyecatcher-height-sm: 300px;
   height: 30vh;
   max-height: $eyecatcher-height;
   min-height: calc($eyecatcher-height * 0.6);
-  &__titles {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-  }
+
   .image-settings {
     position: absolute;
     bottom: 1rem;
@@ -143,11 +157,13 @@ $eyecatcher-height-sm: 300px;
     height: 30vw;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
+
     .image-settings {
       bottom: 0.2rem;
       right: 0.5rem;
     }
   }
+
   .nav-pre-next-link {
     margin-bottom: 1.5rem;
   }

@@ -1,6 +1,7 @@
 import type {
   NewsType,
   NewsForm,
+  TitleSettings,
   ImageSettings,
   ContentPreNextId,
 } from '@/types/content'
@@ -16,11 +17,13 @@ const apiKind = 'newses'
 export const getNewsKind = () => apiKind
 
 const useNewsContent = (customerId: Ref<number | null>) => {
+  const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
     loadList,
     get,
     getList,
+    setTitleSettings,
     setImageSettings,
     getPreNextId,
     contentDataRef,
@@ -32,8 +35,8 @@ const useNewsContent = (customerId: Ref<number | null>) => {
     create,
     update,
     remove,
+    updateTitleSettingsWithDebounced,
     updateImageSettingsWithDebounced,
-    getDefaultImageSettings,
     loadingRef: writeLoading,
   } = useContentWrite<NewsSaveApi, NewsGetApi>(customerId, apiKind)
 
@@ -43,6 +46,10 @@ const useNewsContent = (customerId: Ref<number | null>) => {
           id: apiData.id,
           customerId: apiData.customerId,
           title: apiData.title,
+          titleSettings: {
+            ...getDefaultTitleSettings(),
+            ...(apiData.titleSettings ? apiData.titleSettings : {}),
+          },
           category: apiData.category,
           publishOn: apiData.publishOn,
           body: apiData.body,
@@ -78,6 +85,7 @@ const useNewsContent = (customerId: Ref<number | null>) => {
   const formToNewsSaveApi = (formData: NewsForm): NewsSaveApi => ({
     customerId: customerId.value ?? 0,
     title: formData.title,
+    titleSettings: formData.titleSettings,
     category: formData.category ?? 'I',
     publishOn: formData.publishOn ?? localDate(),
     body: formData.body,
@@ -108,12 +116,24 @@ const useNewsContent = (customerId: Ref<number | null>) => {
     return apitypeToNewsType(data ?? null)
   }
 
+  const setNewsTitleSettings = (settings: Partial<TitleSettings>) => {
+    if (!newsRef.value?.titleSettings) {
+      return
+    }
+    const newSettings: TitleSettings = {
+      ...newsRef.value.titleSettings,
+      ...settings,
+    }
+    setTitleSettings(newSettings)
+    return newSettings
+  }
+
   const setNewsImageSettings = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
-    if (!newsRef.value) return
-    if (!newsRef.value.image?.settings) return
-
+    if (!newsRef.value?.image?.settings) {
+      return
+    }
     const newSettings: ImageSettings = {
       ...newsRef.value.image.settings,
       ...settings,
@@ -127,11 +147,13 @@ const useNewsContent = (customerId: Ref<number | null>) => {
     loadNewsList: loadList,
     getNews: get,
     getNewsList: getList,
-    setNewsImageSettings,
-    getNewsPreNextId: getPreNextId,
     createNews,
     updateNews,
     removeNews: remove,
+    setNewsTitleSettings,
+    setNewsImageSettings,
+    getNewsPreNextId: getPreNextId,
+    updateNewsTitleSettings: updateTitleSettingsWithDebounced,
     updateNewsImageSettings: updateImageSettingsWithDebounced,
     newsRef,
     newsListRef,
@@ -244,14 +266,16 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
   const {
     loadNews,
     getNews,
-    setNewsImageSettings,
-    getNewsPreNextId,
     createNews,
     updateNews,
     removeNews,
+    setNewsTitleSettings,
+    updateNewsTitleSettings,
+    setNewsImageSettings,
+    updateNewsImageSettings,
+    getNewsPreNextId,
     newsRef,
     newsPreNextIdRefRef,
-    updateNewsImageSettings,
     loading,
   } = useNewsContent(customerId)
 
@@ -290,12 +314,27 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     await getNews()
   }
 
+  const onUpdateTitleSetting = (
+    settings: Partial<TitleSettings>
+  ): TitleSettings | undefined => {
+    if (!newsRef.value?.id) {
+      return
+    }
+    const newSettings = setNewsTitleSettings(settings)
+    if (!newSettings) {
+      return
+    }
+    updateNewsTitleSettings(newsRef.value.id, newSettings)
+  }
+
   const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
-    if (!newsRef.value?.id) return
-
+    if (!newsRef.value?.id) {
+      return
+    }
     const newSettings = setNewsImageSettings(settings)
-    if (!newSettings) return
-
+    if (!newSettings) {
+      return
+    }
     updateNewsImageSettings(newsRef.value.id, newSettings)
   }
 
@@ -307,6 +346,7 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     onCreate,
     onUpdate,
     onRemove,
+    onUpdateTitleSetting,
     onUpdateImageSetting,
   }
 }
