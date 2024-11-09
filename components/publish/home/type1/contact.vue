@@ -55,7 +55,7 @@ await onLoad()
           </CommonEyecatchTitleSettingPositionFrame>
         </template>
         <template v-if="canEdit && contactRef" #settings>
-          <ManageContentImageSetting
+          <CommonEyecatchImageSetting
             :settings="contactRef.imageSettings"
             @update="onUpdateImageSetting"
           />
@@ -101,8 +101,8 @@ await onLoad()
 
   .edit-activator {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 0.5rem;
+    right: 0.5rem;
   }
 
   .inquire-activator {

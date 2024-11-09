@@ -55,7 +55,7 @@ await onLoad()
         </CommonEyecatchTitleSettingPositionFrame>
       </template>
       <template v-if="canEdit && eyecatchRef" #settings>
-        <ManageContentImageSetting
+        <CommonEyecatchImageSetting
           :settings="eyecatchRef.imageSettings"
           @update="onUpdateImageSetting"
         />
@@ -85,7 +85,7 @@ await onLoad()
   .edit-activator {
     position: absolute;
     top: 8.5rem;
-    right: 2rem;
+    right: 0.5rem;
   }
 }
 

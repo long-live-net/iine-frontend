@@ -158,42 +158,81 @@ const pySm = computed<number>({
     emit('update', { smPosition: positionSm })
   },
 })
+
+const settingMenu = ref(false)
 </script>
 
 <template>
-  <!-- Large画面 -->
-  <div class="image-setting g-block-lg">
-    <BaseImagePlacer
-      v-model:parallax="parallaxLg"
-      v-model:auto="autoLg"
-      v-model:size="sizeLg"
-      v-model:position-x="pxLg"
-      v-model:position-y="pyLg"
-    />
-  </div>
-  <!-- Small画面 -->
-  <div class="image-setting g-block-sm">
-    <BaseImagePlacer
-      v-model:parallax="parallaxSm"
-      v-model:auto="autoSm"
-      v-model:size="sizeSm"
-      v-model:position-x="pxSm"
-      v-model:position-y="pySm"
-    />
-  </div>
+  <v-menu
+    v-model="settingMenu"
+    location="bottom right"
+    :close-on-content-click="false"
+  >
+    <template #activator="{ props: menuProps }">
+      <v-btn
+        v-bind="menuProps"
+        color="success"
+        prepend-icon="mdi-image"
+        class="activator"
+        @click.stop
+      >
+        画像設定
+      </v-btn>
+    </template>
+    <div class="image-setting">
+      <!-- Large画面 -->
+      <BaseImagePlacer
+        v-model:parallax="parallaxLg"
+        v-model:auto="autoLg"
+        v-model:size="sizeLg"
+        v-model:position-x="pxLg"
+        v-model:position-y="pyLg"
+        class="g-block-lg"
+      />
+      <!-- Small画面 -->
+      <BaseImagePlacer
+        v-model:parallax="parallaxSm"
+        v-model:auto="autoSm"
+        v-model:size="sizeSm"
+        v-model:position-x="pxSm"
+        v-model:position-y="pySm"
+        class="g-block-sm"
+      />
+      <div class="actions">
+        <v-btn
+          size="small"
+          append-icon="mdi-close"
+          color="grey-darken-4"
+          @click.stop="settingMenu = false"
+          >閉じる</v-btn
+        >
+      </div>
+    </div>
+  </v-menu>
 </template>
 
 <style scoped lang="scss">
+.activator {
+  width: auto;
+  height: auto;
+  font-size: 15px;
+  padding: 0.4em 1em;
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    font-size: small;
+  }
+}
+
 .image-setting {
-  background-color: rgba(255, 255, 255, 0.6);
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(255, 255, 255);
   border-radius: 8px;
 }
-</style>
 
-<style deep lang="scss">
-.image-setting {
-  small {
-    color: $gray-darken3;
-  }
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-top: 0.5rem;
 }
 </style>

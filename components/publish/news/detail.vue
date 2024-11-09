@@ -60,7 +60,7 @@ await onLoad(contentId)
             </CommonEyecatchTitleSettingPositionFrame>
           </template>
           <template v-if="canEdit && newsRef" #settings>
-            <ManageContentImageSetting
+            <CommonEyecatchImageSetting
               :settings="newsRef.imageSettings"
               @update="onUpdateImageSetting"
             />
@@ -137,8 +137,8 @@ await onLoad(contentId)
 
   .edit-activator {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 0.5rem;
+    right: 0.5rem;
   }
 
   .no-items {
