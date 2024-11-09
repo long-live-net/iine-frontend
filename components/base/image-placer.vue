@@ -1,57 +1,17 @@
 <script setup lang="ts">
-const props = defineProps<{
-  parallax: boolean
-  auto: boolean
-  size: number
-  positionX: number
-  positionY: number
-}>()
-const emit = defineEmits<{
-  'update:parallax': [parallax: boolean]
-  'update:auto': [auto: boolean]
-  'update:size': [size: number]
-  'update:positionX': [positionX: number]
-  'update:positionY': [positionY: number]
-}>()
-
-const parallaxComp = computed<boolean>({
-  get: () => props.parallax,
-  set: (value) => {
-    emit('update:parallax', value)
-  },
-})
-const autoComp = computed<boolean>({
-  get: () => props.auto,
-  set: (value) => {
-    emit('update:auto', value)
-  },
-})
-const sizeComp = computed<number>({
-  get: () => props.size,
-  set: (value) => {
-    emit('update:size', value)
-  },
-})
-const positionXComp = computed<number>({
-  get: () => props.positionX,
-  set: (value) => {
-    emit('update:positionX', value)
-  },
-})
-const positionYComp = computed<number>({
-  get: () => props.positionY,
-  set: (value) => {
-    emit('update:positionY', value)
-  },
-})
+const parallax = defineModel<boolean>('parallax', { required: true })
+const auto = defineModel<boolean>('auto', { required: true })
+const size = defineModel<number>('size', { required: true })
+const positionX = defineModel<number>('positionX', { required: true })
+const positionY = defineModel<number>('positionY', { required: true })
 </script>
 
 <template>
   <ul class="image-placer">
     <li>
-      <div>
+      <div class="pl-2">
         <v-switch
-          v-model="parallaxComp"
+          v-model="parallax"
           color="primary"
           density="compact"
           hide-details
@@ -62,12 +22,7 @@ const positionYComp = computed<number>({
         </v-switch>
       </div>
       <div>
-        <v-switch
-          v-model="autoComp"
-          color="primary"
-          density="compact"
-          hide-details
-        >
+        <v-switch v-model="auto" color="primary" density="compact" hide-details>
           <template #label>
             <small><b>自動調整</b></small>
           </template>
@@ -76,20 +31,20 @@ const positionYComp = computed<number>({
     </li>
     <li>
       <p class="label mr-1">
-        <v-label :disabled="autoComp">
+        <v-label :disabled="auto">
           <small><b>サイズ</b></small>
         </v-label>
       </p>
       <div class="input">
         <v-slider
-          v-model="sizeComp"
+          v-model="size"
           color="primary"
           density="compact"
           hide-details
           min="100"
           max="400"
           step="1"
-          :disabled="autoComp"
+          :disabled="auto"
         />
       </div>
     </li>
@@ -101,14 +56,14 @@ const positionYComp = computed<number>({
       </p>
       <div class="input">
         <v-slider
-          v-model="positionXComp"
+          v-model="positionX"
           color="primary"
           density="compact"
           hide-details
           min="1"
           max="99"
           step="1"
-          :disabled="autoComp"
+          :disabled="auto"
         />
       </div>
     </li>
@@ -120,14 +75,14 @@ const positionYComp = computed<number>({
       </p>
       <div class="input">
         <v-slider
-          v-model="positionYComp"
+          v-model="positionY"
           color="primary"
           density="compact"
           hide-details
           min="1"
           max="99"
           step="1"
-          :disabled="autoComp"
+          :disabled="auto"
         />
       </div>
     </li>
@@ -136,7 +91,7 @@ const positionYComp = computed<number>({
 
 <style lang="scss" scoped>
 ul.image-placer {
-  padding: 0.5rem 1.25rem 0.75rem 1.25rem;
+  padding-left: 0.5rem;
   li {
     width: 14rem;
     display: flex;
@@ -148,6 +103,9 @@ ul.image-placer {
     .input {
       flex-grow: 1;
     }
+  }
+  small {
+    color: $gray-darken3;
   }
 }
 </style>
