@@ -62,7 +62,10 @@ const useServiceContent = (customerId: Ref<number | null>) => {
             type:
               apiData.image.type ??
               getFileTypeByExtention(getFileExtension(apiData.image.url)),
-            settings: apiData.image.settings,
+          },
+          imageSettings: {
+            ...getDefaultImageSettings(),
+            ...(apiData.imageSettings ? apiData.imageSettings : {}),
           },
           position: apiData.position,
         }
@@ -85,7 +88,7 @@ const useServiceContent = (customerId: Ref<number | null>) => {
   const formToServiceSaveApi = (formData: ServiceForm): ServiceSaveApi => ({
     customerId: customerId.value ?? 0,
     title: formData.title,
-    titleSettings: formData.titleSettings,
+    titleSettings: { ...formData.titleSettings },
     caption: formData.caption,
     body: formData.body,
     position: formData.position,
@@ -93,8 +96,8 @@ const useServiceContent = (customerId: Ref<number | null>) => {
       url: formData.image,
       name: formData.imageName,
       type: formData.imageType,
-      settings: formData.imageSettings ?? getDefaultImageSettings(),
     },
+    imageSettings: { ...(formData.imageSettings ?? getDefaultImageSettings()) },
   })
 
   const createService = async (
@@ -129,11 +132,12 @@ const useServiceContent = (customerId: Ref<number | null>) => {
   const setServiceImageSettings = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
-    if (!serviceRef.value?.image?.settings) {
+    if (!serviceRef.value) {
       return
     }
     const newSettings: ImageSettings = {
-      ...serviceRef.value.image.settings,
+      ...getDefaultImageSettings(),
+      ...(serviceRef.value.imageSettings ? serviceRef.value.imageSettings : {}),
       ...settings,
     }
     setImageSettings(newSettings)

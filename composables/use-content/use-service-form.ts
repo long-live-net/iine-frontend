@@ -67,8 +67,8 @@ export const useServiceForm = () => {
     formData.image.value.value = serviceData?.image?.url ?? ''
     formData.imageName.value.value = serviceData?.image?.name ?? ''
     formData.imageType.value.value = serviceData?.image?.type ?? ''
-    formData.imageSettings.value.value = serviceData.image?.settings
-      ? cloneDeep(serviceData.image.settings)
+    formData.imageSettings.value.value = serviceData.imageSettings
+      ? cloneDeep(serviceData.imageSettings)
       : null
     formData.position.value.value = serviceData?.position ?? 0
   }

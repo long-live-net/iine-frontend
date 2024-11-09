@@ -63,8 +63,8 @@ export const useContactForm = () => {
     formData.image.value.value = contactData.image?.url ?? ''
     formData.imageName.value.value = contactData.image?.name ?? ''
     formData.imageType.value.value = contactData.image?.type ?? ''
-    formData.imageSettings.value.value = contactData.image?.settings
-      ? cloneDeep(contactData.image.settings)
+    formData.imageSettings.value.value = contactData.imageSettings
+      ? cloneDeep(contactData.imageSettings)
       : null
   }
 

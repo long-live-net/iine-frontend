@@ -28,7 +28,6 @@ export interface ImageData {
   url: string
   type: string
   name: string
-  settings: ImageSettings
 }
 
 export interface MenuImageData {
@@ -45,11 +44,13 @@ export interface ContentType {
   titleSettings: TitleSettings
   body?: string
   image?: ImageData
+  imageSettings?: ImageSettings
   tags?: string[]
 }
 
 export interface EyecatchType extends ContentType {
   image: ImageData
+  imageSettings: ImageSettings
 }
 export interface InformationType extends ContentType {
   body: string
@@ -62,6 +63,7 @@ export interface NewsType extends ContentType {
 export interface ServiceType extends ContentType {
   caption: string
   image: ImageData
+  imageSettings: ImageSettings
   position: number
 }
 export interface ContactType extends ContentType {

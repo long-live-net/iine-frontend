@@ -65,8 +65,8 @@ export const useInformationForm = () => {
     formData.image.value.value = informationData.image?.url ?? ''
     formData.imageName.value.value = informationData.image?.name ?? ''
     formData.imageType.value.value = informationData.image?.type ?? ''
-    formData.imageSettings.value.value = informationData.image?.settings
-      ? cloneDeep(informationData.image.settings)
+    formData.imageSettings.value.value = informationData.imageSettings
+      ? cloneDeep(informationData.imageSettings)
       : null
   }
 

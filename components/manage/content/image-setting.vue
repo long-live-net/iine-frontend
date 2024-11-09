@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import type { ImageSettings } from '@/types/content'
 
-const props = defineProps<{ settings: ImageSettings }>()
+const props = withDefaults(defineProps<{ settings?: ImageSettings }>(), {
+  settings: () => ({
+    lgSize: 'cover',
+    smSize: 'cover',
+    lgPosition: 'center',
+    smPosition: 'center',
+    lgParallax: 'scroll',
+    smParallax: 'scroll',
+  }),
+})
 const emit = defineEmits<{
   update: [partOfSettings: Partial<ImageSettings>]
 }>()

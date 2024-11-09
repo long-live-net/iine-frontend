@@ -73,8 +73,8 @@ export const useMenuImageForm = () => {
     formData.image.value.value = menuImageData.image?.url ?? ''
     formData.imageName.value.value = menuImageData.image?.name ?? ''
     formData.imageType.value.value = menuImageData.image?.type ?? ''
-    formData.imageSettings.value.value = menuImageData.image?.settings
-      ? cloneDeep(menuImageData.image.settings)
+    formData.imageSettings.value.value = menuImageData.imageSettings
+      ? cloneDeep(menuImageData.imageSettings)
       : null
     formData.position.value.value = menuImageData.position ?? 0
     formData.menuImageUrl.value.value = menuImageData.menuImage.url ?? ''
