@@ -47,7 +47,7 @@ await onLoad(contentId)
         <CommonEyecatchImage
           v-if="serviceRef?.image"
           :url="serviceRef?.image?.url"
-          :settings="serviceRef?.image?.settings"
+          :settings="serviceRef?.imageSettings"
           class="eyecatcher"
         >
           <template #default>
@@ -73,9 +73,9 @@ await onLoad(contentId)
               </template>
             </CommonEyecatchTitleSettingPositionFrame>
           </template>
-          <template v-if="canEdit && serviceRef?.image?.settings" #settings>
+          <template v-if="canEdit && serviceRef" #settings>
             <ManageContentImageSetting
-              :settings="serviceRef.image.settings"
+              :settings="serviceRef.imageSettings"
               @update="onUpdateImageSetting"
             />
           </template>

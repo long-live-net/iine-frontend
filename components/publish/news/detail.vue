@@ -33,7 +33,7 @@ await onLoad(contentId)
         <CommonEyecatchImage
           v-if="newsRef?.image"
           :url="newsRef?.image?.url"
-          :settings="newsRef?.image?.settings"
+          :settings="newsRef?.imageSettings"
           class="eyecatcher"
         >
           <template #default>
@@ -59,9 +59,9 @@ await onLoad(contentId)
               </template>
             </CommonEyecatchTitleSettingPositionFrame>
           </template>
-          <template v-if="canEdit && newsRef?.image?.settings" #settings>
+          <template v-if="canEdit && newsRef" #settings>
             <ManageContentImageSetting
-              :settings="newsRef.image.settings"
+              :settings="newsRef.imageSettings"
               @update="onUpdateImageSetting"
             />
           </template>

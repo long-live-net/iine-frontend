@@ -61,7 +61,14 @@ const useNewsContent = (customerId: Ref<number | null>) => {
                   type:
                     apiData.image.type ??
                     getFileTypeByExtention(getFileExtension(apiData.image.url)),
-                  settings: apiData.image.settings,
+                },
+              }
+            : {}),
+          ...(apiData.imageSettings
+            ? {
+                imageSettings: {
+                  ...getDefaultImageSettings(),
+                  ...apiData.imageSettings,
                 },
               }
             : {}),
@@ -85,7 +92,7 @@ const useNewsContent = (customerId: Ref<number | null>) => {
   const formToNewsSaveApi = (formData: NewsForm): NewsSaveApi => ({
     customerId: customerId.value ?? 0,
     title: formData.title,
-    titleSettings: formData.titleSettings,
+    titleSettings: { ...formData.titleSettings },
     category: formData.category ?? 'I',
     publishOn: formData.publishOn ?? localDate(),
     body: formData.body,
@@ -95,7 +102,14 @@ const useNewsContent = (customerId: Ref<number | null>) => {
             url: formData.image,
             name: formData.imageName,
             type: formData.imageType,
-            settings: formData.imageSettings ?? getDefaultImageSettings(),
+          },
+        }
+      : {}),
+    ...(formData.imageSettings
+      ? {
+          imageSettings: {
+            ...getDefaultImageSettings(),
+            ...formData.imageSettings,
           },
         }
       : {}),
@@ -131,11 +145,12 @@ const useNewsContent = (customerId: Ref<number | null>) => {
   const setNewsImageSettings = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
-    if (!newsRef.value?.image?.settings) {
+    if (!newsRef.value) {
       return
     }
     const newSettings: ImageSettings = {
-      ...newsRef.value.image.settings,
+      ...getDefaultImageSettings(),
+      ...(newsRef.value.imageSettings ? newsRef.value.imageSettings : {}),
       ...settings,
     }
     setImageSettings(newSettings)

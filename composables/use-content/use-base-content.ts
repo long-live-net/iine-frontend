@@ -294,10 +294,10 @@ export const useContentRead = <T extends ContentGetApi>(
    * image settings の情報を更新する
    */
   const setImageSettings = (settings: ImageSettings) => {
-    if (!contentDataRef.value?.image) {
+    if (!contentDataRef.value) {
       return
     }
-    contentDataRef.value.image.settings = { ...settings }
+    contentDataRef.value.imageSettings = { ...settings }
   }
 
   return {

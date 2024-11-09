@@ -57,7 +57,7 @@ export const useEyecatchForm = () => {
     formData.image.value.value = eyecatchData.image.url
     formData.imageName.value.value = eyecatchData.image.name
     formData.imageType.value.value = eyecatchData.image.type
-    formData.imageSettings.value.value = cloneDeep(eyecatchData.image.settings)
+    formData.imageSettings.value.value = cloneDeep(eyecatchData.imageSettings)
   }
 
   return {

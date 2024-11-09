@@ -47,10 +47,10 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
             type:
               apiData.image.type ??
               getFileTypeByExtention(getFileExtension(apiData.image.url)),
-            settings: {
-              ...getDefaultImageSettings(),
-              ...(apiData.image.settings ? apiData.image.settings : {}),
-            },
+          },
+          imageSettings: {
+            ...getDefaultImageSettings(),
+            ...(apiData.imageSettings ? apiData.imageSettings : {}),
           },
         }
       : null
@@ -64,16 +64,13 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     customerId: customerId.value ?? 0,
     title: formData.title,
     subtitle: formData.subtitle,
-    titleSettings: formData.titleSettings,
+    titleSettings: { ...formData.titleSettings },
     image: {
       url: formData.image,
       name: formData.imageName,
       type: formData.imageType,
-      settings: {
-        ...getDefaultImageSettings(),
-        ...(formData.imageSettings ? formData.imageSettings : {}),
-      },
     },
+    imageSettings: { ...(formData.imageSettings ?? getDefaultImageSettings()) },
   })
 
   const createEyecatch = async (
@@ -106,11 +103,12 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
   }
 
   const setEyecatchImageSettings = (settings: Partial<ImageSettings>) => {
-    if (!eyecatchRef.value?.image?.settings) {
+    if (!eyecatchRef.value) {
       return
     }
     const newSettings: ImageSettings = {
-      ...eyecatchRef.value.image.settings,
+      ...getDefaultImageSettings(),
+      ...eyecatchRef.value.imageSettings,
       ...settings,
     }
     setImageSettings(newSettings)

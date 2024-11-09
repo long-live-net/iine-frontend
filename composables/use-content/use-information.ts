@@ -56,7 +56,14 @@ const useInformationContent = (customerId: Ref<number | null>) => {
                   type:
                     apiData.image.type ??
                     getFileTypeByExtention(getFileExtension(apiData.image.url)),
-                  settings: apiData.image.settings,
+                },
+              }
+            : {}),
+          ...(apiData.imageSettings
+            ? {
+                imageSettings: {
+                  ...getDefaultImageSettings(),
+                  ...apiData.imageSettings,
                 },
               }
             : {}),
@@ -74,7 +81,7 @@ const useInformationContent = (customerId: Ref<number | null>) => {
     customerId: customerId.value ?? 0,
     title: formData.title,
     subtitle: formData.subtitle,
-    titleSettings: formData.titleSettings,
+    titleSettings: { ...formData.titleSettings },
     body: formData.body,
     ...(formData.image && formData.imageName && formData.imageType
       ? {
@@ -82,7 +89,14 @@ const useInformationContent = (customerId: Ref<number | null>) => {
             url: formData.image,
             name: formData.imageName,
             type: formData.imageType,
-            settings: formData.imageSettings ?? getDefaultImageSettings(),
+          },
+        }
+      : {}),
+    ...(formData.imageSettings
+      ? {
+          imageSettings: {
+            ...getDefaultImageSettings(),
+            ...formData.imageSettings,
           },
         }
       : {}),
@@ -120,11 +134,14 @@ const useInformationContent = (customerId: Ref<number | null>) => {
   const setInformationImageSettings = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
-    if (!informationRef.value?.image?.settings) {
+    if (!informationRef.value) {
       return
     }
     const newSettings: ImageSettings = {
-      ...informationRef.value.image.settings,
+      ...getDefaultImageSettings(),
+      ...(informationRef.value.imageSettings
+        ? informationRef.value.imageSettings
+        : {}),
       ...settings,
     }
     setImageSettings(newSettings)

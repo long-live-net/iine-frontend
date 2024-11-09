@@ -22,7 +22,7 @@ await onLoad()
   >
     <CommonEyecatchImage
       :url="eyecatchRef?.image?.url"
-      :settings="eyecatchRef?.image?.settings"
+      :settings="eyecatchRef?.imageSettings"
       class="eyecatcher"
     >
       <template #default>
@@ -54,9 +54,9 @@ await onLoad()
           </template>
         </CommonEyecatchTitleSettingPositionFrame>
       </template>
-      <template v-if="canEdit && eyecatchRef?.image?.settings" #settings>
+      <template v-if="canEdit && eyecatchRef" #settings>
         <ManageContentImageSetting
-          :settings="eyecatchRef.image.settings"
+          :settings="eyecatchRef.imageSettings"
           @update="onUpdateImageSetting"
         />
       </template>

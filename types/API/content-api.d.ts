@@ -1,6 +1,7 @@
 import type {
   TitleSettings,
   ImageData,
+  ImageSettings,
   MenuImageData,
   ContentPreNextId,
   ContentPosition,
@@ -19,10 +20,12 @@ export interface ContentGetApi {
   titleSettings?: TitleSettings
   body?: string
   image?: ImageData
+  imageSettings?: ImageSettings
 }
 
 export interface EyecatchGetApi extends ContentGetApi {
   image: ImageData
+  imageSettings: ImageSettings
 }
 export interface InformationGetApi extends ContentGetApi {
   body: string
@@ -30,6 +33,7 @@ export interface InformationGetApi extends ContentGetApi {
 export interface ServiceGetApi extends ContentGetApi {
   caption: string
   image: ImageData
+  imageSettings: ImageSettings
   position: number
 }
 export interface NewsGetApi extends ContentGetApi {
@@ -57,16 +61,19 @@ export type ContentSaveApi = {
   titleSettings: TitleSettings
   body?: string
   image?: ImageData
+  imageSettings?: ImageSettings
 }
 
 export interface EyecatchSaveApi extends ContentSaveApi {
   image: ImageData
+  imageSettings: ImageSettings
 }
 export interface InformationSaveApi extends ContentSaveApi {
   body: string
 }
 export interface ServiceSaveApi extends ContentSaveApi {
   image: ImageData
+  imageSettings: ImageSettings
   caption: string
   position: number
 }

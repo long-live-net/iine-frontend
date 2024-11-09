@@ -63,8 +63,8 @@ export const useNewsForm = () => {
     formData.image.value.value = newsData.image?.url ?? ''
     formData.imageName.value.value = newsData.image?.name ?? ''
     formData.imageType.value.value = newsData.image?.type ?? ''
-    formData.imageSettings.value.value = newsData.image?.settings
-      ? cloneDeep(newsData.image.settings)
+    formData.imageSettings.value.value = newsData.imageSettings
+      ? cloneDeep(newsData.imageSettings)
       : null
   }
 
