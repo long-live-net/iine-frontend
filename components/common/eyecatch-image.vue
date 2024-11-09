@@ -55,11 +55,6 @@ const bkImage = computed(() => `url(${props.url.length ? props.url : noImage})`)
     background-size: v-bind('settings.smSize');
     background-position: v-bind('settings.smPosition');
     background-attachment: v-bind('settings.smParallax');
-
-    // .settings {
-    //   bottom: 0.5rem;
-    //   right: 0.5rem;
-    // }
   }
 }
 
