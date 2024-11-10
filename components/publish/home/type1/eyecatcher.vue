@@ -26,7 +26,7 @@ await onLoad()
       class="eyecatcher"
     >
       <template #default>
-        <CommonEyecatchTitleSettingPositionFrame
+        <CommonEyecatchTitleSettingPositionEyecatcher
           :settings="eyecatchRef?.titleSettings"
           :can-edit="canEdit"
           @update="onUpdateTitleSetting"
@@ -52,7 +52,7 @@ await onLoad()
               @update="onUpdateTitleSetting"
             />
           </template>
-        </CommonEyecatchTitleSettingPositionFrame>
+        </CommonEyecatchTitleSettingPositionEyecatcher>
       </template>
       <template v-if="canEdit && eyecatchRef" #settings>
         <CommonEyecatchImageSetting

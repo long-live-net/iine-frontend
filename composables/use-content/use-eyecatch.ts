@@ -1,20 +1,27 @@
 import type {
   EyecatchType,
   EyecatchForm,
-  TitleSettings,
+  EyecatchTitleSettings,
   ImageSettings,
 } from '@/types/content'
 import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/API/content-api'
 
 const apiKind = 'eyecatches'
 export const getEyecatchKind = () => apiKind
+export const getEyecatchDefaultTitleSettings = (): EyecatchTitleSettings => ({
+  fontFamily: 'inherit',
+  color: '#FFFFFF',
+  bgColor: 'transparent',
+  position: '50% 50%',
+  positionSm: '50% 50%',
+  align: 'left',
+})
 
 const useEyecatchContent = (customerId: Ref<number | null>) => {
-  const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
+  const { getDefaultImageSettings } = useContentInit()
   const {
     loadData,
     get,
-    setTitleSettings,
     setImageSettings,
     contentDataRef,
     loadingRef: readLoading,
@@ -38,7 +45,7 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
           title: apiData.title,
           subtitle: apiData.subtitle,
           titleSettings: {
-            ...getDefaultTitleSettings(),
+            ...getEyecatchDefaultTitleSettings(),
             ...(apiData.titleSettings ? apiData.titleSettings : {}),
           },
           image: {
@@ -90,15 +97,17 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     return apitypeToEyecatchType(data ?? null)
   }
 
-  const setEyecatchTitleSettings = (settings: Partial<TitleSettings>) => {
+  const setEyecatchTitleSettings = (
+    settings: Partial<EyecatchTitleSettings>
+  ) => {
     if (!eyecatchRef.value?.titleSettings) {
       return
     }
-    const newSettings: TitleSettings = {
+    const newSettings: EyecatchTitleSettings = {
       ...eyecatchRef.value.titleSettings,
       ...settings,
     }
-    setTitleSettings(newSettings)
+    eyecatchRef.value.titleSettings = { ...newSettings }
     return newSettings
   }
 
@@ -182,8 +191,8 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
   }
 
   const onUpdateTitleSetting = (
-    settings: Partial<TitleSettings>
-  ): TitleSettings | undefined => {
+    settings: Partial<EyecatchTitleSettings>
+  ): EyecatchTitleSettings | undefined => {
     if (!eyecatchRef.value?.id) {
       return
     }
