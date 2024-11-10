@@ -1,5 +1,9 @@
 import { debounce } from 'es-toolkit/compat'
-import type { TitleSettings, ImageSettings } from '@/types/content'
+import type {
+  EyecatchTitleSettings,
+  TitleSettings,
+  ImageSettings,
+} from '@/types/content'
 import type {
   ContentGetApi,
   ContentSaveApi,
@@ -417,7 +421,7 @@ export const useContentWrite = <
    */
   const updateTitleSettings = async (
     contentId: number,
-    titleSettings: TitleSettings
+    titleSettings: EyecatchTitleSettings | TitleSettings
   ): Promise<void> => {
     try {
       loading.value = true

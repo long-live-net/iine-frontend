@@ -1,12 +1,13 @@
 import { cloneDeep } from 'es-toolkit'
 import { useForm, useField } from 'vee-validate'
 import type { EyecatchType, EyecatchForm } from '@/types/content'
+import { getEyecatchDefaultTitleSettings } from '@/composables/use-content/use-eyecatch'
 
 /**
  * Eyecatch Form
  */
 export const useEyecatchForm = () => {
-  const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
+  const { getDefaultImageSettings } = useContentInit()
   const { noBlank, maxLength } = useValidateRules()
 
   const eyecatchFormSchema = {
@@ -27,7 +28,7 @@ export const useEyecatchForm = () => {
   const eyecatchFormInitial: EyecatchForm = {
     title: '',
     subtitle: '',
-    titleSettings: getDefaultTitleSettings(),
+    titleSettings: getEyecatchDefaultTitleSettings(),
     image: '',
     imageName: '',
     imageType: '',

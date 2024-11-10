@@ -85,10 +85,10 @@ const titleAlign = computed(() => props.settings?.align ?? 'left')
     font-size: 2.5rem;
 
     @media only screen and (max-width: $grid-breakpoint-lg) {
-      font-size: 2.25rem;
+      font-size: 2.2rem;
     }
     @media only screen and (max-width: $grid-breakpoint-md) {
-      font-size: 2rem;
+      font-size: 1.75rem;
     }
   }
 
@@ -102,7 +102,7 @@ const titleAlign = computed(() => props.settings?.align ?? 'left')
     }
     @media only screen and (max-width: $grid-breakpoint-md) {
       margin-top: 0.5rem;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
     }
   }
 }
@@ -118,7 +118,7 @@ const titleAlign = computed(() => props.settings?.align ?? 'left')
     font-size: 1.5rem;
 
     @media only screen and (max-width: $grid-breakpoint-lg) {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
     }
     @media only screen and (max-width: $grid-breakpoint-md) {
       font-size: 1.25rem;

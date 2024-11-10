@@ -2,7 +2,10 @@
 import type { TitleSettings } from '@/types/content'
 
 const props = withDefaults(
-  defineProps<{ settings?: TitleSettings | null; canEdit?: boolean }>(),
+  defineProps<{
+    settings?: TitleSettings | null
+    canEdit?: boolean
+  }>(),
   {
     settings: null,
     canEdit: false,
@@ -57,24 +60,29 @@ const onUpdatePosition = (pos: { x: number; y: number }) => {
 
 <template>
   <CommonContentItemMovable
+    v-if="canEdit"
     :position="position"
-    :can-edit="canEdit"
     @update:position="onUpdatePosition"
   >
-    <div class="title-setting-position-frame">
+    <div class="eyecatch-title-setting-position-editable">
       <slot />
-      <div v-if="canEdit && $slots.topSettings" class="top-settings">
+      <div v-if="$slots.topSettings" class="top-settings">
         <slot name="topSettings" />
       </div>
-      <div v-if="canEdit && $slots.sideSettings" class="side-settings">
+      <div v-if="$slots.sideSettings" class="side-settings">
         <slot name="sideSettings" />
       </div>
     </div>
   </CommonContentItemMovable>
+  <div v-else class="eyecatch-title-setting-position">
+    <div class="eyecatch-title">
+      <slot />
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.title-setting-position-frame {
+.eyecatch-title-setting-position-editable {
   position: relative;
 
   .top-settings {
@@ -90,6 +98,20 @@ const onUpdatePosition = (pos: { x: number; y: number }) => {
     top: -0.25rem;
     left: v-bind('settingsLeft');
     right: v-bind('settingsRight');
+  }
+}
+
+.eyecatch-title-setting-position {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  .eyecatch-title {
+    position: absolute;
+    top: v-bind('`${position.y}%`');
+    left: v-bind('`${position.x}%`');
+    transform: translate(-50%, -50%);
   }
 }
 </style>

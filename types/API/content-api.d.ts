@@ -1,5 +1,6 @@
 import type {
   TitleSettings,
+  EyecatchTitleSettings,
   ImageData,
   ImageSettings,
   MenuImageData,
@@ -24,6 +25,7 @@ export interface ContentGetApi {
 }
 
 export interface EyecatchGetApi extends ContentGetApi {
+  titleSettings?: EyecatchTitleSettings
   image: ImageData
   imageSettings: ImageSettings
 }
@@ -65,6 +67,7 @@ export type ContentSaveApi = {
 }
 
 export interface EyecatchSaveApi extends ContentSaveApi {
+  titleSettings: EyecatchTitleSettings
   image: ImageData
   imageSettings: ImageSettings
 }

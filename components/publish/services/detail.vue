@@ -51,7 +51,7 @@ await onLoad(contentId)
           class="eyecatcher"
         >
           <template #default>
-            <CommonEyecatchTitleSettingPositionFrame
+            <CommonEyecatchTitleSettingPosition
               :settings="serviceRef?.titleSettings"
               :can-edit="canEdit"
               class="g-block-lg"
@@ -71,7 +71,7 @@ await onLoad(contentId)
                   @update="onUpdateTitleSetting"
                 />
               </template>
-            </CommonEyecatchTitleSettingPositionFrame>
+            </CommonEyecatchTitleSettingPosition>
           </template>
           <template v-if="canEdit && serviceRef" #settings>
             <CommonEyecatchImageSetting

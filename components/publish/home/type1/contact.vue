@@ -25,7 +25,7 @@ await onLoad()
         class="eyecatcher"
       >
         <template #default>
-          <CommonEyecatchTitleSettingPositionFrame
+          <CommonEyecatchTitleSettingPosition
             :settings="contactRef?.titleSettings"
             :can-edit="canEdit"
             class="g-block-lg"
@@ -52,7 +52,7 @@ await onLoad()
                 @update="onUpdateTitleSetting"
               />
             </template>
-          </CommonEyecatchTitleSettingPositionFrame>
+          </CommonEyecatchTitleSettingPosition>
         </template>
         <template v-if="canEdit && contactRef" #settings>
           <CommonEyecatchImageSetting

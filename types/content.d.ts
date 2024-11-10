@@ -48,7 +48,11 @@ export interface ContentType {
   tags?: string[]
 }
 
+export interface EyecatchTitleSettings extends TitleSettings {
+  positionSm: string
+}
 export interface EyecatchType extends ContentType {
+  titleSettings: EyecatchTitleSettings
   image: ImageData
   imageSettings: ImageSettings
 }
@@ -91,6 +95,7 @@ export interface ContentForm {
   imageSettings?: ImageSettings | null
 }
 export interface EyecatchForm extends ContentForm {
+  titleSettings: EyecatchTitleSettings
   image: string
   imageName: string
   imageType: string
