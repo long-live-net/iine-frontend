@@ -1,9 +1,5 @@
 import { debounce } from 'es-toolkit/compat'
-import type {
-  EyecatchTitleSettings,
-  TitleSettings,
-  ImageSettings,
-} from '@/types/content'
+import type { TitleSettings, ImageSettings } from '@/types/content'
 import type {
   ContentGetApi,
   ContentSaveApi,
