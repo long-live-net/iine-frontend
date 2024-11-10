@@ -287,7 +287,7 @@ export const useContentRead = <T extends ContentGetApi>(
   /**
    * title settings の情報を更新する
    */
-  const setTitleSettings = (settings: TitleSettings) => {
+  const setTitleSettings = (settings: NonNullable<T['titleSettings']>) => {
     if (!contentDataRef.value) {
       return
     }
@@ -301,7 +301,9 @@ export const useContentRead = <T extends ContentGetApi>(
     if (!contentDataRef.value) {
       return
     }
+    console.log('contentDataRef 3', unref(contentDataRef))
     contentDataRef.value.imageSettings = { ...settings }
+    console.log('contentDataRef 4', unref(contentDataRef))
   }
 
   return {
@@ -421,7 +423,7 @@ export const useContentWrite = <
    */
   const updateTitleSettings = async (
     contentId: number,
-    titleSettings: EyecatchTitleSettings | TitleSettings
+    titleSettings: NonNullable<T['titleSettings']>
   ): Promise<void> => {
     try {
       loading.value = true
