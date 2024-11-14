@@ -17,7 +17,7 @@ const textAlign = computed<TextAlignValue>({
 </script>
 
 <template>
-  <div @mousedown.stop>
+  <div @mousedown.stop @touchstart.stop>
     <BaseTextAlignSelector v-model:align="textAlign" />
   </div>
 </template>

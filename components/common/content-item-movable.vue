@@ -150,16 +150,16 @@ const onTouchEnd = () => {
   <div
     ref="itemDraggableBaseFrame"
     class="item-draggable-base-frame"
-    @mouseleave.prevent.stop="onMouseLeave"
+    @mouseleave.stop="onMouseLeave"
   >
     <div
       class="item-dragable can-edit"
-      @mousedown.prevent.stop="onMouseDown"
-      @mouseup.prevent.stop="onMouseUp"
+      @mousedown.stop="onMouseDown"
+      @mouseup.stop="onMouseUp"
       @mousemove.prevent.stop="onMouseMove"
-      @touchstart.prevent.stop="onTouchStart"
+      @touchstart.stop="onTouchStart"
       @touchmove.prevent.stop="onTouchMove"
-      @touchend.prevent.stop="onTouchEnd"
+      @touchend.stop="onTouchEnd"
     >
       <slot />
     </div>
