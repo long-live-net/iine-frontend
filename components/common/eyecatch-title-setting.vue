@@ -44,7 +44,7 @@ const bgColor = computed<string>({
 </script>
 
 <template>
-  <div @mousedown.stop>
+  <div @mousedown.stop @touchstart.stop>
     <div>
       <BaseFontSelectorMenu
         v-model:font-family="fontFamily"
