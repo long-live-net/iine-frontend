@@ -41,7 +41,7 @@ useHead({
 #default-layout-container {
   display: flex;
   flex-flow: column;
-  min-height: 100vh;
+  min-height: 100dvh;
   header {
     position: fixed;
     top: 0px;
