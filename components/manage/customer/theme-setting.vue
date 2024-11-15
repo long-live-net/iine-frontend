@@ -8,14 +8,17 @@ const titleData = {
 }
 
 const {
-  editDesignTheme,
-  editColorTheme,
-  DesignThemeOptions,
-  colorThemeOptions,
   initialLoading,
   init,
-  chengeDesignTheme,
+  editFontFamily,
+  editColorTheme,
+  // editDesignTheme,
+  fontFamilyItems,
+  colorThemeOptions,
+  // DesignThemeOptions,
+  chengeFontFamily,
   chengeColorTheme,
+  // chengeDesignTheme,
 } = useThemeSettingsEdit()
 
 watch(settingModal, async () => {
@@ -35,11 +38,22 @@ watch(settingModal, async () => {
   >
     <div class="theme-setting">
       <section>
+        <h4>フォント</h4>
+        <div class="theme-selection mt-4 ml-4 mr-0 mr-md-8">
+          <BaseFontSelector
+            :font-family="editFontFamily"
+            :font-family-items="fontFamilyItems"
+            @update:font-family="chengeFontFamily"
+          />
+        </div>
+      </section>
+      <section>
         <h4>カラーテーマ</h4>
-        <div class="theme-selection">
+        <div class="theme-selection ml-2">
           <v-radio-group
             :model-value="editColorTheme"
             inline
+            hide-details
             @update:model-value="chengeColorTheme($event)"
           >
             <v-radio
@@ -51,7 +65,7 @@ watch(settingModal, async () => {
           </v-radio-group>
         </div>
       </section>
-      <section class="disabled">
+      <!-- <section class="disabled">
         <h4>
           <v-icon icon="mdi-lock" />
           レイアウトテーマ (未サポート)
@@ -60,6 +74,7 @@ watch(settingModal, async () => {
           <v-radio-group
             :model-value="editDesignTheme"
             inline
+            hide-details
             disabled
             @update:model-value="chengeDesignTheme($event)"
           >
@@ -71,7 +86,7 @@ watch(settingModal, async () => {
             />
           </v-radio-group>
         </div>
-      </section>
+      </section> -->
     </div>
   </CommonModalDialog>
 </template>
@@ -80,18 +95,9 @@ watch(settingModal, async () => {
 .theme-setting {
   display: flex;
   flex-direction: column;
-  row-gap: 0.5rem;
-  padding: 0.25rem 1rem;
-  width: 600px;
+  row-gap: 1.5rem;
+  padding: 0 1rem 0.5rem;
+  width: 520px;
   max-width: 100%;
-
-  .disabled {
-    h3,
-    h4,
-    h5,
-    p {
-      color: $gray-lighten1;
-    }
-  }
 }
 </style>

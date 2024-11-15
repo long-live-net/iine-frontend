@@ -11,6 +11,7 @@ export type CustomerSettingApi = {
   customerId: number
   availContentsKind: string[]
   pageTitle: PageTitle
+  fontFamily?: string | null
   colorTheme: ColorTheme
   designTheme: DesignTheme
   homeLayout?: PageLayout[]

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { pageFontFamilies } from '@/composables/use-customer/use-customer-setting'
+import type { FontFamilyItem } from '@/components/base/font-selector.vue'
 
 const fontFamily = defineModel<string>('fontFamily', { required: true })
 withDefaults(
   defineProps<{
+    fontFamilyItems: FontFamilyItem[]
     activaterLabel: string
     location?:
       | 'top'
@@ -47,7 +48,7 @@ const selectorMenu = ref(false)
       </h4>
       <BaseFontSelector
         v-model:font-family="fontFamily"
-        :font-families="pageFontFamilies"
+        :font-family-items="fontFamilyItems"
       />
       <div class="actions">
         <v-btn

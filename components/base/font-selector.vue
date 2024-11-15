@@ -1,19 +1,11 @@
 <script setup lang="ts">
+export type FontFamilyItem = {
+  key: string
+  value: string
+  text: string
+}
 const fontFamily = defineModel<string>('fontFamily', { required: true })
-const props = defineProps<{ fontFamilies: { [key: string]: string } }>()
-
-const fontFamilyItems = computed(() => [
-  {
-    key: '自動',
-    value: 'inherit',
-    text: 'おはよう世界',
-  },
-  ...Object.keys(props.fontFamilies).map((key) => ({
-    key,
-    value: props.fontFamilies[key],
-    text: 'おはよう世界',
-  })),
-])
+defineProps<{ fontFamilyItems: FontFamilyItem[] }>()
 </script>
 
 <template>
