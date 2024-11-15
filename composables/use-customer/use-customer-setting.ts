@@ -267,18 +267,6 @@ export const useThemeSettingsEdit = () => {
   } = useCustomerSetting()
   const { addSnackber } = useSnackbars()
 
-  const editDesignTheme = ref<DesignTheme>('type1')
-  const editColorTheme = ref<ColorTheme>('light')
-
-  watch(
-    customerSetting,
-    () => {
-      editDesignTheme.value = customerSetting.value?.designTheme ?? 'type1'
-      editColorTheme.value = customerSetting.value?.colorTheme ?? 'light'
-    },
-    { immediate: true }
-  )
-
   const initialLoading = ref(false)
   const init = async () => {
     try {
@@ -289,35 +277,32 @@ export const useThemeSettingsEdit = () => {
     }
   }
 
-  const chengeDesignTheme = async (designTheme: DesignTheme | null) => {
-    if (!customerSetting.value || !designTheme) {
-      return
-    }
-    const updateData = { ...customerSetting.value, designTheme }
-    setCustomerSetting(updateData)
-    await updateCustomerSetting(updateData)
-    addSnackber?.('デザインテーマを更新しました。')
-    await fetchCustomerSetting()
-  }
+  const editFontFamily = ref<string>('inherit')
+  const editColorTheme = ref<ColorTheme>('light')
+  const editDesignTheme = ref<DesignTheme>('type1')
 
-  const chengeColorTheme = async (colorTheme: ColorTheme | null) => {
-    if (!customerSetting.value || !colorTheme) {
-      return
-    }
-    const updateData = { ...customerSetting.value, colorTheme }
-    setCustomerSetting(updateData)
-    await updateCustomerSetting(updateData)
-    addSnackber?.('カラーテーマを更新しました。')
-    await fetchCustomerSetting()
-  }
+  watch(
+    customerSetting,
+    () => {
+      editFontFamily.value = customerSetting.value?.fontFamily ?? 'inherit'
+      editColorTheme.value = customerSetting.value?.colorTheme ?? 'light'
+      editDesignTheme.value = customerSetting.value?.designTheme ?? 'type1'
+    },
+    { immediate: true }
+  )
 
-  const DesignThemeOptions: {
-    type: DesignTheme
-    label: string
-  }[] = [
-    { type: 'type1', label: '標準' },
-    { type: 'type2', label: 'シャープ' },
-  ]
+  const fontFamilyItems = computed(() => [
+    {
+      key: '自動',
+      value: 'inherit',
+      text: 'おはよう世界',
+    },
+    ...Object.keys(pageFontFamilies).map((key) => ({
+      key,
+      value: pageFontFamilies[key],
+      text: 'おはよう世界',
+    })),
+  ])
   const colorThemeOptions: {
     type: ColorTheme
     label: string
@@ -325,17 +310,62 @@ export const useThemeSettingsEdit = () => {
     { type: 'light', label: 'ライト' },
     { type: 'dark', label: 'ダーク' },
   ]
+  const DesignThemeOptions: {
+    type: DesignTheme
+    label: string
+  }[] = [
+    { type: 'type1', label: '標準' },
+    { type: 'type2', label: 'シャープ' },
+  ]
+
+  const _update = async (
+    settings: Partial<CustomerSetting>,
+    message: string
+  ) => {
+    if (!customerSetting.value) {
+      return
+    }
+    const data: CustomerSetting = { ...customerSetting.value, ...settings }
+    setCustomerSetting(data)
+    await updateCustomerSetting(data)
+    addSnackber?.(message)
+    await fetchCustomerSetting()
+  }
+
+  const chengeFontFamily = async (fontFamily: string | null) => {
+    if (!fontFamily) {
+      return
+    }
+    await _update({ fontFamily }, 'フォントを更新しました。')
+  }
+
+  const chengeColorTheme = async (colorTheme: ColorTheme | null) => {
+    if (!colorTheme) {
+      return
+    }
+    await _update({ colorTheme }, 'カラーテーマを更新しました。')
+  }
+
+  const chengeDesignTheme = async (designTheme: DesignTheme | null) => {
+    if (!designTheme) {
+      return
+    }
+    await _update({ designTheme }, 'デザインテーマを更新しました。')
+  }
 
   return {
-    editDesignTheme,
-    editColorTheme,
-    DesignThemeOptions,
-    colorThemeOptions,
+    init,
     initialLoading,
     loading,
-    init,
-    chengeDesignTheme,
+    editFontFamily,
+    editColorTheme,
+    editDesignTheme,
+    fontFamilyItems,
+    colorThemeOptions,
+    DesignThemeOptions,
+    chengeFontFamily,
     chengeColorTheme,
+    chengeDesignTheme,
   }
 }
 

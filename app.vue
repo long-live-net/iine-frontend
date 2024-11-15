@@ -1,19 +1,10 @@
 <script setup lang="ts">
 const { customerSetting } = useCustomerSetting()
-const bodyClass = ref('g-theme-default')
 
-watch(
-  customerSetting,
-  () => {
-    if (customerSetting.value?.colorTheme === 'dark') {
-      bodyClass.value = 'g-theme-dark'
-    } else {
-      bodyClass.value = 'g-theme-default'
-    }
-  },
-  {
-    immediate: true,
-  }
+const bodyClass = computed(() =>
+  customerSetting.value?.colorTheme === 'dark'
+    ? 'g-theme-dark'
+    : 'g-theme-default'
 )
 watch(
   bodyClass,
@@ -25,6 +16,27 @@ watch(
       document.body.className = bodyClass.value
     } else {
       useHead({ bodyAttrs: { class: bodyClass.value } })
+    }
+  },
+  {
+    immediate: true,
+  }
+)
+
+const bodyStyleFontFamily = computed(
+  () => customerSetting.value?.fontFamily ?? 'inherit'
+)
+watch(
+  bodyStyleFontFamily,
+  () => {
+    if (import.meta.client) {
+      document.body.style.fontFamily = bodyStyleFontFamily.value
+    } else {
+      useHead({
+        bodyAttrs: {
+          style: `font-family: ${bodyStyleFontFamily.value}`,
+        },
+      })
     }
   },
   {

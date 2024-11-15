@@ -21,6 +21,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
         title: apiData.pageTitle?.title ?? 'IINE TITLE',
         iconUrl: apiData.pageTitle?.iconUrl ?? null,
       },
+      fontFamily: apiData.fontFamily ?? null,
       colorTheme: apiData.colorTheme,
       designTheme: apiData.designTheme,
       homeLayout:
@@ -45,6 +46,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
       title: appData.pageTitle.title,
       iconUrl: appData.pageTitle?.iconUrl ?? null,
     },
+    ...(appData.fontFamily ? { fontFamily: appData.fontFamily } : {}),
     colorTheme: appData.colorTheme,
     designTheme: appData.designTheme,
     homeLayout: appData.homeLayout.map((l) => ({
