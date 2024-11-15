@@ -90,11 +90,11 @@ await onLoad()
 }
 
 .eyecatcher {
-  height: 100vh;
+  height: 100dvh;
   min-height: 400px;
 
   @media only screen and (max-width: $grid-breakpoint-md) {
-    height: 75vh;
+    height: 75dvh;
     min-height: auto;
   }
 }

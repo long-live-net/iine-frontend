@@ -57,7 +57,7 @@ const backhomeLabel = computed(() =>
 <style scoped lang="scss">
 .auth-login {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
