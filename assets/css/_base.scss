@@ -1,7 +1,5 @@
 @use 'variables.scss';
 
-// @import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c');
-
 html {
   margin: 0;
   padding: 0;
@@ -11,14 +9,6 @@ html {
   color: variables.$gray-darken2;
 }
 body {
-  font-family: 'Noto Sans JP', 'M PLUS Rounded 1c', 'Zen Maru Gothic',
-    'ヒラギノ丸ゴ Pro W4', 'ヒラギノ丸ゴ Pro', 'Hiragino Maru Gothic Pro',
-    'sans-serif';
-  // font-family: 'Noto Sans JP', 'Zen Kaku Gothic New', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro',
-  //   'メイリオ', 'Meiryo', '游ゴシック', 'Yu Gothic', 'MS PGothic', 'sans-serif';
-  // font-family: 'Zen Old Mincho', 'Noto Serif JP', '游明朝体', 'Yu Mincho',
-  //   YuMincho, 'Hiragino Mincho ProN W3', 'ヒラギノ明朝 ProN W3',
-  //   'Hiragino Mincho ProN', 'MS PMincho', 'MS Mincho', serif;
   margin: 0;
   padding: 0;
 }
