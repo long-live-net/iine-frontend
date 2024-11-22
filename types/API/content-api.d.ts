@@ -7,7 +7,6 @@ import type {
   ContentPreNextId,
   ContentPosition,
 } from '@/types/content'
-import type { NewsCategory2Label } from '@/types/news-category'
 
 /**
  * GET API で取得するデータ型
@@ -40,7 +39,7 @@ export interface ServiceGetApi extends ContentGetApi {
 }
 export interface NewsGetApi extends ContentGetApi {
   body: string
-  category: NewsCategory2Label
+  category: string
   publishOn: Date
 }
 export interface ContactGetApi extends ContentGetApi {
@@ -82,7 +81,7 @@ export interface ServiceSaveApi extends ContentSaveApi {
 }
 export interface NewsSaveApi extends ContentSaveApi {
   body: string
-  category: NewsCategory2Label
+  category: string
   publishOn: Date
 }
 export interface ContactSaveApi extends ContentSaveApi {

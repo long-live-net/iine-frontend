@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { TitleSettings } from '@/types/content'
-import type { FontFamilyItem } from '@/components/base/font-selector.vue'
-import { pageFontFamilies } from '@/composables/use-customer/use-customer-setting'
+import { getFontFamilyItems } from '@/composables/use-customer/use-customer-setting'
 
 const props = defineProps<{ settings?: TitleSettings | null }>()
 const emit = defineEmits<{
@@ -19,18 +18,7 @@ const subMenuLocation = computed(() => {
   }
 })
 
-const fontFamilyItems = computed<FontFamilyItem[]>(() => [
-  {
-    key: '自動',
-    value: 'inherit',
-    text: 'おはよう世界',
-  },
-  ...Object.keys(pageFontFamilies).map((key) => ({
-    key,
-    value: pageFontFamilies[key],
-    text: 'おはよう世界',
-  })),
-])
+const fontFamilyItems = computed(() => getFontFamilyItems())
 const fontFamily = computed<string>({
   get: () => props.settings?.fontFamily ?? 'inherit',
   set: (value) => {
