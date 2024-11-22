@@ -7,7 +7,6 @@ import type {
   ContentPreNextId,
   ContentPosition,
 } from '@/types/content'
-import type { string } from '@/types/news-category'
 
 /**
  * GET API で取得するデータ型
