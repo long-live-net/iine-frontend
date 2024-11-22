@@ -365,3 +365,42 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     onUpdateImageSetting,
   }
 }
+
+export const useNewsCategory = () => {
+  const { customerSetting } = useCustomerSetting()
+
+  const categoryItems = computed(
+    () => customerSetting.value?.newsCategories ?? []
+  )
+  const category2BkColor = [
+    '#2962FF',
+    '#4CAF50',
+    '#FFEA00',
+    '#E53935',
+    '#ECEFF1',
+    '#AA00FF',
+  ]
+  const category2Color = ['white', 'white', 'black', 'white', 'black', 'white']
+
+  const getCategory2BkColor = (category: string) => {
+    const index = Math.abs(
+      categoryItems.value.findIndex((c) => c === category) %
+        category2BkColor.length
+    )
+    return category2BkColor[index]
+  }
+
+  const getCategory2Color = (category: string) => {
+    const index = Math.abs(
+      categoryItems.value.findIndex((c) => c === category) %
+        category2Color.length
+    )
+    return category2Color[index]
+  }
+
+  return {
+    categoryItems,
+    getCategory2BkColor,
+    getCategory2Color,
+  }
+}

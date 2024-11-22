@@ -11,14 +11,26 @@ import type {
   SnsLinksForm,
 } from '@/types/customer-setting'
 
-export const pageFontFamilies: { [key: string]: string } = {
+const pageFontFamilies: { [key: string]: string } = {
   notoSansJp: '"Noto Sans JP", "sans-serif"',
   zenKakuGothic: '"Zen Kaku Gothic New", "sans-serif"',
   notoSerifJp: '"Noto Serif JP", "serif"',
   zenOldMincho: '"Zen Old Mincho", "serif"',
   mPlusRounded1c: '"M PLUS Rounded 1c", "sans-serif"',
   zenMaruGothic: '"Zen Maru Gothic", "sans-serif"',
-}
+} as const
+export const getFontFamilyItems = () => [
+  {
+    key: '自動',
+    value: 'inherit',
+    text: 'おはよう世界',
+  },
+  ...Object.keys(pageFontFamilies).map((key) => ({
+    key,
+    value: pageFontFamilies[key],
+    text: 'おはよう世界',
+  })),
+]
 
 /**
  * 顧客情報
@@ -291,18 +303,7 @@ export const useThemeSettingsEdit = () => {
     { immediate: true }
   )
 
-  const fontFamilyItems = computed(() => [
-    {
-      key: '自動',
-      value: 'inherit',
-      text: 'おはよう世界',
-    },
-    ...Object.keys(pageFontFamilies).map((key) => ({
-      key,
-      value: pageFontFamilies[key],
-      text: 'おはよう世界',
-    })),
-  ])
+  const fontFamilyItems = computed(() => getFontFamilyItems())
   const colorThemeOptions: {
     type: ColorTheme
     label: string

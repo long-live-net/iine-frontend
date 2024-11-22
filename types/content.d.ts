@@ -1,5 +1,3 @@
-import type { NewsCategory2Label } from '@/types/news-category'
-
 /**
  * Title Settings
  */
@@ -61,7 +59,7 @@ export interface InformationType extends ContentType {
 }
 export interface NewsType extends ContentType {
   body: string
-  category: NewsCategory2Label
+  category: string
   publishOn: Date
 }
 export interface ServiceType extends ContentType {
@@ -105,7 +103,7 @@ export interface InformationForm extends ContentForm {
 }
 export interface NewsForm extends ContentForm {
   body: string
-  category: NewsCategory2Label | null
+  category: string | null
   publishOn: Date | null
 }
 export interface ServiceForm extends ContentForm {

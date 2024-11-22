@@ -1,39 +1,15 @@
 <script setup lang="ts">
-import { newsCategory2Label } from '@/types/news-category'
-import type { NewsCategory2Label } from '@/types/news-category'
+const props = defineProps<{ category: string; small?: boolean }>()
 
-const props = defineProps<{
-  category: NewsCategory2Label
-  small?: boolean
-}>()
-
-const categoryLabel = computed(
-  () => newsCategory2Label[props.category] ?? 'OTHER'
-)
-const categoryBkColor = computed(() => {
-  const category2BkColor = {
-    I: '#2196f3',
-    S: '#4caf50',
-    W: '#fabe00',
-    T: '#ff5252',
-  }
-  return category2BkColor[props.category] ?? '#666666'
-})
-const categoryColor = computed(() => {
-  const category2Color = {
-    I: 'white',
-    S: 'white',
-    W: 'black',
-    T: 'white',
-  }
-  return category2Color[props.category] ?? 'white'
-})
+const { getCategory2BkColor, getCategory2Color } = useNewsCategory()
+const categoryBkColor = computed(() => getCategory2BkColor(props.category))
+const categoryColor = computed(() => getCategory2Color(props.category))
 </script>
 
 <template>
   <p class="news-badge">
     <span>
-      {{ categoryLabel }}
+      {{ category }}
     </span>
   </p>
 </template>

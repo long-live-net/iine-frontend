@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { NewsType, NewsForm } from '@/types/content'
-import { newsCategory2Label } from '@/types/news-category'
 import { getNewsKind } from '@/composables/use-content/use-news'
 
 const props = defineProps<{
@@ -19,13 +18,7 @@ const apiKind = getNewsKind()
 
 const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetNewsForm } = useNewsForm()
-
-const categoryChoices = Object.entries(newsCategory2Label).map(
-  ([key, value]) => ({
-    value: key,
-    title: value,
-  })
-)
+const { categoryItems } = useNewsCategory()
 
 watch(modal, (current) => {
   if (current) {
@@ -98,7 +91,7 @@ const onCancel = () => {
           <v-select
             v-model="formData.category.value.value"
             :error-messages="formData.category.errorMessage.value"
-            :items="categoryChoices"
+            :items="categoryItems"
             label="カテゴリ"
           />
         </div>

@@ -38,6 +38,7 @@ export type CustomerSetting = {
   id: number
   customerId: number
   availContentsKind: string[]
+  newsCategories: string[]
   pageTitle: PageTitle
   fontFamily: string | null
   colorTheme: ColorTheme

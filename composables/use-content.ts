@@ -8,7 +8,11 @@ export {
 export { useEyecatchActions } from './use-content/use-eyecatch'
 export { useEyecatchForm } from './use-content/use-eyecatch-form'
 
-export { useNewsListActions, useNewsActions } from './use-content/use-news'
+export {
+  useNewsListActions,
+  useNewsActions,
+  useNewsCategory,
+} from './use-content/use-news'
 export { useNewsForm } from './use-content/use-news-form'
 
 export {

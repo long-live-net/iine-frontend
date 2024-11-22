@@ -17,6 +17,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
       id: apiData.id,
       customerId: apiData.customerId,
       availContentsKind: [...(apiData.availContentsKind ?? [])],
+      newsCategories: [...(apiData.newsCategories ?? [])],
       pageTitle: {
         title: apiData.pageTitle?.title ?? 'IINE TITLE',
         iconUrl: apiData.pageTitle?.iconUrl ?? null,
@@ -42,6 +43,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
     id: appData.id,
     customerId: appData.customerId,
     availContentsKind: [...appData.availContentsKind],
+    newsCategories: [...appData.newsCategories],
     pageTitle: {
       title: appData.pageTitle.title,
       iconUrl: appData.pageTitle?.iconUrl ?? null,
