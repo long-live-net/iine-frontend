@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 // colors same as bootstrap theme
 $blue-darken3: #163278;
 $blue-darken2: #303f9f;
@@ -63,10 +65,10 @@ $grid-breakpoints: (
   xxl: 1400px,
 );
 
-$grid-breakpoint-sm: map-get($grid-breakpoints, sm);
-$grid-breakpoint-md: map-get($grid-breakpoints, md);
-$grid-breakpoint-lg: map-get($grid-breakpoints, lg);
-$grid-breakpoint-xl: map-get($grid-breakpoints, xl);
+$grid-breakpoint-sm: map.get($grid-breakpoints, sm);
+$grid-breakpoint-md: map.get($grid-breakpoints, md);
+$grid-breakpoint-lg: map.get($grid-breakpoints, lg);
+$grid-breakpoint-xl: map.get($grid-breakpoints, xl);
 
 // nav header footer height
 $nav-header-height: 120px;
