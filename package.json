@@ -4,6 +4,7 @@
   "scripts": {
     "build": "nuxt build --mode production",
     "dev": "nuxt dev",
+    "devip": "NUXT_HOST=0.0.0.0 nuxt dev",
     "generate": "nuxt generate --mode production",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",

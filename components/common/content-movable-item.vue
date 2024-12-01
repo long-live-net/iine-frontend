@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { debounce } from 'es-toolkit'
-
 const position = defineModel<{ x: number; y: number }>('position', {
   required: true,
 })
@@ -11,6 +9,7 @@ const startX = ref(0)
 const startY = ref(0)
 const offsetX = ref(0)
 const offsetY = ref(0)
+
 const positionX = ref(50)
 const positionY = ref(50)
 watch(
@@ -26,38 +25,30 @@ watch(
 )
 
 const itemDraggableBaseFrame = ref<HTMLDivElement | null>(null)
-const itemDraggableBaseFrameRect = ref<DOMRect | null>(null)
-const getItemDraggableBaseframeRect = () => {
-  if (itemDraggableBaseFrame.value) {
-    itemDraggableBaseFrameRect.value =
-      itemDraggableBaseFrame.value.getBoundingClientRect()
+const getPercentOfWidth = (x: number, baseRect: DOMRect | null) => {
+  if (!baseRect) {
+    return 0
   }
+  if (!baseRect.width || baseRect.width <= 0) {
+    return 0
+  }
+  return Math.round((x / baseRect.width) * 100)
 }
-const onWindowResize = debounce(() => {
-  getItemDraggableBaseframeRect()
-}, 400)
-
-const getPercentOfWidth = (x: number) =>
-  itemDraggableBaseFrameRect.value
-    ? Math.round((x / itemDraggableBaseFrameRect.value.width) * 100)
-    : 0
-const getPercentOfHeight = (y: number) =>
-  itemDraggableBaseFrameRect.value
-    ? Math.round((y / itemDraggableBaseFrameRect.value.height) * 100)
-    : 0
+const getPercentOfHeight = (y: number, baseRect: DOMRect | null) => {
+  if (!baseRect) {
+    return 0
+  }
+  if (!baseRect.height || baseRect.height <= 0) {
+    return 0
+  }
+  return Math.round((y / baseRect.height) * 100)
+}
 
 const isTouchDevice = ref(false)
 onMounted(() => {
   if ('ontouchstart' in window || navigator.maxTouchPoints) {
     isTouchDevice.value = true
   }
-  watch(itemDraggableBaseFrame, getItemDraggableBaseframeRect, {
-    immediate: true,
-  })
-  window.addEventListener('resize', onWindowResize)
-})
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', onWindowResize)
 })
 
 const endMove = () => {
@@ -69,8 +60,9 @@ const endMove = () => {
   if (offsetX.value === 0 && offsetY.value == 0) {
     return
   }
-  positionX.value += getPercentOfWidth(offsetX.value)
-  positionY.value += getPercentOfHeight(offsetY.value)
+  const rect = itemDraggableBaseFrame.value?.getBoundingClientRect() ?? null
+  positionX.value += getPercentOfWidth(offsetX.value, rect)
+  positionY.value += getPercentOfHeight(offsetY.value, rect)
   offsetX.value = 0
   offsetY.value = 0
   position.value = {

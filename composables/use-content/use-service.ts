@@ -28,8 +28,10 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     setTitleSettings,
     setImageSettings,
     setListPositions,
+    getPreNextId,
     contentDataRef,
     contentListRef,
+    preNextIdRef,
     loadingRef: readLoading,
   } = useContentRead<ServiceGetApi>(customerId, apiKind)
   const {
@@ -168,13 +170,25 @@ const useServiceContent = (customerId: Ref<number | null>) => {
     setServiceTitleSettings,
     setServiceImageSettings,
     updateServiceListPositions: updatePositions,
+    getServicePreNextId: getPreNextId,
     updateServiceTitleSettings: updateTitleSettingsWithDebounced,
     updateServiceImageSettings: updateImageSettingsWithDebounced,
     serviceRef,
     serviceListRef,
     serviceTotalRef,
+    servicePreNextIdRefRef: preNextIdRef,
     loading,
   }
+}
+
+const useServiceListQueriesStore = () => {
+  const filter = useState<ListFilter>('serviceListFilter', () => ({}))
+  const sort = useState<ListSort>('serviceListSort', () => ({ position: 1 }))
+  const pager = useState<ListPager>('serviceListPager', () => ({
+    page: 1,
+    limit: 20,
+  }))
+  return { filter, sort, pager }
 }
 
 /**
@@ -183,9 +197,11 @@ const useServiceContent = (customerId: Ref<number | null>) => {
  */
 export const useServiceListActions = (customerId: Ref<number | null>) => {
   const filter = ref<ListFilter>({})
-  const sort = ref<ListSort>({ id: 1 })
+  const sort = ref<ListSort>({ position: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })
 
+  const { addSnackber } = useSnackbars()
+  const listQueries = useServiceListQueriesStore()
   const {
     loadServiceList,
     getServiceList,
@@ -198,10 +214,18 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
     loading,
   } = useServiceContent(customerId)
 
-  const { addSnackber } = useSnackbars()
-
-  const onLoad = () => loadServiceList(filter.value, sort.value, pager.value)
-  const onGetList = () => getServiceList(filter.value, sort.value, pager.value)
+  const onLoad = async () => {
+    await loadServiceList(filter.value, sort.value, pager.value)
+    listQueries.filter.value = filter.value
+    listQueries.sort.value = sort.value
+    listQueries.pager.value = pager.value
+  }
+  const onGetList = async () => {
+    await getServiceList(filter.value, sort.value, pager.value)
+    listQueries.filter.value = filter.value
+    listQueries.sort.value = sort.value
+    listQueries.pager.value = pager.value
+  }
 
   const onCreate = async (formData: ServiceForm) => {
     await createService(formData)
@@ -255,6 +279,8 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
  * @param customerId
  */
 export const useServiceActions = (customerId: Ref<number | null>) => {
+  const { addSnackber } = useSnackbars()
+  const { filter, sort } = useServiceListQueriesStore()
   const {
     loadService,
     getService,
@@ -265,14 +291,17 @@ export const useServiceActions = (customerId: Ref<number | null>) => {
     updateServiceTitleSettings,
     setServiceImageSettings,
     updateServiceImageSettings,
+    getServicePreNextId,
     serviceRef,
+    servicePreNextIdRefRef,
     loading,
   } = useServiceContent(customerId)
 
-  const { addSnackber } = useSnackbars()
-
   const onLoad = async (id?: number) => {
     await loadService(id)
+    if (serviceRef.value) {
+      await getServicePreNextId(serviceRef.value.id, filter.value, sort.value)
+    }
   }
 
   const onCreate = async (formData: ServiceForm) => {
@@ -325,6 +354,7 @@ export const useServiceActions = (customerId: Ref<number | null>) => {
 
   return {
     serviceRef,
+    servicePreNextIdRefRef,
     loading,
     onLoad,
     onCreate,

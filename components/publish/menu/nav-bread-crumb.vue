@@ -24,6 +24,8 @@ const serviceItem = computed(() => {
   }
 })
 
+const detailTitle = computed(() => `詳細 ${useRoute().params.id}`)
+
 const route = useRoute()
 const items = ref<BreadCrumbsItem[]>([])
 watch(
@@ -66,7 +68,7 @@ watch(
             disabled: false,
           },
           {
-            title: '詳細',
+            title: detailTitle.value,
             disabled: true,
           },
         ]
@@ -84,7 +86,7 @@ watch(
             disabled: false,
           },
           {
-            title: '詳細',
+            title: detailTitle.value,
             disabled: true,
           },
         ]

@@ -16,7 +16,6 @@ const {
   onCreate,
   onUpdate,
   onRemove,
-  setListQueries,
 } = useNewsListActions(customerId)
 
 const page = ref(1)
@@ -27,11 +26,6 @@ const getNewses = async () => {
   sort.value = { publishOn: -1 }
   pager.value = { page: page.value, limit: pageLimit.value }
   await getList()
-  setListQueries({
-    filter: filter.value,
-    sort: sort.value,
-    pager: pager.value,
-  })
 }
 
 watch(isWholeData, async () => {

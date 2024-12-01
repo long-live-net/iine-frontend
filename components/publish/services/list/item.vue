@@ -79,7 +79,7 @@ defineEmits<{
   section.current-item {
     color: $blue-lighten2;
     .eyecatcher {
-      background-color: rgba(0 0 0 / 0.5);
+      background-color: rgba(128 255 255 / 0.75);
       background-blend-mode: overlay;
     }
   }
