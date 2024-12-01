@@ -59,7 +59,7 @@ const onUpdatePosition = (pos: { x: number; y: number }) => {
 </script>
 
 <template>
-  <CommonContentItemMovable
+  <CommonContentMovableItem
     v-if="canEdit"
     :position="position"
     @update:position="onUpdatePosition"
@@ -73,7 +73,7 @@ const onUpdatePosition = (pos: { x: number; y: number }) => {
         <slot name="sideSettings" />
       </div>
     </div>
-  </CommonContentItemMovable>
+  </CommonContentMovableItem>
   <div v-else class="eyecatch-title-setting-position">
     <div class="eyecatch-title">
       <slot />

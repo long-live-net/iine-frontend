@@ -116,15 +116,12 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
     if (!eyecatchRef.value) {
       return
     }
-    console.log('eyecatchRef 1-1', unref(eyecatchRef))
     const newSettings: ImageSettings = {
       ...getDefaultImageSettings(),
       ...eyecatchRef.value.imageSettings,
       ...settings,
     }
-    console.log('eyecatchRef 1-2', unref(eyecatchRef))
     setImageSettings(newSettings)
-    console.log('eyecatchRef 1-3', unref(eyecatchRef))
     return newSettings
   }
 
@@ -210,7 +207,6 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
   const onUpdateImageSetting = (
     settings: Partial<ImageSettings>
   ): ImageSettings | undefined => {
-    console.log('eyecatchRef 1', unref(eyecatchRef))
     if (!eyecatchRef.value?.id) {
       return
     }
@@ -218,7 +214,6 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
     if (!newSettings) {
       return
     }
-    console.log('eyecatchRef 2', unref(eyecatchRef))
     updateEyecatchImageSettings(eyecatchRef.value.id, newSettings)
   }
 

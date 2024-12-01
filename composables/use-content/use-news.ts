@@ -3,7 +3,6 @@ import type {
   NewsForm,
   TitleSettings,
   ImageSettings,
-  ContentPreNextId,
 } from '@/types/content'
 import type {
   NewsGetApi,
@@ -173,7 +172,7 @@ const useNewsContent = (customerId: Ref<number | null>) => {
     newsRef,
     newsListRef,
     newsTotalRef,
-    newsPreNextIdRefRef: preNextIdRef as Ref<ContentPreNextId>,
+    newsPreNextIdRefRef: preNextIdRef,
     loading,
   }
 }
@@ -200,6 +199,7 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
   const pager = ref<ListPager>({ page: 1, limit: 20 })
 
   const { addSnackber } = useSnackbars()
+  const listQueries = useNewsListQueriesStore()
   const {
     loadNewsList,
     getNewsList,
@@ -213,10 +213,16 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
 
   const onLoad = async () => {
     await loadNewsList(filter.value, sort.value, pager.value)
+    listQueries.filter.value = filter.value
+    listQueries.sort.value = sort.value
+    listQueries.pager.value = pager.value
   }
 
   const getList = async () => {
     await getNewsList(filter.value, sort.value, pager.value)
+    listQueries.filter.value = filter.value
+    listQueries.sort.value = sort.value
+    listQueries.pager.value = pager.value
   }
 
   const onCreate = async (formData: NewsForm) => {
@@ -245,17 +251,6 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
     await getNewsList(filter.value, sort.value, pager.value)
   }
 
-  const listQueries = useNewsListQueriesStore()
-  const setListQueries = (queries: {
-    filter: ListFilter
-    sort: ListSort
-    pager: ListPager
-  }) => {
-    listQueries.filter.value = queries.filter
-    listQueries.sort.value = queries.sort
-    listQueries.pager.value = queries.pager
-  }
-
   return {
     filter,
     sort,
@@ -268,7 +263,6 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
     onCreate,
     onUpdate,
     onRemove,
-    setListQueries,
   }
 }
 
@@ -278,6 +272,7 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
  */
 export const useNewsActions = (customerId: Ref<number | null>) => {
   const { addSnackber } = useSnackbars()
+  const { filter, sort } = useNewsListQueriesStore()
   const {
     loadNews,
     getNews,
@@ -293,8 +288,6 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     newsPreNextIdRefRef,
     loading,
   } = useNewsContent(customerId)
-
-  const { filter, sort } = useNewsListQueriesStore()
 
   const onLoad = async (id?: number) => {
     await loadNews(id)

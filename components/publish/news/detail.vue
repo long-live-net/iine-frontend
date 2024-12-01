@@ -19,13 +19,25 @@ const route = useRoute()
 const contentId = parseInt(
   Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
 )
+
+const preUrl = computed(() =>
+  newsPreNextIdRefRef.value?.preId
+    ? `/news/${newsPreNextIdRefRef.value.preId}`
+    : null
+)
+const nextUrl = computed(() =>
+  newsPreNextIdRefRef.value?.nextId
+    ? `/news/${newsPreNextIdRefRef.value.nextId}`
+    : null
+)
+
 await onLoad(contentId)
 </script>
 
 <template>
   <CommonContentWrap :loading="loading">
-    <CommonContentCard class="news-detail">
-      <template #default>
+    <CommonContentSlidableNavigation :pre-url="preUrl" :next-url="nextUrl">
+      <CommonContentCard class="news-detail">
         <CommonContentCardTitle
           :title="newsRef?.title ?? ''"
           class="g-block-sm"
@@ -71,20 +83,7 @@ await onLoad(contentId)
           :title="newsRef?.title ?? ''"
           class="g-block-lg"
         />
-        <div class="nav-pre-next-link">
-          <div v-if="newsPreNextIdRefRef?.preId" class="nav-pre">
-            <nuxt-link :to="`/news/${newsPreNextIdRefRef.preId}`">
-              <v-icon icon="mdi-arrow-left-drop-circle" size="x-large" />
-            </nuxt-link>
-          </div>
-          <div v-else />
-          <div v-if="newsPreNextIdRefRef?.nextId" class="nav-next">
-            <nuxt-link :to="`/news/${newsPreNextIdRefRef.nextId}`">
-              <v-icon icon="mdi-arrow-right-drop-circle" size="x-large" />
-            </nuxt-link>
-          </div>
-          <div v-else />
-        </div>
+        <CommonContentPreNextNagivation :pre-url="preUrl" :next-url="nextUrl" />
         <CommonContentCardBody class="news-detail__body">
           <div v-if="newsRef?.id" class="news-detail__body--header">
             <PublishNewsCategoryBadge :category="newsRef.category" small />
@@ -114,8 +113,8 @@ await onLoad(contentId)
             @remove="onRemove"
           />
         </div>
-      </template>
-    </CommonContentCard>
+      </CommonContentCard>
+    </CommonContentSlidableNavigation>
   </CommonContentWrap>
 </template>
 
@@ -167,11 +166,5 @@ $eyecatcher-height-sm: 300px;
     max-height: $eyecatcher-height-sm;
     min-height: calc($eyecatcher-height-sm * 0.5);
   }
-}
-
-.nav-pre-next-link {
-  display: flex;
-  justify-content: space-between;
-  margin: 1rem 1.5rem;
 }
 </style>

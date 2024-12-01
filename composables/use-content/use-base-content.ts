@@ -297,9 +297,7 @@ export const useContentRead = <T extends ContentGetApi>(
     if (!contentDataRef.value) {
       return
     }
-    console.log('contentDataRef 3', unref(contentDataRef))
     contentDataRef.value.imageSettings = { ...settings }
-    console.log('contentDataRef 4', unref(contentDataRef))
   }
 
   return {

@@ -83,4 +83,9 @@
       }
     }
   }
+
+  .g-theme-slidable-item {
+    color: variables.$gray-lighten1;
+    background-color: variables.$gray-darken2;
+  }
 }
