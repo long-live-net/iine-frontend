@@ -103,29 +103,17 @@ const isImage = computed(() => props.editor.isActive('image'))
 // ==== Text Color ====
 // ==== URL Link ====
 // ==== Youtube ====
-const isHeaderInput = ref(false)
-const isTextSizeInput = ref(false)
-const isTextColorInput = ref(false)
-const isLinkInput = ref(false)
-const isYoutubeInput = ref(false)
+const headerActivatorId = 'header-activator-button'
+const textSizeActivatorId = 'text-size-activator-button'
+const textColorActivatorId = 'text-color-activator-button'
+const linkActivatorId = 'link-activator-button'
+const youtubeActivatorId = 'youtube-activator-button'
 
 //  Header
 const inputHeader = computed<HeaderLebel>(
   () => props.editor.getAttributes('heading').level ?? null
 )
 const isHeader = computed(() => props.editor.isActive('heading'))
-const onInputHeader = () => {
-  isHeaderInput.value = !isHeaderInput.value
-  if (isHeaderInput.value) {
-    isTextSizeInput.value = false
-    isTextColorInput.value = false
-    isLinkInput.value = false
-    isYoutubeInput.value = false
-  }
-}
-const onHeaderCancelled = () => {
-  isHeaderInput.value = false
-}
 const onHeaderInputted = (level: HeaderLebel) => {
   if (level) {
     props.editor.chain().focus().toggleHeading({ level }).run()
@@ -139,18 +127,6 @@ const inputTextSize = computed<FontSize>(() => {
   const size = ret ? Number(ret) : 0
   return 10 <= size && size <= 36 ? size : null
 })
-const onInputTextSize = () => {
-  isTextSizeInput.value = !isTextSizeInput.value
-  if (isTextSizeInput.value) {
-    isHeaderInput.value = false
-    isTextColorInput.value = false
-    isLinkInput.value = false
-    isYoutubeInput.value = false
-  }
-}
-const onTextSizeCancelled = () => {
-  isTextSizeInput.value = false
-}
 const onTextSizeDeleted = () => {
   props.editor.chain().focus().unsetFontSize().run()
 }
@@ -166,18 +142,6 @@ const onTextSizeInputted = (size: FontSize) => {
 const inputTextColor = computed<string>(
   () => props.editor.getAttributes('textStyle').color ?? ''
 )
-const onInputTextColor = () => {
-  isTextColorInput.value = !isTextColorInput.value
-  if (isTextColorInput.value) {
-    isTextSizeInput.value = false
-    isHeaderInput.value = false
-    isLinkInput.value = false
-    isYoutubeInput.value = false
-  }
-}
-const onTextColorCancelled = () => {
-  isTextColorInput.value = false
-}
 const onTextColorDeleted = () => {
   props.editor.chain().focus().unsetColor().run()
 }
@@ -194,21 +158,8 @@ const inputUrl = computed<string>(
   () => props.editor.getAttributes('link').href ?? ''
 )
 const isLink = computed(() => props.editor.isActive('link'))
-const onInputLink = () => {
-  isLinkInput.value = !isLinkInput.value
-  if (isLinkInput.value) {
-    isTextSizeInput.value = false
-    isHeaderInput.value = false
-    isTextColorInput.value = false
-    isYoutubeInput.value = false
-  }
-}
-const onLinkCancelled = () => {
-  isLinkInput.value = false
-}
 const onLinkDeleted = () => {
   props.editor.chain().focus().extendMarkRange('link').unsetLink().run()
-  isLinkInput.value = false
 }
 const onLinkInputted = (url: string) => {
   if (url) {
@@ -221,27 +172,13 @@ const onLinkInputted = (url: string) => {
   } else {
     props.editor.chain().focus().extendMarkRange('link').unsetLink().run()
   }
-  isLinkInput.value = false
 }
 
 //  Youtube
 const isYoutube = computed(() => props.editor.isActive('youtube'))
-const onInputYoutube = () => {
-  isYoutubeInput.value = !isYoutubeInput.value
-  if (isYoutubeInput.value) {
-    isTextSizeInput.value = false
-    isHeaderInput.value = false
-    isTextColorInput.value = false
-    isLinkInput.value = false
-  }
-}
-const onYoutubeCancelled = () => {
-  isYoutubeInput.value = false
-}
 const onYoutubeInputted = (url: string) => {
   if (url) {
     props.editor.chain().focus().setYoutubeVideo({ src: url }).run()
-    isYoutubeInput.value = false
   }
 }
 
@@ -262,22 +199,25 @@ const onClearNodesAndMarks = () => {
       </button>
 
       <button
+        :id="headerActivatorId"
         :class="{ 'is-active': isHeader }"
-        @click.stop.prevent="onInputHeader"
+        @click.stop.prevent
       >
         <v-icon size="small">mdi-format-header-equal</v-icon>
       </button>
 
       <button
+        :id="textSizeActivatorId"
         :class="{ 'is-active': inputTextSize && inputTextSize > 0 }"
-        @click.stop.prevent="onInputTextSize"
+        @click.stop.prevent
       >
         <v-icon size="small">mdi-format-color-text</v-icon>
       </button>
 
       <button
+        :id="textColorActivatorId"
         :class="{ 'is-active': inputTextColor.length }"
-        @click.stop.prevent="onInputTextColor"
+        @click.stop.prevent
       >
         <div class="d-flex align-center flex-column justify-center">
           <v-icon size="x-small" icon="mdi-format-color-text" />
@@ -310,12 +250,12 @@ const onClearNodesAndMarks = () => {
         <v-icon size="small">mdi-format-bold</v-icon>
       </button>
       <button
+        :id="linkActivatorId"
         :class="{ 'is-active': isLink }"
-        @click.stop.prevent="onInputLink"
+        @click.stop.prevent
       >
         <v-icon size="small">mdi-link</v-icon>
       </button>
-
       <button
         :class="{ 'is-active': isBlockquote }"
         @click.stop.prevent="onToggleBlockQuote"
@@ -372,49 +312,40 @@ const onClearNodesAndMarks = () => {
           <v-icon size="small">mdi-image</v-icon>
         </button>
         <button
+          :id="youtubeActivatorId"
           :class="{ 'is-active': isYoutube }"
-          @click.stop.prevent="onInputYoutube"
+          @click.stop.prevent
         >
           <v-icon size="small">mdi-youtube</v-icon>
         </button>
       </template>
     </nav>
     <base-wysiwsg-editor-tiptap-toolbar-header
-      v-if="isHeaderInput"
       :level="inputHeader"
-      class="sub-input"
+      :activator-id="headerActivatorId"
       @update:level="onHeaderInputted"
-      @cancel="onHeaderCancelled"
     />
     <base-wysiwsg-editor-tiptap-toolbar-font-size
-      v-if="isTextSizeInput"
       :size="inputTextSize"
-      class="sub-input"
+      :activator-id="textSizeActivatorId"
       @update:size="onTextSizeInputted"
       @delete="onTextSizeDeleted"
-      @cancel="onTextSizeCancelled"
     />
     <base-wysiwsg-editor-tiptap-toolbar-color
-      v-if="isTextColorInput"
       :color="inputTextColor"
-      class="sub-input"
+      :activator-id="textColorActivatorId"
       @update:color="onTextColorInputted"
       @delete="onTextColorDeleted"
-      @cancel="onTextColorCancelled"
     />
     <base-wysiwsg-editor-tiptap-toolbar-url
-      v-if="isLinkInput"
       :url="inputUrl"
-      class="sub-input"
+      :activator-id="linkActivatorId"
       @update:url="onLinkInputted"
       @delete="onLinkDeleted"
-      @cancel="onLinkCancelled"
     />
     <base-wysiwsg-editor-tiptap-toolbar-youtube
-      v-if="isYoutubeInput"
-      class="sub-input"
+      :activator-id="youtubeActivatorId"
       @update:url="onYoutubeInputted"
-      @cancel="onYoutubeCancelled"
     />
   </div>
 </template>
@@ -447,13 +378,6 @@ const onClearNodesAndMarks = () => {
         background-color: $link-active;
       }
     }
-  }
-
-  .sub-input {
-    position: absolute;
-    top: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
   }
 }
 </style>

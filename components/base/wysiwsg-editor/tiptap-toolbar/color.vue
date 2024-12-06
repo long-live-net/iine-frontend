@@ -1,9 +1,11 @@
 <script setup lang="ts">
-const props = defineProps<{ color: string }>()
+const props = defineProps<{
+  color: string
+  activatorId: string
+}>()
 defineEmits<{
   'update:color': [value: string]
   delete: []
-  cancel: []
 }>()
 
 // const swatches = [
@@ -23,45 +25,54 @@ watch(
   },
   { immediate: true }
 )
+
+const menuValue = ref(false)
 </script>
 
 <template>
-  <div class="sub-input-color elevation-4">
-    <div class="controller">
-      <v-color-picker
-        :model-value="inputColor"
-        hide-canvas
-        hide-inputs
-        show-swatches
-        :swatches-max-height="120"
-        @update:model-value="$emit('update:color', $event)"
-      />
-    </div>
-    <div class="actions">
-      <div class="d-flex align-center">
-        <v-btn
-          v-if="color"
-          :color="inputColor"
-          icon="mdi-delete"
-          size="x-small"
-          class="mr-2"
-          @click="$emit('delete')"
-        />
-        <p :style="{ color: inputColor }">
-          <b>Font Color</b>
-        </p>
-      </div>
-      <div>
-        <v-btn
-          variant="outlined"
-          color="black"
-          icon="mdi-close"
-          size="x-small"
-          @click="$emit('cancel')"
+  <v-menu
+    v-model="menuValue"
+    :activator="`#${activatorId}`"
+    :close-on-content-click="false"
+    location="bottom"
+  >
+    <div class="sub-input-color">
+      <div class="controller">
+        <v-color-picker
+          :model-value="inputColor"
+          hide-canvas
+          hide-inputs
+          show-swatches
+          :swatches-max-height="120"
+          @update:model-value="$emit('update:color', $event)"
         />
       </div>
+      <div class="actions">
+        <div class="d-flex align-center">
+          <v-btn
+            v-if="color"
+            :color="inputColor"
+            icon="mdi-delete"
+            size="x-small"
+            class="mr-2"
+            @click="$emit('delete')"
+          />
+          <p :style="{ color: inputColor }">
+            <b>Font Color</b>
+          </p>
+        </div>
+        <div>
+          <v-btn
+            variant="outlined"
+            color="black"
+            icon="mdi-close"
+            size="x-small"
+            @click="menuValue = false"
+          />
+        </div>
+      </div>
     </div>
-  </div>
+  </v-menu>
 </template>
 
 <style scoped lang="scss">

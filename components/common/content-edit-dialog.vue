@@ -32,7 +32,7 @@ const titleColor = computed(() => (props.isUpdate ? 'success' : 'info'))
 
 <style lang="scss" scoped>
 .content-edit-dialog {
-  width: 840px;
-  max-width: 100%;
+  width: 90dvw;
+  max-width: 840px;
 }
 </style>
