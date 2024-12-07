@@ -1,7 +1,4 @@
 <script setup lang="ts">
-defineProps<{
-  activatorId: string
-}>()
 const emit = defineEmits<{
   'update:url': [value: string]
 }>()
@@ -30,9 +27,9 @@ const onUpdateUrl = () => {
 <template>
   <v-menu
     v-model="menuValue"
-    :activator="`#${activatorId}`"
-    :close-on-content-click="false"
+    activator="parent"
     location="bottom"
+    :close-on-content-click="false"
   >
     <div class="sub-input-url">
       <div class="controller">

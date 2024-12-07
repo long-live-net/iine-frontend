@@ -2,10 +2,7 @@
 import { debounce } from 'es-toolkit/compat'
 import type { FontSize } from '@/utils/wysiwsg-editor/tip-tap'
 
-const props = defineProps<{
-  size: FontSize
-  activatorId: string
-}>()
+const props = defineProps<{ size: FontSize }>()
 const emit = defineEmits<{
   'update:size': [value: FontSize]
   delete: []
@@ -38,9 +35,9 @@ const menuValue = ref(false)
 <template>
   <v-menu
     v-model="menuValue"
-    :activator="`#${activatorId}`"
-    :close-on-content-click="false"
+    activator="parent"
     location="bottom"
+    :close-on-content-click="false"
   >
     <div class="sub-input-font-size">
       <div class="controller elevation-2">

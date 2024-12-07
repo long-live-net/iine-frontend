@@ -1,8 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
-  color: string
-  activatorId: string
-}>()
+const props = defineProps<{ color: string }>()
 defineEmits<{
   'update:color': [value: string]
   delete: []
@@ -32,9 +29,9 @@ const menuValue = ref(false)
 <template>
   <v-menu
     v-model="menuValue"
-    :activator="`#${activatorId}`"
-    :close-on-content-click="false"
+    activator="parent"
     location="bottom"
+    :close-on-content-click="false"
   >
     <div class="sub-input-color">
       <div class="controller">

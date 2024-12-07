@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import type { HeaderLebel } from '@/utils/wysiwsg-editor/tip-tap'
 
-const props = defineProps<{
-  level: HeaderLebel
-  activatorId: string
-}>()
-const emit = defineEmits<{
-  'update:level': [value: HeaderLebel]
-}>()
+const props = defineProps<{ level: HeaderLebel }>()
+const emit = defineEmits<{ 'update:level': [value: HeaderLebel] }>()
 
 const inputLevel = ref<HeaderLebel>(null)
 watch(
@@ -36,9 +31,9 @@ const menuValue = ref(false)
 <template>
   <v-menu
     v-model="menuValue"
-    :activator="`#${activatorId}`"
-    :close-on-content-click="false"
+    activator="parent"
     location="bottom"
+    :close-on-content-click="false"
   >
     <div class="sub-input-header">
       <div class="controller">

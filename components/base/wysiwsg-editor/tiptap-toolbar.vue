@@ -99,17 +99,6 @@ const onToggleTextAlignJustify = () => {
 const isImage = computed(() => props.editor.isActive('image'))
 
 // ==== Header ====
-// ==== Text Size ====
-// ==== Text Color ====
-// ==== URL Link ====
-// ==== Youtube ====
-const headerActivatorId = 'header-activator-button'
-const textSizeActivatorId = 'text-size-activator-button'
-const textColorActivatorId = 'text-color-activator-button'
-const linkActivatorId = 'link-activator-button'
-const youtubeActivatorId = 'youtube-activator-button'
-
-//  Header
 const inputHeader = computed<HeaderLebel>(
   () => props.editor.getAttributes('heading').level ?? null
 )
@@ -120,7 +109,7 @@ const onHeaderInputted = (level: HeaderLebel) => {
   }
 }
 
-//  Text Size
+// ==== Text Size ====
 const inputTextSize = computed<FontSize>(() => {
   const sizeString = props.editor.getAttributes('textStyle').fontSize ?? ''
   const ret = sizeString.match(/[0-9]+/)
@@ -138,7 +127,7 @@ const onTextSizeInputted = (size: FontSize) => {
   }
 }
 
-//  Text Color
+// ==== Text Color ====
 const inputTextColor = computed<string>(
   () => props.editor.getAttributes('textStyle').color ?? ''
 )
@@ -153,7 +142,7 @@ const onTextColorInputted = (color: string) => {
   }
 }
 
-//  URL Link
+// ==== URL Link ====
 const inputUrl = computed<string>(
   () => props.editor.getAttributes('link').href ?? ''
 )
@@ -174,7 +163,7 @@ const onLinkInputted = (url: string) => {
   }
 }
 
-//  Youtube
+// ==== Youtube ====
 const isYoutube = computed(() => props.editor.isActive('youtube'))
 const onYoutubeInputted = (url: string) => {
   if (url) {
@@ -198,24 +187,27 @@ const onClearNodesAndMarks = () => {
         <v-icon size="small">mdi-redo</v-icon>
       </button>
 
-      <button
-        :id="headerActivatorId"
-        :class="{ 'is-active': isHeader }"
-        @click.stop.prevent
-      >
+      <button :class="{ 'is-active': isHeader }" @click.stop.prevent>
         <v-icon size="small">mdi-format-header-equal</v-icon>
+        <base-wysiwsg-editor-tiptap-toolbar-header
+          :level="inputHeader"
+          @update:level="onHeaderInputted"
+        />
       </button>
 
       <button
-        :id="textSizeActivatorId"
         :class="{ 'is-active': inputTextSize && inputTextSize > 0 }"
         @click.stop.prevent
       >
         <v-icon size="small">mdi-format-color-text</v-icon>
+        <base-wysiwsg-editor-tiptap-toolbar-font-size
+          :size="inputTextSize"
+          @update:size="onTextSizeInputted"
+          @delete="onTextSizeDeleted"
+        />
       </button>
 
       <button
-        :id="textColorActivatorId"
         :class="{ 'is-active': inputTextColor.length }"
         @click.stop.prevent
       >
@@ -223,6 +215,11 @@ const onClearNodesAndMarks = () => {
           <v-icon size="x-small" icon="mdi-format-color-text" />
           <v-sheet :color="inputTextColor" height="3" width="20" tile />
         </div>
+        <base-wysiwsg-editor-tiptap-toolbar-color
+          :color="inputTextColor"
+          @update:color="onTextColorInputted"
+          @delete="onTextColorDeleted"
+        />
       </button>
 
       <button
@@ -249,12 +246,13 @@ const onClearNodesAndMarks = () => {
       >
         <v-icon size="small">mdi-format-bold</v-icon>
       </button>
-      <button
-        :id="linkActivatorId"
-        :class="{ 'is-active': isLink }"
-        @click.stop.prevent
-      >
+      <button :class="{ 'is-active': isLink }" @click.stop.prevent>
         <v-icon size="small">mdi-link</v-icon>
+        <base-wysiwsg-editor-tiptap-toolbar-url
+          :url="inputUrl"
+          @update:url="onLinkInputted"
+          @delete="onLinkDeleted"
+        />
       </button>
       <button
         :class="{ 'is-active': isBlockquote }"
@@ -311,42 +309,14 @@ const onClearNodesAndMarks = () => {
         >
           <v-icon size="small">mdi-image</v-icon>
         </button>
-        <button
-          :id="youtubeActivatorId"
-          :class="{ 'is-active': isYoutube }"
-          @click.stop.prevent
-        >
+        <button :class="{ 'is-active': isYoutube }" @click.stop.prevent>
           <v-icon size="small">mdi-youtube</v-icon>
+          <base-wysiwsg-editor-tiptap-toolbar-youtube
+            @update:url="onYoutubeInputted"
+          />
         </button>
       </template>
     </nav>
-    <base-wysiwsg-editor-tiptap-toolbar-header
-      :level="inputHeader"
-      :activator-id="headerActivatorId"
-      @update:level="onHeaderInputted"
-    />
-    <base-wysiwsg-editor-tiptap-toolbar-font-size
-      :size="inputTextSize"
-      :activator-id="textSizeActivatorId"
-      @update:size="onTextSizeInputted"
-      @delete="onTextSizeDeleted"
-    />
-    <base-wysiwsg-editor-tiptap-toolbar-color
-      :color="inputTextColor"
-      :activator-id="textColorActivatorId"
-      @update:color="onTextColorInputted"
-      @delete="onTextColorDeleted"
-    />
-    <base-wysiwsg-editor-tiptap-toolbar-url
-      :url="inputUrl"
-      :activator-id="linkActivatorId"
-      @update:url="onLinkInputted"
-      @delete="onLinkDeleted"
-    />
-    <base-wysiwsg-editor-tiptap-toolbar-youtube
-      :activator-id="youtubeActivatorId"
-      @update:url="onYoutubeInputted"
-    />
   </div>
 </template>
 

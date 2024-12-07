@@ -1,8 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
-  url: string
-  activatorId: string
-}>()
+const props = defineProps<{ url: string }>()
 const emit = defineEmits<{
   'update:url': [value: string]
   delete: []
@@ -42,9 +39,9 @@ const onDeleteUrl = () => {
 <template>
   <v-menu
     v-model="menuValue"
-    :activator="`#${activatorId}`"
-    :close-on-content-click="false"
+    activator="parent"
     location="bottom"
+    :close-on-content-click="false"
   >
     <div class="sub-input-url">
       <div class="controller">
