@@ -30,7 +30,7 @@ const menuValue = ref(false)
   <v-menu
     v-model="menuValue"
     activator="parent"
-    location="bottom"
+    location="top"
     :close-on-content-click="false"
   >
     <div class="sub-input-color">

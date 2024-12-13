@@ -142,6 +142,43 @@ const onTextColorInputted = (color: string) => {
   }
 }
 
+// ==== Table ====
+const isTable = computed(() => props.editor.isActive('table'))
+const onAddTable = () => {
+  props.editor
+    .chain()
+    .focus()
+    .insertTable({ rows: 3, cols: 5, withHeaderRow: true })
+    .run()
+}
+const onDeleteTable = () => {
+  props.editor.chain().focus().deleteTable().run()
+}
+const onAddRowBefore = () => {
+  props.editor.chain().focus().addRowBefore().run()
+}
+const onAddRowAfter = () => {
+  props.editor.chain().focus().addRowAfter().run()
+}
+const onDeleteRow = () => {
+  props.editor.chain().focus().deleteRow().run()
+}
+const onToggleHeaderRow = () => {
+  props.editor.chain().focus().toggleHeaderRow().run()
+}
+const onAddColumnBefore = () => {
+  props.editor.chain().focus().addColumnBefore().run()
+}
+const onAddColumnAfter = () => {
+  props.editor.chain().focus().addColumnAfter().run()
+}
+const onDeleteColumn = () => {
+  props.editor.chain().focus().deleteColumn().run()
+}
+const onToggleHeaderColumn = () => {
+  props.editor.chain().focus().toggleHeaderColumn().run()
+}
+
 // ==== URL Link ====
 const inputUrl = computed<string>(
   () => props.editor.getAttributes('link').href ?? ''
@@ -298,6 +335,23 @@ const onClearNodesAndMarks = () => {
         <v-icon size="small">mdi-format-align-justify</v-icon>
       </button>
 
+      <button :class="{ 'is-active': isTable }" @click.stop.prevent>
+        <v-icon size="small">mdi-table</v-icon>
+        <base-wysiwsg-editor-tiptap-toolbar-table
+          :is-table="isTable"
+          @table:add="onAddTable"
+          @table:delete="onDeleteTable"
+          @tr:add:before="onAddRowBefore"
+          @tr:add:after="onAddRowAfter"
+          @tr:delete="onDeleteRow"
+          @tr:toggle:header="onToggleHeaderRow"
+          @td:add:before="onAddColumnBefore"
+          @td:add:after="onAddColumnAfter"
+          @td:delete="onDeleteColumn"
+          @td:toggle:header="onToggleHeaderColumn"
+        />
+      </button>
+
       <button @click.stop.prevent="onClearNodesAndMarks">
         <v-icon size="small">mdi-format-clear</v-icon>
       </button>
@@ -323,7 +377,6 @@ const onClearNodesAndMarks = () => {
 <style scoped lang="scss">
 .tiptap-toolbar {
   nav.toolbar {
-    position: relative;
     color: $white;
     background-color: $gray-darken1;
     padding: 0.25rem 0.5rem;

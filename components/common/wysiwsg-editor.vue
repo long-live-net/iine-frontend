@@ -85,7 +85,7 @@ const inputBodyImageFunction = async (
 <template>
   <client-only>
     <div
-      class="wysiwyg-editor g-theme-wysiwyg-editor"
+      class="wysiwyg-editor g-theme-wysiwyg-editor g-theme-wysiwyg-contents"
       :class="editorClasses"
       @mouseover="isHover = true"
       @mouseleave="isHover = false"
@@ -157,7 +157,7 @@ const inputBodyImageFunction = async (
 }
 
 .hovered {
-  background-color: var(--g-theme-wysiwyg-editor-hovered-background-color);
+  box-shadow: 0 0 4px var(--g-theme-wysiwyg-editor-hovered-box-shadow-color);
 }
 .focused {
   border-bottom: 2px solid $gray-darken1;

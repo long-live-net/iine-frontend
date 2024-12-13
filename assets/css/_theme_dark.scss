@@ -53,14 +53,25 @@
   }
 
   .g-theme-wysiwyg-editor {
-    background-color: variables.$gray-darken4;
+    background-color: variables.$gray-darken5;
     color: variables.$white;
     border-color: variables.$gray-darken2;
     --g-theme-wysiwyg-editor-label-color: #{variables.$gray-lighten2};
     --g-theme-wysiwyg-editor-label-focused-color: #{variables.$white};
     --g-theme-wysiwyg-editor-placeholder-color: #{variables.$gray-lighten1};
-    --g-theme-wysiwyg-editor-hovered-background-color: #{variables.$gray-darken3};
+    --g-theme-wysiwyg-editor-hovered-box-shadow-color: #{variables.$gray-lighten2};
     --g-theme-wysiwyg-editor-focused-background-color: #{variables.$gray-darken5};
+  }
+
+  .g-theme-wysiwyg-contents {
+    table {
+      td {
+        background-color: variables.$gray-darken15;
+      }
+      th {
+        background-color: #546e7a;
+      }
+    }
   }
 
   .g-theme-modal {
