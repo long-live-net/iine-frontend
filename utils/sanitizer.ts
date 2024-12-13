@@ -10,6 +10,8 @@ export const htmlSanitizer = (htmlText: string | undefined) =>
       '*': ['class', 'style'],
       a: ['href', 'name', 'target', 'rel'],
       img: ['src', 'alt', 'title', 'width', 'height', 'loading'],
+      th: ['colspan', 'rowspan'],
+      td: ['colspan', 'rowspan'],
       iframe: [
         'src',
         'width',

@@ -8,9 +8,23 @@ import TextStyle from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import Placeholder from '@tiptap/extension-placeholder'
 import ImageResize from 'tiptap-extension-resize-image'
-import Youtube from '@tiptap/extension-youtube'
 import { FontSize } from '@/utils/wysiwsg-editor/tip-tap'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import Youtube from '@tiptap/extension-youtube'
 import type TiptapFrameWithInputImage from './tiptap-frame-with-input-image.vue'
+
+const CustomTable = Table.extend({
+  renderHTML({ HTMLAttributes }) {
+    return [
+      'div',
+      { class: 'table-wrapper-responsive' },
+      ['table', HTMLAttributes, ['tbody', 0]],
+    ]
+  },
+})
 
 const content = defineModel<string | null>('content', { default: null })
 const props = withDefaults(
@@ -54,6 +68,10 @@ onMounted(() => {
         placeholder: props.placeholder || 'Plase input',
       }),
       ImageResize,
+      CustomTable,
+      TableRow,
+      TableHeader,
+      TableCell,
       Youtube.configure({
         controls: false,
         nocookie: true,
@@ -108,15 +126,15 @@ defineExpose({ clearContent })
 <template>
   <base-wysiwsg-editor-tiptap-toolbar
     v-if="editor"
-    id="wysiwsg-editor-tiptap-toolbar"
     :editor="editor"
     :no-image="noImage"
+    class="wysiwsg-editor-tiptap-toolbar"
     @image-setting="frameWithInputImage?.clickFileInput()"
   />
   <base-wysiwsg-editor-tiptap-frame-with-input-image
     v-if="editor"
-    id="wysiwsg-editor-tiptap-editor"
     ref="frameWithInputImage"
+    class="wysiwsg-editor-tiptap-editor"
     @input-image="onInputImage"
   >
     <editor-content :editor="editor" />
@@ -124,13 +142,13 @@ defineExpose({ clearContent })
 </template>
 
 <style scoped lang="scss">
-#wysiwsg-editor-tiptap-toolbar {
+.wysiwsg-editor-tiptap-toolbar {
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-#wysiwsg-editor-tiptap-editor {
+.wysiwsg-editor-tiptap-editor {
   overflow-x: hidden;
 }
 
@@ -149,8 +167,8 @@ defineExpose({ clearContent })
 
   ul,
   ol {
-    padding: 0 1rem;
-    margin: 1.25rem 1rem 1.25rem 0.4rem;
+    padding: 0 1rem 0 1.5rem;
+    margin: 1.25rem 0;
 
     li p {
       margin-top: 0.25em;
@@ -171,6 +189,65 @@ defineExpose({ clearContent })
     height: auto !important;
   }
 
+  table {
+    border-spacing: 2px;
+    margin: 0;
+    table-layout: fixed;
+    width: auto;
+
+    td,
+    th {
+      min-width: 1.5rem;
+      padding: 4px 6px;
+      position: relative;
+      vertical-align: top;
+      white-space: nowrap;
+
+      > * {
+        margin-bottom: 0;
+      }
+    }
+
+    th {
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .selectedCell:after {
+      background: gray;
+      content: '';
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .column-resize-handle {
+      background-color: purple;
+      bottom: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: -2px;
+      top: 0;
+      width: 6px;
+    }
+  }
+
+  .tableWrapper {
+    max-width: 100%;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+
+  .table-wrapper-responsive {
+    max-width: 100%;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+
   p.is-editor-empty:first-child::before {
     color: #adb5bd;
     content: attr(data-placeholder);
@@ -181,7 +258,6 @@ defineExpose({ clearContent })
 
   div[data-youtube-video] {
     iframe {
-      border: 0.5rem solid var(--black-contrast);
       display: block;
       max-width: 100%;
       min-height: 200px;
