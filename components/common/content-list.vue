@@ -6,8 +6,8 @@ defineProps<{ contents: Readonly<ContentType[]> }>()
 
 <template>
   <ul class="content-list">
-    <li v-for="content in contents" :key="content.id">
-      <slot :content="content" />
+    <li v-for="(content, index) in contents" :key="content.id">
+      <slot :content="content" :index="index" />
     </li>
   </ul>
 </template>

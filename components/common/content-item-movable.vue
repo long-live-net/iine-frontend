@@ -145,7 +145,7 @@ const onTouchEnd = () => {
     @mouseleave.stop="onMouseLeave"
   >
     <div
-      class="item-dragable can-edit"
+      class="item-movable can-edit"
       @mousedown.stop="onMouseDown"
       @mouseup.stop="onMouseUp"
       @mousemove.prevent.stop="onMouseMove"
@@ -165,7 +165,7 @@ const onTouchEnd = () => {
   height: 100%;
   overflow: hidden;
 
-  .item-dragable {
+  .item-movable {
     position: absolute;
     top: calc(v-bind('`${positionY}% + ${offsetY}px`'));
     left: calc(v-bind('`${positionX}% + ${offsetX}px`'));

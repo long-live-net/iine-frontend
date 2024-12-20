@@ -30,6 +30,12 @@ watch(isWholeData, async () => {
   await getNewses()
 })
 
+const isAppear = ref(false)
+const onIntersectImage = async (isIntersecting: boolean) => {
+  if (isIntersecting) {
+    isAppear.value = isIntersecting
+  }
+}
 await onLoad()
 </script>
 
@@ -37,10 +43,27 @@ await onLoad()
   <CommonContentWrap :loading="loading">
     <CommonContentCard class="type1-news-list">
       <CommonContentCardBody>
-        <CommonContentList v-if="newsListRef?.length" :contents="newsListRef">
-          <template #default="{ content }">
+        <CommonContentList
+          v-if="newsListRef?.length"
+          v-intersect="{
+            handler: onIntersectImage,
+            options: {
+              threshold: [0.5],
+            },
+          }"
+          :contents="newsListRef"
+        >
+          <template #default="{ content, index }">
             <div class="news-item">
-              <div class="news-item__header g-theme-contents-item__header">
+              <div
+                class="news-item__header g-theme-contents-item__header"
+                :class="{ 'g-animation-initial-effect': !canEdit }"
+                :style="{
+                  'animation-name': canEdit || !isAppear ? 'none' : 'gFadeIn',
+                  'animation-duration': '1.5s',
+                  'animation-delay': `${index * 0.1}s`,
+                }"
+              >
                 <span>
                   {{
                     formatLocalDate(
@@ -54,7 +77,16 @@ await onLoad()
                   class="ml-2"
                 />
               </div>
-              <div class="news-item__title">
+              <div
+                class="news-item__title"
+                :class="{ 'g-animation-initial-effect': !canEdit }"
+                :style="{
+                  'animation-name':
+                    canEdit || !isAppear ? 'none' : 'gFadeInLeft',
+                  'animation-duration': '1.5s',
+                  'animation-delay': `${index * 0.1}s`,
+                }"
+              >
                 <nuxt-link :to="`/news/${content.id}`">
                   {{ content.title }}
                 </nuxt-link>

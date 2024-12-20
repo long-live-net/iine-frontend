@@ -20,47 +20,59 @@ await onLoad()
     :loading="loading"
     loading-size="large"
   >
-    <CommonEyecatchImage
-      :url="eyecatchRef?.image?.url"
-      :settings="eyecatchRef?.imageSettings"
-      class="eyecatcher"
+    <CommonContentItemAnimation
+      :thresholds="[0]"
+      animation-name="gFadeIn"
+      animation-duration="2s"
     >
-      <template #default>
-        <CommonEyecatchTitleSettingPositionEyecatcher
-          :settings="eyecatchRef?.titleSettings"
-          :can-edit="canEdit"
-          @update="onUpdateTitleSetting"
-        >
-          <template #default>
-            <CommonEyecatchTitle
-              place="top"
-              :title="eyecatchRef?.title"
-              :subtitle="eyecatchRef?.subtitle"
-              :settings="eyecatchRef?.titleSettings"
-              text-no-wrap
-            />
-          </template>
-          <template #sideSettings>
-            <CommonEyecatchTitleSetting
-              :settings="eyecatchRef?.titleSettings"
-              @update="onUpdateTitleSetting"
-            />
-          </template>
-          <template v-if="eyecatchRef?.subtitle" #topSettings>
-            <CommonEyecatchTitleSettingAlign
-              :settings="eyecatchRef?.titleSettings"
-              @update="onUpdateTitleSetting"
-            />
-          </template>
-        </CommonEyecatchTitleSettingPositionEyecatcher>
-      </template>
-      <template v-if="canEdit && eyecatchRef" #settings>
-        <CommonEyecatchImageSetting
-          :settings="eyecatchRef.imageSettings"
-          @update="onUpdateImageSetting"
-        />
-      </template>
-    </CommonEyecatchImage>
+      <CommonEyecatchImage
+        :url="eyecatchRef?.image?.url"
+        :settings="eyecatchRef?.imageSettings"
+        class="eyecatcher"
+      >
+        <template #default>
+          <CommonEyecatchTitleSettingPositionEyecatcher
+            :settings="eyecatchRef?.titleSettings"
+            :can-edit="canEdit"
+            @update="onUpdateTitleSetting"
+          >
+            <template #default>
+              <CommonContentItemAnimation
+                :thresholds="[0]"
+                animation-name="gZoomIn"
+                animation-duration="1s"
+              >
+                <CommonEyecatchTitle
+                  place="top"
+                  :title="eyecatchRef?.title"
+                  :subtitle="eyecatchRef?.subtitle"
+                  :settings="eyecatchRef?.titleSettings"
+                  text-no-wrap
+                />
+              </CommonContentItemAnimation>
+            </template>
+            <template #sideSettings>
+              <CommonEyecatchTitleSetting
+                :settings="eyecatchRef?.titleSettings"
+                @update="onUpdateTitleSetting"
+              />
+            </template>
+            <template v-if="eyecatchRef?.subtitle" #topSettings>
+              <CommonEyecatchTitleSettingAlign
+                :settings="eyecatchRef?.titleSettings"
+                @update="onUpdateTitleSetting"
+              />
+            </template>
+          </CommonEyecatchTitleSettingPositionEyecatcher>
+        </template>
+        <template v-if="canEdit && eyecatchRef" #settings>
+          <CommonEyecatchImageSetting
+            :settings="eyecatchRef.imageSettings"
+            @update="onUpdateImageSetting"
+          />
+        </template>
+      </CommonEyecatchImage>
+    </CommonContentItemAnimation>
     <div v-if="canEdit" class="edit-activator">
       <ManageContentEyecatcher
         v-if="eyecatchRef?.id"

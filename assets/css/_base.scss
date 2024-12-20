@@ -134,3 +134,91 @@ h6 {
     text-align: left;
   }
 }
+
+// items animation
+@keyframes gFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gFadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 60px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes gFadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -60px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes gFadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-80px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes gFadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(80px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes gZoomIn {
+  from {
+    opacity: 0.25;
+    transform: scale3d(0.25, 0.25, 0.25);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes gZoomInUp {
+  from {
+    opacity: 0.25;
+    transform: scale3d(0.25, 0.25, 0.25) translate3d(0, 150px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+  }
+}
+
+.g-animation-initial-effect {
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
