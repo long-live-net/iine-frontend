@@ -17,49 +17,62 @@ await onLoad()
 <template>
   <CommonContentWrap :loading="loading">
     <CommonContentCard class="type1-information">
-      <CommonEyecatchImage
-        v-if="informationRef?.image"
-        :url="informationRef?.image?.url"
-        :settings="informationRef?.imageSettings"
-        class="eyecatcher"
-      >
-        <template #default>
-          <CommonEyecatchTitleSettingPosition
-            :settings="informationRef?.titleSettings"
-            :can-edit="canEdit"
-            class="g-block-lg"
-            @update="onUpdateTitleSetting"
+      <template v-if="informationRef?.image">
+        <CommonContentItemAnimation
+          :thresholds="[0]"
+          animation-name="gFadeIn"
+          animation-duration="2s"
+        >
+          <CommonEyecatchImage
+            :url="informationRef?.image?.url"
+            :settings="informationRef?.imageSettings"
+            class="eyecatcher"
           >
             <template #default>
-              <CommonEyecatchTitle
-                place="section"
-                :title="informationRef?.title"
-                :subtitle="informationRef?.subtitle"
+              <CommonEyecatchTitleSettingPosition
                 :settings="informationRef?.titleSettings"
-                text-no-wrap
-              />
-            </template>
-            <template #sideSettings>
-              <CommonEyecatchTitleSetting
-                :settings="informationRef?.titleSettings"
+                :can-edit="canEdit"
+                class="g-block-lg"
                 @update="onUpdateTitleSetting"
+              >
+                <template #default>
+                  <CommonContentItemAnimation
+                    :thresholds="[0]"
+                    animation-name="gZoomIn"
+                    animation-duration="1s"
+                  >
+                    <CommonEyecatchTitle
+                      place="section"
+                      :title="informationRef?.title"
+                      :subtitle="informationRef?.subtitle"
+                      :settings="informationRef?.titleSettings"
+                      text-no-wrap
+                    />
+                  </CommonContentItemAnimation>
+                </template>
+                <template #sideSettings>
+                  <CommonEyecatchTitleSetting
+                    :settings="informationRef?.titleSettings"
+                    @update="onUpdateTitleSetting"
+                  />
+                </template>
+                <template v-if="informationRef?.subtitle" #topSettings>
+                  <CommonEyecatchTitleSettingAlign
+                    :settings="informationRef?.titleSettings"
+                    @update="onUpdateTitleSetting"
+                  />
+                </template>
+              </CommonEyecatchTitleSettingPosition>
+            </template>
+            <template v-if="canEdit && informationRef" #settings>
+              <CommonEyecatchImageSetting
+                :settings="informationRef.imageSettings"
+                @update="onUpdateImageSetting"
               />
             </template>
-            <template v-if="informationRef?.subtitle" #topSettings>
-              <CommonEyecatchTitleSettingAlign
-                :settings="informationRef?.titleSettings"
-                @update="onUpdateTitleSetting"
-              />
-            </template>
-          </CommonEyecatchTitleSettingPosition>
-        </template>
-        <template v-if="canEdit && informationRef" #settings>
-          <CommonEyecatchImageSetting
-            :settings="informationRef.imageSettings"
-            @update="onUpdateImageSetting"
-          />
-        </template>
-      </CommonEyecatchImage>
+          </CommonEyecatchImage>
+        </CommonContentItemAnimation>
+      </template>
       <CommonContentCardTitle
         :title="informationRef?.title ?? ''"
         :subtitle="informationRef?.subtitle"

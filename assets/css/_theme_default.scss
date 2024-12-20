@@ -2,13 +2,13 @@
 
 .g-theme-default {
   background-color: variables.$gray-lighten25;
-  color: variables.$gray-darken2;
+  color: variables.$gray-darken3;
 
   a {
-    color: variables.$link-normal;
+    color: variables.$link-normal2;
   }
   a:link {
-    color: variables.$link-normal;
+    color: variables.$link-normal2;
   }
   a:hover {
     color: variables.$link-active;
@@ -26,7 +26,7 @@
 
   .g-theme-app-container {
     background-color: variables.$gray-lighten25;
-    color: variables.$gray-darken2;
+    color: variables.$gray-darken3;
   }
   .g-theme-header {
     background-color: variables.$gray-darken3;

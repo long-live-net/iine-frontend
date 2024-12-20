@@ -18,49 +18,62 @@ await onLoad()
 <template>
   <CommonContentWrap :loading="loading">
     <CommonContentCard class="type1-contact">
-      <CommonEyecatchImage
-        v-if="contactRef?.image"
-        :url="contactRef?.image?.url"
-        :settings="contactRef?.imageSettings"
-        class="eyecatcher"
-      >
-        <template #default>
-          <CommonEyecatchTitleSettingPosition
-            :settings="contactRef?.titleSettings"
-            :can-edit="canEdit"
-            class="g-block-lg"
-            @update="onUpdateTitleSetting"
+      <template v-if="contactRef?.image">
+        <CommonContentItemAnimation
+          :thresholds="[0]"
+          animation-name="gFadeIn"
+          animation-duration="2s"
+        >
+          <CommonEyecatchImage
+            :url="contactRef?.image?.url"
+            :settings="contactRef?.imageSettings"
+            class="eyecatcher"
           >
             <template #default>
-              <CommonEyecatchTitle
-                place="section"
-                :title="contactRef?.title"
-                :subtitle="contactRef?.subtitle"
+              <CommonEyecatchTitleSettingPosition
                 :settings="contactRef?.titleSettings"
-                text-no-wrap
-              />
-            </template>
-            <template #sideSettings>
-              <CommonEyecatchTitleSetting
-                :settings="contactRef?.titleSettings"
+                :can-edit="canEdit"
+                class="g-block-lg"
                 @update="onUpdateTitleSetting"
+              >
+                <template #default>
+                  <CommonContentItemAnimation
+                    :thresholds="[0]"
+                    animation-name="gZoomIn"
+                    animation-duration="1s"
+                  >
+                    <CommonEyecatchTitle
+                      place="section"
+                      :title="contactRef?.title"
+                      :subtitle="contactRef?.subtitle"
+                      :settings="contactRef?.titleSettings"
+                      text-no-wrap
+                    />
+                  </CommonContentItemAnimation>
+                </template>
+                <template #sideSettings>
+                  <CommonEyecatchTitleSetting
+                    :settings="contactRef?.titleSettings"
+                    @update="onUpdateTitleSetting"
+                  />
+                </template>
+                <template v-if="contactRef?.subtitle" #topSettings>
+                  <CommonEyecatchTitleSettingAlign
+                    :settings="contactRef?.titleSettings"
+                    @update="onUpdateTitleSetting"
+                  />
+                </template>
+              </CommonEyecatchTitleSettingPosition>
+            </template>
+            <template v-if="canEdit && contactRef" #settings>
+              <CommonEyecatchImageSetting
+                :settings="contactRef.imageSettings"
+                @update="onUpdateImageSetting"
               />
             </template>
-            <template v-if="contactRef?.subtitle" #topSettings>
-              <CommonEyecatchTitleSettingAlign
-                :settings="contactRef?.titleSettings"
-                @update="onUpdateTitleSetting"
-              />
-            </template>
-          </CommonEyecatchTitleSettingPosition>
-        </template>
-        <template v-if="canEdit && contactRef" #settings>
-          <CommonEyecatchImageSetting
-            :settings="contactRef.imageSettings"
-            @update="onUpdateImageSetting"
-          />
-        </template>
-      </CommonEyecatchImage>
+          </CommonEyecatchImage>
+        </CommonContentItemAnimation>
+      </template>
       <PublishCustomerServiceLinks class="type1-contact__service-links" />
       <CommonContentCardTitle
         :title="contactRef?.title ?? ''"

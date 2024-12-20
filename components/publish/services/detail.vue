@@ -58,42 +58,55 @@ await onLoad(contentId)
             :title="serviceRef?.title ?? ''"
             class="g-block-sm"
           />
-          <CommonEyecatchImage
-            v-if="serviceRef?.image"
-            :url="serviceRef?.image?.url"
-            :settings="serviceRef?.imageSettings"
-            class="eyecatcher"
-          >
-            <template #default>
-              <CommonEyecatchTitleSettingPosition
-                :settings="serviceRef?.titleSettings"
-                :can-edit="canEdit"
-                class="g-block-lg"
-                @update="onUpdateTitleSetting"
+          <template v-if="serviceRef?.image">
+            <CommonContentItemAnimation
+              :thresholds="[0]"
+              animation-name="gFadeIn"
+              animation-duration="1.5s"
+            >
+              <CommonEyecatchImage
+                :url="serviceRef?.image?.url"
+                :settings="serviceRef?.imageSettings"
+                class="eyecatcher"
               >
                 <template #default>
-                  <CommonEyecatchTitle
-                    place="section"
-                    :title="serviceRef?.title"
+                  <CommonEyecatchTitleSettingPosition
                     :settings="serviceRef?.titleSettings"
-                    text-no-wrap
-                  />
-                </template>
-                <template #sideSettings>
-                  <CommonEyecatchTitleSetting
-                    :settings="serviceRef?.titleSettings"
+                    :can-edit="canEdit"
+                    class="g-block-lg"
                     @update="onUpdateTitleSetting"
+                  >
+                    <template #default>
+                      <CommonContentItemAnimation
+                        :thresholds="[0]"
+                        animation-name="gZoomIn"
+                        animation-duration="1s"
+                      >
+                        <CommonEyecatchTitle
+                          place="section"
+                          :title="serviceRef?.title"
+                          :settings="serviceRef?.titleSettings"
+                          text-no-wrap
+                        />
+                      </CommonContentItemAnimation>
+                    </template>
+                    <template #sideSettings>
+                      <CommonEyecatchTitleSetting
+                        :settings="serviceRef?.titleSettings"
+                        @update="onUpdateTitleSetting"
+                      />
+                    </template>
+                  </CommonEyecatchTitleSettingPosition>
+                </template>
+                <template v-if="canEdit && serviceRef" #settings>
+                  <CommonEyecatchImageSetting
+                    :settings="serviceRef.imageSettings"
+                    @update="onUpdateImageSetting"
                   />
                 </template>
-              </CommonEyecatchTitleSettingPosition>
-            </template>
-            <template v-if="canEdit && serviceRef" #settings>
-              <CommonEyecatchImageSetting
-                :settings="serviceRef.imageSettings"
-                @update="onUpdateImageSetting"
-              />
-            </template>
-          </CommonEyecatchImage>
+              </CommonEyecatchImage>
+            </CommonContentItemAnimation>
+          </template>
           <CommonContentPreNextNagivation
             :pre-url="preUrl"
             :next-url="nextUrl"

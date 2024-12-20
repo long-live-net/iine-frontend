@@ -15,6 +15,7 @@ withDefaults(
 defineEmits<{
   select: [menuImage: MenuImageType]
 }>()
+const route = useRoute()
 </script>
 
 <template>
@@ -26,18 +27,26 @@ defineEmits<{
       <h5 class="title">
         {{ item.title }}
       </h5>
-      <CommonEyecatchImage
-        v-if="item.image"
-        :url="item.image.url"
-        round
-        class="eyecatcher"
-      />
+      <template v-if="item.image">
+        <CommonContentItemAnimation
+          animation-name="gFadeInUp"
+          :thresholds="[0.25]"
+          :disabled="route.name !== 'index'"
+        >
+          <CommonEyecatchImage :url="item.image.url" round class="eyecatcher" />
+        </CommonContentItemAnimation>
+      </template>
     </section>
-    <CommonWysiwsgViewer
-      v-if="!noCaption"
-      :value="item.caption"
-      class="caption"
-    />
+    <template v-if="!noCaption">
+      <CommonContentItemAnimation
+        animation-name="gFadeIn"
+        animation-duration="2s"
+        :thresholds="[0.5]"
+        :disabled="route.name !== 'index'"
+      >
+        <CommonWysiwsgViewer :value="item.caption" class="caption" />
+      </CommonContentItemAnimation>
+    </template>
   </div>
 </template>
 
@@ -68,10 +77,13 @@ defineEmits<{
     &:hover {
       color: $link-active;
     }
+
     .eyecatcher {
+      transition: transform 0.4s;
       &:hover {
         background-color: rgba(255 255 255 / 0.25);
         background-blend-mode: overlay;
+        transform: scale(1.1);
       }
     }
   }

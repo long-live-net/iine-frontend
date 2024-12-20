@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { debounce } from 'es-toolkit/compat'
+import { debounce } from 'es-toolkit'
 import type { FontSize } from '@/utils/wysiwsg-editor/tip-tap'
 
 const props = defineProps<{ size: FontSize }>()
