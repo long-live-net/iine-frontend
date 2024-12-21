@@ -20,7 +20,7 @@ await onLoad()
     <CommonContentCard class="type1-contact">
       <template v-if="contactRef?.image">
         <CommonContentItemAnimation
-          :thresholds="[0]"
+          :thresholds="[0.5]"
           animation-name="gFadeIn"
           animation-duration="2s"
         >
@@ -38,9 +38,9 @@ await onLoad()
               >
                 <template #default>
                   <CommonContentItemAnimation
-                    :thresholds="[0]"
+                    :thresholds="[0.5]"
                     animation-name="gZoomIn"
-                    animation-duration="1s"
+                    animation-duration="1.5s"
                   >
                     <CommonEyecatchTitle
                       place="section"

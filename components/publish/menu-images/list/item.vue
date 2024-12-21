@@ -30,7 +30,7 @@ const route = useRoute()
       <template v-if="item.image">
         <CommonContentItemAnimation
           animation-name="gFadeInUp"
-          :thresholds="[0.25]"
+          :thresholds="[0.5]"
           :disabled="route.name !== 'index'"
         >
           <CommonEyecatchImage :url="item.image.url" round class="eyecatcher" />

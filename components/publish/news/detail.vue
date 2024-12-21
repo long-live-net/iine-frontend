@@ -44,7 +44,7 @@ await onLoad(contentId)
         />
         <template v-if="newsRef?.image">
           <CommonContentItemAnimation
-            :thresholds="[0]"
+            :thresholds="[0.5]"
             animation-name="gFadeIn"
             animation-duration="1.5s"
           >
@@ -62,7 +62,7 @@ await onLoad(contentId)
                 >
                   <template #default>
                     <CommonContentItemAnimation
-                      :thresholds="[0]"
+                      :thresholds="[0.5]"
                       animation-name="gZoomIn"
                       animation-duration="1s"
                     >
