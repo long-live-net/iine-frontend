@@ -38,10 +38,17 @@ await onLoad(contentId)
   <CommonContentWrap :loading="loading">
     <CommonContentSlidableNavigation :pre-url="preUrl" :next-url="nextUrl">
       <CommonContentCard class="news-detail">
-        <CommonContentCardTitle
-          :title="newsRef?.title ?? ''"
+        <CommonContentItemAnimation
+          :thresholds="[0.5]"
+          animation-name="gFadeIn"
+          animation-duration="1.5s"
           class="g-block-sm"
-        />
+        >
+          <CommonContentCardTitle
+            :title="newsRef?.title ?? ''"
+            class="g-block-sm"
+          />
+        </CommonContentItemAnimation>
         <template v-if="newsRef?.image">
           <CommonContentItemAnimation
             :thresholds="[0.5]"

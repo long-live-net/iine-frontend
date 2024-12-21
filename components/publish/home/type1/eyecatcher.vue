@@ -40,7 +40,7 @@ await onLoad()
               <CommonContentItemAnimation
                 :thresholds="[0.5]"
                 animation-name="gZoomIn"
-                animation-duration="1.5s"
+                animation-duration="1.25s"
               >
                 <CommonEyecatchTitle
                   place="top"

@@ -53,92 +53,94 @@ await onLoad(contentId)
   <CommonContentWrap :loading="loading">
     <CommonContentSlidableNavigation :pre-url="preUrl" :next-url="nextUrl">
       <CommonContentCard class="service-detail">
-        <template #default>
+        <CommonContentItemAnimation
+          :thresholds="[0.5]"
+          animation-name="gFadeIn"
+          animation-duration="1.5s"
+          class="g-block-sm"
+        >
           <CommonContentCardTitle
             :title="serviceRef?.title ?? ''"
             class="g-block-sm"
           />
-          <template v-if="serviceRef?.image">
-            <CommonContentItemAnimation
-              :thresholds="[0.5]"
-              animation-name="gFadeIn"
-              animation-duration="1.5s"
+        </CommonContentItemAnimation>
+        <template v-if="serviceRef?.image">
+          <CommonContentItemAnimation
+            :thresholds="[0.5]"
+            animation-name="gFadeIn"
+            animation-duration="1.5s"
+          >
+            <CommonEyecatchImage
+              :url="serviceRef?.image?.url"
+              :settings="serviceRef?.imageSettings"
+              class="eyecatcher"
             >
-              <CommonEyecatchImage
-                :url="serviceRef?.image?.url"
-                :settings="serviceRef?.imageSettings"
-                class="eyecatcher"
-              >
-                <template #default>
-                  <CommonEyecatchTitleSettingPosition
-                    :settings="serviceRef?.titleSettings"
-                    :can-edit="canEdit"
-                    class="g-block-lg"
-                    @update="onUpdateTitleSetting"
-                  >
-                    <template #default>
-                      <CommonContentItemAnimation
-                        :thresholds="[0.5]"
-                        animation-name="gZoomIn"
-                        animation-duration="1s"
-                      >
-                        <CommonEyecatchTitle
-                          place="section"
-                          :title="serviceRef?.title"
-                          :settings="serviceRef?.titleSettings"
-                          text-no-wrap
-                        />
-                      </CommonContentItemAnimation>
-                    </template>
-                    <template #sideSettings>
-                      <CommonEyecatchTitleSetting
+              <template #default>
+                <CommonEyecatchTitleSettingPosition
+                  :settings="serviceRef?.titleSettings"
+                  :can-edit="canEdit"
+                  class="g-block-lg"
+                  @update="onUpdateTitleSetting"
+                >
+                  <template #default>
+                    <CommonContentItemAnimation
+                      :thresholds="[0.5]"
+                      animation-name="gZoomIn"
+                      animation-duration="1s"
+                    >
+                      <CommonEyecatchTitle
+                        place="section"
+                        :title="serviceRef?.title"
                         :settings="serviceRef?.titleSettings"
-                        @update="onUpdateTitleSetting"
+                        text-no-wrap
                       />
-                    </template>
-                  </CommonEyecatchTitleSettingPosition>
-                </template>
-                <template v-if="canEdit && serviceRef" #settings>
-                  <CommonEyecatchImageSetting
-                    :settings="serviceRef.imageSettings"
-                    @update="onUpdateImageSetting"
-                  />
-                </template>
-              </CommonEyecatchImage>
-            </CommonContentItemAnimation>
-          </template>
-          <CommonContentPreNextNagivation
-            :pre-url="preUrl"
-            :next-url="nextUrl"
-          />
-          <CommonContentCardBody>
-            <div v-if="bodyPlainString">
-              <CommonWysiwsgViewer :value="serviceRef?.body" />
-            </div>
-            <div v-else class="no-items">
-              <p>データがありません</p>
-              <div v-if="canEdit">
-                <ManageContentServiceBody
-                  v-if="serviceRef"
-                  :service-data="serviceRef"
-                  activater-label="本文を登録してください"
-                  @update="onUpdateData"
-                  @remove="onRemoveData"
+                    </CommonContentItemAnimation>
+                  </template>
+                  <template #sideSettings>
+                    <CommonEyecatchTitleSetting
+                      :settings="serviceRef?.titleSettings"
+                      @update="onUpdateTitleSetting"
+                    />
+                  </template>
+                </CommonEyecatchTitleSettingPosition>
+              </template>
+              <template v-if="canEdit && serviceRef" #settings>
+                <CommonEyecatchImageSetting
+                  :settings="serviceRef.imageSettings"
+                  @update="onUpdateImageSetting"
                 />
-                <p v-else class="mt-9">
-                  <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
-                </p>
-              </div>
-            </div>
-          </CommonContentCardBody>
-          <div v-if="canEdit && serviceRef?.id" class="edit-activator">
-            <ManageContentServiceBody
-              :service-data="serviceRef"
-              @update="onUpdateData"
-              @remove="onRemoveData"
-            />
-          </div>
+              </template>
+            </CommonEyecatchImage>
+          </CommonContentItemAnimation>
         </template>
+        <CommonContentPreNextNagivation :pre-url="preUrl" :next-url="nextUrl" />
+        <CommonContentCardBody>
+          <div v-if="bodyPlainString">
+            <CommonWysiwsgViewer :value="serviceRef?.body" />
+          </div>
+          <div v-else class="no-items">
+            <p>データがありません</p>
+            <div v-if="canEdit">
+              <ManageContentServiceBody
+                v-if="serviceRef"
+                :service-data="serviceRef"
+                activater-label="本文を登録してください"
+                @update="onUpdateData"
+                @remove="onRemoveData"
+              />
+              <p v-else class="mt-9">
+                <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
+              </p>
+            </div>
+          </div>
+        </CommonContentCardBody>
+        <div v-if="canEdit && serviceRef?.id" class="edit-activator">
+          <ManageContentServiceBody
+            :service-data="serviceRef"
+            @update="onUpdateData"
+            @remove="onRemoveData"
+          />
+        </div>
       </CommonContentCard>
     </CommonContentSlidableNavigation>
   </CommonContentWrap>

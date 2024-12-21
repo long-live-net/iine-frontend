@@ -39,7 +39,7 @@ await onLoad()
                   <CommonContentItemAnimation
                     :thresholds="[0.5]"
                     animation-name="gZoomIn"
-                    animation-duration="1.5s"
+                    animation-duration="1.25s"
                   >
                     <CommonEyecatchTitle
                       place="section"
@@ -73,11 +73,18 @@ await onLoad()
           </CommonEyecatchImage>
         </CommonContentItemAnimation>
       </template>
-      <CommonContentCardTitle
-        :title="informationRef?.title ?? ''"
-        :subtitle="informationRef?.subtitle"
+      <CommonContentItemAnimation
+        :thresholds="[0.5]"
+        animation-name="gFadeIn"
+        animation-duration="1.5s"
         class="g-block-sm"
-      />
+      >
+        <CommonContentCardTitle
+          :title="informationRef?.title ?? ''"
+          :subtitle="informationRef?.subtitle"
+          class="g-block-sm"
+        />
+      </CommonContentItemAnimation>
       <CommonContentCardBody class="type1-information__body">
         <div v-if="informationRef?.body">
           <CommonWysiwsgViewer :value="informationRef?.body" />

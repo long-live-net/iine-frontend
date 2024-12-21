@@ -39,8 +39,8 @@ await onLoad()
                 <template #default>
                   <CommonContentItemAnimation
                     :thresholds="[0.5]"
-                    animation-name="gZoomIn"
-                    animation-duration="1.5s"
+                    animation-name="gFadeInRight"
+                    animation-duration="1.25s"
                   >
                     <CommonEyecatchTitle
                       place="section"
@@ -75,11 +75,18 @@ await onLoad()
         </CommonContentItemAnimation>
       </template>
       <PublishCustomerServiceLinks class="type1-contact__service-links" />
-      <CommonContentCardTitle
-        :title="contactRef?.title ?? ''"
-        :subtitle="contactRef?.subtitle"
-        class="g-block-sm type1-contact__title"
-      />
+      <CommonContentItemAnimation
+        :thresholds="[0.5]"
+        animation-name="gFadeIn"
+        animation-duration="1.5s"
+        class="g-block-sm"
+      >
+        <CommonContentCardTitle
+          :title="contactRef?.title ?? ''"
+          :subtitle="contactRef?.subtitle"
+          class="g-block-sm type1-contact__title"
+        />
+      </CommonContentItemAnimation>
       <CommonContentCardBody class="type1-contact__body">
         <div v-if="contactRef?.body">
           <CommonWysiwsgViewer :value="contactRef?.body" />

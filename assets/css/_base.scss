@@ -218,6 +218,18 @@ h6 {
   }
 }
 
+@keyframes gZoomInRight {
+  from {
+    opacity: 0.25;
+    transform: scale3d(0.25, 0.25, 0.25) translate3d(150px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+  }
+}
+
 .g-animation-initial-effect {
   opacity: 0;
   animation-fill-mode: forwards;
