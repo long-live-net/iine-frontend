@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import type { ImageSettings } from '@/types/content'
 
-const props = withDefaults(defineProps<{ settings?: ImageSettings }>(), {
-  settings: () => ({
-    lgSize: 'cover',
-    smSize: 'cover',
-    lgPosition: 'center',
-    smPosition: 'center',
-    lgParallax: 'scroll',
-    smParallax: 'scroll',
-  }),
-})
+const props = withDefaults(
+  defineProps<{ settings?: ImageSettings; noParallax?: boolean }>(),
+  {
+    settings: () => ({
+      lgSize: 'cover',
+      smSize: 'cover',
+      lgPosition: 'center',
+      smPosition: 'center',
+      lgParallax: 'scroll',
+      smParallax: 'scroll',
+    }),
+    noParallax: false,
+  }
+)
 const emit = defineEmits<{
   update: [partOfSettings: Partial<ImageSettings>]
 }>()
@@ -187,6 +191,7 @@ const settingMenu = ref(false)
         v-model:size="sizeLg"
         v-model:position-x="pxLg"
         v-model:position-y="pyLg"
+        :no-parallax="noParallax"
         class="g-block-lg"
       />
       <!-- Small画面 -->
@@ -196,6 +201,7 @@ const settingMenu = ref(false)
         v-model:size="sizeSm"
         v-model:position-x="pxSm"
         v-model:position-y="pySm"
+        :no-parallax="noParallax"
         class="g-block-sm"
       />
       <div class="actions">
