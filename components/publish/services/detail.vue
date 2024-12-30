@@ -107,6 +107,7 @@ await onLoad(contentId)
               <template v-if="canEdit && serviceRef" #settings>
                 <CommonEyecatchImageSetting
                   :settings="serviceRef.imageSettings"
+                  no-parallax
                   @update="onUpdateImageSetting"
                 />
               </template>

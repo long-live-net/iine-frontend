@@ -4,6 +4,8 @@ const auto = defineModel<boolean>('auto', { required: true })
 const size = defineModel<number>('size', { required: true })
 const positionX = defineModel<number>('positionX', { required: true })
 const positionY = defineModel<number>('positionY', { required: true })
+
+withDefaults(defineProps<{ noParallax?: boolean }>(), { noParallax: false })
 </script>
 
 <template>
@@ -11,6 +13,7 @@ const positionY = defineModel<number>('positionY', { required: true })
     <li>
       <div class="pl-2">
         <v-switch
+          v-if="!noParallax"
           v-model="parallax"
           color="primary"
           density="compact"

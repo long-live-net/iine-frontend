@@ -92,6 +92,7 @@ await onLoad(contentId)
               <template v-if="canEdit && newsRef" #settings>
                 <CommonEyecatchImageSetting
                   :settings="newsRef.imageSettings"
+                  no-parallax
                   @update="onUpdateImageSetting"
                 />
               </template>
