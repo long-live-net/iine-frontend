@@ -13,7 +13,7 @@ const sectionTitle = (section: PageLayout): string =>
 
 <template>
   <article>
-    <section :id="`${domidPrefix}-eyecatch`">
+    <section :id="`${domidPrefix}-eyecatch`" class="section-margin-top">
       <PublishHomeType1Eyecatcher />
     </section>
     <section
@@ -40,8 +40,17 @@ const sectionTitle = (section: PageLayout): string =>
 
 <style lang="scss" scoped>
 article {
+  .section-margin-top {
+    padding-top: 0;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      padding-top: $nav-header-height;
+    }
+  }
+
   .section-margin {
     padding-top: calc($nav-header-height + 1rem);
+    margin-top: -40px;
   }
 }
 </style>

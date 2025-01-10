@@ -154,7 +154,11 @@ await onLoad(contentId)
   .edit-activator {
     position: absolute;
     top: 0.5rem;
-    right: 0.5rem;
+    left: 0.5rem;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      top: 6.8rem;
+    }
   }
 
   .no-items {

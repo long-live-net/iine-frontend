@@ -97,7 +97,11 @@ await onLoad()
   .edit-activator {
     position: absolute;
     top: 8.5rem;
-    right: 0.5rem;
+    left: 0.5rem;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      top: 0.5rem;
+    }
   }
 }
 

@@ -120,7 +120,7 @@ await onLoad()
   .edit-activator {
     position: absolute;
     top: 0.5rem;
-    right: 0.5rem;
+    left: 0.5rem;
   }
 
   .inquire-activator {
