@@ -99,7 +99,7 @@ await onLoad()
               <div v-if="canEdit" class="edit-activator">
                 <ManageContentNews
                   :news-data="content as NewsType"
-                  activater-size="x-small"
+                  activator-size="x-small"
                   @update="onUpdate"
                   @remove="onRemove"
                 />

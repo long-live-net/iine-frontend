@@ -50,22 +50,28 @@ const bgColor = computed<string>({
     <div>
       <BaseFontSelectorMenu
         v-model:font-family="fontFamily"
-        activater-label="フォント"
         :font-family-items="fontFamilyItems"
+        activator-label="フォント"
+        activator-button-size="small"
+        activator-button-width="64px"
         :location="subMenuLocation"
       />
     </div>
     <div>
       <BaseColorPickerMenu
         v-model:color="txColor"
-        activater-label="文字色"
+        activator-label="文字色"
+        activator-button-size="small"
+        activator-button-width="64px"
         :location="subMenuLocation"
       />
     </div>
     <div>
       <BaseColorPickerMenu
         v-model:color="bgColor"
-        activater-label="背景色"
+        activator-label="背景色"
+        activator-button-size="small"
+        activator-button-width="64px"
         :location="subMenuLocation"
         use-delete
       />

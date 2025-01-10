@@ -1,24 +1,24 @@
 <script setup lang="ts">
-const settingModal = defineModel<boolean>('modal', { required: true })
+import { debounce } from 'es-toolkit'
+import type { ColorTheme } from '@/types/customer-setting'
 
+const settingModal = defineModel<boolean>('modal', { required: true })
 const titleData = {
-  title: 'テーマ設定',
+  title: 'ページ設定',
   titleIcon: 'mdi-cog',
   titleColor: 'accent',
 }
 
 const {
-  initialLoading,
   init,
   editFontFamily,
+  editTextColor,
   editColorTheme,
-  // editDesignTheme,
   fontFamilyItems,
   colorThemeOptions,
-  // DesignThemeOptions,
   chengeFontFamily,
+  chengeTextColor,
   chengeColorTheme,
-  // chengeDesignTheme,
 } = useThemeSettingsEdit()
 
 watch(settingModal, async () => {
@@ -26,78 +26,112 @@ watch(settingModal, async () => {
     await init()
   }
 })
+
+const textColor = ref<string>('transparent')
+watch(
+  editTextColor,
+  () => {
+    textColor.value = editTextColor.value ?? 'transparent'
+  },
+  {
+    immediate: true,
+  }
+)
+watch(textColor, () => {
+  const currentColor = editTextColor.value ?? 'transparent'
+  if (textColor.value === currentColor) {
+    return
+  }
+  const updatingColor =
+    textColor.value === 'transparent' ? null : textColor.value
+  onChangeTextColor(updatingColor)
+})
+
+const onChangeTextColor = debounce(
+  (color: string | null) => chengeTextColor(color),
+  200
+)
+
+const onChengeColorTheme = (colorTheme: ColorTheme | null) => {
+  if (colorTheme) {
+    chengeTextColor(null)
+    chengeColorTheme(colorTheme)
+  }
+}
 </script>
 
 <template>
-  <CommonModalDialog
-    v-model:modal="settingModal"
-    :title="titleData.title"
-    :title-icon="titleData.titleIcon"
-    :title-icon-color="titleData.titleColor"
-    :loading="initialLoading"
-  >
-    <div class="theme-setting">
-      <section>
-        <h4>フォント</h4>
-        <div class="theme-selection mt-4 ml-4 mr-0 mr-md-8">
-          <BaseFontSelector
-            :font-family="editFontFamily"
-            :font-family-items="fontFamilyItems"
-            @update:font-family="chengeFontFamily"
-          />
-        </div>
-      </section>
-      <section>
-        <h4>カラーテーマ</h4>
-        <div class="theme-selection ml-2">
-          <v-radio-group
-            :model-value="editColorTheme"
-            inline
-            hide-details
-            @update:model-value="chengeColorTheme($event)"
-          >
-            <v-radio
-              v-for="ct in colorThemeOptions"
-              :key="ct.type"
-              :label="ct.label"
-              :value="ct.type"
-            />
-          </v-radio-group>
-        </div>
-      </section>
-      <!-- <section class="disabled">
-        <h4>
-          <v-icon icon="mdi-lock" />
-          レイアウトテーマ (未サポート)
-        </h4>
-        <div class="theme-selection">
-          <v-radio-group
-            :model-value="editDesignTheme"
-            inline
-            hide-details
-            disabled
-            @update:model-value="chengeDesignTheme($event)"
-          >
-            <v-radio
-              v-for="st in DesignThemeOptions"
-              :key="st.type"
-              :label="st.label"
-              :value="st.type"
-            />
-          </v-radio-group>
-        </div>
-      </section> -->
+  <div v-if="settingModal" class="g-theme-modal theme-setting-wrap">
+    <div class="theme-setting-header">
+      <div class="theme-setting-header__title">
+        <v-icon :icon="titleData.titleIcon" :color="titleData.titleColor" />
+        <h4>{{ titleData.title }}</h4>
+      </div>
+      <div class="theme-setting-header__dismiss">
+        <v-btn
+          variant="tonal"
+          icon="mdi-close"
+          size="x-small"
+          @click="settingModal = false"
+        />
+      </div>
     </div>
-  </CommonModalDialog>
+    <div class="theme-setting">
+      <div>
+        <CommonCustomerColorThemeSelectorMenu
+          :theme="editColorTheme"
+          :color-theme-options="colorThemeOptions"
+          activator-label="カラーテーマ"
+          activator-button-size="small"
+          activator-button-width="96px"
+          @update:theme="onChengeColorTheme"
+        />
+      </div>
+      <div>
+        <BaseFontSelectorMenu
+          :font-family="editFontFamily"
+          :font-family-items="fontFamilyItems"
+          activator-label="フォント"
+          activator-button-size="small"
+          activator-button-width="64px"
+          @update:font-family="chengeFontFamily"
+        />
+      </div>
+      <div>
+        <BaseColorPickerMenu
+          v-model:color="textColor"
+          activator-label="文字色"
+          activator-button-size="small"
+          activator-button-width="64px"
+          use-delete
+        />
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.theme-setting {
-  display: flex;
-  flex-direction: column;
-  row-gap: 1.5rem;
-  padding: 0 1rem 0.5rem;
-  width: 520px;
-  max-width: 100%;
+.theme-setting-wrap {
+  position: fixed;
+  top: calc($nav-header-height + 0.5rem);
+  right: 0.5rem;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+
+  .theme-setting-header {
+    display: flex;
+    justify-content: space-between;
+
+    &__title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+  .theme-setting {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
 }
 </style>

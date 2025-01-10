@@ -23,7 +23,7 @@ const userMenuItems: MenuItem[] = [
     props: { prependIcon: 'mdi-page-layout-header-footer' },
   },
   {
-    title: 'テーマ設定',
+    title: 'ページ設定',
     value: 'themeSetting',
     props: { prependIcon: 'mdi-cog' },
   },

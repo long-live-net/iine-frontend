@@ -31,12 +31,35 @@ watch(
   () => {
     if (import.meta.client) {
       document.body.style.fontFamily = bodyStyleFontFamily.value
-    } else {
-      useHead({
-        bodyAttrs: {
-          style: `font-family: ${bodyStyleFontFamily.value}`,
-        },
-      })
+    }
+  },
+  {
+    immediate: true,
+  }
+)
+
+const bodyStyleTextColor = computed(() => customerSetting.value?.textColor)
+watch(
+  [bodyStyleTextColor, bodyClass],
+  () => {
+    if (import.meta.client) {
+      if (!bodyClass.value) {
+        return
+      }
+      const bodyClassElement = document.querySelector<HTMLElement>(
+        `.${bodyClass.value}`
+      )
+      if (!bodyClassElement) {
+        return
+      }
+      if (bodyStyleTextColor.value) {
+        bodyClassElement.style.setProperty(
+          '--text-color',
+          bodyStyleTextColor.value
+        )
+      } else if (bodyClassElement.style.getPropertyValue('--text-color')) {
+        bodyClassElement.style.removeProperty('--text-color')
+      }
     }
   },
   {

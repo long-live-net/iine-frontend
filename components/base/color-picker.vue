@@ -3,7 +3,7 @@ const color = defineModel<string>('color', { required: true })
 const pickerColor = computed<string>({
   get: () => (color.value === 'transparent' ? '#FFFFFF00' : color.value),
   set: (col: string) => {
-    color.value = col
+    color.value = col === '#FFFFFF00' ? 'transparent' : col
   },
 })
 </script>

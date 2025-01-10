@@ -54,7 +54,7 @@ const onClickEyecatch = (menuImage: MenuImageType) => {
             <div class="edit-activator">
               <ManageContentMenuImage
                 :menu-image-data="content as MenuImageType"
-                activater-size="x-small"
+                activator-size="x-small"
                 @update="onUpdate"
                 @remove="onRemove"
               />
@@ -66,7 +66,7 @@ const onClickEyecatch = (menuImage: MenuImageType) => {
         <p>データがありません</p>
         <div>
           <ManageContentMenuImage
-            activater-label="コンテンツを登録してください"
+            activator-label="コンテンツを登録してください"
             @create="onCreate"
           />
         </div>

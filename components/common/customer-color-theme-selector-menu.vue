@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import type { FontFamilyItem } from '@/components/base/font-selector.vue'
+import type { ColorTheme } from '@/types/customer-setting'
 
-const fontFamily = defineModel<string>('fontFamily', { required: true })
+const theme = defineModel<ColorTheme>('theme', { required: true })
 withDefaults(
   defineProps<{
-    fontFamilyItems: FontFamilyItem[]
+    colorThemeOptions: {
+      type: ColorTheme
+      label: string
+    }[]
     activatorLabel: string
     activatorButtonSize?: 'small' | 'default'
     activatorButtonWidth?: string
@@ -39,21 +42,24 @@ const selectorMenu = ref(false)
         v-bind="menuProps"
         :size="activatorButtonSize"
         :width="activatorButtonWidth"
-        color="grey-darken-4"
+        color="info"
         @click.stop
       >
         {{ activatorLabel }}
       </v-btn>
     </template>
-    <div class="font-selector-wrap">
-      <h4 class="label" :style="{ 'font-family': fontFamily }">
-        <v-icon>mdi-format-font</v-icon>
-        フォントを選択
+    <div class="color-theme-selector-wrap">
+      <h4 class="label" :style="{ 'font-family': theme }">
+        カラーテーマを選択
       </h4>
-      <BaseFontSelector
-        v-model:font-family="fontFamily"
-        :font-family-items="fontFamilyItems"
-      />
+      <v-radio-group v-model="theme" inline hide-details>
+        <v-radio
+          v-for="ct in colorThemeOptions"
+          :key="ct.type"
+          :label="ct.label"
+          :value="ct.type"
+        />
+      </v-radio-group>
       <div class="actions">
         <v-btn
           size="small"
@@ -68,7 +74,7 @@ const selectorMenu = ref(false)
 </template>
 
 <style lang="scss" scoped>
-.font-selector-wrap {
+.color-theme-selector-wrap {
   width: 250px;
   color: $black;
   background-color: $white;

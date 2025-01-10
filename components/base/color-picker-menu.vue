@@ -2,7 +2,9 @@
 const color = defineModel<string>('color', { required: true })
 withDefaults(
   defineProps<{
-    activaterLabel: string
+    activatorLabel: string
+    activatorButtonSize?: 'small' | 'default'
+    activatorButtonWidth?: string
     location?:
       | 'top'
       | 'top center'
@@ -15,6 +17,8 @@ withDefaults(
     useDelete?: boolean
   }>(),
   {
+    activatorButtonSize: 'default',
+    activatorButtonWidth: undefined,
     location: 'bottom',
     useDelete: false,
   }
@@ -34,12 +38,12 @@ const btnColor = computed(() =>
     <template #activator="{ props: menuProps }">
       <v-btn
         v-bind="menuProps"
-        size="small"
+        :size="activatorButtonSize"
+        :width="activatorButtonWidth"
         :color="btnColor"
-        width="64px"
         @click.stop
       >
-        {{ activaterLabel }}
+        {{ activatorLabel }}
       </v-btn>
     </template>
 

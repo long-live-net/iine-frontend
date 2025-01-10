@@ -4,8 +4,8 @@ import { getNewsKind } from '@/composables/use-content/use-news'
 
 const props = defineProps<{
   newsData?: NewsType | null
-  activaterLabel?: string
-  activaterSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
+  activatorLabel?: string
+  activatorSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
 }>()
 const emit = defineEmits<{
   create: [inputData: NewsForm]
@@ -60,8 +60,8 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!newsData?.id"
-    :activater-label="activaterLabel"
-    :activater-size="activaterSize"
+    :activator-label="activatorLabel"
+    :activator-size="activatorSize"
   />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!newsData?.id">
     <v-form class="news-form">

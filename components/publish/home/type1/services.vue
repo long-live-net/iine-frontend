@@ -44,7 +44,7 @@ const onMovingDetailPage = (service: ContentType) => {
             <div class="edit-activator">
               <ManageContentService
                 :service-data="content as ServiceType"
-                activater-size="x-small"
+                activator-size="x-small"
                 @update="onUpdate"
                 @remove="onRemove"
               />
@@ -56,7 +56,7 @@ const onMovingDetailPage = (service: ContentType) => {
         <p>データがありません</p>
         <div>
           <ManageContentService
-            activater-label="コンテンツを登録してください"
+            activator-label="コンテンツを登録してください"
             @create="onCreate"
           />
         </div>

@@ -125,7 +125,7 @@ await onLoad(contentId)
               <ManageContentServiceBody
                 v-if="serviceRef"
                 :service-data="serviceRef"
-                activater-label="本文を登録してください"
+                activator-label="本文を登録してください"
                 @update="onUpdateData"
                 @remove="onRemoveData"
               />
@@ -154,7 +154,11 @@ await onLoad(contentId)
   .edit-activator {
     position: absolute;
     top: 0.5rem;
-    right: 0.5rem;
+    left: 0.5rem;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      top: 6.8rem;
+    }
   }
 
   .no-items {

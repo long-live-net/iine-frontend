@@ -13,6 +13,7 @@ export type CustomerSettingApi = {
   newsCategories: string[]
   pageTitle: PageTitle
   fontFamily?: string | null
+  textColor?: string | null
   colorTheme: ColorTheme
   designTheme: DesignTheme
   homeLayout?: PageLayout[]
