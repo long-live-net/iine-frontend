@@ -1,8 +1,9 @@
 @use 'variables.scss';
 
 .g-theme-default {
+  --text-color: #{variables.$gray-darken3};
   background-color: variables.$gray-lighten25;
-  color: variables.$gray-darken3;
+  color: var(--text-color);
 
   a {
     color: variables.$link-normal2;
@@ -19,22 +20,16 @@
   small {
     color: variables.$dimgray;
   }
-  b {
-    color: variables.$gray-darken2;
-    font-weight: bolder;
-  }
 
   .g-theme-app-container {
     background-color: variables.$gray-lighten25;
-    color: variables.$gray-darken3;
+    color: var(--text-color);
   }
   .g-theme-header {
-    background-color: variables.$gray-darken3;
-    opacity: 0.75;
+    background-color: rgba(variables.$gray-darken3, 0.75);
   }
   .g-theme-footer {
     background-color: variables.$white;
-    color: variables.$dimgray;
   }
   .g-theme-contents-card {
     background-color: variables.$white;
@@ -92,7 +87,6 @@
         background-color: variables.$gray-lighten2;
       }
       dd {
-        color: variables.$gray-darken5;
         background-color: variables.$gray-lighten4;
       }
     }

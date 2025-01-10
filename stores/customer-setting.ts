@@ -23,6 +23,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
         iconUrl: apiData.pageTitle?.iconUrl ?? null,
       },
       fontFamily: apiData.fontFamily ?? null,
+      textColor: apiData.textColor ?? null,
       colorTheme: apiData.colorTheme,
       designTheme: apiData.designTheme,
       homeLayout:
@@ -49,6 +50,9 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
       iconUrl: appData.pageTitle?.iconUrl ?? null,
     },
     ...(appData.fontFamily ? { fontFamily: appData.fontFamily } : {}),
+    ...(appData.textColor
+      ? { textColor: appData.textColor }
+      : { textColor: null }),
     colorTheme: appData.colorTheme,
     designTheme: appData.designTheme,
     homeLayout: appData.homeLayout.map((l) => ({

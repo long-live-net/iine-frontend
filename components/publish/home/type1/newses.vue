@@ -94,7 +94,7 @@ await onLoad()
               <div v-if="canEdit" class="edit-activator">
                 <ManageContentNews
                   :news-data="content as NewsType"
-                  activater-size="x-small"
+                  activator-size="x-small"
                   @update="onUpdate"
                   @remove="onRemove"
                 />
@@ -106,7 +106,7 @@ await onLoad()
           <p>データがありません</p>
           <div v-if="canEdit">
             <ManageContentNews
-              activater-label="ニュースを登録してください"
+              activator-label="ニュースを登録してください"
               @create="onCreate"
             />
           </div>

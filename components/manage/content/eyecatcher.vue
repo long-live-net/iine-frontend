@@ -4,7 +4,7 @@ import { getEyecatchKind } from '@/composables/use-content/use-eyecatch'
 
 const props = defineProps<{
   eyecatchData?: EyecatchType | null
-  activaterLabel?: string
+  activatorLabel?: string
 }>()
 
 const emit = defineEmits<{
@@ -60,7 +60,7 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!eyecatchData?.id"
-    :activater-label="activaterLabel"
+    :activator-label="activatorLabel"
   />
   <CommonContentEditDialog
     v-model:modal="modal"

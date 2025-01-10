@@ -121,7 +121,7 @@ await onLoad(contentId)
             <p>データがありません</p>
             <div v-if="canEdit">
               <ManageContentNews
-                activater-label="コンテンツを登録してください"
+                activator-label="コンテンツを登録してください"
                 @create="onCreate"
               />
             </div>

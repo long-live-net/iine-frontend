@@ -4,7 +4,7 @@ import { getContactKind } from '@/composables/use-content/use-contact'
 
 const props = defineProps<{
   contactData?: ContactType | null
-  activaterLabel?: string
+  activatorLabel?: string
 }>()
 
 const emit = defineEmits<{
@@ -60,7 +60,7 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!contactData?.id"
-    :activater-label="activaterLabel"
+    :activator-label="activatorLabel"
   />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!contactData?.id">
     <v-form>

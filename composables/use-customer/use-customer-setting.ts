@@ -290,6 +290,7 @@ export const useThemeSettingsEdit = () => {
   }
 
   const editFontFamily = ref<string>('inherit')
+  const editTextColor = ref<string | null>(null)
   const editColorTheme = ref<ColorTheme>('light')
   const editDesignTheme = ref<DesignTheme>('type1')
 
@@ -297,6 +298,7 @@ export const useThemeSettingsEdit = () => {
     customerSetting,
     () => {
       editFontFamily.value = customerSetting.value?.fontFamily ?? 'inherit'
+      editTextColor.value = customerSetting.value?.textColor ?? null
       editColorTheme.value = customerSetting.value?.colorTheme ?? 'light'
       editDesignTheme.value = customerSetting.value?.designTheme ?? 'type1'
     },
@@ -340,6 +342,10 @@ export const useThemeSettingsEdit = () => {
     await _update({ fontFamily }, 'フォントを更新しました。')
   }
 
+  const chengeTextColor = async (textColor: string | null) => {
+    await _update({ textColor }, '文字色を更新しました。')
+  }
+
   const chengeColorTheme = async (colorTheme: ColorTheme | null) => {
     if (!colorTheme) {
       return
@@ -359,12 +365,14 @@ export const useThemeSettingsEdit = () => {
     initialLoading,
     loading,
     editFontFamily,
+    editTextColor,
     editColorTheme,
     editDesignTheme,
     fontFamilyItems,
     colorThemeOptions,
     DesignThemeOptions,
     chengeFontFamily,
+    chengeTextColor,
     chengeColorTheme,
     chengeDesignTheme,
   }

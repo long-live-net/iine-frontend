@@ -98,7 +98,7 @@ await onLoad()
           <p>データがありません</p>
           <div v-if="canEdit">
             <ManageContentContact
-              activater-label="コンテンツを登録してください"
+              activator-label="コンテンツを登録してください"
               @create="onCreate"
             />
           </div>

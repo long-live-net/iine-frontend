@@ -4,7 +4,7 @@ import { getInformationKind } from '@/composables/use-content/use-information'
 
 const props = defineProps<{
   informationData?: InformationType | null
-  activaterLabel?: string
+  activatorLabel?: string
 }>()
 const emit = defineEmits<{
   create: [inputData: InformationForm]
@@ -59,7 +59,7 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!informationData?.id"
-    :activater-label="activaterLabel"
+    :activator-label="activatorLabel"
   />
   <CommonContentEditDialog
     v-model:modal="modal"

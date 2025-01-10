@@ -4,8 +4,8 @@ import { getMenuImageKind } from '@/composables/use-content/use-menu-image'
 
 const props = defineProps<{
   menuImageData?: MenuImageType | null
-  activaterLabel?: string
-  activaterSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
+  activatorLabel?: string
+  activatorSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
 }>()
 const emit = defineEmits<{
   create: [inputData: MenuImageForm]
@@ -65,8 +65,8 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!menuImageData?.id"
-    :activater-label="activaterLabel"
-    :activater-size="activaterSize"
+    :activator-label="activatorLabel"
+    :activator-size="activatorSize"
   />
   <CommonContentEditDialog
     v-model:modal="modal"

@@ -4,8 +4,8 @@ import { getServiceKind } from '@/composables/use-content/use-service'
 
 const props = defineProps<{
   serviceData?: ServiceType | null
-  activaterLabel?: string
-  activaterSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
+  activatorLabel?: string
+  activatorSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
 }>()
 const emit = defineEmits<{
   create: [inputData: ServiceForm]
@@ -60,8 +60,8 @@ const onCancel = () => {
   <CommonContentEditActivator
     v-model:modal="modal"
     :is-update="!!serviceData?.id"
-    :activater-label="activaterLabel"
-    :activater-size="activaterSize"
+    :activator-label="activatorLabel"
+    :activator-size="activatorSize"
   />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!serviceData?.id">
     <v-form>

@@ -83,7 +83,7 @@ await onLoad()
       <ManageContentEyecatcher
         v-else
         :eyecatch-data="eyecatchRef"
-        activater-label="トップ画像を登録してください"
+        activator-label="トップ画像を登録してください"
         @create="onCreate"
       />
     </div>

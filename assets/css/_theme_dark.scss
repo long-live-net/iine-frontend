@@ -1,8 +1,9 @@
 @use 'variables.scss';
 
 .g-theme-dark {
+  --text-color: #{variables.$white};
   background-color: variables.$gray-darken3;
-  color: variables.$white;
+  color: var(--text-color);
 
   a {
     color: variables.$blue-lighten3;
@@ -19,21 +20,17 @@
 
   .g-theme-app-container {
     background-color: variables.$gray-darken3;
-    color: variables.$white;
+    color: var(--text-color);
   }
 
   .g-theme-header {
-    background-color: variables.$gray-darken5;
-    opacity: 0.75;
-    color: variables.$white;
+    background-color: rgba(variables.$gray-darken5, 0.75);
   }
   .g-theme-footer {
     background-color: variables.$gray-darken5;
-    color: variables.$white;
   }
   .g-theme-contents-card {
     background-color: variables.$gray-darken5;
-    color: variables.$white;
     box-shadow: 2px 2px 16px variables.$black;
   }
   .g-theme-contents-item {
@@ -54,7 +51,6 @@
 
   .g-theme-wysiwyg-editor {
     background-color: variables.$gray-darken5;
-    color: variables.$white;
     border-color: variables.$gray-darken2;
     --g-theme-wysiwyg-editor-label-color: #{variables.$gray-lighten2};
     --g-theme-wysiwyg-editor-label-focused-color: #{variables.$white};
@@ -76,7 +72,6 @@
 
   .g-theme-modal {
     background-color: variables.$gray-darken2;
-    color: variables.$white;
     .dismiss {
       color: variables.$warning;
     }
@@ -89,7 +84,6 @@
         background-color: variables.$gray-darken2;
       }
       dd {
-        color: variables.$gray-lighten3;
         background-color: variables.$gray-darken3;
       }
     }

@@ -125,7 +125,7 @@ await onLoad(contentId)
               <ManageContentServiceBody
                 v-if="serviceRef"
                 :service-data="serviceRef"
-                activater-label="本文を登録してください"
+                activator-label="本文を登録してください"
                 @update="onUpdateData"
                 @remove="onRemoveData"
               />
