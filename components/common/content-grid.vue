@@ -4,10 +4,12 @@ import type { ContentType } from '@/types/content'
 withDefaults(
   defineProps<{
     contents: Readonly<T[]>
+    contentGridMaxWidth?: string
     gridMinWidth?: string
     gridMaxWidth?: string
   }>(),
   {
+    contentGridMaxWidth: '80rem',
     gridMinWidth: '16rem',
     gridMaxWidth: '22rem',
   }
@@ -39,12 +41,11 @@ withDefaults(
   justify-content: space-around;
   row-gap: 2rem;
   margin: 0 auto;
-  max-width: 80rem;
+  max-width: v-bind('contentGridMaxWidth');
   min-height: 18rem;
   &__column {
     padding: 1rem;
-    width: 90%;
-    text-align: center;
+    width: 100%;
   }
 }
 </style>

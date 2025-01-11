@@ -46,7 +46,7 @@ const bkImage = computed(() => `url(${props.url.length ? props.url : noImage})`)
   .settings {
     position: absolute;
     bottom: 0.5rem;
-    right: 0.5rem;
+    left: 0.5rem;
   }
 }
 
