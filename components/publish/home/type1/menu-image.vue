@@ -140,20 +140,22 @@ const onClickEyecatch = (menuImage: MenuImageType) => {
 }
 
 .menu-omage-viewer {
-  width: calc(80vw - 4rem);
-  height: auto;
   margin: 0 auto;
 
-  @media only screen and (max-width: $grid-breakpoint-md) {
-    width: calc(90vw - 4rem);
-  }
-  @media only screen and (max-width: $grid-breakpoint-sm) {
-    width: calc(100vw - 4rem);
-  }
-
   img {
-    width: 100%;
-    height: auto;
+    display: block;
+    margin: 0 auto;
+    width: calc(100dvw - 180px);
+    max-width: 1280px;
+    max-height: calc(100dvh - 250px);
+    object-fit: contain;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      width: calc(100dvw - 150px);
+    }
+    @media only screen and (max-width: $grid-breakpoint-sm) {
+      width: calc(100dvw - 50px);
+    }
   }
 }
 </style>
