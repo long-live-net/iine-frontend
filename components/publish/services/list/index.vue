@@ -30,6 +30,10 @@ filter.value = {}
 sort.value = { position: 1 }
 pager.value = { page: 1, limit: 12 }
 await onLoad()
+
+const contentGridMaxWidth = computed(() =>
+  serviceListRef.value && serviceListRef.value.length < 4 ? '60rem' : '80rem'
+)
 </script>
 
 <template>
@@ -38,6 +42,7 @@ await onLoad()
       <CommonContentGrid
         v-if="serviceListRef?.length"
         :contents="serviceListRef"
+        :content-grid-max-width="contentGridMaxWidth"
         grid-min-width="14rem"
         grid-max-width="18rem"
       >

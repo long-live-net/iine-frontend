@@ -111,8 +111,8 @@ const onMovingDetailPage = (service: ContentType) => {
 
   .edit-activator {
     position: absolute;
-    top: -4px;
-    left: -4px;
+    top: -8px;
+    left: 4px;
   }
 }
 </style>

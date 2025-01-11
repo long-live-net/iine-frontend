@@ -78,8 +78,8 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   max-width: 80rem;
   min-height: 18rem;
   &__column {
-    padding: 1.5rem 1.5rem 2.5rem 1.5rem;
-    width: 90%;
+    padding: 1.5rem 0.75rem 2.5rem 0.75rem;
+    width: 100%;
     text-align: center;
   }
   .column-draggable {

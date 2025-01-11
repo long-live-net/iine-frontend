@@ -169,7 +169,7 @@ const settingMenu = ref(false)
 <template>
   <v-menu
     v-model="settingMenu"
-    location="bottom right"
+    location="bottom left"
     :close-on-content-click="false"
   >
     <template #activator="{ props: menuProps }">

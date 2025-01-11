@@ -52,6 +52,9 @@ const route = useRoute()
 
 <style lang="scss" scoped>
 .menu-image-list-item {
+  width: 90%;
+  margin: 0 auto;
+
   .title {
     text-align: center;
     font-weight: bold;
