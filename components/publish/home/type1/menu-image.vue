@@ -144,6 +144,7 @@ const onClickEyecatch = (menuImage: MenuImageType) => {
 
   img {
     width: calc(100dvw - 180px);
+    max-width: 1280px;
     max-height: calc(100dvh - 250px);
     object-fit: contain;
     margin: 0 auto;
