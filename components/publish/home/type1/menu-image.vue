@@ -143,12 +143,12 @@ const onClickEyecatch = (menuImage: MenuImageType) => {
   margin: 0 auto;
 
   img {
+    display: block;
+    margin: 0 auto;
     width: calc(100dvw - 180px);
     max-width: 1280px;
     max-height: calc(100dvh - 250px);
     object-fit: contain;
-    margin: 0 auto;
-    display: block;
 
     @media only screen and (max-width: $grid-breakpoint-md) {
       width: calc(100dvw - 150px);
