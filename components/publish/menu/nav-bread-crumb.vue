@@ -23,6 +23,16 @@ const serviceItem = computed(() => {
     hash: `#${domidPrefix}-${kind}`,
   }
 })
+const featureItem = computed(() => {
+  const kind: SectionKind = 'feature'
+  const featureSection = customerSetting.value?.homeLayout?.find(
+    (s) => s.kind === kind
+  )
+  return {
+    title: featureSection?.menuTitle ?? featureSection?.title ?? 'Feature',
+    hash: `#${domidPrefix}-${kind}`,
+  }
+})
 
 const detailTitle = computed(() => `詳細 ${useRoute().params.id}`)
 
@@ -83,6 +93,24 @@ watch(
           {
             title: serviceItem.value.title,
             to: { name: 'index', hash: serviceItem.value.hash },
+            disabled: false,
+          },
+          {
+            title: detailTitle.value,
+            disabled: true,
+          },
+        ]
+        return
+      case 'features-id':
+        items.value = [
+          {
+            title: 'HOME',
+            to: { name: 'index' },
+            disabled: false,
+          },
+          {
+            title: featureItem.value.title,
+            to: { name: 'index', hash: featureItem.value.hash },
             disabled: false,
           },
           {

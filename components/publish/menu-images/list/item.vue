@@ -37,7 +37,11 @@ const route = useRoute()
         </CommonContentItemAnimation>
       </template>
     </section>
-    <template v-if="!noCaption">
+    <section
+      v-if="!noCaption"
+      :class="[isCurrent ? 'current-item' : 'item-link']"
+      @click="$emit('select', item)"
+    >
       <CommonContentItemAnimation
         animation-name="gFadeIn"
         animation-duration="2s"
@@ -46,7 +50,7 @@ const route = useRoute()
       >
         <CommonWysiwsgViewer :value="item.caption" class="caption" />
       </CommonContentItemAnimation>
-    </template>
+    </section>
   </div>
 </template>
 
