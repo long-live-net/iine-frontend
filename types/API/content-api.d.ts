@@ -37,6 +37,12 @@ export interface ServiceGetApi extends ContentGetApi {
   imageSettings: ImageSettings
   position: number
 }
+export interface FeatureGetApi extends ContentGetApi {
+  caption: string
+  image: ImageData
+  imageSettings: ImageSettings
+  position: number
+}
 export interface NewsGetApi extends ContentGetApi {
   body: string
   category: string
@@ -74,9 +80,15 @@ export interface InformationSaveApi extends ContentSaveApi {
   body: string
 }
 export interface ServiceSaveApi extends ContentSaveApi {
+  caption: string
   image: ImageData
   imageSettings: ImageSettings
+  position: number
+}
+export interface FeatureSaveApi extends ContentSaveApi {
   caption: string
+  image: ImageData
+  imageSettings: ImageSettings
   position: number
 }
 export interface NewsSaveApi extends ContentSaveApi {

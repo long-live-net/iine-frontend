@@ -11,6 +11,7 @@ export type SectionKind =
   | 'information'
   | 'news'
   | 'service'
+  | 'feature'
   | 'contact'
   | 'access'
   | 'menu'

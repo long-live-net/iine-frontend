@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { ServiceType } from '@/types/content'
+import type { FeatureType } from '@/types/content'
 
 withDefaults(
   defineProps<{
-    item: ServiceType
+    item: FeatureType
     isCurrent?: boolean
     noCaption?: boolean
   }>(),
@@ -13,14 +13,14 @@ withDefaults(
   }
 )
 defineEmits<{
-  select: [service: ServiceType]
+  select: [feature: FeatureType]
 }>()
 
 const route = useRoute()
 </script>
 
 <template>
-  <div class="service-list-item">
+  <div class="feature-list-item-for-grid">
     <section
       :class="[isCurrent ? 'current-item' : 'item-link']"
       @click="$emit('select', item)"
@@ -60,7 +60,7 @@ const route = useRoute()
 </template>
 
 <style lang="scss" scoped>
-.service-list-item {
+.feature-list-item-for-grid {
   width: 90%;
   margin: 0 auto;
 
