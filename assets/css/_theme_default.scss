@@ -35,6 +35,7 @@
     background-color: variables.$white;
     box-shadow: 2px 2px 16px variables.$gray-lighten1;
   }
+
   .g-theme-contents-item {
     &__header {
       background-color: variables.$blue-lighten6;
@@ -49,6 +50,11 @@
   }
   .g-theme-edit-contents {
     color: variables.$black;
+  }
+
+  .g-theme-contents-grid-row-caption {
+    background-color: rgba(variables.$white, 0.9);
+    box-shadow: 2px 2px 16px rgba(variables.$gray-lighten1, 0.75);
   }
 
   .g-theme-wysiwyg-editor {

@@ -197,6 +197,7 @@ export const useHomeLayoutEdit = () => {
     { kind: 'information', title: 'information' },
     { kind: 'news', title: 'news' },
     { kind: 'service', title: 'service' },
+    { kind: 'feature', title: 'feature' },
     { kind: 'contact', title: 'contact' },
     { kind: 'access', title: 'access' },
     { kind: 'menu-image', title: 'menu' },

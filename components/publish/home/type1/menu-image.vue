@@ -53,7 +53,7 @@ const onClickEyecatch = (menuImage: MenuImageType) => {
             />
             <div class="edit-activator">
               <ManageContentMenuImage
-                :menu-image-data="content as MenuImageType"
+                :menu-image-data="content"
                 activator-size="x-small"
                 @update="onUpdate"
                 @remove="onRemove"
@@ -126,6 +126,10 @@ const onClickEyecatch = (menuImage: MenuImageType) => {
     position: absolute;
     top: -1rem;
     right: 5rem;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      right: 1rem;
+    }
   }
 }
 
@@ -150,8 +154,11 @@ const onClickEyecatch = (menuImage: MenuImageType) => {
     max-height: calc(100dvh - 250px);
     object-fit: contain;
 
+    @media only screen and (max-width: $grid-breakpoint-lg) {
+      width: calc(100dvw - 100px);
+    }
     @media only screen and (max-width: $grid-breakpoint-md) {
-      width: calc(100dvw - 150px);
+      width: calc(100dvw - 60px);
     }
     @media only screen and (max-width: $grid-breakpoint-sm) {
       width: calc(100dvw - 50px);

@@ -68,6 +68,12 @@ export interface ServiceType extends ContentType {
   imageSettings: ImageSettings
   position: number
 }
+export interface FeatureType extends ContentType {
+  caption: string
+  image: ImageData
+  imageSettings: ImageSettings
+  position: number
+}
 export interface ContactType extends ContentType {
   body: string
 }
@@ -107,6 +113,13 @@ export interface NewsForm extends ContentForm {
   publishOn: Date | null
 }
 export interface ServiceForm extends ContentForm {
+  image: string
+  imageName: string
+  imageType: string
+  caption: string
+  position: number
+}
+export interface FeatureForm extends ContentForm {
   image: string
   imageName: string
   imageType: string

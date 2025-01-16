@@ -48,7 +48,7 @@ await onLoad()
           v-intersect="{
             handler: onIntersectImage,
             options: {
-              threshold: [0.5],
+              threshold: [0.25],
             },
           }"
           :contents="newsListRef"

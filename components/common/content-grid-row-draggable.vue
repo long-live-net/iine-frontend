@@ -14,6 +14,7 @@ const draggableContents = computed({
   },
 })
 
+const contentGridMaxWidth = '1140px'
 const isDragging = ref(false)
 const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
 </script>
@@ -29,15 +30,15 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
         v-model="draggableContents"
         item-key="id"
         handle=".draggable"
-        class="content-grid"
+        class="content-grid-row"
         @start="isDragging = true"
         @end="isDragging = false"
       >
-        <template #item="{ element }">
+        <template #item="{ element, index }">
           <div
             class="content-grid__column column-draggable g-theme-contents-item__draggable"
           >
-            <slot :content="element as T" />
+            <slot :content="element as T" :index="index" />
             <div
               class="edit-position-top draggable g-theme-contents-item__draggable--notion"
             >
@@ -68,24 +69,21 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   margin-bottom: 2rem;
 }
 
-.content-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 22rem));
-  justify-items: center;
-  justify-content: space-around;
-  row-gap: 2rem;
+.content-grid-row {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3rem;
   margin: 0 auto;
-  max-width: 80rem;
-  min-height: 18rem;
+  width: 90%;
+  max-width: v-bind('contentGridMaxWidth');
+  min-height: 10rem;
   &__column {
-    padding: 1.5rem 0.75rem 2.5rem 0.75rem;
     width: 100%;
-    text-align: center;
   }
 
   .column-draggable {
     position: relative;
-    width: 92% !important;
+    padding: 1rem;
     border-radius: 6px;
 
     .edit-position-top {

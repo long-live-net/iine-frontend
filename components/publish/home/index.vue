@@ -30,6 +30,7 @@ const sectionTitle = (section: PageLayout): string =>
         <PublishHomeType1Information v-if="section.kind === 'information'" />
         <PublishHomeType1Newses v-if="section.kind === 'news'" />
         <PublishHomeType1Services v-if="section.kind === 'service'" />
+        <PublishHomeType1Features v-if="section.kind === 'feature'" />
         <PublishHomeType1Contact v-if="section.kind === 'contact'" />
         <PublishHomeType1Access v-if="section.kind === 'access'" />
         <PublishHomeType1MenuImage v-if="section.kind === 'menu-image'" />
@@ -50,7 +51,7 @@ article {
 
   .section-margin {
     padding-top: calc($nav-header-height + 1rem);
-    margin-top: -40px;
+    margin-top: -10px;
   }
 }
 </style>
