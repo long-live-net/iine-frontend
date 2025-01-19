@@ -106,8 +106,8 @@ const onSelectUserMenu = (value: number | string) => {
     </BaseDropdown>
   </div>
   <ManageCustomerOnPreview
-    v-if="isPreview"
     id="on-preview-button"
+    :is-preview="isPreview"
     @click="togglePreview"
   />
   <ManageCustomerTitleSetting v-model:modal="titleSettingDialog" />
@@ -119,7 +119,11 @@ const onSelectUserMenu = (value: number | string) => {
 <style scoped lang="scss">
 #on-preview-button {
   position: fixed;
-  top: calc($nav-header-height + 0.75rem);
-  right: 1rem;
+  top: calc($nav-header-height - 2.25rem);
+  right: 1.8rem;
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    right: 0.6rem;
+  }
 }
 </style>
