@@ -90,13 +90,9 @@ const useInformationContent = (customerId: Ref<number | null>) => {
             name: formData.imageName,
             type: formData.imageType,
           },
-        }
-      : {}),
-    ...(formData.imageSettings
-      ? {
           imageSettings: {
             ...getDefaultImageSettings(),
-            ...formData.imageSettings,
+            ...(formData.imageSettings ? formData.imageSettings : {}),
           },
         }
       : {}),

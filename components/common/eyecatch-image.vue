@@ -22,11 +22,41 @@ const props = withDefaults(defineProps<EyeCatchImageProps>(), {
 })
 
 const noImage = '/images/no-image-g.png'
-const bkImage = computed(() => `url(${props.url.length ? props.url : noImage})`)
+const { isSmall, isJudged } = useMediaQueryIsSmall()
+type ImageOptions = {
+  src: string
+  size: string | 'cover'
+  position: string | 'center'
+  parallax: 'fixed' | 'scroll'
+}
+const imageOptions = computed<ImageOptions>(() =>
+  isJudged.value && isSmall.value
+    ? {
+        src: `url(${props.url.length ? props.url : noImage})`,
+        size: props.settings.smSize,
+        position: props.settings.smPosition,
+        parallax: props.settings.smParallax,
+      }
+    : {
+        src: `url(${props.url.length ? props.url : noImage})`,
+        size: props.settings.lgSize,
+        position: props.settings.lgPosition,
+        parallax: props.settings.lgParallax,
+      }
+)
+const isParallax = computed(() => imageOptions.value.parallax === 'fixed')
 </script>
 
 <template>
-  <div class="eyecatch-image" :class="{ circle: circle, round: round }">
+  <div
+    class="eyecatch-image"
+    :class="{
+      parallax: isParallax,
+      normal: !isParallax,
+      circle: circle,
+      round: round,
+    }"
+  >
     <slot />
     <div v-if="$slots.settings" class="settings">
       <slot name="settings" />
@@ -37,11 +67,6 @@ const bkImage = computed(() => `url(${props.url.length ? props.url : noImage})`)
 <style lang="scss" scoped>
 .eyecatch-image {
   position: relative;
-  background-repeat: no-repeat;
-  background-image: v-bind('bkImage');
-  background-size: v-bind('settings.lgSize');
-  background-position: v-bind('settings.lgPosition');
-  background-attachment: v-bind('settings.lgParallax');
 
   .settings {
     position: absolute;
@@ -50,21 +75,36 @@ const bkImage = computed(() => `url(${props.url.length ? props.url : noImage})`)
   }
 }
 
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .eyecatch-image {
-    background-size: v-bind('settings.smSize');
-    background-position: v-bind('settings.smPosition');
-    background-attachment: v-bind('settings.smParallax');
+.normal {
+  background-repeat: no-repeat;
+  background-image: v-bind('imageOptions.src');
+  background-size: v-bind('imageOptions.size');
+  background-position: v-bind('imageOptions.position');
+  background-attachment: v-bind('imageOptions.parallax');
+}
+
+.parallax {
+  clip-path: inset(0);
+
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-repeat: no-repeat;
+    background-image: v-bind('imageOptions.src');
+    background-size: v-bind('imageOptions.size');
+    background-position: v-bind('imageOptions.position');
   }
 }
 
 .circle {
-  border-radius: 50%;
-  overflow: hidden;
+  clip-path: inset(0 round 50%) !important;
 }
 
 .round {
-  border-radius: 12px;
-  overflow: hidden;
+  clip-path: inset(0 round 12px) !important;
 }
 </style>
