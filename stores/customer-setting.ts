@@ -68,7 +68,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
       })) ?? null,
   })
 
-  const load = async (customerId: number): Promise<CustomerSetting | null> => {
+  const load = async (customerId: string): Promise<CustomerSetting | null> => {
     const key = `fetch_customer_setting_${endpoint}_${keyExt.value++}`
     const { data, error } = await useAsyncData<CustomerSettingApi>(key, () =>
       $fetch(`${endpoint}/${customerId}`, {
@@ -81,7 +81,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
     }
     return api2Appdata(data.value)
   }
-  const fetch = async (customerId: number): Promise<CustomerSetting | null> => {
+  const fetch = async (customerId: string): Promise<CustomerSetting | null> => {
     const data = await $fetch<CustomerSettingApi | null>(
       `${endpoint}/${customerId}`,
       {
@@ -125,12 +125,12 @@ export const useCustomerSettingStore = defineStore('customerSetting', () => {
       : null
   }
 
-  async function loadCustomerSetting(customerId: number) {
+  async function loadCustomerSetting(customerId: string) {
     const customerSetting = await load(customerId)
     setCustomerSetting(customerSetting)
   }
 
-  async function fetchCustomerSetting(customerId: number) {
+  async function fetchCustomerSetting(customerId: string) {
     const customerSetting = await fetch(customerId)
     setCustomerSetting(customerSetting)
   }

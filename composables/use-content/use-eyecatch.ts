@@ -17,7 +17,7 @@ export const getEyecatchDefaultTitleSettings = (): EyecatchTitleSettings => ({
   align: 'left',
 })
 
-const useEyecatchContent = (customerId: Ref<number | null>) => {
+const useEyecatchContent = (customerId: Ref<string | null>) => {
   const { getDefaultImageSettings } = useContentInit()
   const {
     loadData,
@@ -69,7 +69,7 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
   const loading = computed(() => readLoading.value || writeLoading.value)
 
   const formToEyecatchSaveApi = (formData: EyecatchForm): EyecatchSaveApi => ({
-    customerId: customerId.value ?? 0,
+    customerId: customerId.value ?? '',
     title: formData.title,
     subtitle: formData.subtitle,
     titleSettings: { ...formData.titleSettings },
@@ -90,7 +90,7 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
   }
 
   const updateEyecatch = async (
-    contentId: number,
+    contentId: string,
     formData: EyecatchForm
   ): Promise<EyecatchType | null> => {
     const inputData: EyecatchSaveApi = formToEyecatchSaveApi(formData)
@@ -144,7 +144,7 @@ const useEyecatchContent = (customerId: Ref<number | null>) => {
  * Eyecatch API アクションサービス
  * @param customerId
  */
-export const useEyecatchActions = (customerId: Ref<number | null>) => {
+export const useEyecatchActions = (customerId: Ref<string | null>) => {
   const {
     loadEyecatch,
     getEyecatch,
@@ -175,7 +175,7 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: EyecatchForm
   }) => {
     if (!id) return
@@ -185,7 +185,7 @@ export const useEyecatchActions = (customerId: Ref<number | null>) => {
     await getEyecatch(savedData?.id)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeEyecatch(id)
     addSnackber?.('トップ画像を削除しました。')
     await getEyecatch()

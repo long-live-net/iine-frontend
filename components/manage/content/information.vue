@@ -8,8 +8,8 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{
   create: [inputData: InformationForm]
-  update: [{ id: number; formData: InformationForm }]
-  remove: [id: number]
+  update: [{ id: string; formData: InformationForm }]
+  remove: [id: string]
 }>()
 
 const { customerId } = useCustomer()

@@ -9,7 +9,7 @@ import type { ContactGetApi, ContactSaveApi } from '@/types/API/content-api'
 const apiKind = 'contacts'
 export const getContactKind = () => apiKind
 
-const useContactContent = (customerId: Ref<number | null>) => {
+const useContactContent = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
@@ -70,7 +70,7 @@ const useContactContent = (customerId: Ref<number | null>) => {
   const loading = computed(() => readLoading.value || writeLoading.value)
 
   const formToContactSaveApi = (formData: ContactForm): ContactSaveApi => ({
-    customerId: customerId.value ?? 0,
+    customerId: customerId.value ?? '',
     title: formData.title,
     subtitle: formData.subtitle,
     titleSettings: { ...formData.titleSettings },
@@ -99,7 +99,7 @@ const useContactContent = (customerId: Ref<number | null>) => {
   }
 
   const updateContact = async (
-    contentId: number,
+    contentId: string,
     formData: ContactForm
   ): Promise<ContactType | null> => {
     const inputData: ContactSaveApi = formToContactSaveApi(formData)
@@ -153,7 +153,7 @@ const useContactContent = (customerId: Ref<number | null>) => {
  * Contact API アクションサービス
  * @param customerId
  */
-export const useContactActions = (customerId: Ref<number | null>) => {
+export const useContactActions = (customerId: Ref<string | null>) => {
   const {
     loadContact,
     getContact,
@@ -184,7 +184,7 @@ export const useContactActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: ContactForm
   }) => {
     if (!id) return
@@ -194,7 +194,7 @@ export const useContactActions = (customerId: Ref<number | null>) => {
     await getContact(savedData?.id)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeContact(id)
     addSnackber?.('Contact を削除しました。')
     await getContact()

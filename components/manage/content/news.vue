@@ -9,8 +9,8 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{
   create: [inputData: NewsForm]
-  update: [{ id: number; formData: NewsForm }]
-  remove: [id: number]
+  update: [{ id: string; formData: NewsForm }]
+  remove: [id: string]
 }>()
 
 const { customerId } = useCustomer()

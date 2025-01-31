@@ -17,7 +17,7 @@ import type {
 const apiKind = 'services'
 export const getServiceKind = () => apiKind
 
-const useServiceContent = (customerId: Ref<number | null>) => {
+const useServiceContent = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
@@ -88,7 +88,7 @@ const useServiceContent = (customerId: Ref<number | null>) => {
   const loading = computed(() => readLoading.value || writeLoading.value)
 
   const formToServiceSaveApi = (formData: ServiceForm): ServiceSaveApi => ({
-    customerId: customerId.value ?? 0,
+    customerId: customerId.value ?? '',
     title: formData.title,
     titleSettings: { ...formData.titleSettings },
     caption: formData.caption,
@@ -111,7 +111,7 @@ const useServiceContent = (customerId: Ref<number | null>) => {
   }
 
   const updateService = async (
-    contentId: number,
+    contentId: string,
     formData: ServiceForm
   ): Promise<ServiceType | null> => {
     const inputData: ServiceSaveApi = formToServiceSaveApi(formData)
@@ -195,7 +195,7 @@ const useServiceListQueriesStore = () => {
  * service list API アクションサービス
  * @param customerId
  */
-export const useServiceListActions = (customerId: Ref<number | null>) => {
+export const useServiceListActions = (customerId: Ref<string | null>) => {
   const filter = ref<ListFilter>({})
   const sort = ref<ListSort>({ position: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })
@@ -237,7 +237,7 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: ServiceForm
   }) => {
     if (!id) return
@@ -247,7 +247,7 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
     getServiceList(filter.value, sort.value, pager.value)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeService(id)
     addSnackber?.('Service を削除しました。')
     getServiceList(filter.value, sort.value, pager.value)
@@ -278,7 +278,7 @@ export const useServiceListActions = (customerId: Ref<number | null>) => {
  * service detail API アクションサービス
  * @param customerId
  */
-export const useServiceActions = (customerId: Ref<number | null>) => {
+export const useServiceActions = (customerId: Ref<string | null>) => {
   const { addSnackber } = useSnackbars()
   const { filter, sort } = useServiceListQueriesStore()
   const {
@@ -297,7 +297,7 @@ export const useServiceActions = (customerId: Ref<number | null>) => {
     loading,
   } = useServiceContent(customerId)
 
-  const onLoad = async (id?: number) => {
+  const onLoad = async (id?: string) => {
     await loadService(id)
     if (serviceRef.value) {
       await getServicePreNextId(serviceRef.value.id, filter.value, sort.value)
@@ -314,7 +314,7 @@ export const useServiceActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: ServiceForm
   }) => {
     if (!id) return
@@ -324,7 +324,7 @@ export const useServiceActions = (customerId: Ref<number | null>) => {
     await getService(savedData?.id)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeService(id)
     addSnackber?.('Service を削除しました。')
     await getService()

@@ -9,7 +9,7 @@ const imageSetting = defineModel<ImageSettings | null>('settings')
 const props = defineProps<{
   label?: string
   errorMessages?: string | string[]
-  customerId: number | null
+  customerId: string | null
   apiKind: string
 }>()
 

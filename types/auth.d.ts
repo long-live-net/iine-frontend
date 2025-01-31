@@ -4,7 +4,7 @@ import type { CustomerUser } from '~/types/customer-user'
  * User Login  Api Request Credential
  */
 export type LoginApiCredential = {
-  customerId: number
+  customerId: string
   username: string
   password: string
 }

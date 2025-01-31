@@ -12,7 +12,7 @@ import type {
 const apiKind = 'informations'
 export const getInformationKind = () => apiKind
 
-const useInformationContent = (customerId: Ref<number | null>) => {
+const useInformationContent = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
@@ -78,7 +78,7 @@ const useInformationContent = (customerId: Ref<number | null>) => {
   const formToInformationSaveApi = (
     formData: InformationForm
   ): InformationSaveApi => ({
-    customerId: customerId.value ?? 0,
+    customerId: customerId.value ?? '',
     title: formData.title,
     subtitle: formData.subtitle,
     titleSettings: { ...formData.titleSettings },
@@ -107,7 +107,7 @@ const useInformationContent = (customerId: Ref<number | null>) => {
   }
 
   const updateInformation = async (
-    contentId: number,
+    contentId: string,
     formData: InformationForm
   ): Promise<InformationType | null> => {
     const inputData: InformationSaveApi = formToInformationSaveApi(formData)
@@ -163,7 +163,7 @@ const useInformationContent = (customerId: Ref<number | null>) => {
  * Information API アクションサービス
  * @param customerId
  */
-export const useInformationActions = (customerId: Ref<number | null>) => {
+export const useInformationActions = (customerId: Ref<string | null>) => {
   const {
     loadInformation,
     getInformation,
@@ -194,7 +194,7 @@ export const useInformationActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: InformationForm
   }) => {
     if (!id) return
@@ -204,7 +204,7 @@ export const useInformationActions = (customerId: Ref<number | null>) => {
     getInformation(savedData?.id)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeInformation(id)
     addSnackber?.('Information を削除しました。')
     getInformation()

@@ -16,7 +16,6 @@ export const useAuth = () => {
 
   /**
    * 利用者ログイン認証処理
-   * @param customerId
    * @param credential
    */
   const login = async (credential: LoginApiCredential) => {

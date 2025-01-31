@@ -71,7 +71,7 @@ export const useContentInit = () => {
 }
 
 export const useContentRead = <T extends ContentGetApi>(
-  customerId: Ref<number | null>,
+  customerId: Ref<string | null>,
   apiPath: string
 ) => {
   const contentDataRef: Ref<T | null> = ref(null)
@@ -93,7 +93,7 @@ export const useContentRead = <T extends ContentGetApi>(
    *
    * @param contentId 未設定時は最新データを取得する
    */
-  const loadData = async (contentId?: number | null) => {
+  const loadData = async (contentId?: string | null) => {
     contentDataRef.value = null
     const key = `get_content_${apiPath}_${keyExt.value++}`
     const url =
@@ -175,7 +175,7 @@ export const useContentRead = <T extends ContentGetApi>(
    * get content data
    * @param contentId 未設定時は最新データを取得する
    */
-  const get = async (contentId?: number | null) => {
+  const get = async (contentId?: string | null) => {
     const url =
       contentId === undefined || contentId === null
         ? `/${apiPath}/recent`
@@ -233,7 +233,7 @@ export const useContentRead = <T extends ContentGetApi>(
    * @param sort ソートキー
    */
   const getPreNextId = async (
-    currentId: number,
+    currentId: string,
     filter: ListFilter = {},
     sort: ListSort = {}
   ) => {
@@ -321,7 +321,7 @@ export const useContentWrite = <
   F extends ContentSaveApi,
   T extends ContentGetApi,
 >(
-  customerId: Ref<number | null>,
+  customerId: Ref<string | null>,
   apiPath: string
 ) => {
   const loading = ref(false)
@@ -354,7 +354,7 @@ export const useContentWrite = <
    * @param contentId
    * @param modData
    */
-  const update = async (contentId: number, sendData: F): Promise<T> => {
+  const update = async (contentId: string, sendData: F): Promise<T> => {
     try {
       loading.value = true
       const data = await $fetch<T>(`/${apiPath}/${contentId}`, {
@@ -375,7 +375,7 @@ export const useContentWrite = <
    * remove content data
    * @param contentId
    */
-  const remove = async (contentId: number): Promise<void> => {
+  const remove = async (contentId: string): Promise<void> => {
     try {
       loading.value = true
       await $fetch(`/${apiPath}/${contentId}`, {
@@ -416,7 +416,7 @@ export const useContentWrite = <
    * Title Settings 更新
    */
   const updateTitleSettings = async (
-    contentId: number,
+    contentId: string,
     titleSettings: NonNullable<T['titleSettings']>
   ): Promise<void> => {
     try {
@@ -439,7 +439,7 @@ export const useContentWrite = <
    * Image Settings 更新
    */
   const updateImageSettings = async (
-    contentId: number,
+    contentId: string,
     imageSettings: ImageSettings
   ): Promise<void> => {
     try {

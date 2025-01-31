@@ -6,7 +6,7 @@ const props = defineProps<{
   label?: string
   accessables?: string[]
   errorMessages?: string | string[]
-  customerId: number | null
+  customerId: string | null
   apiKind: string
 }>()
 

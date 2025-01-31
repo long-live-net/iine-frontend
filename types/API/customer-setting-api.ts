@@ -7,8 +7,8 @@ import type {
 } from '@/types/customer-setting'
 
 export type CustomerSettingApi = {
-  id: number
-  customerId: number
+  id: string
+  customerId: string
   availContentsKind: string[]
   newsCategories: string[]
   pageTitle: PageTitle

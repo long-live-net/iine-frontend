@@ -2,8 +2,8 @@
  * CustomerUser API
  */
 export type CustomerUserApi = {
-  id?: number
-  customerId: number
+  id?: string
+  customerId: string
   email: string
   name: string
   note?: string | null

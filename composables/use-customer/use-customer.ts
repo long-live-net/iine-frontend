@@ -14,7 +14,7 @@ export const useCustomer = () => {
   const customerName = computed(() => customer.value?.name ?? '')
   const loading = ref(false)
 
-  const fetchCustomer = async (customerId: number) => {
+  const fetchCustomer = async (customerId: string) => {
     loading.value = true
     await customerStore.fetchCustomer(customerId).finally(() => {
       loading.value = false

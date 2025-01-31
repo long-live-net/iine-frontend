@@ -1,7 +1,7 @@
 const QUERY_NAMR_FOR_FILE = 'iinefile'
 const QUERY_NAMR_FOR_IMAGEFILE = 'iineimagefile'
 
-export const useFilePost = (customerId: Ref<number | null>, kind: string) => {
+export const useFilePost = (customerId: Ref<string | null>, kind: string) => {
   const loading = ref(false)
   const { authorizationHeader } = useAuth()
 

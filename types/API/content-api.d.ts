@@ -13,8 +13,8 @@ import type {
  */
 export interface ContentGetApi {
   _id?: string
-  id: number
-  customerId: number
+  id: string
+  customerId: string
   title: string
   subtitle?: string
   titleSettings?: TitleSettings
@@ -62,7 +62,7 @@ export interface MenuImageGetApi extends ContentGetApi {
  * POST, PUT API で保存するデータ型
  */
 export type ContentSaveApi = {
-  customerId: number
+  customerId: string
   title: string
   subtitle?: string
   titleSettings: TitleSettings
