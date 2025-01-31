@@ -34,7 +34,7 @@ const featureItem = computed(() => {
   }
 })
 
-const detailTitle = computed(() => `詳細 ${useRoute().params.id}`)
+const detailTitle = computed(() => 'Detail')
 
 const route = useRoute()
 const items = ref<BreadCrumbsItem[]>([])
