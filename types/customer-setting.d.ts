@@ -36,8 +36,8 @@ export type NetworkServiceLink = {
  * Customer Setting
  */
 export type CustomerSetting = {
-  id: number
-  customerId: number
+  id: string
+  customerId: string
   availContentsKind: string[]
   newsCategories: string[]
   pageTitle: PageTitle

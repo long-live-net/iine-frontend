@@ -2,7 +2,7 @@
  * Customer Data Types
  */
 export type CustomerApi = {
-  id: number
+  id: string
   nickName: string
   name: string
   defaultEmail: string

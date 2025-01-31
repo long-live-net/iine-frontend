@@ -2,8 +2,8 @@
  * CustomerUser 情報
  */
 export type CustomerUser = {
-  id: number
-  customerId: number
+  id: string
+  customerId: string
   customerName?: string
   email: string
   name: string

@@ -15,7 +15,7 @@ import type {
 const apiKind = 'menu-images'
 export const getMenuImageKind = () => apiKind
 
-const useMenuImageContent = (customerId: Ref<number | null>) => {
+const useMenuImageContent = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
@@ -86,7 +86,7 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
   const formToMenuImageSaveApi = (
     formData: MenuImageForm
   ): MenuImageSaveApi => ({
-    customerId: customerId.value ?? 0,
+    customerId: customerId.value ?? '',
     title: formData.title,
     titleSettings: { ...formData.titleSettings },
     caption: formData.caption,
@@ -113,7 +113,7 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
   }
 
   const updateMenuImage = async (
-    contentId: number,
+    contentId: string,
     formData: MenuImageForm
   ): Promise<MenuImageType | null> => {
     const data = await update(contentId, formToMenuImageSaveApi(formData))
@@ -153,7 +153,7 @@ const useMenuImageContent = (customerId: Ref<number | null>) => {
  * menuImage list API アクションサービス
  * @param customerId
  */
-export const useMenuImageListActions = (customerId: Ref<number | null>) => {
+export const useMenuImageListActions = (customerId: Ref<string | null>) => {
   const filter = ref<ListFilter>({})
   const sort = ref<ListSort>({ id: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })
@@ -186,7 +186,7 @@ export const useMenuImageListActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: MenuImageForm
   }) => {
     if (!id) return
@@ -196,7 +196,7 @@ export const useMenuImageListActions = (customerId: Ref<number | null>) => {
     getMenuImageList(filter.value, sort.value, pager.value)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeMenuImage(id)
     addSnackber?.('Menu を削除しました。')
     getMenuImageList(filter.value, sort.value, pager.value)

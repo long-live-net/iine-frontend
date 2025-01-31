@@ -17,7 +17,7 @@ import type {
 const apiKind = 'features'
 export const getFeatureKind = () => apiKind
 
-const useFeatureContent = (customerId: Ref<number | null>) => {
+const useFeatureContent = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
@@ -88,7 +88,7 @@ const useFeatureContent = (customerId: Ref<number | null>) => {
   const loading = computed(() => readLoading.value || writeLoading.value)
 
   const formToFeatureSaveApi = (formData: FeatureForm): FeatureSaveApi => ({
-    customerId: customerId.value ?? 0,
+    customerId: customerId.value ?? '',
     title: formData.title,
     titleSettings: { ...formData.titleSettings },
     caption: formData.caption,
@@ -111,7 +111,7 @@ const useFeatureContent = (customerId: Ref<number | null>) => {
   }
 
   const updateFeature = async (
-    contentId: number,
+    contentId: string,
     formData: FeatureForm
   ): Promise<FeatureType | null> => {
     const inputData: FeatureSaveApi = formToFeatureSaveApi(formData)
@@ -195,7 +195,7 @@ const useFeatureListQueriesStore = () => {
  * feature list API アクションサービス
  * @param customerId
  */
-export const useFeatureListActions = (customerId: Ref<number | null>) => {
+export const useFeatureListActions = (customerId: Ref<string | null>) => {
   const filter = ref<ListFilter>({})
   const sort = ref<ListSort>({ position: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })
@@ -237,7 +237,7 @@ export const useFeatureListActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: FeatureForm
   }) => {
     if (!id) return
@@ -247,7 +247,7 @@ export const useFeatureListActions = (customerId: Ref<number | null>) => {
     getFeatureList(filter.value, sort.value, pager.value)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeFeature(id)
     addSnackber?.('Feature を削除しました。')
     getFeatureList(filter.value, sort.value, pager.value)
@@ -278,7 +278,7 @@ export const useFeatureListActions = (customerId: Ref<number | null>) => {
  * feature detail API アクションサービス
  * @param customerId
  */
-export const useFeatureActions = (customerId: Ref<number | null>) => {
+export const useFeatureActions = (customerId: Ref<string | null>) => {
   const { addSnackber } = useSnackbars()
   const { filter, sort } = useFeatureListQueriesStore()
   const {
@@ -297,7 +297,7 @@ export const useFeatureActions = (customerId: Ref<number | null>) => {
     loading,
   } = useFeatureContent(customerId)
 
-  const onLoad = async (id?: number) => {
+  const onLoad = async (id?: string) => {
     await loadFeature(id)
     if (featureRef.value) {
       await getFeaturePreNextId(featureRef.value.id, filter.value, sort.value)
@@ -314,7 +314,7 @@ export const useFeatureActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: FeatureForm
   }) => {
     if (!id) return
@@ -324,7 +324,7 @@ export const useFeatureActions = (customerId: Ref<number | null>) => {
     await getFeature(savedData?.id)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeFeature(id)
     addSnackber?.('Feature を削除しました。')
     await getFeature()

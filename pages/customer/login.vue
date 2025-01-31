@@ -12,7 +12,7 @@ const router = useRouter()
 
 const onLogin = async (form: LoginForm) => {
   const credential: LoginApiCredential = {
-    customerId: customerId.value ?? 0,
+    customerId: customerId.value ?? '',
     username: form.username,
     password: form.password,
   }

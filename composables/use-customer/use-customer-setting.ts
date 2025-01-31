@@ -180,7 +180,6 @@ export const useHomeLayoutTitleEdit = () => {
 
 /**
  * ホームレイアウト変更
- * @param customerId
  */
 export const useHomeLayoutEdit = () => {
   const {

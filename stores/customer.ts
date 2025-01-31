@@ -46,7 +46,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
     }
     return api2Appdata(data.value)
   }
-  const fetch = async (id: number): Promise<Customer | null> => {
+  const fetch = async (id: string): Promise<Customer | null> => {
     const data = await $fetch<CustomerApi | null>(`${endpoint}/${id}`, {
       baseURL: backendBaseUrl,
       method: 'GET',
@@ -88,7 +88,7 @@ export const useCustomerStore = defineStore('customer', () => {
     setCustomer(customer)
   }
 
-  async function fetchCustomer(customerId: number) {
+  async function fetchCustomer(customerId: string) {
     const customer = await fetch(customerId)
     setCustomer(customer)
   }

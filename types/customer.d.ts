@@ -2,7 +2,7 @@
  * Customer Data Types
  */
 export type Customer = {
-  id: number
+  id: string
   name: string
   nickName: string
   defaultEmail: string

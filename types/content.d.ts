@@ -35,8 +35,8 @@ export interface MenuImageData {
 }
 
 export interface ContentType {
-  id: number
-  customerId?: number
+  id: string
+  customerId?: string
   title: string
   subtitle?: string
   titleSettings: TitleSettings
@@ -88,7 +88,7 @@ export interface MenuImageType extends ContentType {
  * Content Form Data Types
  */
 export interface ContentForm {
-  id?: number
+  id?: string
   title: string
   subtitle?: string
   titleSettings: TitleSettings
@@ -144,15 +144,15 @@ export interface MenuImageForm extends ContentForm {
  * Pre Next ID 取得時のレスポンスデータ
  */
 export interface ContentPreNextId {
-  preId: number | null
-  nextId: number | null
+  preId: string | null
+  nextId: string | null
 }
 
 /**
  * トップ画面表示位置 (position)
  */
 export interface ContentPosition {
-  id: number
+  id: string
   position: number
 }
 

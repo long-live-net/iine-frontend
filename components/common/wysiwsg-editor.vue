@@ -10,7 +10,7 @@ const props = withDefaults(
     clearable?: boolean
     errorMessages?: string | string[]
     noImage?: boolean
-    customerId: number | null
+    customerId: string | null
     apiKind: string
   }>(),
   {

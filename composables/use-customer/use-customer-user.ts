@@ -20,7 +20,7 @@ const useCustomerUserApi = () => {
       return null
     }
     return {
-      id: apiData.id ?? 0,
+      id: apiData.id ?? '',
       customerId: apiData.customerId,
       email: apiData.email,
       name: apiData.name,
@@ -44,7 +44,7 @@ const useCustomerUserApi = () => {
   const loading = ref(false)
 
   const fetchCustomerUser = async (
-    id: number
+    id: string
   ): Promise<CustomerUser | null> => {
     loading.value = true
     try {
@@ -84,7 +84,7 @@ const useCustomerUserApi = () => {
   }
 
   const checkExistsEmail = async (
-    userId: number,
+    userId: string,
     email: string
   ): Promise<boolean | null> => {
     loading.value = true
@@ -151,8 +151,7 @@ export const useCustomerUserForm = () => {
 
 /**
  * Customer User 変更アクションサービス
- * @param customerId
- */
+d */
 export const useCustomerUserActions = () => {
   const { customer } = useCustomer()
   const customerUserRef = ref<CustomerUser | null>(null)
@@ -166,11 +165,11 @@ export const useCustomerUserActions = () => {
   const authStore = useAuthStore()
   const { addSnackber } = useSnackbars()
 
-  const fetch = async (userId: number) => {
+  const fetch = async (userId: string) => {
     customerUserRef.value = await fetchCustomerUser(userId)
   }
 
-  const checkEmail = async (userId: number, form: CustomerUserForm) => {
+  const checkEmail = async (userId: string, form: CustomerUserForm) => {
     if (await checkExistsEmail(userId, form.email)) {
       addSnackber?.('他のメールアドレスに変更してください。', 'warning')
       addSnackber?.('指定のメールアドレスは既に使用されています。', 'error')
@@ -179,7 +178,7 @@ export const useCustomerUserActions = () => {
     return true
   }
 
-  const update = async (userId: number, form: CustomerUserForm) => {
+  const update = async (userId: string, form: CustomerUserForm) => {
     if (!customer.value?.id) {
       return
     }

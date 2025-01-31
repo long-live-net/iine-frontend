@@ -22,19 +22,19 @@ const bodyPlainString = computed(
     featureRef.value?.body?.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') ?? ''
 )
 
-const onUpdateData = async (params: { id: number; formData: FeatureForm }) => {
+const onUpdateData = async (params: { id: string; formData: FeatureForm }) => {
   await onUpdate(params)
   emit('update:data')
 }
-const onRemoveData = async (id: number) => {
+const onRemoveData = async (id: string) => {
   await onRemove(id)
   emit('update:data')
 }
 
 const route = useRoute()
-const contentId = parseInt(
-  Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-)
+const contentId = Array.isArray(route.params.id)
+  ? route.params.id[0]
+  : route.params.id
 
 const preUrl = computed(() =>
   featurePreNextIdRefRef.value?.preId

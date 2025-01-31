@@ -58,7 +58,7 @@ export const useInquireForm = () => {
  * Send Inquire Email
  * @param customerId
  */
-export const useInquireSend = (customerId: Ref<number | null>) => {
+export const useInquireSend = (customerId: Ref<string | null>) => {
   const apiPath = '/inquire'
   const loading = ref(false)
 

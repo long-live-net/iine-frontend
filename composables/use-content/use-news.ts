@@ -15,7 +15,7 @@ import type {
 const apiKind = 'newses'
 export const getNewsKind = () => apiKind
 
-const useNewsContent = (customerId: Ref<number | null>) => {
+const useNewsContent = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
   const {
     loadData,
@@ -89,7 +89,7 @@ const useNewsContent = (customerId: Ref<number | null>) => {
   const loading = computed(() => readLoading.value || writeLoading.value)
 
   const formToNewsSaveApi = (formData: NewsForm): NewsSaveApi => ({
-    customerId: customerId.value ?? 0,
+    customerId: customerId.value ?? '',
     title: formData.title,
     titleSettings: { ...formData.titleSettings },
     category: formData.category ?? 'I',
@@ -117,7 +117,7 @@ const useNewsContent = (customerId: Ref<number | null>) => {
   }
 
   const updateNews = async (
-    contentId: number,
+    contentId: string,
     formData: NewsForm
   ): Promise<NewsType | null> => {
     const inputData: NewsSaveApi = formToNewsSaveApi(formData)
@@ -189,7 +189,7 @@ const useNewsListQueriesStore = () => {
  * news list API アクションサービス
  * @param customerId
  */
-export const useNewsListActions = (customerId: Ref<number | null>) => {
+export const useNewsListActions = (customerId: Ref<string | null>) => {
   const filter = ref<ListFilter>({})
   const sort = ref<ListSort>({ id: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })
@@ -231,7 +231,7 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: NewsForm
   }) => {
     if (!id) return
@@ -241,7 +241,7 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
     await getNewsList(filter.value, sort.value, pager.value)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeNews(id)
     addSnackber?.('News を削除しました。')
     await getNewsList(filter.value, sort.value, pager.value)
@@ -266,7 +266,7 @@ export const useNewsListActions = (customerId: Ref<number | null>) => {
  * news API アクションサービス
  * @param customerId
  */
-export const useNewsActions = (customerId: Ref<number | null>) => {
+export const useNewsActions = (customerId: Ref<string | null>) => {
   const { addSnackber } = useSnackbars()
   const { filter, sort } = useNewsListQueriesStore()
   const {
@@ -285,7 +285,7 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     loading,
   } = useNewsContent(customerId)
 
-  const onLoad = async (id?: number) => {
+  const onLoad = async (id?: string) => {
     await loadNews(id)
     if (newsRef.value) {
       await getNewsPreNextId(newsRef.value.id, filter.value, sort.value)
@@ -302,7 +302,7 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     id,
     formData,
   }: {
-    id: number
+    id: string
     formData: NewsForm
   }) => {
     if (!id) return
@@ -312,7 +312,7 @@ export const useNewsActions = (customerId: Ref<number | null>) => {
     await getNews(savedData?.id)
   }
 
-  const onRemove = async (id: number) => {
+  const onRemove = async (id: string) => {
     await removeNews(id)
     addSnackber?.('News を削除しました。')
     await getNews()

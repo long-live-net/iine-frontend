@@ -16,9 +16,9 @@ const {
 } = useNewsActions(customerId)
 
 const route = useRoute()
-const contentId = parseInt(
-  Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-)
+const contentId = Array.isArray(route.params.id)
+  ? route.params.id[0]
+  : route.params.id
 
 const preUrl = computed(() =>
   newsPreNextIdRefRef.value?.preId
