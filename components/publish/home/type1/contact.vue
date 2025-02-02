@@ -163,7 +163,7 @@ $eyecatcher-height-sm: 300px;
 .eyecatcher {
   height: 30vh;
   max-height: $eyecatcher-height;
-  min-height: calc($eyecatcher-height * 0.7);
+  min-height: calc($eyecatcher-height * 0.75);
 
   @media only screen and (max-width: $grid-breakpoint-md) {
     height: 50vw;
