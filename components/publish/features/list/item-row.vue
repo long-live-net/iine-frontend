@@ -74,7 +74,7 @@ const route = useRoute()
 
     .eyecatcher {
       width: 100%;
-      aspect-ratio: 2 / 1;
+      aspect-ratio: 21 / 10;
     }
   }
 
