@@ -55,6 +55,9 @@ const route = useRoute()
             {{ item.title }}
           </h5>
           <CommonWysiwsgViewer :value="item.caption" class="caption" />
+          <p class="g-block-sm mt-2 text-right">
+            <v-btn variant="outlined" size="small">詳しく見る</v-btn>
+          </p>
         </div>
       </CommonContentItemAnimation>
     </section>

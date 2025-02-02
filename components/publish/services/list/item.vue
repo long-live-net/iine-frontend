@@ -54,6 +54,9 @@ const route = useRoute()
         :disabled="route.name !== 'index'"
       >
         <CommonWysiwsgViewer :value="item.caption" class="caption" />
+        <p class="g-block-sm mt-2 text-right">
+          <v-btn variant="outlined" size="small">詳しく見る</v-btn>
+        </p>
       </CommonContentItemAnimation>
     </section>
   </div>

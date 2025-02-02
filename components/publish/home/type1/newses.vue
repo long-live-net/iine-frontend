@@ -116,7 +116,7 @@ await onLoad()
         </div>
       </CommonContentCardBody>
       <div class="type1-news-list__action">
-        <NuxtLink to="/news">and more ...</NuxtLink>
+        <NuxtLink to="/news">もっと見る ...</NuxtLink>
       </div>
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
         <ManageContentNews @create="onCreate" />
@@ -130,7 +130,7 @@ await onLoad()
   position: relative;
   min-height: 16rem;
   &__action {
-    margin: 1.5rem 0;
+    margin-bottom: 1.25rem;
     text-align: center;
   }
   .no-items {
