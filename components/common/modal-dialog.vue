@@ -77,31 +77,46 @@ withDefaults(
 </template>
 
 <style lang="scss" scoped>
+$modal-dialog-header-height: 80px;
+
 .modal-dialog {
   position: relative;
-  overflow-y: auto;
   border-radius: 6px;
+  padding-top: $modal-dialog-header-height;
+  padding-bottom: 1.5rem;
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    padding-bottom: 1rem;
+  }
+
   &__header {
-    position: sticky;
+    position: absolute;
     top: 0;
     left: 0;
     z-index: 1999;
+    height: $modal-dialog-header-height;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
     padding-right: 6px;
     border-bottom: 1px solid lightgray;
+    border-radius: 6px;
     .header-label {
       display: flex;
       align-items: center;
     }
   }
   &__body {
-    padding: 1.5rem;
+    max-height: calc(100dvh - 180px);
+    width: 100%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
     @media only screen and (max-width: $grid-breakpoint-md) {
-      padding: 1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
     }
+    overflow-y: auto;
   }
 }
 

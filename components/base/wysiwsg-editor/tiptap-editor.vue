@@ -124,37 +124,41 @@ defineExpose({ clearContent })
 </script>
 
 <template>
-  <base-wysiwsg-editor-tiptap-toolbar
-    v-if="editor"
-    :editor="editor"
-    :no-image="noImage"
-    class="wysiwsg-editor-tiptap-toolbar"
-    @image-setting="frameWithInputImage?.clickFileInput()"
-  />
-  <base-wysiwsg-editor-tiptap-frame-with-input-image
-    v-if="editor"
-    ref="frameWithInputImage"
-    class="wysiwsg-editor-tiptap-editor"
-    @input-image="onInputImage"
-  >
-    <editor-content :editor="editor" />
-  </base-wysiwsg-editor-tiptap-frame-with-input-image>
+  <div class="wysiwsg-editor-container">
+    <base-wysiwsg-editor-tiptap-toolbar
+      v-if="editor"
+      :editor="editor"
+      :no-image="noImage"
+      class="wysiwsg-editor-tiptap-toolbar"
+      @image-setting="frameWithInputImage?.clickFileInput()"
+    />
+    <base-wysiwsg-editor-tiptap-frame-with-input-image
+      v-if="editor"
+      ref="frameWithInputImage"
+      class="wysiwsg-editor-tiptap-editor"
+      @input-image="onInputImage"
+    >
+      <editor-content :editor="editor" />
+    </base-wysiwsg-editor-tiptap-frame-with-input-image>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.wysiwsg-editor-tiptap-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+.wysiwsg-editor-container {
+  .wysiwsg-editor-tiptap-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
 
-.wysiwsg-editor-tiptap-editor {
-  overflow-x: hidden;
-}
+  .wysiwsg-editor-tiptap-editor {
+    overflow-x: hidden;
+  }
 
-.drag-enter {
-  opacity: 0.5;
-  cursor: copy;
+  .drag-enter {
+    opacity: 0.5;
+    cursor: copy;
+  }
 }
 
 :deep(.tiptap) {
