@@ -1,5 +1,62 @@
 <script setup lang="ts">
 const { customerSetting } = useCustomerSetting()
+const { customer } = useCustomer()
+
+const pageTitle = computed(
+  () => customerSetting.value?.pageTitle?.title ?? customer.value?.name ?? null
+)
+const description = computed(() =>
+  customer.value?.name ? `${customer.value.name} Website` : null
+)
+const favicon = computed(() =>
+  customer.value?.nickName ? `/favicon-${customer.value?.nickName}.ico` : null
+)
+
+watch(
+  [pageTitle, description, favicon],
+  () => {
+    if (pageTitle.value && description.value && favicon.value) {
+      useHead({
+        title: pageTitle.value,
+        meta: [
+          {
+            hid: 'description',
+            name: 'description',
+            content: description.value,
+          },
+        ],
+        link: [
+          {
+            rel: 'icon',
+            type: 'image/x-icon',
+            href: favicon.value,
+          },
+        ],
+      })
+    } else {
+      useHead({
+        title: 'IINE',
+        meta: [
+          {
+            hid: 'description',
+            name: 'description',
+            content: 'IINE Website',
+          },
+        ],
+        link: [
+          {
+            rel: 'icon',
+            type: 'image/x-icon',
+            href: './favicon.ico',
+          },
+        ],
+      })
+    }
+  },
+  {
+    immediate: true,
+  }
+)
 
 const bodyClass = computed(() =>
   customerSetting.value?.colorTheme === 'dark'

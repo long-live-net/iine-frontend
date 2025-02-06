@@ -3,25 +3,6 @@ defineOptions({
   name: 'DefaultLayout',
 })
 
-const { headInfoRef } = useCustomerPageHeadInfo()
-useHead({
-  title: headInfoRef.value.title,
-  meta: [
-    {
-      hid: 'description',
-      name: 'description',
-      content: headInfoRef.value.description,
-    },
-  ],
-  link: [
-    {
-      rel: 'icon',
-      type: 'image/x-icon',
-      href: `/${headInfoRef.value.favicon}`,
-    },
-  ],
-})
-
 const initializing = useState<boolean>('initializing', () => true)
 onMounted(() => {
   if (initializing.value)

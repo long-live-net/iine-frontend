@@ -35,15 +35,3 @@ export const useCustomerPageContext = () => {
     canEdit,
   }
 }
-
-export const useCustomerPageHeadInfo = () => {
-  const { customer } = useCustomer()
-  const headInfoRef = computed(() => ({
-    title: customer.value?.name ?? 'IINE',
-    description: `${customer.value?.name ?? 'IINE'} Website`,
-    favicon: customer.value?.nickName
-      ? `favicon-${customer.value?.nickName}.ico`
-      : 'favicon.ico',
-  }))
-  return { headInfoRef }
-}

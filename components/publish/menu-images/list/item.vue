@@ -48,7 +48,12 @@ const route = useRoute()
         :thresholds="[0.5]"
         :disabled="route.name !== 'index'"
       >
-        <CommonWysiwsgViewer :value="item.caption" class="caption" />
+        <div class="caption-base">
+          <CommonWysiwsgViewer :value="item.caption" class="caption" />
+          <p class="see-detail">
+            <v-btn variant="outlined" size="small">メニューを見る</v-btn>
+          </p>
+        </div>
       </CommonContentItemAnimation>
     </section>
   </div>
@@ -69,9 +74,15 @@ const route = useRoute()
   .eyecatcher {
     margin-top: 1rem;
     aspect-ratio: 5 / 4;
+
     @media only screen and (max-width: $grid-breakpoint-md) {
       aspect-ratio: 4 / 3;
     }
+  }
+
+  .see-detail {
+    margin-top: 0.3rem;
+    text-align: right;
   }
 
   .caption {
@@ -81,8 +92,11 @@ const route = useRoute()
 
   section.item-link {
     cursor: pointer;
-    &:hover {
-      color: $link-active;
+
+    .caption-base {
+      &:hover {
+        color: var(--link-active-color);
+      }
     }
 
     .eyecatcher {
@@ -97,6 +111,7 @@ const route = useRoute()
 
   section.current-item {
     color: $dimgray;
+
     .eyecatcher {
       background-color: rgba(0 0 0 / 0.5);
       background-blend-mode: overlay;
