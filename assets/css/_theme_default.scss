@@ -2,20 +2,23 @@
 
 .g-theme-default {
   --text-color: #{variables.$gray-darken3};
+  --link-color: #{variables.$link-normal2};
+  --link-active-color: #{variables.$cyan};
+
   background-color: variables.$gray-lighten25;
   color: var(--text-color);
 
   a {
-    color: variables.$link-normal2;
+    color: var(--link-color);
   }
   a:link {
-    color: variables.$link-normal2;
+    color: var(--link-color);
   }
   a:hover {
-    color: variables.$link-active;
+    color: var(--link-active-color);
   }
   a:active {
-    color: variables.$link-active;
+    color: var(--link-active-color);
   }
   small {
     color: variables.$dimgray;

@@ -55,7 +55,7 @@ const route = useRoute()
             {{ item.title }}
           </h5>
           <CommonWysiwsgViewer :value="item.caption" class="caption" />
-          <p class="g-block-sm mt-2 text-right">
+          <p class="see-detail">
             <v-btn variant="outlined" size="small">詳しく見る</v-btn>
           </p>
         </div>
@@ -105,13 +105,21 @@ const route = useRoute()
         text-align: left;
         margin-top: 1rem;
       }
+
+      .see-detail {
+        margin-top: 0.3rem;
+        text-align: right;
+      }
     }
   }
 
-  section.item-link {
+  .item-link {
     cursor: pointer;
-    &:hover {
-      color: $link-active;
+
+    .caption-base {
+      &:hover {
+        color: var(--link-active-color);
+      }
     }
 
     .eyecatcher {
@@ -124,8 +132,9 @@ const route = useRoute()
     }
   }
 
-  section.current-item {
+  .current-item {
     color: $blue-lighten2;
+
     .eyecatcher {
       background-color: rgba(128 255 255 / 0.75);
       background-blend-mode: overlay;
