@@ -24,7 +24,4 @@ export {
   useChangePasswordForm,
 } from './use-customer/use-customer-user'
 
-export {
-  useCustomerPageContext,
-  useCustomerPageHeadInfo,
-} from './use-customer/use-customer-page-context'
+export { useCustomerPageContext } from './use-customer/use-customer-page-context'
