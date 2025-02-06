@@ -84,6 +84,7 @@ $modal-dialog-header-height: 80px;
   border-radius: 6px;
   padding-top: $modal-dialog-header-height;
   padding-bottom: 1.5rem;
+
   @media only screen and (max-width: $grid-breakpoint-md) {
     padding-bottom: 1rem;
   }
@@ -102,6 +103,7 @@ $modal-dialog-header-height: 80px;
     padding-right: 6px;
     border-bottom: 1px solid lightgray;
     border-radius: 6px;
+
     .header-label {
       display: flex;
       align-items: center;
@@ -112,17 +114,19 @@ $modal-dialog-header-height: 80px;
     width: 100%;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+    overflow-y: auto;
+
     @media only screen and (max-width: $grid-breakpoint-md) {
       padding-left: 1rem;
       padding-right: 1rem;
     }
-    overflow-y: auto;
   }
 }
 
 .theme-white {
   background-color: $white;
   color: $black;
+
   .dismiss {
     color: $primary;
   }
@@ -131,6 +135,7 @@ $modal-dialog-header-height: 80px;
 .theme-black {
   background-color: $black;
   color: $white;
+
   .dismiss {
     color: $accent;
   }
