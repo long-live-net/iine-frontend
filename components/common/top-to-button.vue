@@ -1,9 +1,12 @@
 <script setup lang="ts">
-defineProps<{ src: string }>()
+defineProps<{
+  topHashName: string
+  src: string
+}>()
 
 const { windowHeight, scrollY } = useWindowState()
 const isScrollOverTheWindow = computed(
-  () => scrollY.value > windowHeight.value * 0.75
+  () => scrollY.value > windowHeight.value * 0.5
 )
 </script>
 
@@ -12,10 +15,7 @@ const isScrollOverTheWindow = computed(
     class="top-to-button"
     :class="{ 'button-active': isScrollOverTheWindow }"
   >
-    <nuxt-link
-      class="top-to-button__avatar"
-      :to="{ name: 'index', hash: '#home-index-top' }"
-    >
+    <nuxt-link class="top-to-button__avatar" :to="{ hash: `#${topHashName}` }">
       <v-avatar :image="src" size="72" />
     </nuxt-link>
   </div>
@@ -36,31 +36,29 @@ const isScrollOverTheWindow = computed(
     width: 4rem;
     height: 4rem;
   }
-}
-.top-to-button::after {
-  content: 'TOP';
-  font-weight: bold;
-  display: block;
-  margin-top: 0.5rem;
-}
+  &::after {
+    content: 'TOP';
+    font-weight: bold;
+    display: block;
+    margin-top: 0.5rem;
+  }
 
-.button-active {
-  transform: translateY(0);
-  opacity: 1;
-  visibility: visible;
-}
-
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .top-to-button {
+  @media only screen and (max-width: $grid-breakpoint-md) {
     right: 1rem;
     bottom: 1.8rem;
     &__avatar {
       width: 3rem;
       height: 3rem;
     }
+    &::after {
+      font-size: small;
+    }
   }
-  .top-to-button::after {
-    font-size: small;
-  }
+}
+
+.button-active {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
 }
 </style>

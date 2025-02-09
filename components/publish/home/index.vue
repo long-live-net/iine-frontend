@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DesignTheme, PageLayout } from '@/types/customer-setting'
 
+// Note: domidPrefix = 'home-index'
 const { domidPrefix, customerSetting } = useCustomerSetting()
 
 const designTheme = computed<DesignTheme>(
@@ -12,7 +13,7 @@ const sectionTitle = (section: PageLayout): string =>
 </script>
 
 <template>
-  <article>
+  <article :id="`${domidPrefix}-top`">
     <section :id="`${domidPrefix}-eyecatch`" class="section-margin-top">
       <PublishHomeType1Eyecatcher />
     </section>
@@ -41,6 +42,9 @@ const sectionTitle = (section: PageLayout): string =>
 
 <style lang="scss" scoped>
 article {
+  padding: 0;
+  padding-bottom: 4rem;
+
   .section-margin-top {
     padding-top: 0;
 
