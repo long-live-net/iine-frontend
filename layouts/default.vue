@@ -10,6 +10,9 @@ onMounted(() => {
       initializing.value = false
     }, 1000)
 })
+
+const topButtonImage = '/images/arrow-up2.png'
+const topHashName = 'default-layout-main-top'
 </script>
 
 <template>
@@ -21,13 +24,16 @@ onMounted(() => {
       <header>
         <PublishMenuNavHeader />
       </header>
-      <main>
+      <main :id="topHashName">
         <slot />
       </main>
       <footer>
         <PublishMenuNavFooter />
       </footer>
     </div>
+    <client-only>
+      <CommonTopToButton :top-hash-name="topHashName" :src="topButtonImage" />
+    </client-only>
   </div>
 </template>
 
