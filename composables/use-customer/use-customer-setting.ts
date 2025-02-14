@@ -199,7 +199,8 @@ export const useHomeLayoutEdit = () => {
     { kind: 'feature', title: 'feature' },
     { kind: 'contact', title: 'contact' },
     { kind: 'access', title: 'access' },
-    { kind: 'menu-image', title: 'menu' },
+    { kind: 'menu', title: 'menu' },
+    { kind: 'menu-image', title: 'menu by image' },
   ]
   const baseSections = ref<PageLayout[]>([])
   const editSections = ref<PageLayout[]>([])

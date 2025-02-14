@@ -33,21 +33,21 @@ const headerItems = computed(
   <nav class="nav-header g-theme-header">
     <div class="g-block-lg">
       <div class="nav-header__menu">
-        <PublishMenuNavHeaderTitle
+        <PublishLayoutNavHeaderTitle
           :link-to="headerTitle.to"
           :title="headerTitle.title"
           :color="headerTitle.color"
           :hover-color="headerTitle.hoverColor"
         />
         <div class="row-direction">
-          <PublishMenuNavHeaderItem
+          <PublishLayoutNavHeaderItem
             :link-to="{ name: 'index', hash: '#home-index-top' }"
             color="white"
             hover-color="orange"
           >
             <v-icon icon="mdi-home" size="large" style="padding-bottom: 2px" />
-          </PublishMenuNavHeaderItem>
-          <PublishMenuNavHeaderItem
+          </PublishLayoutNavHeaderItem>
+          <PublishLayoutNavHeaderItem
             v-for="item in headerItems"
             :key="item.kind"
             :link-to="item.to"
@@ -70,7 +70,7 @@ const headerItems = computed(
             color="white"
             @click="sidebar = !sidebar"
           />
-          <PublishMenuNavHeaderTitle
+          <PublishLayoutNavHeaderTitle
             :title="headerTitle.title"
             color="white"
             hover-color="white"
@@ -87,13 +87,13 @@ const headerItems = computed(
         <teleport to="#default-layout-container">
           <BaseDrawer v-model:drawer="sidebar" color="#424242" theme="dark">
             <div class="column-direction">
-              <PublishMenuNavHeaderTitle
+              <PublishLayoutNavHeaderTitle
                 :link-to="headerTitle.to"
                 :title="headerTitle.title"
                 :color="headerTitle.color"
                 :hover-color="headerTitle.hoverColor"
               />
-              <PublishMenuNavHeaderItem
+              <PublishLayoutNavHeaderItem
                 v-for="item in headerItems"
                 :key="item.kind"
                 :link-to="item.to"

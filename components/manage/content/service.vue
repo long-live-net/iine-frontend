@@ -2,6 +2,7 @@
 import type { ServiceType, ServiceForm } from '@/types/content'
 import { getServiceKind } from '@/composables/use-content/use-service'
 
+const modal = defineModel<boolean>('modal', { required: true })
 const props = defineProps<{
   serviceData?: ServiceType | null
   activatorLabel?: string
@@ -16,7 +17,6 @@ const emit = defineEmits<{
 const { customerId } = useCustomer()
 const apiKind = getServiceKind()
 
-const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetServiceForm } =
   useServiceForm()
 
@@ -57,12 +57,6 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditActivator
-    v-model:modal="modal"
-    :is-update="!!serviceData?.id"
-    :activator-label="activatorLabel"
-    :activator-size="activatorSize"
-  />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!serviceData?.id">
     <v-form>
       <div>

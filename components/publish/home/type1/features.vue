@@ -19,7 +19,7 @@ const {
 
 filter.value = {}
 sort.value = { position: 1 }
-pager.value = { page: 1, limit: 12 }
+pager.value = { page: 1, limit: 24 }
 await onLoad()
 
 const router = useRouter()

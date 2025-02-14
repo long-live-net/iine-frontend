@@ -1,22 +1,18 @@
 <script setup lang="ts">
-import type ServicesList from '@/components/publish/services/list.vue'
-const servicesListRef = ref<InstanceType<typeof ServicesList> | null>(null)
+import type MenuList from '@/components/publish/menus/list.vue'
+const menuListRef = ref<InstanceType<typeof MenuList> | null>(null)
 </script>
 
 <template>
-  <div id="service-detail-top">
+  <div id="menu-detail-top">
     <PublishLayoutNavBreadCrumb class="nav-bread-crumbs" />
-    <PublishServicesDetail @update:data="servicesListRef?.onGetList" />
-    <PublishServicesList
-      ref="servicesListRef"
-      no-caption
-      class="service-list-gap"
-    />
+    <PublishMenusDetail @update:data="menuListRef?.onGetList" />
+    <PublishMenusList ref="menuListRef" no-caption class="menu-list-gap" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-#service-detail-top {
+#menu-detail-top {
   padding-top: calc($nav-header-height);
   padding-bottom: 6rem;
 }
@@ -25,12 +21,12 @@ const servicesListRef = ref<InstanceType<typeof ServicesList> | null>(null)
   margin-bottom: 2.5rem;
 }
 
-.service-list-gap {
+.menu-list-gap {
   margin-top: 6rem;
 }
 
 @media only screen and (max-width: $grid-breakpoint-md) {
-  #service-detail-top {
+  #menu-detail-top {
     padding-bottom: 4.25rem;
   }
 

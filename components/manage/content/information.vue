@@ -2,8 +2,9 @@
 import type { InformationType, InformationForm } from '@/types/content'
 import { getInformationKind } from '@/composables/use-content/use-information'
 
+const modal = defineModel<boolean>('modal', { required: true })
 const props = defineProps<{
-  informationData?: InformationType | null
+  itemData?: InformationType | null
   activatorLabel?: string
 }>()
 const emit = defineEmits<{
@@ -15,14 +16,13 @@ const emit = defineEmits<{
 const { customerId } = useCustomer()
 const apiKind = getInformationKind()
 
-const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetInformationForm } =
   useInformationForm()
 
 watch(modal, (current) => {
   if (current) {
     handleReset()
-    resetInformationForm(props.informationData)
+    resetInformationForm(props.itemData)
   }
 })
 
@@ -32,21 +32,21 @@ const onCreate = handleSubmit((informationForm) => {
 })
 
 const onUpdate = handleSubmit((informationForm) => {
-  if (!props.informationData?.id) {
+  if (!props.itemData?.id) {
     return
   }
   emit('update', {
-    id: props.informationData.id,
+    id: props.itemData.id,
     formData: informationForm,
   })
   modal.value = false
 })
 
 const onRemove = () => {
-  if (!props.informationData?.id) {
+  if (!props.itemData?.id) {
     return
   }
-  emit('remove', props.informationData.id)
+  emit('remove', props.itemData.id)
   modal.value = false
 }
 
@@ -56,15 +56,7 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditActivator
-    v-model:modal="modal"
-    :is-update="!!informationData?.id"
-    :activator-label="activatorLabel"
-  />
-  <CommonContentEditDialog
-    v-model:modal="modal"
-    :is-update="!!informationData?.id"
-  >
+  <CommonContentEditDialog v-model:modal="modal" :is-update="!!itemData?.id">
     <v-form>
       <div>
         <CommonContentInputImage
@@ -108,7 +100,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :content-id="informationData?.id"
+        :content-id="itemData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"

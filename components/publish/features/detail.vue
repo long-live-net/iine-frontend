@@ -158,7 +158,7 @@ await onLoad(contentId)
     left: 0.5rem;
 
     @media only screen and (max-width: $grid-breakpoint-md) {
-      top: 6.8rem;
+      top: 5rem;
     }
   }
 

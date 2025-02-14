@@ -2,8 +2,9 @@
 import type { ContactType, ContactForm } from '@/types/content'
 import { getContactKind } from '@/composables/use-content/use-contact'
 
+const modal = defineModel<boolean>('modal', { required: true })
 const props = defineProps<{
-  contactData?: ContactType | null
+  itemData?: ContactType | null
   activatorLabel?: string
 }>()
 
@@ -16,14 +17,13 @@ const emit = defineEmits<{
 const { customerId } = useCustomer()
 const apiKind = getContactKind()
 
-const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetContactForm } =
   useContactForm()
 
 watch(modal, (current) => {
   if (current) {
     handleReset()
-    resetContactForm(props.contactData)
+    resetContactForm(props.itemData)
   }
 })
 
@@ -33,21 +33,21 @@ const onCreate = handleSubmit((contanctForm) => {
 })
 
 const onUpdate = handleSubmit((contanctForm) => {
-  if (!props.contactData?.id) {
+  if (!props.itemData?.id) {
     return
   }
   emit('update', {
-    id: props.contactData.id,
+    id: props.itemData.id,
     formData: contanctForm,
   })
   modal.value = false
 })
 
 const onRemove = () => {
-  if (!props.contactData?.id) {
+  if (!props.itemData?.id) {
     return
   }
-  emit('remove', props.contactData.id)
+  emit('remove', props.itemData.id)
   modal.value = false
 }
 
@@ -57,12 +57,7 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditActivator
-    v-model:modal="modal"
-    :is-update="!!contactData?.id"
-    :activator-label="activatorLabel"
-  />
-  <CommonContentEditDialog v-model:modal="modal" :is-update="!!contactData?.id">
+  <CommonContentEditDialog v-model:modal="modal" :is-update="!!itemData?.id">
     <v-form>
       <div>
         <CommonContentInputImage
@@ -106,7 +101,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :content-id="contactData?.id"
+        :content-id="itemData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"

@@ -5,7 +5,7 @@ const featuresListRef = ref<InstanceType<typeof FeaturesList> | null>(null)
 
 <template>
   <div id="feature-detail-top">
-    <PublishMenuNavBreadCrumb class="nav-bread-crumbs" />
+    <PublishLayoutNavBreadCrumb class="nav-bread-crumbs" />
     <PublishFeaturesDetail @update:data="featuresListRef?.onGetList" />
     <PublishFeaturesList
       ref="featuresListRef"
