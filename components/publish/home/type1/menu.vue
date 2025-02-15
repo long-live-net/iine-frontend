@@ -52,7 +52,7 @@ await onLoad()
   </CommonContentWrap>
   <ManageContentMenu
     v-model:modal="editModal"
-    :item-data="updatingData"
+    :menu-data="updatingData"
     @create="onCreate"
     @update="onUpdate"
     @remove="onRemove"

@@ -4,7 +4,7 @@ import { getInformationKind } from '@/composables/use-content/use-information'
 
 const modal = defineModel<boolean>('modal', { required: true })
 const props = defineProps<{
-  itemData?: InformationType | null
+  informationData?: InformationType | null
   activatorLabel?: string
 }>()
 const emit = defineEmits<{
@@ -22,7 +22,7 @@ const { handleSubmit, handleReset, formData, resetInformationForm } =
 watch(modal, (current) => {
   if (current) {
     handleReset()
-    resetInformationForm(props.itemData)
+    resetInformationForm(props.informationData)
   }
 })
 
@@ -32,21 +32,21 @@ const onCreate = handleSubmit((informationForm) => {
 })
 
 const onUpdate = handleSubmit((informationForm) => {
-  if (!props.itemData?.id) {
+  if (!props.informationData?.id) {
     return
   }
   emit('update', {
-    id: props.itemData.id,
+    id: props.informationData.id,
     formData: informationForm,
   })
   modal.value = false
 })
 
 const onRemove = () => {
-  if (!props.itemData?.id) {
+  if (!props.informationData?.id) {
     return
   }
-  emit('remove', props.itemData.id)
+  emit('remove', props.informationData.id)
   modal.value = false
 }
 
@@ -56,7 +56,10 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditDialog v-model:modal="modal" :is-update="!!itemData?.id">
+  <CommonContentEditDialog
+    v-model:modal="modal"
+    :is-update="!!informationData?.id"
+  >
     <v-form>
       <div>
         <CommonContentInputImage
@@ -100,7 +103,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :content-id="itemData?.id"
+        :content-id="informationData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"

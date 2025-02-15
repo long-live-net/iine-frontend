@@ -3,7 +3,7 @@ import type { MenuType, MenuForm } from '@/types/content'
 import { getMenuKind } from '@/composables/use-content/use-menu'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{ itemData?: MenuType | null }>()
+const props = defineProps<{ menuData?: MenuType | null }>()
 const emit = defineEmits<{
   create: [inputData: MenuForm]
   update: [{ id: string; formData: MenuForm }]
@@ -17,7 +17,7 @@ const { handleSubmit, handleReset, formData, resetMenuForm } = useMenuForm()
 watch(modal, (current) => {
   if (current) {
     handleReset()
-    resetMenuForm(props.itemData)
+    resetMenuForm(props.menuData)
   }
 })
 
@@ -27,21 +27,21 @@ const onCreate = handleSubmit((menuForm) => {
 })
 
 const onUpdate = handleSubmit((menuForm) => {
-  if (!props.itemData?.id) {
+  if (!props.menuData?.id) {
     return
   }
   emit('update', {
-    id: props.itemData?.id,
+    id: props.menuData?.id,
     formData: menuForm,
   })
   modal.value = false
 })
 
 const onRemove = () => {
-  if (!props.itemData?.id) {
+  if (!props.menuData?.id) {
     return
   }
-  emit('remove', props.itemData.id)
+  emit('remove', props.menuData.id)
   modal.value = false
 }
 
@@ -51,7 +51,7 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditDialog v-model:modal="modal" :is-update="!!itemData?.id">
+  <CommonContentEditDialog v-model:modal="modal" :is-update="!!menuData?.id">
     <v-form>
       <div>
         <CommonContentInputImage
@@ -87,7 +87,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :content-id="itemData?.id"
+        :content-id="menuData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"

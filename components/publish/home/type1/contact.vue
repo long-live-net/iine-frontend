@@ -37,7 +37,7 @@ await onLoad()
   </CommonContentWrap>
   <ManageContentContact
     v-model:modal="editModal"
-    :item-data="updatingData"
+    :contact-data="updatingData"
     @create="onCreate"
     @update="onUpdate"
     @remove="onRemove"

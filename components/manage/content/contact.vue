@@ -4,7 +4,7 @@ import { getContactKind } from '@/composables/use-content/use-contact'
 
 const modal = defineModel<boolean>('modal', { required: true })
 const props = defineProps<{
-  itemData?: ContactType | null
+  contactData?: ContactType | null
   activatorLabel?: string
 }>()
 
@@ -23,7 +23,7 @@ const { handleSubmit, handleReset, formData, resetContactForm } =
 watch(modal, (current) => {
   if (current) {
     handleReset()
-    resetContactForm(props.itemData)
+    resetContactForm(props.contactData)
   }
 })
 
@@ -33,21 +33,21 @@ const onCreate = handleSubmit((contanctForm) => {
 })
 
 const onUpdate = handleSubmit((contanctForm) => {
-  if (!props.itemData?.id) {
+  if (!props.contactData?.id) {
     return
   }
   emit('update', {
-    id: props.itemData.id,
+    id: props.contactData.id,
     formData: contanctForm,
   })
   modal.value = false
 })
 
 const onRemove = () => {
-  if (!props.itemData?.id) {
+  if (!props.contactData?.id) {
     return
   }
-  emit('remove', props.itemData.id)
+  emit('remove', props.contactData.id)
   modal.value = false
 }
 
@@ -57,7 +57,7 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditDialog v-model:modal="modal" :is-update="!!itemData?.id">
+  <CommonContentEditDialog v-model:modal="modal" :is-update="!!contactData?.id">
     <v-form>
       <div>
         <CommonContentInputImage
@@ -101,7 +101,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :content-id="itemData?.id"
+        :content-id="contactData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"
