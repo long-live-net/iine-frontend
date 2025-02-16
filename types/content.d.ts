@@ -92,11 +92,20 @@ export interface MenuType extends ContentType {
   position: number
 }
 
+export interface MenuCategoryType {
+  id: string
+  customerId: string
+  menuId: string
+  category: string
+  position: number
+}
+
 export interface MenuDetailType extends ContentType {
   menuId: string
+  categoryId: string
+  isHilight?: boolean
   price?: string
   caption?: string
-  isHilight: boolean
   position: number
 }
 
@@ -167,11 +176,15 @@ export interface MenuForm extends ContentForm {
   position: number
 }
 
+export interface MenuCategoryForm {
+  category: string
+  position: number
+}
+
 export interface MenuDetailForm extends ContentForm {
-  menuId: string
+  isHilight?: boolean
   price?: string
   caption?: string
-  isHilight: boolean
   position: number
 }
 

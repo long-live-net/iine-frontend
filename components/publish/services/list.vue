@@ -33,7 +33,6 @@ await onLoad()
         v-model:modal="editModal"
         :items="serviceListRef"
         :can-edit="false"
-        no-caption
         small
       >
         <template #default="{ content }">

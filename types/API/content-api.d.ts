@@ -57,11 +57,22 @@ export interface MenuGetApi extends ContentGetApi {
   imageSettings: ImageSettings
   position: number
 }
+
+export interface MenuCategoryGetApi {
+  _id?: string
+  id: string
+  customerId: string
+  menuId: string
+  category: string
+  position: number
+}
+
 export interface MenuDetailGetApi extends ContentGetApi {
   menuId: string
+  categoryId: string
+  isHilight?: boolean
   price?: string
   caption?: string
-  isHilight: boolean
   position: number
 }
 export interface MenuImageGetApi extends ContentGetApi {
@@ -118,11 +129,18 @@ export interface MenuSaveApi extends ContentSaveApi {
   imageSettings: ImageSettings
   position: number
 }
+export interface MenuCategorySaveApi {
+  customerId: string
+  menuId: string
+  category: string
+  position: number
+}
 export interface MenuDetailSaveApi extends ContentSaveApi {
   menuId: string
+  categoryId: string
+  isHilight?: boolean
   price?: string
   caption?: string
-  isHilight: boolean
   position: number
 }
 export interface MenuImageSaveApi extends ContentSaveApi {

@@ -33,7 +33,6 @@ await onLoad()
         v-model:modal="editModal"
         :items="menuListRef"
         :can-edit="false"
-        no-caption
         small
       >
         <template #default="{ content }">

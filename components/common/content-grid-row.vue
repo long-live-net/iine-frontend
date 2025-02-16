@@ -5,16 +5,18 @@ withDefaults(
   defineProps<{
     contents: Readonly<T[]>
     contentGridMaxWidth?: string
+    dense?: boolean
   }>(),
   {
     contentGridMaxWidth: '1140px',
+    dense: false,
   }
 )
 </script>
 
 <template>
   <div>
-    <div class="content-grid-row">
+    <div class="content-grid-row" :class="{ dense: dense }">
       <div
         v-for="(content, idx) in contents"
         :key="content.id"
@@ -42,6 +44,14 @@ withDefaults(
   @media only screen and (max-width: $grid-breakpoint-md) {
     row-gap: 1.5rem;
     width: 100%;
+  }
+}
+
+.dense {
+  row-gap: 1.25rem;
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    row-gap: 0.5rem;
   }
 }
 </style>

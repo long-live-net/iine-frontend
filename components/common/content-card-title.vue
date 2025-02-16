@@ -4,24 +4,29 @@ withDefaults(
     title: string
     subtitle?: string
     textNoWrap?: boolean
+    keepCenter?: boolean
   }>(),
   {
     title: '',
     subtitle: '',
     textNoWrap: false,
+    keepCenter: false,
   }
 )
 </script>
 
 <template>
   <div class="content-card-title">
-    <h5 class="g-text-cl" :class="{ 'text-no-wrap': textNoWrap }">
+    <h5
+      class="g-text-cl"
+      :class="{ 'text-no-wrap': textNoWrap, 'keep-center': keepCenter }"
+    >
       {{ title }}
     </h5>
     <p
       v-if="subtitle"
       class="g-text-cl"
-      :class="{ 'text-no-wrap': textNoWrap }"
+      :class="{ 'text-no-wrap': textNoWrap, 'keep-center': keepCenter }"
     >
       {{ subtitle }}
     </p>
@@ -37,6 +42,10 @@ withDefaults(
   }
   p {
     font-size: 1.1rem;
+  }
+
+  .keep-center {
+    text-align: center !important;
   }
 }
 

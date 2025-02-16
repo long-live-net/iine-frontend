@@ -14,7 +14,7 @@ import type {
   ContentPositionApi,
 } from '@/types/API/content-api'
 
-const apiKind = 'menuDetails'
+const apiKind = 'menu-details'
 export const getMenuDetailKind = () => apiKind
 
 const useMenuDetailContent = (customerId: Ref<string | null>) => {
@@ -78,6 +78,7 @@ const useMenuDetailContent = (customerId: Ref<string | null>) => {
                 },
               }
             : {}),
+          categoryId: apiData.categoryId,
           isHilight: apiData.isHilight,
           position: apiData.position,
         }
@@ -98,10 +99,14 @@ const useMenuDetailContent = (customerId: Ref<string | null>) => {
   const loading = computed(() => readLoading.value || writeLoading.value)
 
   const formToMenuDetailSaveApi = (
+    menuId: string,
+    categoryId: string,
     formData: MenuDetailForm
   ): MenuDetailSaveApi => ({
     customerId: customerId.value ?? '',
-    menuId: formData.menuId,
+    menuId,
+    categoryId,
+    isHilight: formData.isHilight,
     title: formData.title,
     titleSettings: { ...formData.titleSettings },
     price: formData.price,
@@ -120,22 +125,33 @@ const useMenuDetailContent = (customerId: Ref<string | null>) => {
         }
       : {}),
     position: formData.position,
-    isHilight: formData.isHilight,
   })
 
   const createMenuDetail = async (
+    menuId: string,
+    categoryId: string,
     formData: MenuDetailForm
   ): Promise<MenuDetailType | null> => {
-    const inputData: MenuDetailSaveApi = formToMenuDetailSaveApi(formData)
+    const inputData: MenuDetailSaveApi = formToMenuDetailSaveApi(
+      menuId,
+      categoryId,
+      formData
+    )
     const data = await create(inputData)
     return apitypeToMenuDetailType(data ?? null)
   }
 
   const updateMenuDetail = async (
     contentId: string,
+    menuId: string,
+    categoryId: string,
     formData: MenuDetailForm
   ): Promise<MenuDetailType | null> => {
-    const inputData: MenuDetailSaveApi = formToMenuDetailSaveApi(formData)
+    const inputData: MenuDetailSaveApi = formToMenuDetailSaveApi(
+      menuId,
+      categoryId,
+      formData
+    )
     const data = await update(contentId, inputData)
     return apitypeToMenuDetailType(data ?? null)
   }
@@ -250,22 +266,30 @@ export const useMenuDetailListActions = (customerId: Ref<string | null>) => {
     listQueries.pager.value = pager.value
   }
 
-  const onCreate = async (formData: MenuDetailForm) => {
-    await createMenuDetail(formData)
+  const onCreate = async (
+    menuId: string,
+    categoryId: string,
+    formData: MenuDetailForm
+  ) => {
+    await createMenuDetail(menuId, categoryId, formData)
     addSnackber?.('MenuDetail を登録しました。')
     getMenuDetailList(filter.value, sort.value, pager.value)
   }
 
   const onUpdate = async ({
     id,
+    menuId,
+    categoryId,
     formData,
   }: {
     id: string
+    menuId: string
+    categoryId: string
     formData: MenuDetailForm
   }) => {
     if (!id) return
 
-    await updateMenuDetail(id, formData)
+    await updateMenuDetail(id, menuId, categoryId, formData)
     addSnackber?.('MenuDetail を更新しました。')
     getMenuDetailList(filter.value, sort.value, pager.value)
   }

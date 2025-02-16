@@ -7,13 +7,11 @@ import { useField, useForm } from 'vee-validate'
  */
 export const useMenuDetailForm = () => {
   const { getDefaultTitleSettings } = useContentInit()
-  const { required, noBlank, maxLength } = useValidateRules()
+  const { noBlank, maxLength } = useValidateRules()
 
   const menuDetailFormSchema = {
-    menuId: (v: string | undefined) =>
-      noBlank(v) || 'menuId を設定してください',
     title: (v: string | undefined) => {
-      if (!noBlank(v)) return 'タイトルを入力してください'
+      if (!noBlank(v)) return 'メニュー名を入力してください'
       if (!maxLength(v, 40)) return '40文字以内で入力してください'
       return true
     },
@@ -26,12 +24,11 @@ export const useMenuDetailForm = () => {
     imageName: () => true,
     imageType: () => true,
     imageSettings: () => true,
-    isHilight: (v: boolean | undefined) =>
-      required(v) || '注目するかどうかを設定してください',
+    isHilight: () => true,
     position: () => true,
   }
   const menuDetailFormInitial: MenuDetailForm = {
-    menuId: '',
+    isHilight: false,
     title: '',
     titleSettings: getDefaultTitleSettings(),
     price: '',
@@ -40,7 +37,6 @@ export const useMenuDetailForm = () => {
     imageName: '',
     imageType: '',
     imageSettings: null,
-    isHilight: false,
     position: 0,
   }
 
@@ -50,7 +46,7 @@ export const useMenuDetailForm = () => {
   })
 
   const formData = {
-    menuId: useField<MenuDetailForm['menuId']>('menuId'),
+    isHilight: useField<MenuDetailForm['isHilight']>('isHilight'),
     title: useField<MenuDetailForm['title']>('title'),
     titleSettings: useField<MenuDetailForm['titleSettings']>('titleSettings'),
     price: useField<MenuDetailForm['price']>('price'),
@@ -59,13 +55,12 @@ export const useMenuDetailForm = () => {
     imageName: useField<MenuDetailForm['imageName']>('imageName'),
     imageType: useField<MenuDetailForm['imageType']>('imageType'),
     imageSettings: useField<MenuDetailForm['imageSettings']>('imageSettings'),
-    isHilight: useField<MenuDetailForm['isHilight']>('isHilight'),
     position: useField<MenuDetailForm['position']>('position'),
   }
 
   const resetMenuDetailForm = (menuDetailData?: MenuDetailType | null) => {
     if (!menuDetailData) return
-    formData.menuId.value.value = menuDetailData?.menuId ?? ''
+    formData.isHilight.value.value = menuDetailData?.isHilight
     formData.title.value.value = menuDetailData?.title ?? ''
     formData.titleSettings.value.value = cloneDeep(menuDetailData.titleSettings)
     formData.price.value.value = menuDetailData?.price ?? ''
@@ -76,7 +71,6 @@ export const useMenuDetailForm = () => {
     formData.imageSettings.value.value = menuDetailData.imageSettings
       ? cloneDeep(menuDetailData.imageSettings)
       : null
-    formData.isHilight.value.value = menuDetailData?.isHilight ?? false
     formData.position.value.value = menuDetailData?.position ?? 0
   }
 

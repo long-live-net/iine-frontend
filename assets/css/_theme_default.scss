@@ -2,6 +2,7 @@
 
 .g-theme-default {
   --text-color: #{variables.$gray-darken3};
+  --dim-color: rgb(0 0 0 / 60%);
   --link-color: #{variables.$link-normal2};
   --link-active-color: #{variables.$cyan};
 
