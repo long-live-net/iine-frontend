@@ -1,12 +1,12 @@
 @use 'variables.scss';
 
 .g-theme-default {
+  --background-color: #{variables.$gray-lighten25};
   --text-color: #{variables.$gray-darken3};
-  --dim-color: rgb(0 0 0 / 60%);
   --link-color: #{variables.$link-normal2};
   --link-active-color: #{variables.$cyan};
 
-  background-color: variables.$gray-lighten25;
+  background-color: var(--background-color);
   color: var(--text-color);
 
   a {
@@ -26,7 +26,7 @@
   }
 
   .g-theme-app-container {
-    background-color: variables.$gray-lighten25;
+    background-color: var(--background-color);
     color: var(--text-color);
   }
   .g-theme-header {
@@ -37,7 +37,7 @@
   }
   .g-theme-contents-card {
     background-color: variables.$white;
-    box-shadow: 2px 2px 16px variables.$gray-lighten1;
+    box-shadow: 2px 2px 16px rgba(variables.$gray-lighten1, 0.75);
   }
 
   .g-theme-contents-item {
@@ -52,13 +52,11 @@
       }
     }
   }
-  .g-theme-edit-contents {
-    color: variables.$black;
-  }
+  --guid-line-border-color: #{variables.$gray-lighten2};
 
   .g-theme-contents-grid-row-caption {
     background-color: rgba(variables.$white, 0.9);
-    box-shadow: 2px 2px 16px rgba(variables.$gray-lighten1, 0.75);
+    box-shadow: 2px 2px 16px rgba(variables.$gray-lighten2, 0.75);
   }
 
   .g-theme-wysiwyg-editor {
@@ -105,5 +103,19 @@
   .g-theme-slidable-item {
     color: variables.$white;
     background-color: variables.$gray-lighten2;
+  }
+
+  .g-theme-contents-menu-detail {
+    background-color: variables.$gray-lighten15;
+
+    .g-theme-contents-menu-title {
+      background-color: variables.$gray-lighten4;
+      box-shadow: 2px 2px 8px rgba(variables.$gray-lighten4, 0.75);
+    }
+
+    .g-theme-contents-menu-category {
+      background-color: variables.$gray-lighten4;
+      box-shadow: 2px 2px 16px rgba(variables.$gray-lighten4, 0.75);
+    }
   }
 }

@@ -213,6 +213,7 @@ export interface ContentPreNextId {
 export interface ContentPosition {
   id: string
   position: number
+  [key: string]: string | number | boolean | null | undefined
 }
 
 export type PositionObj = { [key: number]: number }

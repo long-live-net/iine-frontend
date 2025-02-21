@@ -2,7 +2,19 @@
 import draggable from 'vuedraggable'
 import type { ContentType } from '@/types/content'
 
-const props = defineProps<{ contents: T[] }>()
+const props = withDefaults(
+  defineProps<{
+    contents: T[]
+    group?: string
+    dense?: boolean
+    guideLine?: boolean
+  }>(),
+  {
+    group: 'contentItem',
+    dense: false,
+    guideLine: false,
+  }
+)
 const emit = defineEmits<{
   update: [contents: T[]]
 }>()
@@ -29,8 +41,14 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
       <draggable
         v-model="draggableContents"
         item-key="id"
+        :group="group"
         handle=".draggable"
         class="content-grid-row"
+        :class="{
+          dense,
+          'g-theme-contents-item__draggable--guid-line': guideLine,
+          'guide-line': guideLine,
+        }"
         @start="isDragging = true"
         @end="isDragging = false"
       >
@@ -38,7 +56,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
           <div
             class="content-grid__column column-draggable g-theme-contents-item__draggable"
           >
-            <slot :content="element as T" :index="index" />
+            <slot :content="element" :index="index" />
             <div
               class="edit-position-top draggable g-theme-contents-item__draggable--notion"
             >
@@ -76,7 +94,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   margin: 0 auto;
   width: 90%;
   max-width: v-bind('contentGridMaxWidth');
-  min-height: 10rem;
+  min-height: 12rem;
   &__column {
     width: 100%;
   }
@@ -108,5 +126,15 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   .draggable {
     cursor: v-bind('columnCursor');
   }
+}
+
+.dense {
+  row-gap: 2rem;
+}
+
+.guide-line {
+  padding: 12px;
+  border: 4px dashed var(--guid-line-border-color);
+  border-radius: 6px;
 }
 </style>

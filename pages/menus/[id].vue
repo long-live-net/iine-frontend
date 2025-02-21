@@ -15,23 +15,17 @@ const menuListRef = ref<InstanceType<typeof MenuList> | null>(null)
 #menu-detail-top {
   padding-top: calc($nav-header-height);
   padding-bottom: 6rem;
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    padding-bottom: 4.25rem;
+  }
 }
 
 .nav-bread-crumbs {
-  margin-bottom: 2.5rem;
+  margin-bottom: 0;
 }
 
 .menu-list-gap {
   margin-top: 6rem;
-}
-
-@media only screen and (max-width: $grid-breakpoint-md) {
-  #menu-detail-top {
-    padding-bottom: 4.25rem;
-  }
-
-  .nav-bread-crumbs {
-    margin-bottom: 0;
-  }
 }
 </style>

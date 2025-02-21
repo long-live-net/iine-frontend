@@ -186,11 +186,13 @@ const useMenuDetailContent = (customerId: Ref<string | null>) => {
   }
 
   const setMenuDetailListPositions = (
-    menuDetailList: MenuDetailType[]
+    menuDetailList: MenuDetailType[],
+    categoryId: string
   ): ContentPosition[] => {
     const positions = menuDetailList.map<ContentPositionApi>((d, i) => ({
       id: d.id,
       position: i + 1,
+      categoryId,
     }))
     setListPositions(positions)
     return positions
@@ -300,8 +302,13 @@ export const useMenuDetailListActions = (customerId: Ref<string | null>) => {
     getMenuDetailList(filter.value, sort.value, pager.value)
   }
 
-  const onUpdatePositions = async (menuDetails: MenuDetailType[]) => {
-    await updateMenuDetailListPositions(setMenuDetailListPositions(menuDetails))
+  const onUpdatePositions = async (
+    menuDetails: MenuDetailType[],
+    categoryId: string
+  ) => {
+    await updateMenuDetailListPositions(
+      setMenuDetailListPositions(menuDetails, categoryId)
+    )
     addSnackber?.('位置を変更しました。')
     getMenuDetailList(filter.value, sort.value, pager.value)
   }

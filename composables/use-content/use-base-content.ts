@@ -266,14 +266,21 @@ export const useContentRead = <T extends ContentGetApi>(
       return
     }
     const contentTotal = contentListRef.value.total
-    const contentList = positions.map((pos) => {
-      const fc = contentListRef.value?.list.find((c) => pos.id === c.id)
-      if (fc) {
-        return { ...fc }
-      } else {
-        return {} as T
-      }
-    })
+    const changedList = positions
+      .map((pos) => {
+        const fc = contentListRef.value?.list.find((c) => pos.id === c.id)
+        if (fc) {
+          return { ...fc, ...pos } as T
+        } else {
+          return null
+        }
+      })
+      .filter((c) => !!c)
+    const unchangedList = contentListRef.value?.list.filter((c) =>
+      positions.every((p) => p.id !== c.id)
+    )
+    const contentList = [...changedList, ...unchangedList]
+
     contentListRef.value = {
       total: contentTotal,
       list: contentList,
@@ -397,6 +404,9 @@ export const useContentWrite = <
   const updatePositions = async (
     positions: ContentPositionApi[]
   ): Promise<void> => {
+    if (positions.length <= 0) {
+      return
+    }
     try {
       loading.value = true
       await $fetch(`/${apiPath}/positions`, {

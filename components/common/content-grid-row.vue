@@ -48,10 +48,10 @@ withDefaults(
 }
 
 .dense {
-  row-gap: 1.25rem;
+  row-gap: 1.5rem;
 
   @media only screen and (max-width: $grid-breakpoint-md) {
-    row-gap: 0.5rem;
+    row-gap: 0.75rem;
   }
 }
 </style>

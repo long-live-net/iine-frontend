@@ -1,89 +1,113 @@
 <script setup lang="ts">
 import type { MenuDetailType } from '@/types/content'
+const props = defineProps<{ item: MenuDetailType }>()
 
-defineProps<{ item: MenuDetailType }>()
-defineEmits<{ select: [menuDetail: MenuDetailType] }>()
+const captionPlainString = computed(
+  () => props.item?.caption?.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') ?? ''
+)
+
+const imageViewModal = ref(false)
+const imageViewTitle = ref('')
+const imageViewFileUrl = ref('')
+const onClickEyecatch = (item: MenuDetailType) => {
+  if (import.meta.client && item.image?.url) {
+    imageViewModal.value = true
+    imageViewTitle.value = item.title
+    imageViewFileUrl.value = item.image.url
+  }
+}
 </script>
 
 <template>
-  <div class="menuDetail-list-item" :class="{ 'mb-4': !!item.image }">
-    <section
-      v-if="item.image"
-      class="eyecatcher-col item-link"
-      @click="$emit('select', item)"
-    >
-      <CommonEyecatchImage :url="item.image.url" class="eyecatcher" />
-    </section>
-    <section v-else class="blank-col" />
+  <div class="detail-list-item" :class="{ 'mb-4': !!item.image }">
+    <div class="detail-title-price">
+      <h5 class="title">
+        {{ item.title }}
+      </h5>
+      <p class="price">
+        {{ item.price }}
+      </p>
+    </div>
 
-    <section class="caption-col">
-      <div class="caption-base">
-        <div class="title-price">
-          <h5 class="title">
-            {{ item.title }}
-          </h5>
-          <p>
-            {{ item.price }}
-          </p>
-        </div>
-        <CommonWysiwsgViewer :value="item.caption" class="caption" />
+    <div v-if="captionPlainString || item.image" class="detail-body">
+      <div class="caption-col">
+        <CommonWysiwsgViewer
+          v-if="captionPlainString"
+          :value="item.caption"
+          class="caption"
+        />
       </div>
-    </section>
+
+      <div
+        v-if="item.image"
+        class="eyecatcher-col item-link"
+        @click="onClickEyecatch(item)"
+      >
+        <CommonEyecatchImage :url="item.image.url" class="eyecatcher" />
+      </div>
+    </div>
   </div>
+  <CommonModalDialog
+    v-model:modal="imageViewModal"
+    :title="imageViewTitle"
+    title-icon="mdi-silverware"
+    title-icon-color="orange"
+    theme="auto"
+    width="90vw"
+    max-width="880px"
+  >
+    <div class="image-viewer">
+      <img :src="imageViewFileUrl" />
+    </div>
+  </CommonModalDialog>
 </template>
 
 <style lang="scss" scoped>
-.menuDetail-list-item {
-  $titile-border-color: color-mix(in srgb, currentColor 40%, transparent);
-  $caption-border-color: color-mix(in srgb, currentColor 30%, transparent);
+.detail-list-item {
+  $titile-border-color: color-mix(in srgb, currentColor 25%, transparent);
   $caption-color: color-mix(in srgb, currentColor 75%, transparent);
 
-  display: flex;
-  justify-content: center;
-  width: 90%;
+  width: 85%;
   margin: 0 auto;
 
-  .eyecatcher-col {
-    flex: 0 0 240px;
+  .detail-title-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid $titile-border-color;
+    padding: 0 1.5rem;
 
-    .eyecatcher {
-      width: 100%;
-      aspect-ratio: 5 / 3;
+    .title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .price {
+      font-weight: bold;
     }
   }
 
-  .caption-col {
-    flex: 1 1 auto;
+  .detail-body {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+    padding: 0 1.5rem;
 
-    .caption-base {
-      margin-top: 0.5rem;
-      margin-bottom: 0.5rem;
-      padding-left: 1rem;
+    .caption-col {
+      flex: 1 1 auto;
+      padding-right: 1rem;
+    }
 
-      .title-price {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid $titile-border-color;
+    .eyecatcher-col {
+      flex: 0 0 45%;
 
-        .title {
-          font-weight: bold;
-          font-size: 1.1rem;
-          margin: 0;
-        }
-      }
-
-      .caption {
-        color: $caption-color;
+      .eyecatcher {
+        width: 100%;
+        aspect-ratio: 2 / 1;
+        margin-top: 0.5rem;
       }
     }
-  }
-
-  .blank-col {
-    display: block;
-    flex: 0 0 14px;
-    margin-left: 1rem;
-    background-color: $caption-border-color;
   }
 
   .item-link {
@@ -99,35 +123,44 @@ defineEmits<{ select: [menuDetail: MenuDetailType] }>()
   }
 }
 
+.image-viewer {
+  width: 100%;
+
+  img {
+    width: 100%;
+  }
+}
+
 @media only screen and (max-width: $grid-breakpoint-md) {
-  .menuDetail-list-item {
-    display: block;
-    width: 75%;
+  .detail-list-item {
+    width: 85%;
 
-    .eyecatcher-col {
-      width: 100%;
-
-      .eyecatcher {
-        width: 80%;
-        aspect-ratio: 2 / 1;
-      }
+    .detail-title-price {
+      padding: 0;
     }
 
-    .caption-col {
-      width: 100%;
-      margin-top: 0.5rem;
+    .detail-body {
+      display: block;
+      margin-top: 0.25rem;
+      padding: 0;
 
-      .caption-base {
-        padding-left: 0;
+      .caption-col {
+        flex: 1 0 auto;
+        padding-right: 0;
+        padding-bottom: 0.5rem;
+      }
 
-        .caption {
-          margin-top: 0.4rem;
+      .eyecatcher-col {
+        flex: 1 0 auto;
+        padding-bottom: 0.5rem;
+
+        .eyecatcher {
+          width: 100%;
+          max-width: 280px;
+          margin-top: 0;
+          margin-left: auto;
         }
       }
-    }
-
-    .blank-col {
-      display: none;
     }
   }
 }

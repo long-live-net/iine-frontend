@@ -20,7 +20,6 @@ watch(modal, (current) => {
 })
 
 const onCreate = handleSubmit((MenuCategoryForm) => {
-  console.log('MenuCategoryForm', MenuCategoryForm)
   emit('create', MenuCategoryForm)
   modal.value = false
 })

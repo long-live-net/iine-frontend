@@ -115,7 +115,6 @@ const useMenuCategoryContent = (customerId: Ref<string | null>) => {
       menuId,
       formData
     )
-    console.log('inputData', inputData)
     try {
       loading.value = true
       const data = await $fetch<MenuCategoryGetApi>(`/${apiPath}`, {

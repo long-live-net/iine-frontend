@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FeatureType, ContentType } from '@/types/content'
+import type { ContentType } from '@/types/content'
 import { useFeatureListActions } from '~/composables/use-content/use-features'
 
 const { customerId } = useCustomer()
@@ -34,7 +34,7 @@ const onMovingDetailPage = (feature: ContentType) => {
       <CommonContentGridRowDraggable
         v-if="featureListRef?.length"
         :contents="featureListRef"
-        @update="onUpdatePositions($event as FeatureType[])"
+        @update="onUpdatePositions"
       >
         <template #default="{ content, index }">
           <div class="feature-item">
