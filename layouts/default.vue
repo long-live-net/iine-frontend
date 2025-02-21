@@ -22,13 +22,13 @@ const topHashName = 'default-layout-main-top'
     </div>
     <div v-show="!initializing" id="default-layout-container">
       <header>
-        <PublishMenuNavHeader />
+        <PublishLayoutNavHeader />
       </header>
       <main :id="topHashName">
         <slot />
       </main>
       <footer>
-        <PublishMenuNavFooter />
+        <PublishLayoutNavFooter />
       </footer>
     </div>
     <client-only>

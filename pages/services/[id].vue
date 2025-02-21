@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type ServicesList from '@/components/publish/services/list/index.vue'
+import type ServicesList from '@/components/publish/services/list.vue'
 const servicesListRef = ref<InstanceType<typeof ServicesList> | null>(null)
 </script>
 
 <template>
   <div id="service-detail-top">
-    <PublishMenuNavBreadCrumb class="nav-bread-crumbs" />
+    <PublishLayoutNavBreadCrumb class="nav-bread-crumbs" />
     <PublishServicesDetail @update:data="servicesListRef?.onGetList" />
     <PublishServicesList
       ref="servicesListRef"

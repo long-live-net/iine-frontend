@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FeatureType, ContentType } from '@/types/content'
+import type { ContentType } from '@/types/content'
 import { useFeatureListActions } from '~/composables/use-content/use-features'
 
 const { customerId } = useCustomer()
@@ -19,7 +19,7 @@ const {
 
 filter.value = {}
 sort.value = { position: 1 }
-pager.value = { page: 1, limit: 12 }
+pager.value = { page: 1, limit: 24 }
 await onLoad()
 
 const router = useRouter()
@@ -34,7 +34,7 @@ const onMovingDetailPage = (feature: ContentType) => {
       <CommonContentGridRowDraggable
         v-if="featureListRef?.length"
         :contents="featureListRef"
-        @update="onUpdatePositions($event as FeatureType[])"
+        @update="onUpdatePositions"
       >
         <template #default="{ content, index }">
           <div class="feature-item">

@@ -1,26 +1,27 @@
-<script setup lang="ts">
-import type { ServiceType } from '@/types/content'
+<script setup lang="ts" generic="T extends ContentType">
+import type { ContentType } from '@/types/content'
 
 withDefaults(
   defineProps<{
-    item: ServiceType
+    item: T
+    seeDetailActionLabel?: string
+    eyecatchShape?: 'circle' | 'round' | null
     isCurrent?: boolean
     noCaption?: boolean
   }>(),
   {
+    seeDetailActionLabel: '詳しく見る',
+    eyecatchShape: null,
     isCurrent: false,
     noCaption: false,
   }
 )
-defineEmits<{
-  select: [service: ServiceType]
-}>()
-
+defineEmits<{ select: [item: T] }>()
 const route = useRoute()
 </script>
 
 <template>
-  <div class="service-list-item">
+  <div class="content-grid-item">
     <section
       :class="[isCurrent ? 'current-item' : 'item-link']"
       @click="$emit('select', item)"
@@ -36,7 +37,8 @@ const route = useRoute()
         >
           <CommonEyecatchImage
             :url="item.image.url"
-            circle
+            :circle="eyecatchShape === 'circle'"
+            :round="eyecatchShape === 'round'"
             class="eyecatcher"
           />
         </CommonContentItemAnimation>
@@ -56,7 +58,9 @@ const route = useRoute()
         <div class="caption-base">
           <CommonWysiwsgViewer :value="item.caption" class="caption" />
           <p class="see-detail">
-            <v-btn variant="outlined" size="small">詳しく見る</v-btn>
+            <v-btn variant="outlined" size="small">{{
+              seeDetailActionLabel
+            }}</v-btn>
           </p>
         </div>
       </CommonContentItemAnimation>
@@ -65,7 +69,7 @@ const route = useRoute()
 </template>
 
 <style lang="scss" scoped>
-.service-list-item {
+.content-grid-item {
   width: 90%;
   margin: 0 auto;
 
@@ -85,14 +89,14 @@ const route = useRoute()
     }
   }
 
+  .see-detail {
+    margin-top: 0.4rem;
+    text-align: right;
+  }
+
   .caption {
     text-align: left;
     margin-top: 1rem;
-  }
-
-  .see-detail {
-    margin-top: 0.3rem;
-    text-align: right;
   }
 
   section.item-link {
@@ -116,8 +120,9 @@ const route = useRoute()
 
   section.current-item {
     color: $blue-lighten2;
+
     .eyecatcher {
-      background-color: rgba(128 255 255 / 0.75);
+      background-color: rgba(128 192 255 / 0.75);
       background-blend-mode: overlay;
     }
   }

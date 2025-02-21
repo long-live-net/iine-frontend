@@ -8,7 +8,7 @@ const accessDialog = ref(false)
 <template>
   <div class="nav-footer g-theme-footer">
     <div class="nav-footer__activator">
-      <PublishMenuNavFooterMenu />
+      <PublishLayoutNavFooterMenu />
     </div>
     <div class="g-block-lg">
       <div class="nav-footer__menu">

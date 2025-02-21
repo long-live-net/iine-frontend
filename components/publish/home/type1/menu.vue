@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ServiceType } from '@/types/content'
+import type { MenuType } from '@/types/content'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
@@ -7,21 +7,21 @@ const {
   filter,
   sort,
   pager,
-  serviceListRef,
+  menuListRef,
   onLoad,
   onCreate,
   onUpdate,
   onRemove,
   onUpdatePositions,
   loading,
-} = useServiceListActions(customerId)
+} = useMenuListActions(customerId)
 
 const editModal = ref(false)
-const updatingData = ref<ServiceType | null>(null)
+const updatingData = ref<MenuType | null>(null)
 
 const router = useRouter()
-const onMovingDetailPage = (service: ServiceType) => {
-  router.push(`/services/${service.id}`)
+const onMovingDetailPage = (item: MenuType) => {
+  router.push(`/menus/${item.id}`)
 }
 
 filter.value = {}
@@ -34,7 +34,7 @@ await onLoad()
   <CommonContentWrap :loading="loading">
     <PublishContentGridTable
       v-model:modal="editModal"
-      :items="serviceListRef"
+      :items="menuListRef"
       :can-edit="canEdit"
       @update="updatingData = $event"
       @create="updatingData = null"
@@ -43,15 +43,16 @@ await onLoad()
       <template #default="{ content }">
         <PublishContentGridItem
           :item="content"
-          eyecatch-shape="circle"
+          eyecatch-shape="round"
+          see-detail-action-label="メニューを見る"
           @select="onMovingDetailPage"
         />
       </template>
     </PublishContentGridTable>
   </CommonContentWrap>
-  <ManageContentService
+  <ManageContentMenu
     v-model:modal="editModal"
-    :service-data="updatingData"
+    :menu-data="updatingData"
     @create="onCreate"
     @update="onUpdate"
     @remove="onRemove"

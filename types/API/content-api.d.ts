@@ -51,6 +51,30 @@ export interface NewsGetApi extends ContentGetApi {
 export interface ContactGetApi extends ContentGetApi {
   body: string
 }
+export interface MenuGetApi extends ContentGetApi {
+  caption: string
+  image: ImageData
+  imageSettings: ImageSettings
+  position: number
+}
+
+export interface MenuCategoryGetApi {
+  _id?: string
+  id: string
+  customerId: string
+  menuId: string
+  category: string
+  position: number
+}
+
+export interface MenuDetailGetApi extends ContentGetApi {
+  menuId: string
+  categoryId: string
+  isHilight?: boolean
+  price?: string
+  caption?: string
+  position: number
+}
 export interface MenuImageGetApi extends ContentGetApi {
   caption: string
   image: ImageData
@@ -98,6 +122,26 @@ export interface NewsSaveApi extends ContentSaveApi {
 }
 export interface ContactSaveApi extends ContentSaveApi {
   body: string
+}
+export interface MenuSaveApi extends ContentSaveApi {
+  caption: string
+  image: ImageData
+  imageSettings: ImageSettings
+  position: number
+}
+export interface MenuCategorySaveApi {
+  customerId: string
+  menuId: string
+  category: string
+  position: number
+}
+export interface MenuDetailSaveApi extends ContentSaveApi {
+  menuId: string
+  categoryId: string
+  isHilight?: boolean
+  price?: string
+  caption?: string
+  position: number
 }
 export interface MenuImageSaveApi extends ContentSaveApi {
   caption: string

@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import type { ContentType, ServiceType } from '@/types/content'
-withDefaults(
-  defineProps<{
-    noCaption?: boolean
-  }>(),
-  { noCaption: false }
-)
-defineEmits<{
-  select: [service: ServiceType]
-}>()
+import type { ServiceType } from '@/types/content'
 
+withDefaults(defineProps<{ noCaption?: boolean }>(), { noCaption: false })
+
+const editModal = ref(false)
 const route = useRoute()
 const contentId = Array.isArray(route.params.id)
   ? route.params.id[0]
@@ -19,42 +13,38 @@ const { customerId } = useCustomer()
 const { filter, sort, pager, serviceListRef, loading, onLoad, onGetList } =
   useServiceListActions(customerId)
 
+defineExpose({ onGetList })
+
 const router = useRouter()
-const onMovingDetailPage = (service: ContentType) => {
+const onMovingDetailPage = (service: ServiceType) => {
   router.push(`/services/${service.id}`)
 }
-
-defineExpose({ onGetList })
 
 filter.value = {}
 sort.value = { position: 1 }
 pager.value = { page: 1, limit: 12 }
 await onLoad()
-
-const contentGridMaxWidth = computed(() =>
-  serviceListRef.value && serviceListRef.value.length < 4 ? '60rem' : '80rem'
-)
 </script>
 
 <template>
   <CommonContentWrap :loading="loading">
     <div class="service-list">
-      <CommonContentGrid
-        v-if="serviceListRef?.length"
-        :contents="serviceListRef"
-        :content-grid-max-width="contentGridMaxWidth"
-        grid-min-width="14rem"
-        grid-max-width="18rem"
+      <PublishContentGridTable
+        v-model:modal="editModal"
+        :items="serviceListRef"
+        :can-edit="false"
+        small
       >
         <template #default="{ content }">
-          <PublishServicesListItem
+          <PublishContentGridItem
             :item="content"
+            eyecatch-shape="circle"
             :is-current="content.id === contentId"
-            :no-caption="noCaption"
+            no-caption
             @select="onMovingDetailPage"
           />
         </template>
-      </CommonContentGrid>
+      </PublishContentGridTable>
     </div>
   </CommonContentWrap>
 </template>

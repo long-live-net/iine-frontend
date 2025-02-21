@@ -2,6 +2,7 @@
 import type { MenuImageType, MenuImageForm } from '@/types/content'
 import { getMenuImageKind } from '@/composables/use-content/use-menu-image'
 
+const modal = defineModel<boolean>('modal', { required: true })
 const props = defineProps<{
   menuImageData?: MenuImageType | null
   activatorLabel?: string
@@ -17,7 +18,6 @@ const { customerId } = useCustomer()
 const apiKind = getMenuImageKind()
 const menuType = ref<string>('image')
 
-const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetMenuImageForm } =
   useMenuImageForm()
 
@@ -62,12 +62,6 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditActivator
-    v-model:modal="modal"
-    :is-update="!!menuImageData?.id"
-    :activator-label="activatorLabel"
-    :activator-size="activatorSize"
-  />
   <CommonContentEditDialog
     v-model:modal="modal"
     :is-update="!!menuImageData?.id"

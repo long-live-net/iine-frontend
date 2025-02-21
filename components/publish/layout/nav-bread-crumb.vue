@@ -33,6 +33,16 @@ const featureItem = computed(() => {
     hash: `#${domidPrefix}-${kind}`,
   }
 })
+const menuItem = computed(() => {
+  const kind: SectionKind = 'menu'
+  const menuSection = customerSetting.value?.homeLayout?.find(
+    (s) => s.kind === kind
+  )
+  return {
+    title: menuSection?.menuTitle ?? menuSection?.title ?? 'Menu',
+    hash: `#${domidPrefix}-${kind}`,
+  }
+})
 
 const detailTitle = computed(() => 'Detail')
 
@@ -41,6 +51,7 @@ const items = ref<BreadCrumbsItem[]>([])
 watch(
   [() => route, newsItem, serviceItem],
   () => {
+    console.log('route.name', route.name)
     switch (route.name) {
       case 'news':
         items.value = [
@@ -111,6 +122,24 @@ watch(
           {
             title: featureItem.value.title,
             to: { name: 'index', hash: featureItem.value.hash },
+            disabled: false,
+          },
+          {
+            title: detailTitle.value,
+            disabled: true,
+          },
+        ]
+        return
+      case 'menus-id':
+        items.value = [
+          {
+            title: 'HOME',
+            to: { name: 'index' },
+            disabled: false,
+          },
+          {
+            title: menuItem.value.title,
+            to: { name: 'index', hash: menuItem.value.hash },
             disabled: false,
           },
           {

@@ -1,11 +1,12 @@
 @use 'variables.scss';
 
 .g-theme-dark {
+  --background-color: #{variables.$gray-darken3};
   --text-color: #{variables.$white};
   --link-color: #{variables.$blue-lighten3};
   --link-active-color: #{variables.$link-active};
 
-  background-color: variables.$gray-darken3;
+  background-color: var(--background-color);
   color: var(--text-color);
 
   a {
@@ -25,7 +26,7 @@
   }
 
   .g-theme-app-container {
-    background-color: variables.$gray-darken3;
+    background-color: var(--background-color);
     color: var(--text-color);
   }
 
@@ -48,13 +49,11 @@
       background-color: variables.$gray-darken3;
       box-shadow: 0 0 8px variables.$gray-lighten1;
       &--notion {
-        color: variables.$white;
+        color: variables.$blue-lighten3;
       }
     }
   }
-  .g-theme-edit-contents {
-    color: variables.$black;
-  }
+  --guid-line-border-color: #{variables.$gray-darken3};
 
   .g-theme-contents-grid-row-caption {
     background-color: rgba(variables.$gray-darken5, 0.75);
@@ -104,5 +103,19 @@
   .g-theme-slidable-item {
     color: variables.$gray-lighten1;
     background-color: variables.$gray-darken2;
+  }
+
+  .g-theme-contents-menu-detail {
+    background-color: variables.$gray-darken3;
+
+    .g-theme-contents-menu-title {
+      background-color: variables.$gray-darken5;
+      box-shadow: 2px 2px 8px rgba(variables.$black, 0.75);
+    }
+
+    .g-theme-contents-menu-category {
+      background-color: variables.$gray-darken5;
+      box-shadow: 2px 2px 16px rgba(variables.$black, 0.75);
+    }
   }
 }

@@ -2,6 +2,7 @@
 import type { InformationType, InformationForm } from '@/types/content'
 import { getInformationKind } from '@/composables/use-content/use-information'
 
+const modal = defineModel<boolean>('modal', { required: true })
 const props = defineProps<{
   informationData?: InformationType | null
   activatorLabel?: string
@@ -15,7 +16,6 @@ const emit = defineEmits<{
 const { customerId } = useCustomer()
 const apiKind = getInformationKind()
 
-const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetInformationForm } =
   useInformationForm()
 
@@ -56,11 +56,6 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditActivator
-    v-model:modal="modal"
-    :is-update="!!informationData?.id"
-    :activator-label="activatorLabel"
-  />
   <CommonContentEditDialog
     v-model:modal="modal"
     :is-update="!!informationData?.id"

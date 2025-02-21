@@ -2,6 +2,7 @@
 import type { ContactType, ContactForm } from '@/types/content'
 import { getContactKind } from '@/composables/use-content/use-contact'
 
+const modal = defineModel<boolean>('modal', { required: true })
 const props = defineProps<{
   contactData?: ContactType | null
   activatorLabel?: string
@@ -16,7 +17,6 @@ const emit = defineEmits<{
 const { customerId } = useCustomer()
 const apiKind = getContactKind()
 
-const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetContactForm } =
   useContactForm()
 
@@ -57,11 +57,6 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditActivator
-    v-model:modal="modal"
-    :is-update="!!contactData?.id"
-    :activator-label="activatorLabel"
-  />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!contactData?.id">
     <v-form>
       <div>

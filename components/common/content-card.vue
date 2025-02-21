@@ -15,6 +15,7 @@ $contents-card-min-height: 240px;
   max-width: $contents-card-max-width;
   min-height: $contents-card-min-height;
   margin: 0 auto;
+
   .contents-card {
     min-height: $contents-card-min-height;
     overflow: hidden;
@@ -25,6 +26,7 @@ $contents-card-min-height: 240px;
 @media only screen and (max-width: $grid-breakpoint-md) {
   .contents-card-wrap {
     width: 100%;
+
     .contents-card {
       border-radius: 0;
     }

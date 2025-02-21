@@ -1,6 +1,6 @@
 <template>
   <div id="news-index-top">
-    <PublishMenuNavBreadCrumb class="nav-bread-crumbs" />
+    <PublishLayoutNavBreadCrumb class="nav-bread-crumbs" />
     <PublishNews />
   </div>
 </template>
