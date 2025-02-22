@@ -1,7 +1,7 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends ContentType">
 import type { ContentType } from '@/types/content'
 
-defineProps<{ contents: Readonly<ContentType[]> }>()
+defineProps<{ contents: Readonly<T[]> }>()
 </script>
 
 <template>

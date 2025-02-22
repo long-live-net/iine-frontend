@@ -3,10 +3,7 @@ import type { InformationType, InformationForm } from '@/types/content'
 import { getInformationKind } from '@/composables/use-content/use-information'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{
-  informationData?: InformationType | null
-  activatorLabel?: string
-}>()
+const props = defineProps<{ informationData?: InformationType | null }>()
 const emit = defineEmits<{
   create: [inputData: InformationForm]
   update: [{ id: string; formData: InformationForm }]

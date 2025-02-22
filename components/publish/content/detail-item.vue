@@ -83,6 +83,11 @@ const bodyPlainString = computed(
         </CommonEyecatchImage>
       </CommonContentItemAnimation>
     </template>
+    <CommonContentCardTitle
+      v-else
+      :title="item?.title ?? ''"
+      class="g-block-lg"
+    />
 
     <slot name="middlenavi" />
 

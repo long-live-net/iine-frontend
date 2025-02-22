@@ -47,24 +47,22 @@ await onLoad(contentId)
 
 <template>
   <CommonContentWrap :loading="loading">
-    <CommonContentSlidableNavigation :pre-url="preUrl" :next-url="nextUrl">
-      <CommonContentCard>
-        <PublishContentDetailItem
-          v-model:modal="editModal"
-          :item="serviceRef"
-          :can-edit="canEdit"
-          @update-title-setting="onUpdateTitleSetting"
-          @update-image-setting="onUpdateImageSetting"
-        >
-          <template #middlenavi>
-            <CommonContentPreNextNagivation
-              :pre-url="preUrl"
-              :next-url="nextUrl"
-            />
-          </template>
-        </PublishContentDetailItem>
-      </CommonContentCard>
-    </CommonContentSlidableNavigation>
+    <CommonContentCard>
+      <PublishContentDetailItem
+        v-model:modal="editModal"
+        :item="serviceRef"
+        :can-edit="canEdit"
+        @update-title-setting="onUpdateTitleSetting"
+        @update-image-setting="onUpdateImageSetting"
+      >
+        <template #middlenavi>
+          <CommonContentPreNextNagivation
+            :pre-url="preUrl"
+            :next-url="nextUrl"
+          />
+        </template>
+      </PublishContentDetailItem>
+    </CommonContentCard>
   </CommonContentWrap>
   <ManageContentServiceBody
     v-model:modal="editModal"

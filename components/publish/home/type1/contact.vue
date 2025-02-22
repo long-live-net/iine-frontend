@@ -40,7 +40,9 @@ await onLoad()
         </template>
 
         <template #footernavi>
-          <PublishInquire />
+          <div class="inquire-activator">
+            <PublishInquire />
+          </div>
         </template>
       </PublishContentDetailItem>
     </CommonContentCard>
@@ -64,5 +66,10 @@ await onLoad()
     top: 0.25rem;
     right: 1rem;
   }
+}
+
+.inquire-activator {
+  width: fit-content;
+  margin: 0 0 0 auto;
 }
 </style>

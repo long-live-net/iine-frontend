@@ -4,6 +4,10 @@ import { formatLocalDate } from '@/utils/misc'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
+
+const editModal = ref(false)
+const updatingData = ref<NewsType | null>(null)
+
 const {
   filter,
   sort,
@@ -79,15 +83,10 @@ await onLoad()
             <div class="news-item">
               <div class="news-item__header g-theme-contents-item__header">
                 <span>
-                  {{
-                    formatLocalDate(
-                      (content as NewsType).publishOn,
-                      'YYYY/MM/DD'
-                    )
-                  }}
+                  {{ formatLocalDate(content.publishOn, 'YYYY/MM/DD') }}
                 </span>
                 <PublishNewsCategoryBadge
-                  :category="(content as NewsType).category"
+                  :category="content.category"
                   style="margin-left: 0.5rem"
                 />
               </div>
@@ -97,11 +96,11 @@ await onLoad()
                 </nuxt-link>
               </div>
               <div v-if="canEdit" class="edit-activator">
-                <ManageContentNews
-                  :news-data="content as NewsType"
+                <CommonContentEditActivator
+                  v-model:modal="editModal"
+                  is-update
                   activator-size="x-small"
-                  @update="onUpdate"
-                  @remove="onRemove"
+                  @update:modal="updatingData = content"
                 />
               </div>
             </div>
@@ -123,10 +122,20 @@ await onLoad()
         />
       </div>
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
-        <ManageContentNews @create="onCreate" />
+        <CommonContentEditActivator
+          v-model:modal="editModal"
+          @update:modal="updatingData = null"
+        />
       </div>
     </CommonContentCard>
   </CommonContentWrap>
+  <ManageContentNews
+    v-model:modal="editModal"
+    :news-data="updatingData"
+    @create="onCreate"
+    @update="onUpdate"
+    @remove="onRemove"
+  />
 </template>
 
 <style lang="scss" scoped>
