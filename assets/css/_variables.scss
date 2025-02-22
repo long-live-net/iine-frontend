@@ -77,3 +77,6 @@ $grid-breakpoint-xl: map.get($grid-breakpoints, xl);
 // nav header footer height
 $nav-header-height: 120px;
 $nav-footer-height: 60px;
+
+$contents-card-max-width: 1140px;
+$contents-card-min-height: 240px;

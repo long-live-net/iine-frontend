@@ -7,9 +7,6 @@
 </template>
 
 <style lang="scss" scoped>
-$contents-card-max-width: 1140px;
-$contents-card-min-height: 240px;
-
 .contents-card-wrap {
   width: 90%;
   max-width: $contents-card-max-width;

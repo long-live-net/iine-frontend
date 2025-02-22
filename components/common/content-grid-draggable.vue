@@ -14,6 +14,13 @@ const draggableContents = computed({
   },
 })
 
+const useGrid = computed(() => props.contents.length > 2)
+const gridColumnMinDivide = 4.2
+const gridColumnMaxDivide = 3.4
+const flexColumnDivide = computed(() =>
+  props.contents.length < 2 ? 1.5 : props.contents.length
+)
+
 const isDragging = ref(false)
 const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
 </script>
@@ -29,15 +36,14 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
         v-model="draggableContents"
         item-key="id"
         handle=".draggable"
-        class="content-grid"
+        class="content-grid-base"
+        :class="{ 'content-grid': useGrid, 'content-grid-flex': !useGrid }"
         @start="isDragging = true"
         @end="isDragging = false"
       >
         <template #item="{ element }">
-          <div
-            class="content-grid__column column-draggable g-theme-contents-item__draggable"
-          >
-            <slot :content="element as T" />
+          <div class="column column-draggable g-theme-contents-item__draggable">
+            <slot :content="element" />
             <div
               class="edit-position-top draggable g-theme-contents-item__draggable--notion"
             >
@@ -68,21 +74,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   margin-bottom: 2rem;
 }
 
-.content-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 22rem));
-  justify-items: center;
-  justify-content: space-around;
-  row-gap: 2rem;
-  margin: 0 auto;
-  max-width: 80rem;
-  min-height: 18rem;
-  &__column {
-    padding: 1.5rem 0.75rem 2.5rem 0.75rem;
-    width: 100%;
-    text-align: center;
-  }
-
+.content-grid-base {
   .column-draggable {
     position: relative;
     width: 92% !important;
@@ -109,6 +101,48 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
 
   .draggable {
     cursor: v-bind('columnCursor');
+  }
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      calc($contents-card-max-width / v-bind('gridColumnMinDivide')),
+      calc($contents-card-max-width / v-bind('gridColumnMaxDivide'))
+    )
+  );
+  justify-items: center;
+  justify-content: space-around;
+  column-gap: 3rem;
+  row-gap: 3rem;
+  width: 90%;
+  max-width: $contents-card-max-width;
+  min-height: 18rem;
+  margin: 0 auto;
+
+  .column {
+    padding: 1.5rem 0.75rem 2.5rem 0.75rem;
+    width: 100%;
+  }
+}
+
+.content-grid-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  width: 90%;
+  max-width: $contents-card-max-width;
+  min-height: 18rem;
+  margin: 0 auto;
+
+  .column {
+    flex: 0 1
+      calc($contents-card-max-width / v-bind('flexColumnDivide') - 1.25rem);
+    padding: 1.5rem 0.75rem 2.5rem 0.75rem;
   }
 }
 </style>
