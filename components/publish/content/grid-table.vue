@@ -2,7 +2,7 @@
 import type { ContentType } from '@/types/content'
 
 const editModal = defineModel<boolean>('modal', { required: true })
-const props = withDefaults(
+withDefaults(
   defineProps<{
     items?: T[] | null
     canEdit?: boolean
@@ -19,12 +19,6 @@ defineEmits<{
   update: [item: T]
   updatePositions: [items: T[]]
 }>()
-
-const gridMinWidth = computed(() => (props.small ? '14rem' : undefined))
-const gridMaxWidth = computed(() => (props.small ? '18rem' : undefined))
-const contentGridMaxWidth = computed(() =>
-  props.small && props.items && props.items.length < 4 ? '60rem' : undefined
-)
 </script>
 
 <template>
@@ -67,13 +61,7 @@ const contentGridMaxWidth = computed(() =>
     </div>
   </div>
   <div v-else>
-    <CommonContentGrid
-      v-if="items?.length"
-      :contents="items"
-      :content-grid-max-width="contentGridMaxWidth"
-      :grid-min-width="gridMinWidth"
-      :grid-max-width="gridMaxWidth"
-    >
+    <CommonContentGrid v-if="items?.length" :contents="items" :small="small">
       <template #default="{ content }">
         <slot :content="content" />
       </template>

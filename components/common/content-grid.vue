@@ -1,29 +1,32 @@
 <script setup lang="ts" generic="T extends ContentType">
 import type { ContentType } from '@/types/content'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     contents: Readonly<T[]>
-    contentGridMaxWidth?: string
-    gridMinWidth?: string
-    gridMaxWidth?: string
+    small?: boolean
   }>(),
   {
-    contentGridMaxWidth: '80rem',
-    gridMinWidth: '16rem',
-    gridMaxWidth: '22rem',
+    small: false,
   }
+)
+
+const useGrid = computed(() => props.contents.length > 2)
+const gridColumnMinDivide = computed(() => (props.small ? 5.6 : 4.4))
+const gridColumnMaxDivide = computed(() => (props.small ? 4.8 : 3.6))
+const flexColumnDivide = computed(() =>
+  props.small
+    ? props.contents.length + 1.5
+    : props.contents.length < 2
+      ? 1.5
+      : props.contents.length
 )
 </script>
 
 <template>
   <div>
-    <div class="content-grid">
-      <div
-        v-for="content in contents"
-        :key="content.id"
-        class="content-grid__column"
-      >
+    <div :class="{ 'content-grid': useGrid, 'content-grid-flex': !useGrid }">
+      <div v-for="content in contents" :key="content.id" class="column">
         <slot :content="content" />
       </div>
     </div>
@@ -35,17 +38,41 @@ withDefaults(
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(v-bind('gridMinWidth'), v-bind('gridMaxWidth'))
+    minmax(
+      calc($contents-card-max-width / v-bind('gridColumnMinDivide')),
+      calc($contents-card-max-width / v-bind('gridColumnMaxDivide'))
+    )
   );
   justify-items: center;
   justify-content: space-around;
-  row-gap: 2rem;
-  margin: 0 auto;
-  max-width: v-bind('contentGridMaxWidth');
+  column-gap: 3rem;
+  row-gap: 3rem;
+  width: 90%;
+  max-width: $contents-card-max-width;
   min-height: 18rem;
-  &__column {
-    padding: 1rem;
+  margin: 0 auto;
+
+  .column {
+    padding: 0;
     width: 100%;
+  }
+}
+
+.content-grid-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  width: 90%;
+  max-width: $contents-card-max-width;
+  min-height: 18rem;
+  margin: 0 auto;
+
+  .column {
+    flex: 0 1
+      calc($contents-card-max-width / v-bind('flexColumnDivide') - 1.25rem);
+    padding: 0;
   }
 }
 </style>
