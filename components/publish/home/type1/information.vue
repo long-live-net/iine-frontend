@@ -31,7 +31,11 @@ await onLoad()
         @create="updatingData = null"
         @update-title-setting="onUpdateTitleSetting"
         @update-image-setting="onUpdateImageSetting"
-      />
+      >
+        <template #footernavi>
+          <PublishInquire />
+        </template>
+      </PublishContentDetailItem>
     </CommonContentCard>
   </CommonContentWrap>
   <ManageContentInformation

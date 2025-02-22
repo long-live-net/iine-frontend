@@ -120,6 +120,9 @@ const bodyPlainString = computed(
         </div>
       </slot>
     </CommonContentCardBody>
+
+    <slot name="footernavi" />
+
     <div v-if="canEdit && item?.id" class="edit-activator">
       <CommonContentEditActivator
         v-model:modal="editModal"
