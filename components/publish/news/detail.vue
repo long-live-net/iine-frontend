@@ -101,7 +101,6 @@ await onLoad(contentId)
   padding-bottom: 1rem;
 
   .body-header {
-    margin-top: -3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;

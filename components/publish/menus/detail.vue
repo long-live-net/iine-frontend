@@ -360,12 +360,10 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
     padding: 2rem 0 3rem;
 
     .pre-next-navi {
-      margin: -2rem 1rem 0;
+      margin: -0.5rem 1rem 0;
     }
 
     .menu-detail-screen-header {
-      margin: 0 0 2rem;
-
       h3 {
         width: fit-content;
         margin: 0 auto;
@@ -380,7 +378,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
       gap: 2rem;
       width: 96%;
       max-width: 1500px;
-      margin: 0 auto;
+      margin: 2.5rem auto 0;
 
       .menu-category {
         position: relative;
