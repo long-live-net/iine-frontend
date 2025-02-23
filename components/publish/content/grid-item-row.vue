@@ -1,28 +1,28 @@
-<script setup lang="ts">
-import type { FeatureType } from '@/types/content'
+<script setup lang="ts" generic="T extends ContentType">
+import type { ContentType } from '@/types/content'
 
 withDefaults(
   defineProps<{
-    item: FeatureType
+    item: T
     reverse?: boolean
+    seeDetailActionLabel?: string
     isCurrent?: boolean
     noCaption?: boolean
   }>(),
   {
     reverse: false,
+    seeDetailActionLabel: '詳しく見る',
+    eyecatchShape: null,
     isCurrent: false,
     noCaption: false,
   }
 )
-defineEmits<{
-  select: [feature: FeatureType]
-}>()
-
+defineEmits<{ select: [item: T] }>()
 const route = useRoute()
 </script>
 
 <template>
-  <div class="feature-list-item" :class="{ reverse: reverse }">
+  <div class="content-list-item" :class="{ reverse: reverse }">
     <section
       class="eyecatcher-col"
       :class="[isCurrent ? 'current-item' : 'item-link']"
@@ -56,7 +56,9 @@ const route = useRoute()
           </h5>
           <CommonWysiwsgViewer :value="item.caption" class="caption" />
           <p class="see-detail">
-            <v-btn variant="outlined" size="small">詳しく見る</v-btn>
+            <v-btn variant="outlined" size="small">{{
+              seeDetailActionLabel
+            }}</v-btn>
           </p>
         </div>
       </CommonContentItemAnimation>
@@ -65,7 +67,7 @@ const route = useRoute()
 </template>
 
 <style lang="scss" scoped>
-.feature-list-item {
+.content-list-item {
   display: flex;
   justify-content: center;
   margin: 0 auto;
@@ -152,7 +154,7 @@ const route = useRoute()
 }
 
 @media only screen and (max-width: $grid-breakpoint-md) {
-  .feature-list-item {
+  .content-list-item {
     display: block;
     padding: 0 1rem;
 

@@ -6,14 +6,10 @@ withDefaults(
   defineProps<{
     items?: T[] | null
     canEdit?: boolean
-    small?: boolean
-    smallIfPossible?: boolean
   }>(),
   {
     items: null,
     canEdit: false,
-    small: false,
-    smallIfPossible: false,
   }
 )
 defineEmits<{
@@ -25,14 +21,14 @@ defineEmits<{
 
 <template>
   <div v-if="canEdit" class="content-grid-list-editable">
-    <CommonContentGridDraggable
+    <CommonContentGridRowDraggable
       v-if="items?.length"
       :contents="items"
       @update="$emit('updatePositions', $event)"
     >
-      <template #default="{ content }">
+      <template #default="{ content, index }">
         <div class="content-item">
-          <slot :content="content" />
+          <slot :content="content" :index="index" />
 
           <div class="edit-activator">
             <CommonContentEditActivator
@@ -44,7 +40,7 @@ defineEmits<{
           </div>
         </div>
       </template>
-    </CommonContentGridDraggable>
+    </CommonContentGridRowDraggable>
     <div v-else class="no-items">
       <p>データがありません</p>
       <div>
@@ -63,16 +59,11 @@ defineEmits<{
     </div>
   </div>
   <div v-else>
-    <CommonContentGrid
-      v-if="items?.length"
-      :contents="items"
-      :small="small"
-      :small-if-possible="smallIfPossible"
-    >
-      <template #default="{ content }">
-        <slot :content="content" />
+    <CommonContentGridRow v-if="items?.length" :contents="items">
+      <template #default="{ content, index }">
+        <slot :content="content" :index="index" />
       </template>
-    </CommonContentGrid>
+    </CommonContentGridRow>
     <div v-else class="no-items">
       <p>データがありません</p>
     </div>

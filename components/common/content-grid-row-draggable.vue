@@ -26,7 +26,6 @@ const draggableContents = computed({
   },
 })
 
-const contentGridMaxWidth = '1140px'
 const isDragging = ref(false)
 const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
 </script>
@@ -93,7 +92,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   row-gap: 3rem;
   margin: 0 auto;
   width: 90%;
-  max-width: v-bind('contentGridMaxWidth');
+  max-width: $contents-card-max-width;
   min-height: 12rem;
   &__column {
     width: 100%;
