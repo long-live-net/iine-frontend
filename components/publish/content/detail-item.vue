@@ -112,7 +112,7 @@ const bodyPlainString = computed(
         </div>
         <div v-else class="no-items">
           <p>データがありません</p>
-          <div v-if="canEdit">
+          <div v-if="canEdit && $route.name === 'index'">
             <CommonContentEditActivator
               v-model:modal="editModal"
               activator-label="コンテンツを登録してください"

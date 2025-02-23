@@ -15,16 +15,12 @@ const props = withDefaults(
 
 const useGrid = computed(() => props.contents.length > 2)
 const isSmall = computed(
-  () => props.small || (props.smallIfPossible && props.contents.length > 3)
+  () => props.small || (props.smallIfPossible && props.contents.length !== 3)
 )
 const gridColumnMinDivide = computed(() => (isSmall.value ? 5.6 : 4.4))
 const gridColumnMaxDivide = computed(() => (isSmall.value ? 4.8 : 3.6))
 const flexColumnDivide = computed(() =>
-  isSmall.value
-    ? props.contents.length + 1.5
-    : props.contents.length < 2
-      ? 1.5
-      : props.contents.length
+  isSmall.value ? 3 : props.contents.length < 2 ? 1.5 : props.contents.length
 )
 </script>
 
