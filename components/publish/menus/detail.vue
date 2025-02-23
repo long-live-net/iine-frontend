@@ -360,7 +360,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
     padding: 2rem 0 3rem;
 
     .pre-next-navi {
-      margin: -0.5rem 1rem 0;
+      margin: -1rem 1rem 0;
     }
 
     .menu-detail-screen-header {

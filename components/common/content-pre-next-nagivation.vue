@@ -35,22 +35,24 @@ withDefaults(
 
   .pre {
     position: absolute;
-    top: 0.5rem;
+    top: 1rem;
     left: 1.5rem;
     z-index: 5;
 
     @media only screen and (max-width: $grid-breakpoint-md) {
+      top: 0.5rem;
       left: 0;
     }
   }
 
   .next {
     position: absolute;
-    top: 0.5rem;
+    top: 1rem;
     right: 1.5rem;
     z-index: 5;
 
     @media only screen and (max-width: $grid-breakpoint-md) {
+      top: 0.5rem;
       right: 0;
     }
   }
