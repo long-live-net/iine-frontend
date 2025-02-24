@@ -45,6 +45,7 @@ await onLoad(contentId)
           v-model:modal="editModal"
           :item="newsRef"
           :can-edit="canEdit"
+          no-image-parallax
           @update-title-setting="onUpdateTitleSetting"
           @update-image-setting="onUpdateImageSetting"
         >

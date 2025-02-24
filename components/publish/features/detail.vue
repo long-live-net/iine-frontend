@@ -53,6 +53,7 @@ await onLoad(contentId)
         v-model:modal="editModal"
         :item="featureRef"
         :can-edit="canEdit"
+        no-image-parallax
         @update-title-setting="onUpdateTitleSetting"
         @update-image-setting="onUpdateImageSetting"
       >

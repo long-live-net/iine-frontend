@@ -6,9 +6,11 @@ const props = withDefaults(
   defineProps<{
     item: T | null
     canEdit?: boolean
+    noImageParallax?: boolean
   }>(),
   {
     canEdit: false,
+    noImageParallax: false,
   }
 )
 defineEmits<{
@@ -76,7 +78,7 @@ const bodyPlainString = computed(
           <template v-if="canEdit && item" #settings>
             <CommonEyecatchImageSetting
               :settings="item.imageSettings"
-              no-parallax
+              :no-parallax="noImageParallax"
               @update="$emit('updateImageSetting', $event)"
             />
           </template>
