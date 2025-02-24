@@ -241,6 +241,7 @@ export const useMenuDetailListActions = (customerId: Ref<string | null>) => {
   const sort = ref<ListSort>({ position: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })
 
+  const contentTitle = 'メニュー項目'
   const { addSnackber } = useSnackbars()
   const listQueries = useMenuDetailListQueriesStore()
   const {
@@ -274,7 +275,7 @@ export const useMenuDetailListActions = (customerId: Ref<string | null>) => {
     formData: MenuDetailForm
   ) => {
     await createMenuDetail(menuId, categoryId, formData)
-    addSnackber?.('MenuDetail を登録しました。')
+    addSnackber?.(`${contentTitle} 情報を登録しました。`)
     getMenuDetailList(filter.value, sort.value, pager.value)
   }
 
@@ -292,13 +293,13 @@ export const useMenuDetailListActions = (customerId: Ref<string | null>) => {
     if (!id) return
 
     await updateMenuDetail(id, menuId, categoryId, formData)
-    addSnackber?.('MenuDetail を更新しました。')
+    addSnackber?.(`${contentTitle} 情報を更新しました。`)
     getMenuDetailList(filter.value, sort.value, pager.value)
   }
 
   const onRemove = async (id: string) => {
     await removeMenuDetail(id)
-    addSnackber?.('MenuDetail を削除しました。')
+    addSnackber?.(`${contentTitle} 情報を削除しました。`)
     getMenuDetailList(filter.value, sort.value, pager.value)
   }
 
@@ -309,7 +310,7 @@ export const useMenuDetailListActions = (customerId: Ref<string | null>) => {
     await updateMenuDetailListPositions(
       setMenuDetailListPositions(menuDetails, categoryId)
     )
-    addSnackber?.('位置を変更しました。')
+    addSnackber?.(`${contentTitle} 表示位置を変更しました。`)
     getMenuDetailList(filter.value, sort.value, pager.value)
   }
 

@@ -317,10 +317,10 @@ export const useContentRead = <T extends ContentGetApi>(
     setListPositions,
     setTitleSettings,
     setImageSettings,
-    contentDataRef: readonly(contentDataRef),
-    contentListRef: readonly(contentListRef),
-    preNextIdRef: readonly(preNextIdRef),
-    loadingRef: readonly(loading),
+    contentDataRef,
+    contentListRef,
+    preNextIdRef,
+    loadingRef: loading,
   }
 }
 
@@ -477,6 +477,6 @@ export const useContentWrite = <
     updateTitleSettingsWithDebounced,
     updateImageSettings,
     updateImageSettingsWithDebounced,
-    loadingRef: readonly(loading),
+    loadingRef: loading,
   }
 }

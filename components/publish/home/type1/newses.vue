@@ -4,13 +4,17 @@ import { formatLocalDate } from '@/utils/misc'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
+
+const editModal = ref(false)
+const updatingData = ref<NewsType | null>(null)
+
 const {
   filter,
   sort,
   pager,
   newsListRef,
   onLoad,
-  getList,
+  onGetList,
   onCreate,
   onUpdate,
   onRemove,
@@ -24,7 +28,7 @@ pager.value = { page: 1, limit: 6 }
 
 const getNewses = async () => {
   filter.value = { publishOn: !isWholeData.value }
-  await getList()
+  await onGetList()
 }
 watch(isWholeData, async () => {
   await getNewses()
@@ -65,15 +69,10 @@ await onLoad()
                 }"
               >
                 <span>
-                  {{
-                    formatLocalDate(
-                      (content as NewsType).publishOn,
-                      'YYYY/MM/DD'
-                    )
-                  }}
+                  {{ formatLocalDate(content.publishOn, 'YYYY/MM/DD') }}
                 </span>
                 <PublishNewsCategoryBadge
-                  :category="(content as NewsType).category"
+                  :category="content.category"
                   class="ml-2"
                 />
               </div>
@@ -92,11 +91,11 @@ await onLoad()
                 </nuxt-link>
               </div>
               <div v-if="canEdit" class="edit-activator">
-                <ManageContentNews
-                  :news-data="content as NewsType"
+                <CommonContentEditActivator
+                  v-model:modal="editModal"
+                  is-update
                   activator-size="x-small"
-                  @update="onUpdate"
-                  @remove="onRemove"
+                  @update:modal="updatingData = content"
                 />
               </div>
             </div>
@@ -105,9 +104,10 @@ await onLoad()
         <div v-else class="no-items">
           <p>データがありません</p>
           <div v-if="canEdit">
-            <ManageContentNews
+            <CommonContentEditActivator
+              v-model:modal="editModal"
               activator-label="ニュースを登録してください"
-              @create="onCreate"
+              @update:modal="updatingData = null"
             />
           </div>
         </div>
@@ -119,10 +119,20 @@ await onLoad()
         <NuxtLink to="/news">もっと見る ...</NuxtLink>
       </div>
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
-        <ManageContentNews @create="onCreate" />
+        <CommonContentEditActivator
+          v-model:modal="editModal"
+          @update:modal="updatingData = null"
+        />
       </div>
     </CommonContentCard>
   </CommonContentWrap>
+  <ManageContentNews
+    v-model:modal="editModal"
+    :news-data="updatingData"
+    @create="onCreate"
+    @update="onUpdate"
+    @remove="onRemove"
+  />
 </template>
 
 <style lang="scss" scoped>

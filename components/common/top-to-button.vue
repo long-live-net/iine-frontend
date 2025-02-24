@@ -6,7 +6,7 @@ defineProps<{
 
 const { windowHeight, scrollY } = useWindowState()
 const isScrollOverTheWindow = computed(
-  () => scrollY.value > windowHeight.value * 0.5
+  () => scrollY.value > windowHeight.value * 0.3
 )
 </script>
 

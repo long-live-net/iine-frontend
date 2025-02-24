@@ -2,11 +2,8 @@
 import type { NewsType, NewsForm } from '@/types/content'
 import { getNewsKind } from '@/composables/use-content/use-news'
 
-const props = defineProps<{
-  newsData?: NewsType | null
-  activatorLabel?: string
-  activatorSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
-}>()
+const modal = defineModel<boolean>('modal', { required: true })
+const props = defineProps<{ newsData?: NewsType | null }>()
 const emit = defineEmits<{
   create: [inputData: NewsForm]
   update: [{ id: string; formData: NewsForm }]
@@ -16,7 +13,6 @@ const emit = defineEmits<{
 const { customerId } = useCustomer()
 const apiKind = getNewsKind()
 
-const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetNewsForm } = useNewsForm()
 const { categoryItems } = useNewsCategory()
 
@@ -57,12 +53,6 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditActivator
-    v-model:modal="modal"
-    :is-update="!!newsData?.id"
-    :activator-label="activatorLabel"
-    :activator-size="activatorSize"
-  />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!newsData?.id">
     <v-form class="news-form">
       <div>

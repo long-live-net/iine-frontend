@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type FeaturesList from '@/components/publish/features/list/index.vue'
+import type FeaturesList from '@/components/publish/features/list.vue'
 const featuresListRef = ref<InstanceType<typeof FeaturesList> | null>(null)
 </script>
 

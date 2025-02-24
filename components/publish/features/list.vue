@@ -12,6 +12,7 @@ defineEmits<{
   select: [feature: FeatureType]
 }>()
 
+const editModal = ref(false)
 const route = useRoute()
 const contentId = Array.isArray(route.params.id)
   ? route.params.id[0]
@@ -32,38 +33,25 @@ filter.value = {}
 sort.value = { position: 1 }
 pager.value = { page: 1, limit: 12 }
 await onLoad()
-
-const contentGridMaxWidth = computed(() =>
-  featureListRef.value && featureListRef.value.length < 4 ? '60rem' : '80rem'
-)
 </script>
 
 <template>
   <CommonContentWrap :loading="loading">
-    <div class="feature-list">
-      <CommonContentGrid
-        v-if="featureListRef?.length"
-        :contents="featureListRef"
-        :content-grid-max-width="contentGridMaxWidth"
-        grid-min-width="14rem"
-        grid-max-width="18rem"
-      >
-        <template #default="{ content }">
-          <PublishFeaturesListItem
-            :item="content"
-            :is-current="content.id === contentId"
-            :no-caption="noCaption"
-            @select="onMovingDetailPage"
-          />
-        </template>
-      </CommonContentGrid>
-    </div>
+    <PublishContentGridTable
+      v-if="featureListRef?.length"
+      v-model:modal="editModal"
+      :items="featureListRef"
+      small-if-possible
+    >
+      <template #default="{ content }">
+        <PublishContentGridItem
+          :item="content"
+          eyecatch-shape="circle"
+          :is-current="content.id === contentId"
+          :no-caption="noCaption"
+          @select="onMovingDetailPage"
+        />
+      </template>
+    </PublishContentGridTable>
   </CommonContentWrap>
 </template>
-
-<style lang="scss" scoped>
-.feature-list {
-  width: 100%;
-  margin: 0 auto;
-}
-</style>

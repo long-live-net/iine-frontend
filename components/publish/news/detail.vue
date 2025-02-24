@@ -3,6 +3,14 @@ import { formatLocalDate } from '@/utils/misc'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
+
+const route = useRoute()
+const contentId = Array.isArray(route.params.id)
+  ? route.params.id[0]
+  : route.params.id
+
+const editModal = ref(false)
+
 const {
   newsRef,
   newsPreNextIdRefRef,
@@ -14,11 +22,6 @@ const {
   onUpdateTitleSetting,
   onUpdateImageSetting,
 } = useNewsActions(customerId)
-
-const route = useRoute()
-const contentId = Array.isArray(route.params.id)
-  ? route.params.id[0]
-  : route.params.id
 
 const preUrl = computed(() =>
   newsPreNextIdRefRef.value?.preId
@@ -37,159 +40,87 @@ await onLoad(contentId)
 <template>
   <CommonContentWrap :loading="loading">
     <CommonContentSlidableNavigation :pre-url="preUrl" :next-url="nextUrl">
-      <CommonContentCard class="news-detail">
-        <CommonContentItemAnimation
-          :thresholds="[0.5]"
-          animation-name="gFadeIn"
-          animation-duration="1.5s"
-          class="g-block-sm"
+      <CommonContentCard>
+        <PublishContentDetailItem
+          v-model:modal="editModal"
+          :item="newsRef"
+          :can-edit="canEdit"
+          no-image-parallax
+          @update-title-setting="onUpdateTitleSetting"
+          @update-image-setting="onUpdateImageSetting"
         >
-          <CommonContentCardTitle
-            :title="newsRef?.title ?? ''"
-            class="g-block-sm"
-          />
-        </CommonContentItemAnimation>
-        <template v-if="newsRef?.image">
-          <CommonContentItemAnimation
-            :thresholds="[0.5]"
-            animation-name="gFadeIn"
-            animation-duration="1.5s"
-          >
-            <CommonEyecatchImage
-              :url="newsRef?.image?.url"
-              :settings="newsRef?.imageSettings"
-              class="eyecatcher"
-            >
-              <template #default>
-                <CommonEyecatchTitleSettingPosition
-                  :settings="newsRef?.titleSettings"
-                  :can-edit="canEdit"
-                  class="g-block-lg"
-                  @update="onUpdateTitleSetting"
-                >
-                  <template #default>
-                    <CommonContentItemAnimation
-                      :thresholds="[0.5]"
-                      animation-name="gZoomIn"
-                      animation-duration="1s"
-                    >
-                      <CommonEyecatchTitle
-                        place="section"
-                        :title="newsRef?.title"
-                        :settings="newsRef?.titleSettings"
-                        text-no-wrap
-                      />
-                    </CommonContentItemAnimation>
-                  </template>
-                  <template #sideSettings>
-                    <CommonEyecatchTitleSetting
-                      :settings="newsRef?.titleSettings"
-                      @update="onUpdateTitleSetting"
-                    />
-                  </template>
-                </CommonEyecatchTitleSettingPosition>
-              </template>
-              <template v-if="canEdit && newsRef" #settings>
-                <CommonEyecatchImageSetting
-                  :settings="newsRef.imageSettings"
-                  no-parallax
-                  @update="onUpdateImageSetting"
-                />
-              </template>
-            </CommonEyecatchImage>
-          </CommonContentItemAnimation>
-        </template>
-        <CommonContentCardTitle
-          v-else
-          :title="newsRef?.title ?? ''"
-          class="g-block-lg"
-        />
-        <CommonContentPreNextNagivation :pre-url="preUrl" :next-url="nextUrl" />
-        <CommonContentCardBody class="news-detail__body">
-          <div v-if="newsRef?.id" class="news-detail__body--header">
-            <PublishNewsCategoryBadge :category="newsRef.category" small />
-            <p>
-              <small>{{
-                formatLocalDate(newsRef.publishOn, 'YYYY/MM/DD')
-              }}</small>
-            </p>
-          </div>
-          <div v-if="newsRef?.body" class="news-detail__body--body">
-            <CommonWysiwsgViewer :value="newsRef?.body" />
-          </div>
-          <div v-else class="no-items">
-            <p>データがありません</p>
-            <div v-if="canEdit">
-              <ManageContentNews
-                activator-label="コンテンツを登録してください"
-                @create="onCreate"
-              />
+          <template #body>
+            <div class="news-detail">
+              <div v-if="newsRef?.id" class="body-header">
+                <PublishNewsCategoryBadge :category="newsRef.category" small />
+                <p>
+                  <small>{{
+                    formatLocalDate(newsRef.publishOn, 'YYYY/MM/DD')
+                  }}</small>
+                </p>
+              </div>
+              <div v-if="newsRef?.body" class="body">
+                <CommonWysiwsgViewer :value="newsRef?.body" />
+              </div>
+              <div v-else class="no-items">
+                <p>データがありません</p>
+                <div v-if="canEdit">
+                  <CommonContentEditActivator
+                    v-model:modal="editModal"
+                    activator-label="コンテンツを登録してください"
+                    @create="onCreate"
+                  />
+                </div>
+                <p v-else class="mt-9">
+                  <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
+                </p>
+              </div>
             </div>
-          </div>
-        </CommonContentCardBody>
-        <div v-if="canEdit && newsRef?.id" class="edit-activator">
-          <ManageContentNews
-            :news-data="newsRef"
-            @update="onUpdate"
-            @remove="onRemove"
-          />
-        </div>
+          </template>
+          <template #middlenavi>
+            <CommonContentPreNextNagivation
+              :pre-url="preUrl"
+              :next-url="nextUrl"
+            />
+          </template>
+        </PublishContentDetailItem>
       </CommonContentCard>
     </CommonContentSlidableNavigation>
   </CommonContentWrap>
+  <ManageContentNews
+    v-model:modal="editModal"
+    :news-data="newsRef"
+    @create="onCreate"
+    @update="onUpdate"
+    @remove="onRemove"
+  />
 </template>
 
 <style scoped lang="scss">
 .news-detail {
-  position: relative;
-  &__body {
-    padding-top: 0;
-    padding-bottom: 3rem;
-    &--header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    &--body {
-      margin-top: 1.4rem;
-    }
-  }
+  padding-top: 0;
+  padding-bottom: 1rem;
 
-  .edit-activator {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-
-    @media only screen and (max-width: $grid-breakpoint-md) {
-      top: 6.8rem;
-    }
-  }
-
-  .no-items {
+  .body-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    row-gap: 1rem;
+  }
 
-    p {
-      font-weight: bold;
-      color: $accent;
-    }
+  .body {
+    margin-top: 0.75rem;
   }
 }
 
-$eyecatcher-height: 480px;
-$eyecatcher-height-sm: 300px;
+.no-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 1rem;
 
-.eyecatcher {
-  height: 30vh;
-  max-height: $eyecatcher-height;
-  min-height: calc($eyecatcher-height * 0.6);
-
-  @media only screen and (max-width: $grid-breakpoint-md) {
-    height: 30vw;
-    max-height: $eyecatcher-height-sm;
-    min-height: calc($eyecatcher-height-sm * 0.5);
+  p {
+    font-weight: bold;
+    color: $accent;
   }
 }
 </style>

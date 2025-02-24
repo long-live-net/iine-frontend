@@ -181,6 +181,16 @@ export const useHomeLayoutTitleEdit = () => {
 /**
  * ホームレイアウト変更
  */
+const baseLayoutsOrder: PageLayout[] = [
+  { kind: 'information', title: 'information' },
+  { kind: 'news', title: 'news' },
+  { kind: 'service', title: 'service' },
+  { kind: 'feature', title: 'feature' },
+  { kind: 'contact', title: 'contact' },
+  { kind: 'access', title: 'access' },
+  { kind: 'menu', title: 'menu' },
+  { kind: 'menu-image', title: 'menu by image' },
+]
 export const useHomeLayoutEdit = () => {
   const {
     customerSetting,
@@ -192,16 +202,6 @@ export const useHomeLayoutEdit = () => {
   const { addSnackber } = useSnackbars()
 
   const homeLayouts = computed(() => customerSetting.value?.homeLayout ?? [])
-  const baseLayoutsOrder: PageLayout[] = [
-    { kind: 'information', title: 'information' },
-    { kind: 'news', title: 'news' },
-    { kind: 'service', title: 'service' },
-    { kind: 'feature', title: 'feature' },
-    { kind: 'contact', title: 'contact' },
-    { kind: 'access', title: 'access' },
-    { kind: 'menu', title: 'menu' },
-    { kind: 'menu-image', title: 'menu by image' },
-  ]
   const baseSections = ref<PageLayout[]>([])
   const editSections = ref<PageLayout[]>([])
 
@@ -377,6 +377,36 @@ export const useThemeSettingsEdit = () => {
     chengeColorTheme,
     chengeDesignTheme,
   }
+}
+
+/**
+ * content データの apiKind から pageSectionKind やセクションタイトルといった情報を取得する
+ */
+const sectionKind2ApiKind = [
+  { kind: 'information', apiKind: 'informations' },
+  { kind: 'news', apiKind: 'newses' },
+  { kind: 'service', apiKind: 'services' },
+  { kind: 'feature', apiKind: 'features' },
+  { kind: 'contact', apiKind: 'contacts' },
+  // { kind: 'access', apiKind: 'access' },
+  { kind: 'menu', apiKind: 'menus' },
+  { kind: 'menu-image', apiKind: 'menu-images' },
+]
+export const useGetMenuTitle = (apiKind: string): string | null => {
+  const { customerSetting } = useCustomerSetting()
+  const sectionKind = sectionKind2ApiKind.find(
+    (p) => p.apiKind === apiKind
+  )?.kind
+  if (!sectionKind) {
+    return null
+  }
+  const sectionInfo = customerSetting.value?.homeLayout.find(
+    (l) => l.kind === sectionKind
+  )
+  if (!sectionInfo) {
+    return null
+  }
+  return sectionInfo.menuTitle ?? sectionInfo.title
 }
 
 /**

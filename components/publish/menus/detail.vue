@@ -5,25 +5,23 @@ import type {
   MenuDetailForm,
 } from '@/types/content'
 import type { MenuItem } from '@/components/base/dropdown.vue'
+const emit = defineEmits<{ 'update:data': [] }>()
 
 const CATEGORIES_LIMIT = 32
 const DETAILS_LINIT = 128
 
 const { customerId } = useCustomer()
-const { domidPrefix } = useCustomerSetting()
+const { canEdit } = useCustomerPageContext()
 
-const router = useRouter()
 const route = useRoute()
 const menuId = Array.isArray(route.params.id)
   ? route.params.id[0]
   : route.params.id
 
-const { canEdit } = useCustomerPageContext()
-
 /**
  * Menu データ
  */
-const editMenuModal = ref(false)
+const removeMenuModal = ref(false)
 const {
   menuRef,
   menuPreNextIdRefRef,
@@ -34,7 +32,7 @@ const {
 
 const onRemoveMenu = async (id: string) => {
   await removeMenu(id)
-  router.push(`/#${domidPrefix}-menu`)
+  emit('update:data')
 }
 const preUrl = computed(() =>
   menuPreNextIdRefRef.value?.preId
@@ -163,10 +161,9 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
     <div class="menu-detail-screen">
       <template v-if="canEdit">
         <div class="g-block-lg">
-          <div class="menu-screen-actions">
+          <div v-if="menuRef" class="menu-screen-actions">
             <BaseActivator
-              v-if="menuRef"
-              v-model:modal="editMenuModal"
+              v-model:modal="removeMenuModal"
               activator-text="ページ削除"
               activator-icon="mdi-delete"
               activator-size="small"
@@ -190,10 +187,9 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
           </div>
         </div>
         <div class="g-block-sm">
-          <div class="menu-screen-actions">
+          <div v-if="menuRef" class="menu-screen-actions">
             <BaseActivator
-              v-if="menuRef"
-              v-model:modal="editMenuModal"
+              v-model:modal="removeMenuModal"
               activator-text="ページ削除"
               activator-icon="mdi-delete"
               activator-size="small"
@@ -220,109 +216,117 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
       </template>
 
       <div class="menu-detail-screen-container g-theme-contents-menu-detail">
-        <div class="menu-detail-screen-header">
-          <h3 class="g-theme-contents-menu-title">{{ menuRef?.title }}</h3>
-        </div>
-        <CommonContentPreNextNagivation
-          v-if="preUrl?.length || nextUrl?.length"
-          :pre-url="preUrl"
-          :next-url="nextUrl"
-          class="pre-next-navi"
-        />
-        <div v-else><br /></div>
-
-        <div class="menu-detail-screen-body">
-          <div
-            v-for="category in menuCategoryListRef ?? []"
-            :key="category.id"
-            class="menu-category g-theme-contents-menu-category"
-          >
-            <CommonContentCardTitle :title="category.category" keep-center />
-
-            <template v-if="canEdit">
-              <div class="menu-category-actions">
-                <BaseActivator
-                  v-model:modal="editDetailModal"
-                  activator-text="メニュー項目追加"
-                  activator-icon="mdi-plus"
-                  activator-size="small"
-                  activator-color="info"
-                  @update:modal="
-                    ((updatingDetail = null), (targetCategory = category))
-                  "
-                />
-              </div>
-              <CommonContentGridRowDraggable
-                :contents="detailListByCategory(category.id)"
-                group="menuDetail"
-                dense
-                guide-line
-                @update="onUpdatePositionsDetail($event, category)"
-              >
-                <template #default="{ content }">
-                  <div class="menu-detail-container">
-                    <PublishMenuDetailsItemGridRow :item="content" />
-                    <CommonContentEditActivator
-                      v-model:modal="editDetailModal"
-                      activator-size="x-small"
-                      is-update
-                      class="edit-detail-activator"
-                      @update:modal="
-                        ((updatingDetail = content),
-                        (targetCategory = category))
-                      "
-                    />
-                  </div>
-                </template>
-              </CommonContentGridRowDraggable>
-              <div class="edit-category-activator">
-                <CommonContentEditActivator
-                  v-model:modal="editCategoryModal"
-                  activator-size="default"
-                  is-update
-                  @update:modal="updatingCategory = category"
-                />
-              </div>
-            </template>
-            <template v-else>
-              <CommonContentGridRow
-                :contents="detailListByCategory(category.id)"
-                dense
-              >
-                <template #default="{ content }">
-                  <div class="menu-detail-container">
-                    <PublishMenuDetailsItemGridRow :item="content" />
-                  </div>
-                </template>
-              </CommonContentGridRow>
-            </template>
+        <template v-if="menuRef">
+          <div class="menu-detail-screen-header">
+            <h3 class="g-theme-contents-menu-title">{{ menuRef.title }}</h3>
           </div>
-          <div
-            v-if="
-              menuCategoryListRef?.length > 2 &&
-              menuCategoryListRef?.length % 2 === 1
-            "
-            class="menu-category-dummy"
+          <CommonContentPreNextNagivation
+            v-if="preUrl?.length || nextUrl?.length"
+            :pre-url="preUrl"
+            :next-url="nextUrl"
+            class="pre-next-navi"
           />
+          <div v-else><br /></div>
+
+          <div class="menu-detail-screen-body">
+            <div
+              v-for="category in menuCategoryListRef ?? []"
+              :key="category.id"
+              class="menu-category g-theme-contents-menu-category"
+            >
+              <CommonContentCardTitle :title="category.category" keep-center />
+
+              <template v-if="canEdit">
+                <div class="menu-category-actions">
+                  <BaseActivator
+                    v-model:modal="editDetailModal"
+                    activator-text="メニュー項目追加"
+                    activator-icon="mdi-plus"
+                    activator-size="small"
+                    activator-color="info"
+                    @update:modal="
+                      ((updatingDetail = null), (targetCategory = category))
+                    "
+                  />
+                </div>
+                <CommonContentGridRowDraggable
+                  :contents="detailListByCategory(category.id)"
+                  group="menuDetail"
+                  dense
+                  guide-line
+                  @update="onUpdatePositionsDetail($event, category)"
+                >
+                  <template #default="{ content }">
+                    <div class="menu-detail-container">
+                      <PublishMenuDetailsItemGridRow :item="content" />
+                      <CommonContentEditActivator
+                        v-model:modal="editDetailModal"
+                        activator-size="x-small"
+                        is-update
+                        class="edit-detail-activator"
+                        @update:modal="
+                          ((updatingDetail = content),
+                          (targetCategory = category))
+                        "
+                      />
+                    </div>
+                  </template>
+                </CommonContentGridRowDraggable>
+                <div class="edit-category-activator">
+                  <CommonContentEditActivator
+                    v-model:modal="editCategoryModal"
+                    activator-size="default"
+                    is-update
+                    @update:modal="updatingCategory = category"
+                  />
+                </div>
+              </template>
+              <template v-else>
+                <CommonContentGridRow
+                  :contents="detailListByCategory(category.id)"
+                  dense
+                >
+                  <template #default="{ content }">
+                    <div class="menu-detail-container">
+                      <PublishMenuDetailsItemGridRow :item="content" />
+                    </div>
+                  </template>
+                </CommonContentGridRow>
+              </template>
+            </div>
+            <div
+              v-if="
+                menuCategoryListRef?.length > 2 &&
+                menuCategoryListRef?.length % 2 === 1
+              "
+              class="menu-category-dummy"
+            />
+          </div>
+          <CommonContentPreNextNagivation
+            v-if="
+              menuCategoryListRef.length && (preUrl?.length || nextUrl?.length)
+            "
+            :pre-url="preUrl"
+            :next-url="nextUrl"
+            class="pre-next-navi"
+          />
+          <div v-else><br /></div>
+        </template>
+        <div v-else class="no-items">
+          <p>データがありません</p>
+          <p class="mt-4">
+            <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
+          </p>
         </div>
-        <CommonContentPreNextNagivation
-          v-if="
-            menuCategoryListRef.length && (preUrl?.length || nextUrl?.length)
-          "
-          :pre-url="preUrl"
-          :next-url="nextUrl"
-          class="pre-next-navi"
-        />
-        <div v-else><br /></div>
       </div>
     </div>
   </CommonContentWrap>
   <BaseConfirm
     v-if="menuRef"
-    v-model:comfirm="editMenuModal"
+    v-model:comfirm="removeMenuModal"
     message="本当に削除しますか？"
     exec-text="削除する"
-    @cancel="editMenuModal = false"
+    @cancel="removeMenuModal = false"
     @confirm="onRemoveMenu(menuRef.id)"
   />
   <ManageContentMenuCategory
@@ -360,12 +364,10 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
     padding: 2rem 0 3rem;
 
     .pre-next-navi {
-      margin: -2rem 1rem 0;
+      margin: -1rem 1rem 0;
     }
 
     .menu-detail-screen-header {
-      margin: 0 0 2rem;
-
       h3 {
         width: fit-content;
         margin: 0 auto;
@@ -380,7 +382,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
       gap: 2rem;
       width: 96%;
       max-width: 1500px;
-      margin: 0 auto;
+      margin: 2.5rem auto 0;
 
       .menu-category {
         position: relative;

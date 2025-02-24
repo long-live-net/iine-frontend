@@ -32,7 +32,19 @@ await onLoad()
         @create="updatingData = null"
         @update-title-setting="onUpdateTitleSetting"
         @update-image-setting="onUpdateImageSetting"
-      />
+      >
+        <template #middlenavi>
+          <div class="service-links-wrap">
+            <PublishCustomerServiceLinks class="service-links" />
+          </div>
+        </template>
+
+        <template #footernavi>
+          <div class="inquire-activator">
+            <PublishInquire />
+          </div>
+        </template>
+      </PublishContentDetailItem>
     </CommonContentCard>
   </CommonContentWrap>
   <ManageContentContact
@@ -43,3 +55,21 @@ await onLoad()
     @remove="onRemove"
   />
 </template>
+
+<style lang="scss" scoped>
+.service-links-wrap {
+  position: relative;
+  min-height: 0.5rem;
+
+  .service-links {
+    position: absolute;
+    top: 0.25rem;
+    right: 1rem;
+  }
+}
+
+.inquire-activator {
+  width: fit-content;
+  margin: 0 0 0 auto;
+}
+</style>

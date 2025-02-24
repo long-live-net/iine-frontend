@@ -6,9 +6,11 @@ const props = withDefaults(
   defineProps<{
     item: T | null
     canEdit?: boolean
+    noImageParallax?: boolean
   }>(),
   {
     canEdit: false,
+    noImageParallax: false,
   }
 )
 defineEmits<{
@@ -76,13 +78,18 @@ const bodyPlainString = computed(
           <template v-if="canEdit && item" #settings>
             <CommonEyecatchImageSetting
               :settings="item.imageSettings"
-              no-parallax
+              :no-parallax="noImageParallax"
               @update="$emit('updateImageSetting', $event)"
             />
           </template>
         </CommonEyecatchImage>
       </CommonContentItemAnimation>
     </template>
+    <CommonContentCardTitle
+      v-else
+      :title="item?.title ?? ''"
+      class="g-block-lg"
+    />
 
     <slot name="middlenavi" />
 
@@ -107,7 +114,7 @@ const bodyPlainString = computed(
         </div>
         <div v-else class="no-items">
           <p>データがありません</p>
-          <div v-if="canEdit">
+          <div v-if="canEdit && $route.name === 'index'">
             <CommonContentEditActivator
               v-model:modal="editModal"
               activator-label="コンテンツを登録してください"
@@ -120,6 +127,9 @@ const bodyPlainString = computed(
         </div>
       </slot>
     </CommonContentCardBody>
+
+    <slot name="footernavi" />
+
     <div v-if="canEdit && item?.id" class="edit-activator">
       <CommonContentEditActivator
         v-model:modal="editModal"

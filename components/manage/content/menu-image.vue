@@ -3,11 +3,7 @@ import type { MenuImageType, MenuImageForm } from '@/types/content'
 import { getMenuImageKind } from '@/composables/use-content/use-menu-image'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{
-  menuImageData?: MenuImageType | null
-  activatorLabel?: string
-  activatorSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
-}>()
+const props = defineProps<{ menuImageData?: MenuImageType | null }>()
 const emit = defineEmits<{
   create: [inputData: MenuImageForm]
   update: [{ id: string; formData: MenuImageForm }]

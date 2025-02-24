@@ -3,11 +3,8 @@ import type { FeatureType, FeatureForm } from '@/types/content'
 import { getFeatureKind } from '@/composables/use-content/use-features'
 import { useFeatureForm } from '~/composables/use-content/use-feature-form'
 
-const props = defineProps<{
-  featureData?: FeatureType | null
-  activatorLabel?: string
-  activatorSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
-}>()
+const modal = defineModel<boolean>('modal', { required: true })
+const props = defineProps<{ featureData?: FeatureType | null }>()
 const emit = defineEmits<{
   create: [inputData: FeatureForm]
   update: [{ id: string; formData: FeatureForm }]
@@ -17,7 +14,6 @@ const emit = defineEmits<{
 const { customerId } = useCustomer()
 const apiKind = getFeatureKind()
 
-const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetFeatureForm } =
   useFeatureForm()
 
@@ -58,12 +54,6 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditActivator
-    v-model:modal="modal"
-    :is-update="!!featureData?.id"
-    :activator-label="activatorLabel"
-    :activator-size="activatorSize"
-  />
   <CommonContentEditDialog v-model:modal="modal" :is-update="!!featureData?.id">
     <v-form>
       <div>

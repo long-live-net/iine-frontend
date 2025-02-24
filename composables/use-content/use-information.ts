@@ -1,9 +1,4 @@
-import type {
-  InformationType,
-  InformationForm,
-  TitleSettings,
-  ImageSettings,
-} from '@/types/content'
+import type { InformationType, InformationForm } from '@/types/content'
 import type {
   InformationGetApi,
   InformationSaveApi,
@@ -12,29 +7,10 @@ import type {
 const apiKind = 'informations'
 export const getInformationKind = () => apiKind
 
-const useInformationContent = (customerId: Ref<string | null>) => {
+const useInformationConverters = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
-  const {
-    loadData,
-    get,
-    setTitleSettings,
-    setImageSettings,
-    contentDataRef,
-    loadingRef: readLoading,
-  } = useContentRead<InformationGetApi>(customerId, apiKind)
-  const {
-    create,
-    update,
-    remove,
-    updateTitleSettingsWithDebounced,
-    updateImageSettingsWithDebounced,
-    loadingRef: writeLoading,
-  } = useContentWrite<InformationSaveApi, InformationGetApi>(
-    customerId,
-    apiKind
-  )
 
-  const apitypeToInformationType = (
+  const apiToContent = (
     apiData?: InformationGetApi | null
   ): InformationType | null =>
     apiData
@@ -70,14 +46,7 @@ const useInformationContent = (customerId: Ref<string | null>) => {
         }
       : null
 
-  const informationRef = computed<InformationType | null>(() =>
-    apitypeToInformationType(contentDataRef.value)
-  )
-  const loading = computed(() => readLoading.value || writeLoading.value)
-
-  const formToInformationSaveApi = (
-    formData: InformationForm
-  ): InformationSaveApi => ({
+  const formToSaveapi = (formData: InformationForm): InformationSaveApi => ({
     customerId: customerId.value ?? '',
     title: formData.title,
     subtitle: formData.subtitle,
@@ -98,65 +67,7 @@ const useInformationContent = (customerId: Ref<string | null>) => {
       : {}),
   })
 
-  const createInformation = async (
-    formData: InformationForm
-  ): Promise<InformationType | null> => {
-    const inputData: InformationSaveApi = formToInformationSaveApi(formData)
-    const data = await create(inputData)
-    return apitypeToInformationType(data ?? null)
-  }
-
-  const updateInformation = async (
-    contentId: string,
-    formData: InformationForm
-  ): Promise<InformationType | null> => {
-    const inputData: InformationSaveApi = formToInformationSaveApi(formData)
-    const data = await update(contentId, inputData)
-    return apitypeToInformationType(data ?? null)
-  }
-
-  const setInformationTitleSettings = (settings: Partial<TitleSettings>) => {
-    if (!informationRef.value?.titleSettings) {
-      return
-    }
-    const newSettings: TitleSettings = {
-      ...informationRef.value.titleSettings,
-      ...settings,
-    }
-    setTitleSettings(newSettings)
-    return newSettings
-  }
-
-  const setInformationImageSettings = (
-    settings: Partial<ImageSettings>
-  ): ImageSettings | undefined => {
-    if (!informationRef.value) {
-      return
-    }
-    const newSettings: ImageSettings = {
-      ...getDefaultImageSettings(),
-      ...(informationRef.value.imageSettings
-        ? informationRef.value.imageSettings
-        : {}),
-      ...settings,
-    }
-    setImageSettings(newSettings)
-    return newSettings
-  }
-
-  return {
-    loadInformation: loadData,
-    getInformation: get,
-    createInformation,
-    updateInformation,
-    removeInformation: remove,
-    setInformationTitleSettings,
-    setInformationImageSettings,
-    updateInformationTitleSettings: updateTitleSettingsWithDebounced,
-    updateInformationImageSettings: updateImageSettingsWithDebounced,
-    informationRef,
-    loading,
-  }
+  return { apiToContent, formToSaveapi }
 }
 
 /**
@@ -164,85 +75,33 @@ const useInformationContent = (customerId: Ref<string | null>) => {
  * @param customerId
  */
 export const useInformationActions = (customerId: Ref<string | null>) => {
+  const contentTitle = useGetMenuTitle(apiKind) ?? apiKind
+  const { apiToContent, formToSaveapi } = useInformationConverters(customerId)
+
   const {
-    loadInformation,
-    getInformation,
-    createInformation,
-    updateInformation,
-    removeInformation,
-    setInformationTitleSettings,
-    updateInformationTitleSettings,
-    setInformationImageSettings,
-    updateInformationImageSettings,
-    informationRef,
+    contentRef,
     loading,
-  } = useInformationContent(customerId)
-
-  const { addSnackber } = useSnackbars()
-
-  const onLoad = async () => {
-    await loadInformation()
-  }
-
-  const onCreate = async (formData: InformationForm) => {
-    const savedData = await createInformation(formData)
-    addSnackber?.('Information を登録しました。')
-    getInformation(savedData?.id)
-  }
-
-  const onUpdate = async ({
-    id,
-    formData,
-  }: {
-    id: string
-    formData: InformationForm
-  }) => {
-    if (!id) return
-
-    const savedData = await updateInformation(id, formData)
-    addSnackber?.('Information を更新しました。')
-    getInformation(savedData?.id)
-  }
-
-  const onRemove = async (id: string) => {
-    await removeInformation(id)
-    addSnackber?.('Information を削除しました。')
-    getInformation()
-  }
-
-  const onUpdateTitleSetting = (
-    settings: Partial<TitleSettings>
-  ): TitleSettings | undefined => {
-    if (!informationRef.value?.id) {
-      return
-    }
-    const newSettings = setInformationTitleSettings(settings)
-    if (!newSettings) {
-      return
-    }
-    updateInformationTitleSettings(informationRef.value.id, newSettings)
-  }
-
-  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
-    if (!informationRef.value?.id) {
-      return
-    }
-    const newSettings = setInformationImageSettings(settings)
-    if (!newSettings) {
-      return
-    }
-
-    updateInformationImageSettings(informationRef.value.id, newSettings)
-  }
-
-  return {
-    informationRef,
     onLoad,
     onCreate,
     onUpdate,
     onRemove,
     onUpdateTitleSetting,
     onUpdateImageSetting,
+  } = useContentActions<
+    InformationType,
+    InformationForm,
+    InformationGetApi,
+    InformationSaveApi
+  >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
+
+  return {
+    informationRef: contentRef,
     loading,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdateTitleSetting,
+    onUpdateImageSetting,
   }
 }

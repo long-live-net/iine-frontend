@@ -3,11 +3,7 @@ import type { ServiceType, ServiceForm } from '@/types/content'
 import { getServiceKind } from '@/composables/use-content/use-service'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{
-  serviceData?: ServiceType | null
-  activatorLabel?: string
-  activatorSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
-}>()
+const props = defineProps<{ serviceData?: ServiceType | null }>()
 const emit = defineEmits<{
   create: [inputData: ServiceForm]
   update: [{ id: string; formData: ServiceForm }]

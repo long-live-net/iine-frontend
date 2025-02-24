@@ -5,6 +5,11 @@ export {
   useContentWrite,
 } from './use-content/use-base-content'
 
+export {
+  useContentListActions,
+  useContentActions,
+} from './use-content/use-base-content-action'
+
 export { useEyecatchActions } from './use-content/use-eyecatch'
 export { useEyecatchForm } from './use-content/use-eyecatch-form'
 

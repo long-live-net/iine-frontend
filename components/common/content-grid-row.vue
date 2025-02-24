@@ -4,11 +4,9 @@ import type { ContentType } from '@/types/content'
 withDefaults(
   defineProps<{
     contents: Readonly<T[]>
-    contentGridMaxWidth?: string
     dense?: boolean
   }>(),
   {
-    contentGridMaxWidth: '1140px',
     dense: false,
   }
 )
@@ -35,7 +33,7 @@ withDefaults(
   row-gap: 3rem;
   margin: 0 auto;
   width: 90%;
-  max-width: v-bind('contentGridMaxWidth');
+  max-width: $contents-card-max-width;
   min-height: 10rem;
   &__column {
     width: 100%;

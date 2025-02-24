@@ -8,7 +8,7 @@ defineEmits<{ click: [] }>()
     <v-btn
       v-if="isPreview"
       color="warning"
-      prepend-icon="mdi-eye"
+      prepend-icon="mdi-eye-outline"
       size="small"
       width="240px"
       @click="$emit('click')"
@@ -18,7 +18,7 @@ defineEmits<{ click: [] }>()
     <v-btn
       v-else
       color="success"
-      prepend-icon="mdi-eye-outline"
+      prepend-icon="mdi-eye"
       size="small"
       width="130px"
       @click="$emit('click')"

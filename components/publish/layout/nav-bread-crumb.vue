@@ -51,7 +51,6 @@ const items = ref<BreadCrumbsItem[]>([])
 watch(
   [() => route, newsItem, serviceItem],
   () => {
-    console.log('route.name', route.name)
     switch (route.name) {
       case 'news':
         items.value = [

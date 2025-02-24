@@ -28,33 +28,21 @@ await onLoad()
 
 <template>
   <CommonContentWrap :loading="loading">
-    <div class="service-list">
-      <PublishContentGridTable
-        v-model:modal="editModal"
-        :items="serviceListRef"
-        :can-edit="false"
-        small
-      >
-        <template #default="{ content }">
-          <PublishContentGridItem
-            :item="content"
-            eyecatch-shape="circle"
-            :is-current="content.id === contentId"
-            no-caption
-            @select="onMovingDetailPage"
-          />
-        </template>
-      </PublishContentGridTable>
-    </div>
+    <PublishContentGridTable
+      v-model:modal="editModal"
+      :items="serviceListRef"
+      :can-edit="false"
+      small-if-possible
+    >
+      <template #default="{ content }">
+        <PublishContentGridItem
+          :item="content"
+          eyecatch-shape="circle"
+          :is-current="content.id === contentId"
+          no-caption
+          @select="onMovingDetailPage"
+        />
+      </template>
+    </PublishContentGridTable>
   </CommonContentWrap>
 </template>
-
-<style lang="scss" scoped>
-.service-list {
-  width: 90%;
-  margin: 0 auto;
-  @media only screen and (max-width: $grid-breakpoint-md) {
-    width: 100%;
-  }
-}
-</style>
