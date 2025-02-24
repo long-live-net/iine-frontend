@@ -18,7 +18,7 @@ defineEmits<{ click: [] }>()
     <v-btn
       v-else
       color="success"
-      prepend-icon="mdi-eye-off"
+      prepend-icon="mdi-eye"
       size="small"
       width="130px"
       @click="$emit('click')"

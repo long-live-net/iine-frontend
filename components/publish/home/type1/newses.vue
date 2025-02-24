@@ -14,7 +14,7 @@ const {
   pager,
   newsListRef,
   onLoad,
-  getList,
+  onGetList,
   onCreate,
   onUpdate,
   onRemove,
@@ -28,7 +28,7 @@ pager.value = { page: 1, limit: 6 }
 
 const getNewses = async () => {
   filter.value = { publishOn: !isWholeData.value }
-  await getList()
+  await onGetList()
 }
 watch(isWholeData, async () => {
   await getNewses()

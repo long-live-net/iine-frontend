@@ -1,45 +1,13 @@
-import type {
-  NewsType,
-  NewsForm,
-  TitleSettings,
-  ImageSettings,
-} from '@/types/content'
-import type {
-  NewsGetApi,
-  NewsSaveApi,
-  ListFilter,
-  ListSort,
-  ListPager,
-} from '@/types/API/content-api'
+import type { NewsType, NewsForm } from '@/types/content'
+import type { NewsGetApi, NewsSaveApi } from '@/types/API/content-api'
 
 const apiKind = 'newses'
 export const getNewsKind = () => apiKind
 
-const useNewsContent = (customerId: Ref<string | null>) => {
+const useNewsConverters = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
-  const {
-    loadData,
-    loadList,
-    get,
-    getList,
-    setTitleSettings,
-    setImageSettings,
-    getPreNextId,
-    contentDataRef,
-    contentListRef,
-    preNextIdRef,
-    loadingRef: readLoading,
-  } = useContentRead<NewsGetApi>(customerId, apiKind)
-  const {
-    create,
-    update,
-    remove,
-    updateTitleSettingsWithDebounced,
-    updateImageSettingsWithDebounced,
-    loadingRef: writeLoading,
-  } = useContentWrite<NewsSaveApi, NewsGetApi>(customerId, apiKind)
 
-  const apitypeToNewsType = (apiData?: NewsGetApi | null): NewsType | null =>
+  const apiToContent = (apiData?: NewsGetApi | null): NewsType | null =>
     apiData
       ? {
           id: apiData.id,
@@ -74,21 +42,7 @@ const useNewsContent = (customerId: Ref<string | null>) => {
         }
       : null
 
-  const newsRef = computed<NewsType | null>(() =>
-    apitypeToNewsType(contentDataRef.value)
-  )
-  const newsListRef = computed<NewsType[] | null>(
-    () =>
-      contentListRef.value?.list?.map(
-        (n) => apitypeToNewsType(n) ?? ({} as NewsType)
-      ) ?? null
-  )
-  const newsTotalRef = computed<number | null>(
-    () => contentListRef.value?.total ?? null
-  )
-  const loading = computed(() => readLoading.value || writeLoading.value)
-
-  const formToNewsSaveApi = (formData: NewsForm): NewsSaveApi => ({
+  const formToSaveapi = (formData: NewsForm): NewsSaveApi => ({
     customerId: customerId.value ?? '',
     title: formData.title,
     titleSettings: { ...formData.titleSettings },
@@ -110,79 +64,7 @@ const useNewsContent = (customerId: Ref<string | null>) => {
       : {}),
   })
 
-  const createNews = async (formData: NewsForm): Promise<NewsType | null> => {
-    const inputData: NewsSaveApi = formToNewsSaveApi(formData)
-    const data = await create(inputData)
-    return apitypeToNewsType(data ?? null)
-  }
-
-  const updateNews = async (
-    contentId: string,
-    formData: NewsForm
-  ): Promise<NewsType | null> => {
-    const inputData: NewsSaveApi = formToNewsSaveApi(formData)
-    const data = await update(contentId, inputData)
-    return apitypeToNewsType(data ?? null)
-  }
-
-  const setNewsTitleSettings = (settings: Partial<TitleSettings>) => {
-    if (!newsRef.value?.titleSettings) {
-      return
-    }
-    const newSettings: TitleSettings = {
-      ...newsRef.value.titleSettings,
-      ...settings,
-    }
-    setTitleSettings(newSettings)
-    return newSettings
-  }
-
-  const setNewsImageSettings = (
-    settings: Partial<ImageSettings>
-  ): ImageSettings | undefined => {
-    if (!newsRef.value) {
-      return
-    }
-    const newSettings: ImageSettings = {
-      ...getDefaultImageSettings(),
-      ...(newsRef.value.imageSettings ? newsRef.value.imageSettings : {}),
-      ...settings,
-    }
-    setImageSettings(newSettings)
-    return newSettings
-  }
-
-  return {
-    loadNews: loadData,
-    loadNewsList: loadList,
-    getNews: get,
-    getNewsList: getList,
-    createNews,
-    updateNews,
-    removeNews: remove,
-    setNewsTitleSettings,
-    setNewsImageSettings,
-    getNewsPreNextId: getPreNextId,
-    updateNewsTitleSettings: updateTitleSettingsWithDebounced,
-    updateNewsImageSettings: updateImageSettingsWithDebounced,
-    newsRef,
-    newsListRef,
-    newsTotalRef,
-    newsPreNextIdRefRef: preNextIdRef,
-    loading,
-  }
-}
-
-const useNewsListQueriesStore = () => {
-  const filter = useState<ListFilter>('newsListFilter', () => ({
-    publishOn: true,
-  }))
-  const sort = useState<ListSort>('newsListSort', () => ({ publishOn: -1 }))
-  const pager = useState<ListPager>('newsListPager', () => ({
-    page: 1,
-    limit: 20,
-  }))
-  return { filter, sort, pager }
+  return { apiToContent, formToSaveapi }
 }
 
 /**
@@ -190,75 +72,42 @@ const useNewsListQueriesStore = () => {
  * @param customerId
  */
 export const useNewsListActions = (customerId: Ref<string | null>) => {
-  const filter = ref<ListFilter>({})
-  const sort = ref<ListSort>({ id: 1 })
-  const pager = ref<ListPager>({ page: 1, limit: 20 })
-
-  const { addSnackber } = useSnackbars()
-  const listQueries = useNewsListQueriesStore()
+  const contentTitle = useGetMenuTitle(apiKind) ?? apiKind
+  const { apiToContent, formToSaveapi } = useNewsConverters(customerId)
   const {
-    loadNewsList,
-    getNewsList,
-    newsListRef,
-    newsTotalRef,
-    createNews,
-    updateNews,
-    removeNews,
+    filter,
+    sort,
+    pager,
+    listRef,
+    totalRef,
+    onLoad,
+    onGetList,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdatePositions,
     loading,
-  } = useNewsContent(customerId)
-
-  const onLoad = async () => {
-    await loadNewsList(filter.value, sort.value, pager.value)
-    listQueries.filter.value = filter.value
-    listQueries.sort.value = sort.value
-    listQueries.pager.value = pager.value
-  }
-
-  const getList = async () => {
-    await getNewsList(filter.value, sort.value, pager.value)
-    listQueries.filter.value = filter.value
-    listQueries.sort.value = sort.value
-    listQueries.pager.value = pager.value
-  }
-
-  const onCreate = async (formData: NewsForm) => {
-    await createNews(formData)
-    addSnackber?.('News を登録しました。')
-    await getNewsList(filter.value, sort.value, pager.value)
-  }
-
-  const onUpdate = async ({
-    id,
-    formData,
-  }: {
-    id: string
-    formData: NewsForm
-  }) => {
-    if (!id) return
-
-    await updateNews(id, formData)
-    addSnackber?.('News を更新しました。')
-    await getNewsList(filter.value, sort.value, pager.value)
-  }
-
-  const onRemove = async (id: string) => {
-    await removeNews(id)
-    addSnackber?.('News を削除しました。')
-    await getNewsList(filter.value, sort.value, pager.value)
-  }
+  } = useContentListActions<NewsType, NewsForm, NewsGetApi, NewsSaveApi>(
+    apiKind,
+    contentTitle,
+    customerId,
+    apiToContent,
+    formToSaveapi
+  )
 
   return {
     filter,
     sort,
     pager,
-    newsListRef,
-    newsTotalRef,
-    loading,
+    newsListRef: listRef,
+    newsTotalRef: totalRef,
     onLoad,
-    getList,
+    onGetList,
     onCreate,
     onUpdate,
     onRemove,
+    onUpdatePositions,
+    loading,
   }
 }
 
@@ -267,84 +116,29 @@ export const useNewsListActions = (customerId: Ref<string | null>) => {
  * @param customerId
  */
 export const useNewsActions = (customerId: Ref<string | null>) => {
-  const { addSnackber } = useSnackbars()
-  const { filter, sort } = useNewsListQueriesStore()
+  const contentTitle = useGetMenuTitle(apiKind) ?? apiKind
+  const { apiToContent, formToSaveapi } = useNewsConverters(customerId)
   const {
-    loadNews,
-    getNews,
-    createNews,
-    updateNews,
-    removeNews,
-    setNewsTitleSettings,
-    updateNewsTitleSettings,
-    setNewsImageSettings,
-    updateNewsImageSettings,
-    getNewsPreNextId,
-    newsRef,
-    newsPreNextIdRefRef,
+    contentRef,
+    contentPreNextIdRefRef,
     loading,
-  } = useNewsContent(customerId)
-
-  const onLoad = async (id?: string) => {
-    await loadNews(id)
-    if (newsRef.value) {
-      await getNewsPreNextId(newsRef.value.id, filter.value, sort.value)
-    }
-  }
-
-  const onCreate = async (formData: NewsForm) => {
-    const savedData = await createNews(formData)
-    addSnackber?.('News を登録しました。')
-    await getNews(savedData?.id)
-  }
-
-  const onUpdate = async ({
-    id,
-    formData,
-  }: {
-    id: string
-    formData: NewsForm
-  }) => {
-    if (!id) return
-
-    const savedData = await updateNews(id, formData)
-    addSnackber?.('News を更新しました。')
-    await getNews(savedData?.id)
-  }
-
-  const onRemove = async (id: string) => {
-    await removeNews(id)
-    addSnackber?.('News を削除しました。')
-    await getNews()
-  }
-
-  const onUpdateTitleSetting = (
-    settings: Partial<TitleSettings>
-  ): TitleSettings | undefined => {
-    if (!newsRef.value?.id) {
-      return
-    }
-    const newSettings = setNewsTitleSettings(settings)
-    if (!newSettings) {
-      return
-    }
-    updateNewsTitleSettings(newsRef.value.id, newSettings)
-  }
-
-  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
-    if (!newsRef.value?.id) {
-      return
-    }
-    const newSettings = setNewsImageSettings(settings)
-    if (!newSettings) {
-      return
-    }
-    updateNewsImageSettings(newsRef.value.id, newSettings)
-  }
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdateTitleSetting,
+    onUpdateImageSetting,
+  } = useContentActions<NewsType, NewsForm, NewsGetApi, NewsSaveApi>(
+    apiKind,
+    contentTitle,
+    customerId,
+    apiToContent,
+    formToSaveapi
+  )
 
   return {
-    newsRef,
-    newsPreNextIdRefRef,
+    newsRef: contentRef,
+    newsPreNextIdRefRef: contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,

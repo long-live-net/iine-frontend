@@ -10,6 +10,7 @@ export {
   useHomeLayoutTitleEdit,
   useHomeLayoutEdit,
   useThemeSettingsEdit,
+  useGetMenuTitle,
   useCustomerSnsLinks,
   useCustomerSnsLinksForm,
   useCustomerSnsLinksActions,

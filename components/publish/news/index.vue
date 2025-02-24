@@ -16,7 +16,7 @@ const {
   newsTotalRef,
   loading,
   onLoad,
-  getList,
+  onGetList,
   onCreate,
   onUpdate,
   onRemove,
@@ -29,7 +29,7 @@ const getNewses = async () => {
   filter.value = { publishOn: !isWholeData.value }
   sort.value = { publishOn: -1 }
   pager.value = { page: page.value, limit: pageLimit.value }
-  await getList()
+  await onGetList()
 }
 
 watch(isWholeData, async () => {

@@ -2,7 +2,6 @@ import type {
   EyecatchType,
   EyecatchForm,
   EyecatchTitleSettings,
-  ImageSettings,
 } from '@/types/content'
 import type { EyecatchGetApi, EyecatchSaveApi } from '@/types/API/content-api'
 
@@ -17,26 +16,10 @@ export const getEyecatchDefaultTitleSettings = (): EyecatchTitleSettings => ({
   align: 'left',
 })
 
-const useEyecatchContent = (customerId: Ref<string | null>) => {
+const useEyecatchConverters = (customerId: Ref<string | null>) => {
   const { getDefaultImageSettings } = useContentInit()
-  const {
-    loadData,
-    get,
-    setTitleSettings,
-    setImageSettings,
-    contentDataRef,
-    loadingRef: readLoading,
-  } = useContentRead<EyecatchGetApi>(customerId, apiKind)
-  const {
-    create,
-    update,
-    remove,
-    updateTitleSettingsWithDebounced,
-    updateImageSettingsWithDebounced,
-    loadingRef: writeLoading,
-  } = useContentWrite<EyecatchSaveApi, EyecatchGetApi>(customerId, apiKind)
 
-  const apitypeToEyecatchType = (
+  const apiToContent = (
     apiData?: EyecatchGetApi | null
   ): EyecatchType | null =>
     apiData
@@ -63,12 +46,7 @@ const useEyecatchContent = (customerId: Ref<string | null>) => {
         }
       : null
 
-  const eyecatchRef = computed<EyecatchType | null>(() =>
-    apitypeToEyecatchType(contentDataRef.value)
-  )
-  const loading = computed(() => readLoading.value || writeLoading.value)
-
-  const formToEyecatchSaveApi = (formData: EyecatchForm): EyecatchSaveApi => ({
+  const formToSaveapi = (formData: EyecatchForm): EyecatchSaveApi => ({
     customerId: customerId.value ?? '',
     title: formData.title,
     subtitle: formData.subtitle,
@@ -81,63 +59,7 @@ const useEyecatchContent = (customerId: Ref<string | null>) => {
     imageSettings: { ...(formData.imageSettings ?? getDefaultImageSettings()) },
   })
 
-  const createEyecatch = async (
-    formData: EyecatchForm
-  ): Promise<EyecatchType | null> => {
-    const inputData: EyecatchSaveApi = formToEyecatchSaveApi(formData)
-    const data = await create(inputData)
-    return apitypeToEyecatchType(data ?? null)
-  }
-
-  const updateEyecatch = async (
-    contentId: string,
-    formData: EyecatchForm
-  ): Promise<EyecatchType | null> => {
-    const inputData: EyecatchSaveApi = formToEyecatchSaveApi(formData)
-    const data = await update(contentId, inputData)
-    return apitypeToEyecatchType(data ?? null)
-  }
-
-  const setEyecatchTitleSettings = (
-    settings: Partial<EyecatchTitleSettings>
-  ) => {
-    if (!eyecatchRef.value?.titleSettings) {
-      return
-    }
-    const newSettings: EyecatchTitleSettings = {
-      ...eyecatchRef.value.titleSettings,
-      ...settings,
-    }
-    setTitleSettings(newSettings)
-    return newSettings
-  }
-
-  const setEyecatchImageSettings = (settings: Partial<ImageSettings>) => {
-    if (!eyecatchRef.value) {
-      return
-    }
-    const newSettings: ImageSettings = {
-      ...getDefaultImageSettings(),
-      ...eyecatchRef.value.imageSettings,
-      ...settings,
-    }
-    setImageSettings(newSettings)
-    return newSettings
-  }
-
-  return {
-    loadEyecatch: loadData,
-    getEyecatch: get,
-    createEyecatch,
-    updateEyecatch,
-    removeEyecatch: remove,
-    setEyecatchTitleSettings,
-    setEyecatchImageSettings,
-    updateEyecatchTitleSettings: updateTitleSettingsWithDebounced,
-    updateEyecatchImageSettings: updateImageSettingsWithDebounced,
-    eyecatchRef,
-    loading,
-  }
+  return { apiToContent, formToSaveapi }
 }
 
 /**
@@ -145,86 +67,32 @@ const useEyecatchContent = (customerId: Ref<string | null>) => {
  * @param customerId
  */
 export const useEyecatchActions = (customerId: Ref<string | null>) => {
+  const contentTitle = 'トップ画像'
+  const { apiToContent, formToSaveapi } = useEyecatchConverters(customerId)
   const {
-    loadEyecatch,
-    getEyecatch,
-    createEyecatch,
-    updateEyecatch,
-    removeEyecatch,
-    setEyecatchTitleSettings,
-    updateEyecatchTitleSettings,
-    setEyecatchImageSettings,
-    updateEyecatchImageSettings,
-    eyecatchRef,
+    contentRef,
     loading,
-  } = useEyecatchContent(customerId)
-
-  const { addSnackber } = useSnackbars()
-
-  const onLoad = async () => {
-    await loadEyecatch()
-  }
-
-  const onCreate = async (formData: EyecatchForm) => {
-    const savedData = await createEyecatch(formData)
-    addSnackber?.('トップ画像を登録しました。')
-    await getEyecatch(savedData?.id)
-  }
-
-  const onUpdate = async ({
-    id,
-    formData,
-  }: {
-    id: string
-    formData: EyecatchForm
-  }) => {
-    if (!id) return
-
-    const savedData = await updateEyecatch(id, formData)
-    addSnackber?.('トップ画像を更新しました。')
-    await getEyecatch(savedData?.id)
-  }
-
-  const onRemove = async (id: string) => {
-    await removeEyecatch(id)
-    addSnackber?.('トップ画像を削除しました。')
-    await getEyecatch()
-  }
-
-  const onUpdateTitleSetting = (
-    settings: Partial<EyecatchTitleSettings>
-  ): EyecatchTitleSettings | undefined => {
-    if (!eyecatchRef.value?.id) {
-      return
-    }
-    const newSettings = setEyecatchTitleSettings(settings)
-    if (!newSettings) {
-      return
-    }
-    updateEyecatchTitleSettings(eyecatchRef.value.id, newSettings)
-  }
-
-  const onUpdateImageSetting = (
-    settings: Partial<ImageSettings>
-  ): ImageSettings | undefined => {
-    if (!eyecatchRef.value?.id) {
-      return
-    }
-    const newSettings = setEyecatchImageSettings(settings)
-    if (!newSettings) {
-      return
-    }
-    updateEyecatchImageSettings(eyecatchRef.value.id, newSettings)
-  }
-
-  return {
-    eyecatchRef,
     onLoad,
     onCreate,
     onUpdate,
     onRemove,
     onUpdateTitleSetting,
     onUpdateImageSetting,
+  } = useContentActions<
+    EyecatchType,
+    EyecatchForm,
+    EyecatchGetApi,
+    EyecatchSaveApi
+  >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
+
+  return {
+    eyecatchRef: contentRef,
     loading,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdateTitleSetting,
+    onUpdateImageSetting,
   }
 }

@@ -231,6 +231,7 @@ export const useMenuCategoryListActions = (customerId: Ref<string | null>) => {
   const sort = ref<ListSort>({ position: 1 })
   const pager = ref<ListPager>({ page: 1, limit: 20 })
 
+  const contentTitle = 'メニューカテゴリ'
   const { addSnackber } = useSnackbars()
   const {
     loadMenuCategoryList,
@@ -253,7 +254,7 @@ export const useMenuCategoryListActions = (customerId: Ref<string | null>) => {
 
   const onCreate = async (menuId: string, formData: MenuCategoryForm) => {
     await createMenuCategory(menuId, formData)
-    addSnackber?.('MenuCategory を登録しました。')
+    addSnackber?.(`${contentTitle} 情報を登録しました。`)
     getMenuCategoryList(filter.value, sort.value, pager.value)
   }
 
@@ -269,13 +270,13 @@ export const useMenuCategoryListActions = (customerId: Ref<string | null>) => {
     if (!id) return
 
     await updateMenuCategory(id, menuId, formData)
-    addSnackber?.('MenuCategory を更新しました。')
+    addSnackber?.(`${contentTitle} 情報を更新しました。`)
     getMenuCategoryList(filter.value, sort.value, pager.value)
   }
 
   const onRemove = async (id: string) => {
     await removeMenuCategory(id)
-    addSnackber?.('MenuCategory を削除しました。')
+    addSnackber?.(`${contentTitle} 情報を削除しました。`)
     getMenuCategoryList(filter.value, sort.value, pager.value)
   }
 
@@ -286,7 +287,7 @@ export const useMenuCategoryListActions = (customerId: Ref<string | null>) => {
     }))
     setListPositions(positions)
     await updateMenuCategoryPositions(positions)
-    addSnackber?.('位置を変更しました。')
+    addSnackber?.(`${contentTitle} 表示位置を変更しました。`)
     getMenuCategoryList(filter.value, sort.value, pager.value)
   }
 

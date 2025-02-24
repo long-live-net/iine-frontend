@@ -1,36 +1,13 @@
-import type {
-  ContactType,
-  ContactForm,
-  TitleSettings,
-  ImageSettings,
-} from '@/types/content'
+import type { ContactType, ContactForm } from '@/types/content'
 import type { ContactGetApi, ContactSaveApi } from '@/types/API/content-api'
 
 const apiKind = 'contacts'
 export const getContactKind = () => apiKind
 
-const useContactContent = (customerId: Ref<string | null>) => {
+const useContactConverters = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
-  const {
-    loadData,
-    get,
-    setTitleSettings,
-    setImageSettings,
-    contentDataRef,
-    loadingRef: readLoading,
-  } = useContentRead<ContactGetApi>(customerId, apiKind)
-  const {
-    create,
-    update,
-    remove,
-    updateTitleSettingsWithDebounced,
-    updateImageSettingsWithDebounced,
-    loadingRef: writeLoading,
-  } = useContentWrite<ContactSaveApi, ContactGetApi>(customerId, apiKind)
 
-  const apitypeToContactType = (
-    apiData?: ContactGetApi | null
-  ): ContactType | null =>
+  const apiToContent = (apiData?: ContactGetApi | null): ContactType | null =>
     apiData
       ? {
           id: apiData.id,
@@ -64,12 +41,7 @@ const useContactContent = (customerId: Ref<string | null>) => {
         }
       : null
 
-  const contactRef = computed<ContactType | null>(() =>
-    apitypeToContactType(contentDataRef.value)
-  )
-  const loading = computed(() => readLoading.value || writeLoading.value)
-
-  const formToContactSaveApi = (formData: ContactForm): ContactSaveApi => ({
+  const formToSaveapi = (formData: ContactForm): ContactSaveApi => ({
     customerId: customerId.value ?? '',
     title: formData.title,
     subtitle: formData.subtitle,
@@ -90,63 +62,7 @@ const useContactContent = (customerId: Ref<string | null>) => {
       : {}),
   })
 
-  const createContact = async (
-    formData: ContactForm
-  ): Promise<ContactType | null> => {
-    const inputData: ContactSaveApi = formToContactSaveApi(formData)
-    const data = await create(inputData)
-    return apitypeToContactType(data ?? null)
-  }
-
-  const updateContact = async (
-    contentId: string,
-    formData: ContactForm
-  ): Promise<ContactType | null> => {
-    const inputData: ContactSaveApi = formToContactSaveApi(formData)
-    const data = await update(contentId, inputData)
-    return apitypeToContactType(data ?? null)
-  }
-
-  const setContactTitleSettings = (settings: Partial<TitleSettings>) => {
-    if (!contactRef.value?.titleSettings) {
-      return
-    }
-    const newSettings: TitleSettings = {
-      ...contactRef.value.titleSettings,
-      ...settings,
-    }
-    setTitleSettings(newSettings)
-    return newSettings
-  }
-
-  const setContactImageSettings = (
-    settings: Partial<ImageSettings>
-  ): ImageSettings | undefined => {
-    if (!contactRef.value) {
-      return
-    }
-    const newSettings: ImageSettings = {
-      ...getDefaultImageSettings(),
-      ...(contactRef.value.imageSettings ? contactRef.value.imageSettings : {}),
-      ...settings,
-    }
-    setImageSettings(newSettings)
-    return newSettings
-  }
-
-  return {
-    loadContact: loadData,
-    getContact: get,
-    createContact,
-    updateContact,
-    removeContact: remove,
-    setContactTitleSettings,
-    setContactImageSettings,
-    updateContactTitleSettings: updateTitleSettingsWithDebounced,
-    updateContactImageSettings: updateImageSettingsWithDebounced,
-    contactRef,
-    loading,
-  }
+  return { apiToContent, formToSaveapi }
 }
 
 /**
@@ -154,84 +70,34 @@ const useContactContent = (customerId: Ref<string | null>) => {
  * @param customerId
  */
 export const useContactActions = (customerId: Ref<string | null>) => {
+  const contentTitle = useGetMenuTitle(apiKind) ?? apiKind
+  const { apiToContent, formToSaveapi } = useContactConverters(customerId)
   const {
-    loadContact,
-    getContact,
-    createContact,
-    updateContact,
-    removeContact,
-    setContactTitleSettings,
-    updateContactTitleSettings,
-    setContactImageSettings,
-    updateContactImageSettings,
-    contactRef,
+    contentRef,
+    contentPreNextIdRefRef,
     loading,
-  } = useContactContent(customerId)
-
-  const { addSnackber } = useSnackbars()
-
-  const onLoad = async () => {
-    await loadContact()
-  }
-
-  const onCreate = async (formData: ContactForm) => {
-    const savedData = await createContact(formData)
-    addSnackber?.('Contact を登録しました。')
-    await getContact(savedData?.id)
-  }
-
-  const onUpdate = async ({
-    id,
-    formData,
-  }: {
-    id: string
-    formData: ContactForm
-  }) => {
-    if (!id) return
-
-    const savedData = await updateContact(id, formData)
-    addSnackber?.('Contact を更新しました。')
-    await getContact(savedData?.id)
-  }
-
-  const onRemove = async (id: string) => {
-    await removeContact(id)
-    addSnackber?.('Contact を削除しました。')
-    await getContact()
-  }
-
-  const onUpdateTitleSetting = (
-    settings: Partial<TitleSettings>
-  ): TitleSettings | undefined => {
-    if (!contactRef.value?.id) {
-      return
-    }
-    const newSettings = setContactTitleSettings(settings)
-    if (!newSettings) {
-      return
-    }
-    updateContactTitleSettings(contactRef.value.id, newSettings)
-  }
-
-  const onUpdateImageSetting = (settings: Partial<ImageSettings>) => {
-    if (!contactRef.value?.id) {
-      return
-    }
-    const newSettings = setContactImageSettings(settings)
-    if (!newSettings) {
-      return
-    }
-    updateContactImageSettings(contactRef.value.id, newSettings)
-  }
-
-  return {
-    contactRef,
     onLoad,
     onCreate,
     onUpdate,
     onRemove,
     onUpdateTitleSetting,
     onUpdateImageSetting,
+  } = useContentActions<
+    ContactType,
+    ContactForm,
+    ContactGetApi,
+    ContactSaveApi
+  >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
+
+  return {
+    contactRef: contentRef,
+    contactPreNextIdRefRef: contentPreNextIdRefRef,
     loading,
+    onLoad,
+    onCreate,
+    onUpdate,
+    onRemove,
+    onUpdateTitleSetting,
+    onUpdateImageSetting,
   }
 }
