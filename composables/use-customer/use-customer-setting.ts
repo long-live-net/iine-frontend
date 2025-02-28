@@ -190,7 +190,7 @@ const baseLayoutsOrder: PageLayout[] = [
   { kind: 'access', title: 'access' },
   { kind: 'menu', title: 'menu' },
   { kind: 'menu-image', title: 'menu by image' },
-]
+] as const
 export const useHomeLayoutEdit = () => {
   const {
     customerSetting,
@@ -210,7 +210,7 @@ export const useHomeLayoutEdit = () => {
       return
     }
     const availContentsKind = customerSetting.value.availContentsKind
-    baseSections.value = baseLayoutsOrder
+    const baseLayout = baseLayoutsOrder
       .filter((b) => availContentsKind.includes(b.kind))
       .map<PageLayout>((b) => {
         const hs = homeLayouts.value?.find((s) => s.kind === b.kind)
@@ -219,6 +219,10 @@ export const useHomeLayoutEdit = () => {
         }
         return { ...b }
       })
+
+    baseSections.value = baseLayout.filter((b) =>
+      homeLayouts.value.every((h) => b.kind !== h.kind)
+    )
     editSections.value = homeLayouts.value.map<PageLayout>((s) => ({ ...s }))
   }
 
