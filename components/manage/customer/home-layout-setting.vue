@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import type { SectionKind, PageLayout } from '@/types/customer-setting'
 
 const settingModal = defineModel<boolean>('modal', { required: true })
 const titleData = {
@@ -32,21 +31,9 @@ watch(settingModal, async () => {
   }
 })
 
-const clone = (data: PageLayout): PageLayout => ({
-  kind: data.kind,
-  title: data.title,
-  menuTitle: data.menuTitle ?? null,
-})
-
 const onUpdate = async () => {
   await chengeHomeLayouts()
-}
-
-const hasAssigned = (kind: SectionKind) =>
-  editSections.value.some((ec) => ec.kind === kind)
-
-const removeItem = (kind: SectionKind) => {
-  editSections.value = editSections.value.filter((ec) => ec.kind !== kind)
+  settingModal.value = false
 }
 </script>
 
@@ -65,22 +52,15 @@ const removeItem = (kind: SectionKind) => {
           <h4 class="mb-2">テンプレート</h4>
           <draggable
             :list="baseSections"
-            :clone="clone"
-            :group="{ name: 'home-layouts', pull: 'clone', put: false }"
+            group="home-layouts"
             item-key="baseId"
             handle=".home-layout-draggable"
             class="drag-group"
           >
             <template #item="{ element }">
-              <div
-                class="drag-group__item"
-                :class="{
-                  'home-layout-draggable': !hasAssigned(element.kind),
-                }"
-              >
+              <div class="drag-group__item home-layout-draggable">
                 <p class="drag-group__item--icon">
-                  <v-icon v-if="hasAssigned(element.kind)" icon="mdi-cancel" />
-                  <v-icon v-else icon="mdi-apps" color="accent" />
+                  <v-icon icon="mdi-apps" color="accent" />
                 </p>
                 <p>{{ element.menuTitle || element.title }}</p>
               </div>
@@ -103,16 +83,6 @@ const removeItem = (kind: SectionKind) => {
                   <v-icon icon="mdi-apps" color="accent" />
                 </p>
                 <p>{{ element.menuTitle || element.title }}</p>
-                <p class="drag-group__item--action">
-                  <v-btn
-                    color="grey-darken-1"
-                    icon="mdi-close"
-                    size="small"
-                    density="comfortable"
-                    flat
-                    @click="removeItem(element.kind)"
-                  />
-                </p>
               </div>
             </template>
           </draggable>
@@ -154,7 +124,7 @@ const removeItem = (kind: SectionKind) => {
     width: calc(50% - 0.4rem);
 
     .drag-group {
-      min-height: 316px;
+      min-height: 240px;
       padding: 0.6rem;
       display: flex;
       flex-direction: column;
@@ -164,9 +134,11 @@ const removeItem = (kind: SectionKind) => {
         position: relative;
         line-height: 3.25rem;
         padding: 0 0.5rem;
-        background-color: $gray-lighten1;
-        color: $gray-lighten4;
-        border: 2px solid $blue-darken2;
+        &--icon {
+          position: absolute;
+          top: 0;
+          right: 6px;
+        }
       }
     }
   }
@@ -179,11 +151,9 @@ const removeItem = (kind: SectionKind) => {
     .drag-group {
       background-color: $blue-darken1;
       &__item {
-        &--icon {
-          position: absolute;
-          top: 0;
-          right: 6px;
-        }
+        background-color: $gray-lighten4;
+        color: $gray-darken3;
+        border: 2px dashed $blue-darken3;
       }
     }
   }
@@ -195,46 +165,15 @@ const removeItem = (kind: SectionKind) => {
     .drag-group {
       background-color: $accent;
       &__item {
-        &--icon {
-          position: absolute;
-          top: 0;
-          right: 32px;
-        }
-        &--action {
-          position: absolute;
-          top: 0px;
-          right: 3px;
-        }
+        background-color: #ffffcc;
+        color: $black;
+        border: 2px dashed $orange;
       }
     }
   }
 }
 
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .home-layout-editor {
-    .page {
-      .drag-group {
-        &__item {
-          &--icon {
-            top: 14px;
-            right: 6px;
-          }
-          &--action {
-            top: -12px;
-            right: 4px;
-          }
-        }
-      }
-    }
-  }
-}
-</style>
-
-<style lang="scss">
 .home-layout-draggable {
-  background-color: #ffffcc !important;
-  color: $black !important;
-  border: 2px dashed $orange !important;
   cursor: grab;
 }
 </style>

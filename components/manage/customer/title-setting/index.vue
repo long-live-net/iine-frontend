@@ -26,11 +26,13 @@ const onUpdatePageTitle = async (pageTitle: PageTitle) => {
   if (pageTitle.title) {
     await updatePageTitle(pageTitle)
   }
+  settingModal.value = false
 }
 const onUpdateMenuTitle = async (sections: PageLayout[]) => {
   if (sections.length) {
     await updateMenuTitles(sections)
   }
+  settingModal.value = false
 }
 
 const formMounting = ref(false)
