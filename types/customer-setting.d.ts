@@ -23,6 +23,9 @@ export type PageLayout = {
   menuTitle?: string | null
 }
 
+/**
+ * SNS Links
+ */
 export type NetworkServiceNames =
   | 'facebook'
   | 'instagram'
@@ -32,6 +35,36 @@ export type NetworkServiceLink = {
   serviceName: NetworkServiceNames
   url: string
 }
+export type SnsLinkForm = {
+  facebook: string | null
+  instagram: string | null
+  twitter: string | null
+  youtube: string | null
+}
+
+/**
+ * SEO Tags
+ */
+export type SeoTagKeyNames = 'title' | 'description' | 'ogImage'
+export type SeoTag = {
+  keyName: SeoTagKeyNames
+  content: string
+}
+export type SeoTagForm = {
+  title: string | null
+  description: string | null
+  ogImage: string | null
+}
+
+/**
+ * Favicon
+ */
+export type Favicon = {
+  faviconIco: string | null
+  icoSvg: string | null
+  appleTouchIconPng: string | null
+}
+
 /**
  * Customer Setting
  */
@@ -48,14 +81,6 @@ export type CustomerSetting = {
   homeLayout: PageLayout[]
   snsLinks: NetworkServiceLink[] | null
   accessSource: string | null
-}
-
-/**
- * Customer Setting Form
- */
-export type SnsLinksForm = {
-  facebook: string | null
-  instagram: string | null
-  twitter: string | null
-  youtube: string | null
+  seoTags: SeoTag[] | null
+  favicon: Favicon
 }

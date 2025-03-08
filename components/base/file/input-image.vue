@@ -76,6 +76,13 @@ const imageSrc = computed(() => {
       :class="{ 'file-input--error': invalidMessages?.length }"
     >
       <div
+        v-if="label?.length"
+        class="file-input__label"
+        :class="{ 'file-input__label--error': invalidMessages?.length }"
+      >
+        {{ label }}
+      </div>
+      <div
         class="file-input__drag-drop"
         :class="{ 'file-input__drag-drop--enter': isDragEnter }"
         @dragenter="onDragEnter"
@@ -97,7 +104,7 @@ const imageSrc = computed(() => {
               :loading="loading ?? false"
               @click="onClick"
             >
-              背景画像ファイルを選択
+              {{ `${label}ファイルを選択` }}
             </v-btn>
           </div>
         </div>
@@ -109,13 +116,6 @@ const imageSrc = computed(() => {
         :accept="accessables ? accessables.join(',') : undefined"
         @change="onChangeFile"
       />
-      <div
-        v-if="label?.length"
-        class="file-input__label"
-        :class="{ 'file-input__label--error': invalidMessages?.length }"
-      >
-        {{ label }}
-      </div>
     </div>
     <div class="error-messages-wrap">
       <transition name="error">
@@ -134,6 +134,22 @@ const imageSrc = computed(() => {
   background-color: $gray-lighten2;
   border: 1px solid $gray;
   position: relative;
+  &__label {
+    position: absolute;
+    top: 0.75rem;
+    left: 1rem;
+    color: #7e7e7e;
+    &--error {
+      color: $error;
+    }
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      position: relative;
+      top: unset;
+      left: unset;
+      padding: 1rem 1rem 0;
+    }
+  }
   &--error {
     border-color: $error;
   }
@@ -152,7 +168,7 @@ const imageSrc = computed(() => {
       padding: 1rem;
       img {
         width: 240px;
-        height: 200px;
+        height: auto;
         object-fit: cover;
       }
     }
@@ -164,15 +180,6 @@ const imageSrc = computed(() => {
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
       }
-    }
-  }
-  &__label {
-    position: absolute;
-    top: 0.75rem;
-    left: 1rem;
-    color: #7e7e7e;
-    &--error {
-      color: $error;
     }
   }
 }

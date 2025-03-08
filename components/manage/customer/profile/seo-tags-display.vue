@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CustomerSetting } from '@/types/customer-setting'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     customerSetting: CustomerSetting | null
     loading?: boolean
@@ -15,31 +15,40 @@ defineEmits<{
   edit: []
 }>()
 
-const { getSnsTitle, getSnsIcon, getSnsColor, onClickLink } =
-  useCustomerSnsLinks()
+const { getSeoTagName } = useCustomerSeoTags()
+const metaInfos = computed(() => [...(props.customerSetting?.seoTags ?? [])])
 </script>
 
 <template>
   <div class="customer-info-wrap">
     <div class="customer-info-data g-theme-profile">
-      <dl>
-        <template
-          v-for="link in customerSetting?.snsLinks ?? []"
-          :key="link.serviceName"
-        >
+      <dl v-if="metaInfos.length">
+        <template v-for="meta in metaInfos" :key="meta.keyName">
           <dt>
-            {{ getSnsTitle(link.serviceName) }}
-            <v-icon :color="getSnsColor(link.serviceName)">
-              {{ getSnsIcon(link.serviceName) }}
-            </v-icon>
+            {{ getSeoTagName(meta.keyName) }}
           </dt>
-          <dd class="text-url">
-            <a href="" @click.stop.prevent="onClickLink(link.serviceName)">
-              {{ link.url || '-' }}
-            </a>
+          <dd v-if="meta.keyName === 'ogImage'">
+            <p>
+              <small>{{ meta.content || '-' }}</small>
+            </p>
+            <p v-if="meta.content?.length">
+              <img
+                :src="meta.content"
+                alt="ogImage"
+                class="mt-2"
+                style="width: 200px; height: auto"
+              />
+            </p>
+          </dd>
+          <dd v-else>
+            {{ meta.content || '-' }}
           </dd>
         </template>
       </dl>
+      <div v-else>
+        <p>設定されていません。</p>
+        <p>編集するボタンからSEOタグ情報を設定できます。</p>
+      </div>
       <BaseOverlayLiner :overlay="loading" />
     </div>
     <div class="actions">

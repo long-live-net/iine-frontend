@@ -14,6 +14,9 @@ export {
   useCustomerSnsLinks,
   useCustomerSnsLinksForm,
   useCustomerSnsLinksActions,
+  useCustomerSeoTags,
+  useCustomerSeoTagsForm,
+  useCustomerSeoTagsActions,
 } from './use-customer/use-customer-setting'
 
 export { useAuth, useLoginForm } from './use-customer/use-auth'

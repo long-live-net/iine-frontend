@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CustomerSetting, SnsLinksForm } from '@/types/customer-setting'
+import type { CustomerSetting, SnsLinkForm } from '@/types/customer-setting'
 
 const props = withDefaults(
   defineProps<{
@@ -13,7 +13,7 @@ const props = withDefaults(
 )
 const emit = defineEmits<{
   cancel: []
-  update: [form: SnsLinksForm]
+  update: [form: SnsLinkForm]
 }>()
 
 const { handleSubmit, formData } = useCustomerSnsLinksForm()
