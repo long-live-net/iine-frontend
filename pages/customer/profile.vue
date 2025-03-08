@@ -155,7 +155,7 @@ onMounted(() => {
       </div>
       <div v-else-if="snsLinksOperationMode === 'edit'" class="customer-info">
         <div class="header">
-          <p><v-icon icon="mdi-domain" /></p>
+          <p><v-icon icon="mdi-link" /></p>
           <h3>テナント SNS ページ URL 編集</h3>
         </div>
         <ManageCustomerProfileSnsLinksForm
