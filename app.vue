@@ -1,57 +1,48 @@
 <script setup lang="ts">
 const { customerSetting } = useCustomerSetting()
-const { customer } = useCustomer()
-
-const pageTitle = computed(
-  () => customerSetting.value?.pageTitle?.title ?? customer.value?.name ?? null
-)
-const description = computed(() =>
-  customer.value?.name ? `${customer.value.name} Website` : null
-)
-const favicon = computed(() =>
-  customer.value?.nickName ? `/favicon-${customer.value?.nickName}.ico` : null
-)
 
 watch(
-  [pageTitle, description, favicon],
-  () => {
-    if (pageTitle.value && description.value && favicon.value) {
-      useHead({
-        title: pageTitle.value,
-        meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: description.value,
-          },
-        ],
-        link: [
-          {
-            rel: 'icon',
-            type: 'image/x-icon',
-            href: favicon.value,
-          },
-        ],
-      })
-    } else {
-      useHead({
-        title: 'IINE',
-        meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: 'IINE Website',
-          },
-        ],
-        link: [
-          {
-            rel: 'icon',
-            type: 'image/x-icon',
-            href: './favicon.ico',
-          },
-        ],
-      })
+  customerSetting,
+  (settings) => {
+    if (!settings) {
+      return
     }
+    const faviconIco = settings.favicon.faviconIco ?? null
+    const icoSvg = settings.favicon.icoSvg ?? null
+    const appleTouchIconPng = settings.favicon.appleTouchIconPng ?? null
+    const linkRel = [
+      ...(faviconIco
+        ? [{ rel: 'icon', type: 'image/x-icon', href: faviconIco }]
+        : []),
+      ...(icoSvg ? [{ rel: 'icon', type: 'image/svg+xml', href: icoSvg }] : []),
+      ...(appleTouchIconPng
+        ? [{ rel: 'apple-touch-icon', href: appleTouchIconPng }]
+        : []),
+    ]
+    if (linkRel.length) {
+      useHead({ link: linkRel })
+    }
+
+    const title =
+      settings.seoTags?.find((t) => t.keyName === 'title')?.content ??
+      settings.pageTitle.title
+    const description =
+      settings.seoTags?.find((t) => t.keyName === 'description')?.content ??
+      `${title}のページ`
+    const ogImage =
+      settings.seoTags?.find((t) => t.keyName === 'ogImage')?.content ?? null
+
+    useSeoMeta({
+      title,
+      description,
+      ogTitle: title,
+      ogDescription: description,
+      ogSiteName: title,
+      ogType: 'website',
+      ogLocale: 'ja_JP',
+      // ogUrl: TODO
+      ...(ogImage ? { ogImage, twitterCard: 'summary_large_image' } : {}),
+    })
   },
   {
     immediate: true,

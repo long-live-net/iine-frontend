@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { CustomerUserForm } from '@/types/customer-user'
 import type { CustomerForm } from '@/types/customer'
-import type { SnsLinksForm } from '@/types/customer-setting'
+import type { SnsLinkForm, SeoTagForm } from '@/types/customer-setting'
+useSeoMeta({ robots: 'noindex' })
 
 type OperationMode = 'display' | 'edit'
 
@@ -50,9 +51,18 @@ const {
   loading: loadingCustomerSetting,
 } = useCustomerSnsLinksActions()
 
-const onUpdateCUstomerSnsLinks = async (snsLinksForm: SnsLinksForm) => {
-  await updateSnsLinks(snsLinksForm)
+const onUpdateCUstomerSnsLinks = async (snsLinkForm: SnsLinkForm) => {
+  await updateSnsLinks(snsLinkForm)
   snsLinksOperationMode.value = 'display'
+}
+
+// SEO TAGS および favicon 設定情報
+const seoTagsOperationMode = ref<OperationMode>('display')
+const { update: updateSeoTags } = useCustomerSeoTagsActions()
+
+const onUpdateCUstomerSeoTags = async (seoTagForm: SeoTagForm) => {
+  await updateSeoTags(seoTagForm)
+  seoTagsOperationMode.value = 'display'
 }
 
 onMounted(() => {
@@ -156,6 +166,32 @@ onMounted(() => {
         />
       </div>
     </CommonContentCard>
+
+    <CommonContentCard class="mt-12">
+      <div v-if="seoTagsOperationMode === 'display'" class="customer-info">
+        <div class="header">
+          <p><v-icon icon="mdi-cog" /></p>
+          <h3>SEO タグ および Favicon icon 設定</h3>
+        </div>
+        <ManageCustomerProfileSeoTagsDisplay
+          :customer-setting="customerSetting"
+          :loading="loadingCustomerSetting"
+          @edit="seoTagsOperationMode = 'edit'"
+        />
+      </div>
+      <div v-else-if="seoTagsOperationMode === 'edit'" class="customer-info">
+        <div class="header">
+          <p><v-icon icon="mdi-cog" /></p>
+          <h3>SEO タグ および Favicon icon 編集</h3>
+        </div>
+        <ManageCustomerProfileSeoTagsForm
+          :customer-setting="customerSetting"
+          :loading="loadingCustomerSetting"
+          @update="onUpdateCUstomerSeoTags"
+          @cancel="seoTagsOperationMode = 'display'"
+        />
+      </div>
+    </CommonContentCard>
   </div>
 </template>
 
@@ -177,12 +213,20 @@ onMounted(() => {
     max-width: 960px;
     margin: 0 auto;
     padding: 4rem;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      padding: 1rem;
+    }
   }
 
   .customer-info {
     max-width: 960px;
     margin: 0 auto;
     padding: 4rem;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      padding: 1rem;
+    }
   }
 }
 </style>

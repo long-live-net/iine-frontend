@@ -66,6 +66,7 @@ defineEmits<{
 
       dd {
         padding: 0.5rem 1rem;
+        overflow-wrap: anywhere;
       }
     }
   }
@@ -74,20 +75,21 @@ defineEmits<{
     margin-top: 1rem;
     text-align: right;
   }
-}
 
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .customer-info-data {
-    dl {
-      display: block;
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    .customer-info-data {
+      dl {
+        display: block;
 
-      dt {
-        text-align: center;
-      }
+        dt {
+          text-align: center;
+        }
 
-      dd {
-        padding-left: 1.25rem;
-        margin-bottom: 12px;
+        dd {
+          padding-left: 1.25rem;
+          margin-bottom: 12px;
+          max-width: 100%;
+        }
       }
     }
   }

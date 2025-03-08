@@ -8,7 +8,9 @@ import type {
   ColorTheme,
   DesignTheme,
   NetworkServiceLink,
-  SnsLinksForm,
+  SnsLinkForm,
+  SeoTag,
+  SeoTagForm,
 } from '@/types/customer-setting'
 
 const pageFontFamilies: { [key: string]: string } = {
@@ -494,7 +496,7 @@ export const useCustomerSnsLinksForm = () => {
     youtube: (v: string | undefined) =>
       validateUrl(v) || 'URL の形式で入力してください',
   }
-  const customerFormInitial: SnsLinksForm = {
+  const customerFormInitial: SnsLinkForm = {
     facebook: null,
     instagram: null,
     twitter: null,
@@ -507,10 +509,10 @@ export const useCustomerSnsLinksForm = () => {
   })
 
   const formData = {
-    facebook: useField<SnsLinksForm['facebook']>('facebook'),
-    instagram: useField<SnsLinksForm['instagram']>('instagram'),
-    twitter: useField<SnsLinksForm['twitter']>('twitter'),
-    youtube: useField<SnsLinksForm['youtube']>('youtube'),
+    facebook: useField<SnsLinkForm['facebook']>('facebook'),
+    instagram: useField<SnsLinkForm['instagram']>('instagram'),
+    twitter: useField<SnsLinkForm['twitter']>('twitter'),
+    youtube: useField<SnsLinkForm['youtube']>('youtube'),
   }
 
   return {
@@ -537,7 +539,7 @@ export const useCustomerSnsLinksActions = () => {
     await fetchCustomerSetting()
   }
 
-  const update = async (form: SnsLinksForm) => {
+  const update = async (form: SnsLinkForm) => {
     if (!customerSetting.value || !customerSetting.value.id) {
       return
     }
@@ -567,6 +569,104 @@ export const useCustomerSnsLinksActions = () => {
     customerSetting,
     loading,
     fetch,
+    update,
+  }
+}
+
+/**
+ * Customer setting SEO Tags 関連
+ */
+export const useCustomerSeoTags = () => {
+  const { customerSetting } = useCustomerSetting()
+  const seoTags = computed<SeoTag[]>(() => customerSetting.value?.seoTags ?? [])
+  const getSeoTagName = (seoKeyName: string) => {
+    switch (seoKeyName) {
+      case 'title':
+        return 'title'
+      case 'description':
+        return 'description'
+      case 'ogImage':
+        return 'og:image'
+      default:
+        return ''
+    }
+  }
+
+  return {
+    seoTags,
+    getSeoTagName,
+  }
+}
+
+export const useCustomerSeoTagsForm = () => {
+  const { maxLength } = useValidateRules()
+
+  const customerFormSchema = {
+    title: (v: string | undefined) =>
+      maxLength(v, 40) || '40 文字以内で入力してください',
+    description: (v: string | undefined) =>
+      maxLength(v, 100) || '100 文字以内で入力してください',
+    ogImage: () => true,
+  }
+  const customerFormInitial: SeoTagForm = {
+    title: null,
+    description: null,
+    ogImage: null,
+  }
+
+  const { handleSubmit, handleReset, validate } = useForm({
+    validationSchema: customerFormSchema,
+    initialValues: customerFormInitial,
+  })
+
+  const formData = {
+    title: useField<SeoTagForm['title']>('title'),
+    description: useField<SeoTagForm['description']>('description'),
+    ogImage: useField<SeoTagForm['ogImage']>('ogImage'),
+  }
+
+  return {
+    handleSubmit,
+    handleReset,
+    validate,
+    formData,
+  }
+}
+
+export const useCustomerSeoTagsActions = () => {
+  const {
+    customerSetting,
+    fetchCustomerSetting,
+    updateCustomerSetting,
+    loading,
+  } = useCustomerSetting()
+  const { addSnackber } = useSnackbars()
+
+  const update = async (form: SeoTagForm) => {
+    if (!customerSetting.value || !customerSetting.value.id) {
+      return
+    }
+    const seoTags: SeoTag[] = []
+    if (form.title) {
+      seoTags.push({ keyName: 'title', content: form.title })
+    }
+    if (form.description) {
+      seoTags.push({ keyName: 'description', content: form.description })
+    }
+    if (form.ogImage) {
+      seoTags.push({ keyName: 'ogImage', content: form.ogImage })
+    }
+    const customerSettingData: CustomerSetting = {
+      ...customerSetting.value,
+      seoTags: seoTags.length ? seoTags : null,
+    }
+    await updateCustomerSetting(customerSettingData)
+    await fetchCustomerSetting()
+    addSnackber?.('SEO タグおよび Favicon 情報を更新しました。')
+  }
+  return {
+    customerSetting,
+    loading,
     update,
   }
 }

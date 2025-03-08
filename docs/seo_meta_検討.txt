@@ -1,0 +1,20 @@
+   title: 'My Amazing Site',
+
+ * description: 'This is my amazing site, let me tell you all about it.',
+ 検索結果に表示されるメタディスクリプションの文字数は、PC検索が約130文字、スマホ検索が約80文字です。
+両デバイスの文字数に対応するために、スマホの検索結果で表示される文字数以内に収まるように、メタディスクリプションを書きます。
+
+
+   og:title: 'My Amazing Site', 当該ページのタイトル （自動で設定できるはず）
+   og:site_name: 'サイトのタイトル' 'Long Live Net' などのタイトル（こちらも自動で設定する）
+ * og:description: 'This is my amazing site, let me tell you all about it.',
+ * og:image: 'https://example.com/image.png',
+
+   og:type: 'website', (news 等の記事は 'article' で良いかも https://qiita.com/rksk/items/4dd46738a6d62f39389b)
+   og:locale: 'ja_JP',
+   twitterCard: 'summary_large_image', --> https://qiita.com/sysi_otsuka/items/92aa2e4d80b0c389a632
+  
+ * favicon	
+favicon はさまざまなデバイスに対応するため、複数のファイルを設置する必要があり、ユーザ側では対応が難しいと思われる。
+よって、favicon はサービス提供時に Long Live Net 側で作成して設定し、ユーザ側での変更は運営に依頼する形とする。
+cf. https://coliss.com/articles/build-websites/operation/work/how-to-favicon.html

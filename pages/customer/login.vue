@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { LoginApiCredential, LoginForm } from '@/types/auth'
 
+useSeoMeta({ robots: 'noindex' })
 definePageMeta({ layout: 'simple' })
 
 const { customerId, customerName } = useCustomer()

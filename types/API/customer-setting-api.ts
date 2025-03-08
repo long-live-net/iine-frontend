@@ -4,6 +4,8 @@ import type {
   PageTitle,
   PageLayout,
   NetworkServiceLink,
+  SeoTag,
+  Favicon,
 } from '@/types/customer-setting'
 
 export type CustomerSettingApi = {
@@ -19,4 +21,6 @@ export type CustomerSettingApi = {
   homeLayout?: PageLayout[]
   snsLinks?: NetworkServiceLink[] | null
   accessSource?: string | null
+  seoTags?: SeoTag[] | null
+  favicon?: Favicon | null
 }
