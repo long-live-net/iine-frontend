@@ -3,6 +3,12 @@ const { customerSetting } = useCustomerSetting()
 
 const inquireDialog = ref(false)
 const accessDialog = ref(false)
+
+const onClickLink = (reservationUrl: string) => {
+  if (import.meta.client) {
+    window.open(reservationUrl, '_blank')
+  }
+}
 </script>
 
 <template>
@@ -12,6 +18,13 @@ const accessDialog = ref(false)
     </div>
     <div class="g-block-lg">
       <div class="nav-footer__menu">
+        <p
+          v-if="customerSetting?.reservationUrl"
+          class="reservation-button"
+          @click="onClickLink(customerSetting.reservationUrl)"
+        >
+          ご予約
+        </p>
         <v-btn
           prepend-icon="mdi-email"
           variant="text"
@@ -32,6 +45,13 @@ const accessDialog = ref(false)
     </div>
     <div class="g-block-sm">
       <div class="nav-footer__menu">
+        <p
+          v-if="customerSetting?.reservationUrl"
+          class="reservation-button"
+          @click="onClickLink(customerSetting.reservationUrl)"
+        >
+          ご予約
+        </p>
         <v-btn icon variant="text" @click="inquireDialog = true">
           <v-icon>mdi-email</v-icon>
         </v-btn>
@@ -72,6 +92,21 @@ const accessDialog = ref(false)
       border-left: 1px solid #ddd;
       border-right: 1px solid #ddd;
     }
+  }
+}
+
+.reservation-button {
+  text-align: center;
+  padding: 12px 14px;
+  margin-right: 0.5rem;
+  background-color: lightseagreen;
+  color: white;
+  font-weight: bold;
+  white-space: nowrap;
+  transition: background-color 0.25s linear;
+  cursor: pointer;
+  &:hover {
+    background-color: $link-normal2;
   }
 }
 </style>

@@ -23,4 +23,5 @@ export type CustomerSettingApi = {
   accessSource?: string | null
   seoTags?: SeoTag[] | null
   favicon?: Favicon | null
+  reservationUrl?: string | null
 }
