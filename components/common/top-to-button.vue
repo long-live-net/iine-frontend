@@ -1,8 +1,13 @@
 <script setup lang="ts">
-defineProps<{
-  topHashName: string
-  src: string
-}>()
+withDefaults(
+  defineProps<{
+    topHashName: string
+    src?: string
+  }>(),
+  {
+    src: '/images/arrow-up2.png',
+  }
+)
 
 const { windowHeight, scrollY } = useWindowState()
 const isScrollOverTheWindow = computed(

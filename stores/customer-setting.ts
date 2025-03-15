@@ -48,6 +48,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
         icoSvg: apiData.favicon?.icoSvg ?? null,
         appleTouchIconPng: apiData.favicon?.appleTouchIconPng ?? null,
       },
+      reservationUrl: apiData.reservationUrl ?? null,
     }
   }
   const app2Apidata = (appData: CustomerSetting): CustomerSettingApi => ({
@@ -70,7 +71,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
       title: l.title,
       menuTitle: l.menuTitle ?? null,
     })),
-    accessSource: appData.accessSource ?? null,
+    accessSource: appData.accessSource,
     snsLinks:
       appData.snsLinks?.map((l) => ({
         serviceName: l.serviceName,
@@ -82,10 +83,11 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
         content: t.content,
       })) ?? null,
     favicon: {
-      faviconIco: appData.favicon.faviconIco ?? null,
-      icoSvg: appData.favicon.icoSvg ?? null,
-      appleTouchIconPng: appData.favicon.appleTouchIconPng ?? null,
+      faviconIco: appData.favicon.faviconIco,
+      icoSvg: appData.favicon.icoSvg,
+      appleTouchIconPng: appData.favicon.appleTouchIconPng,
     },
+    reservationUrl: appData.reservationUrl,
   })
 
   const load = async (customerId: string): Promise<CustomerSetting | null> => {

@@ -113,9 +113,9 @@ const onChengeColorTheme = (colorTheme: ColorTheme | null) => {
 <style scoped lang="scss">
 .theme-setting-wrap {
   position: fixed;
-  top: calc($nav-header-height + 0.5rem);
-  right: 0.5rem;
-  border-radius: 8px;
+  top: calc($nav-header-height + 5px);
+  right: 7px;
+  border-radius: 6px;
   padding: 0.5rem 0.75rem;
 
   .theme-setting-header {

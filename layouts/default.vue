@@ -3,6 +3,9 @@ defineOptions({
   name: 'DefaultLayout',
 })
 
+const { customerSetting } = useCustomerSetting()
+const { isLoggedIn } = useCustomerPageContext()
+
 const initializing = useState<boolean>('initializing', () => true)
 onMounted(() => {
   if (initializing.value)
@@ -11,7 +14,6 @@ onMounted(() => {
     }, 1000)
 })
 
-const topButtonImage = '/images/arrow-up2.png'
 const topHashName = 'default-layout-main-top'
 </script>
 
@@ -32,7 +34,11 @@ const topHashName = 'default-layout-main-top'
       </footer>
     </div>
     <client-only>
-      <CommonTopToButton :top-hash-name="topHashName" :src="topButtonImage" />
+      <CommonReservasionSideChip
+        v-if="customerSetting?.reservationUrl && !isLoggedIn"
+        :reservation-url="customerSetting.reservationUrl"
+      />
+      <CommonTopToButton :top-hash-name="topHashName" />
     </client-only>
   </div>
 </template>

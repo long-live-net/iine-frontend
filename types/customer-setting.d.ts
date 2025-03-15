@@ -83,4 +83,5 @@ export type CustomerSetting = {
   accessSource: string | null
   seoTags: SeoTag[] | null
   favicon: Favicon
+  reservationUrl: string | null
 }
