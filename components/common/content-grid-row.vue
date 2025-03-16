@@ -49,7 +49,7 @@ withDefaults(
   row-gap: 1.5rem;
 
   @media only screen and (max-width: $grid-breakpoint-md) {
-    row-gap: 0.75rem;
+    row-gap: 1.25rem;
   }
 }
 </style>

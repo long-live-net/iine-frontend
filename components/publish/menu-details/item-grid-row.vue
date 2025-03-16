@@ -64,18 +64,18 @@ const onClickEyecatch = (item: MenuDetailType) => {
 
 <style lang="scss" scoped>
 .detail-list-item {
-  $titile-border-color: color-mix(in srgb, currentColor 25%, transparent);
-  $caption-color: color-mix(in srgb, currentColor 75%, transparent);
+  $title-border-color: color-mix(in srgb, currentColor 20%, transparent);
+  $title-background-color: color-mix(in srgb, currentColor 10%, transparent);
 
   width: 85%;
   margin: 0 auto;
 
   .detail-title-price {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     align-items: center;
-    border-bottom: 1px solid $titile-border-color;
-    padding: 0 1.5rem;
+    padding: 0.25rem 1.5rem;
+    border-bottom: 1px solid $title-border-color;
 
     .title {
       font-weight: bold;
@@ -85,6 +85,9 @@ const onClickEyecatch = (item: MenuDetailType) => {
 
     .price {
       font-weight: bold;
+      white-space: nowrap;
+      margin-left: auto;
+      padding-left: 0.25rem;
     }
   }
 
@@ -121,22 +124,14 @@ const onClickEyecatch = (item: MenuDetailType) => {
       }
     }
   }
-}
 
-.image-viewer {
-  width: 100%;
-
-  img {
-    width: 100%;
-  }
-}
-
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .detail-list-item {
+  @media only screen and (max-width: $grid-breakpoint-md) {
     width: 85%;
 
     .detail-title-price {
-      padding: 0;
+      padding: 0.25rem 1rem;
+      // border-bottom: none;
+      background-color: $title-background-color;
     }
 
     .detail-body {
@@ -162,6 +157,14 @@ const onClickEyecatch = (item: MenuDetailType) => {
         }
       }
     }
+  }
+}
+
+.image-viewer {
+  width: 100%;
+
+  img {
+    width: 100%;
   }
 }
 </style>
