@@ -217,9 +217,6 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
 
       <div class="menu-detail-screen-container g-theme-contents-menu-detail">
         <template v-if="menuRef">
-          <div class="menu-detail-screen-header">
-            <h3 class="g-theme-contents-menu-title">{{ menuRef.title }}</h3>
-          </div>
           <CommonContentPreNextNagivation
             v-if="preUrl?.length || nextUrl?.length"
             :pre-url="preUrl"
@@ -234,7 +231,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
               :key="category.id"
               class="menu-category g-theme-contents-menu-category"
             >
-              <CommonContentCardTitle :title="category.category" keep-center />
+              <CommonContentCardTitle :title="category.category" />
 
               <template v-if="canEdit">
                 <div class="menu-category-actions">
@@ -361,33 +358,25 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
   }
 
   .menu-detail-screen-container {
-    padding: 2rem 0 3rem;
+    padding: 0 0 3rem;
 
     .pre-next-navi {
-      margin: -1rem 1rem 0;
-    }
-
-    .menu-detail-screen-header {
-      h3 {
-        width: fit-content;
-        margin: 0 auto;
-        padding: 0 3rem;
-      }
+      margin: 0 1rem;
     }
 
     .menu-detail-screen-body {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 2rem;
+      gap: 80px;
       width: 96%;
       max-width: 1500px;
-      margin: 2.5rem auto 0;
+      margin: 3rem auto 0;
 
       .menu-category {
         position: relative;
         width: 90%;
-        max-width: 700px;
+        max-width: 680px;
         padding: 0 0 4.5rem;
 
         .edit-category-activator {
