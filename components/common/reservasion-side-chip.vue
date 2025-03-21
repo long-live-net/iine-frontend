@@ -31,7 +31,7 @@ const onClickLink = () => {
   white-space: nowrap;
   transform: translate3d(0, -50%, 0);
   transition: background-color 0.25s linear;
-  box-shadow: -1px 1px 8px rgba($gray-darken3, 0.4);
+  box-shadow: -1px 1px 3px rgba($gray-darken3, 0.25);
   cursor: pointer;
   &::after {
     content: 'ご予約はこちら';

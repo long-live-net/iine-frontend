@@ -398,8 +398,8 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
 
           .edit-detail-activator {
             position: absolute;
-            top: 0.25rem;
-            left: 4%;
+            top: -0.5rem;
+            left: -0.5rem;
           }
         }
       }

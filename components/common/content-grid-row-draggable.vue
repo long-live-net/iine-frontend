@@ -126,6 +126,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   }
 
   .draggable {
+    user-select: none;
     cursor: v-bind('columnCursor');
   }
 }
