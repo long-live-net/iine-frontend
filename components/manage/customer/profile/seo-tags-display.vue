@@ -6,10 +6,7 @@ const props = withDefaults(
     customerSetting: CustomerSetting | null
     loading?: boolean
   }>(),
-  {
-    customerSetting: null,
-    loading: false,
-  }
+  { loading: false }
 )
 defineEmits<{
   edit: []

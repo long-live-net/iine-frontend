@@ -7,7 +7,6 @@ withDefaults(
     keepCenter?: boolean
   }>(),
   {
-    title: '',
     subtitle: '',
     textNoWrap: false,
     keepCenter: false,

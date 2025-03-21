@@ -6,11 +6,9 @@ import type { PageLayout } from '@/types/customer-setting'
 const props = withDefaults(
   defineProps<{
     homeSections: PageLayout[] | null
-    loading: boolean
+    loading?: boolean
   }>(),
-  {
-    loading: false,
-  }
+  { loading: false }
 )
 const emit = defineEmits<{
   cancel: []

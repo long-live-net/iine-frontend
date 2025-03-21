@@ -4,12 +4,9 @@ import type { CustomerUser, CustomerUserForm } from '@/types/customer-user'
 const props = withDefaults(
   defineProps<{
     customerUser: CustomerUser | null
-    loading: boolean
+    loading?: boolean
   }>(),
-  {
-    customerUser: null,
-    loading: false,
-  }
+  { loading: false }
 )
 const emit = defineEmits<{
   cancel: []

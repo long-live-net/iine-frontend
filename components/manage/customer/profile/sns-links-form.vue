@@ -4,12 +4,9 @@ import type { CustomerSetting, SnsLinkForm } from '@/types/customer-setting'
 const props = withDefaults(
   defineProps<{
     customerSetting: CustomerSetting | null
-    loading: boolean
+    loading?: boolean
   }>(),
-  {
-    customerSetting: null,
-    loading: false,
-  }
+  { loading: false }
 )
 const emit = defineEmits<{
   cancel: []

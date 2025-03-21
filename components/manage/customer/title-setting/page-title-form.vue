@@ -5,11 +5,9 @@ import type { PageTitle } from '@/types/customer-setting'
 const props = withDefaults(
   defineProps<{
     pageTitle: PageTitle
-    loading: boolean
+    loading?: boolean
   }>(),
-  {
-    loading: false,
-  }
+  { loading: false }
 )
 const emit = defineEmits<{
   cancel: []

@@ -6,10 +6,7 @@ withDefaults(
     customerUser: CustomerUser | null
     loading?: boolean
   }>(),
-  {
-    customerUser: null,
-    loading: false,
-  }
+  { loading: false }
 )
 defineEmits<{
   edit: []
