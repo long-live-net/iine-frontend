@@ -11,6 +11,7 @@ const props = withDefaults(
     placeholder?: string
     clearable?: boolean
     errorMessages?: string | string[]
+    simpleText?: boolean
     noImage?: boolean
   }>(),
   {
@@ -18,6 +19,7 @@ const props = withDefaults(
     placeholder: undefined,
     clearable: false,
     errorMessages: undefined,
+    simpleText: false,
     noImage: false,
   }
 )
@@ -98,6 +100,7 @@ const inputBodyImageFunction = async (
           ref="tiptapEditorRef"
           v-model:content="valueData"
           :placeholder="placeholder"
+          :simple-text="simpleText"
           :no-image="noImage"
           :input-body-image-function="inputBodyImageFunction"
           @focus="isFocus = true"

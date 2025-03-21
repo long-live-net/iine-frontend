@@ -107,6 +107,7 @@ const onCancel = () => {
           clearable
           label="メニューの説明"
           placeholder="メニューの説明文を入力してください"
+          simple-text
           no-image
           :customer-id="customerId"
           :api-kind="apiKind"

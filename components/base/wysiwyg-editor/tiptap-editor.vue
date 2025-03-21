@@ -30,11 +30,13 @@ const content = defineModel<string | null>('content', { default: null })
 const props = withDefaults(
   defineProps<{
     placeholder?: string | null
+    simpleText?: boolean
     noImage?: boolean
     inputBodyImageFunction?: (imageFile: File) => Promise<string | undefined>
   }>(),
   {
     placeholder: null,
+    simpleText: false,
     noImage: false,
     inputBodyImageFunction: undefined,
   }
@@ -128,6 +130,7 @@ defineExpose({ clearContent })
     <base-wysiwyg-editor-tiptap-toolbar
       v-if="editor"
       :editor="editor"
+      :simple-text="simpleText"
       :no-image="noImage"
       class="wysiwyg-editor-tiptap-toolbar"
       @image-setting="frameWithInputImage?.clickFileInput()"

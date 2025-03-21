@@ -91,6 +91,7 @@ const onCancel = () => {
           clearable
           label="概要"
           placeholder="概要を入力してください"
+          simple-text
           no-image
           :customer-id="customerId"
           :api-kind="apiKind"
