@@ -101,12 +101,13 @@ const onCancel = () => {
         </div>
       </div>
       <div class="mt-3">
-        <CommonWysiwsgEditor
+        <CommonWysiwygEditor
           v-model="formData.caption.value.value"
           :error-messages="formData.caption.errorMessage.value"
           clearable
           label="メニューの説明"
           placeholder="メニューの説明文を入力してください"
+          simple-text
           no-image
           :customer-id="customerId"
           :api-kind="apiKind"

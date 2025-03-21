@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import { debounce } from 'es-toolkit'
-import type TiptapEditor from '@/components/base/wysiwsg-editor/tiptap-editor.vue'
+import type TiptapEditor from '@/components/base/wysiwyg-editor/tiptap-editor.vue'
 
 const model = defineModel<string | null>()
 const props = withDefaults(
   defineProps<{
+    customerId: string | null
+    apiKind: string
     label?: string
     placeholder?: string
     clearable?: boolean
     errorMessages?: string | string[]
+    simpleText?: boolean
     noImage?: boolean
-    customerId: string | null
-    apiKind: string
   }>(),
   {
     label: undefined,
     placeholder: undefined,
     clearable: false,
     errorMessages: undefined,
+    simpleText: false,
     noImage: false,
   }
 )
@@ -94,10 +96,11 @@ const inputBodyImageFunction = async (
         {{ label }}
       </p>
       <CommonContentWrap :loading="inputBodyImagePosting">
-        <BaseWysiwsgEditorTiptapEditor
+        <BaseWysiwygEditorTiptapEditor
           ref="tiptapEditorRef"
           v-model:content="valueData"
           :placeholder="placeholder"
+          :simple-text="simpleText"
           :no-image="noImage"
           :input-body-image-function="inputBodyImageFunction"
           @focus="isFocus = true"

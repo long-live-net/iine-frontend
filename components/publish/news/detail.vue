@@ -60,7 +60,7 @@ await onLoad(contentId)
                 </p>
               </div>
               <div v-if="newsRef?.body" class="body">
-                <CommonWysiwsgViewer :value="newsRef?.body" />
+                <CommonWysiwygViewer :value="newsRef?.body" />
               </div>
               <div v-else class="no-items">
                 <p>データがありません</p>

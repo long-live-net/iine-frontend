@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HeaderLebel } from '@/utils/wysiwsg-editor/tip-tap'
+import type { HeaderLebel } from '~/utils/wysiwyg-editor/tip-tap'
 
 const props = defineProps<{ level: HeaderLebel }>()
 const emit = defineEmits<{ 'update:level': [value: HeaderLebel] }>()

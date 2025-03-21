@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { debounce } from 'es-toolkit'
-import type { FontSize } from '@/utils/wysiwsg-editor/tip-tap'
+import type { FontSize } from '~/utils/wysiwyg-editor/tip-tap'
 
 const props = defineProps<{ size: FontSize }>()
 const emit = defineEmits<{
