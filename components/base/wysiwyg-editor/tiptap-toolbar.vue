@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Editor } from '@tiptap/vue-3'
-import type { HeaderLebel, FontSize } from '@/utils/wysiwsg-editor/tip-tap'
+import type { HeaderLebel, FontSize } from '~/utils/wysiwyg-editor/tip-tap'
 
 const props = withDefaults(
   defineProps<{
@@ -226,7 +226,7 @@ const onClearNodesAndMarks = () => {
 
       <button :class="{ 'is-active': isHeader }" @click.stop.prevent>
         <v-icon size="small">mdi-format-header-equal</v-icon>
-        <base-wysiwsg-editor-tiptap-toolbar-header
+        <base-wysiwyg-editor-tiptap-toolbar-header
           :level="inputHeader"
           @update:level="onHeaderInputted"
         />
@@ -237,7 +237,7 @@ const onClearNodesAndMarks = () => {
         @click.stop.prevent
       >
         <v-icon size="small">mdi-format-color-text</v-icon>
-        <base-wysiwsg-editor-tiptap-toolbar-font-size
+        <base-wysiwyg-editor-tiptap-toolbar-font-size
           :size="inputTextSize"
           @update:size="onTextSizeInputted"
           @delete="onTextSizeDeleted"
@@ -252,7 +252,7 @@ const onClearNodesAndMarks = () => {
           <v-icon size="x-small" icon="mdi-format-color-text" />
           <v-sheet :color="inputTextColor" height="3" width="20" tile />
         </div>
-        <base-wysiwsg-editor-tiptap-toolbar-color
+        <base-wysiwyg-editor-tiptap-toolbar-color
           :color="inputTextColor"
           @update:color="onTextColorInputted"
           @delete="onTextColorDeleted"
@@ -285,7 +285,7 @@ const onClearNodesAndMarks = () => {
       </button>
       <button :class="{ 'is-active': isLink }" @click.stop.prevent>
         <v-icon size="small">mdi-link</v-icon>
-        <base-wysiwsg-editor-tiptap-toolbar-url
+        <base-wysiwyg-editor-tiptap-toolbar-url
           :url="inputUrl"
           @update:url="onLinkInputted"
           @delete="onLinkDeleted"
@@ -337,7 +337,7 @@ const onClearNodesAndMarks = () => {
 
       <button :class="{ 'is-active': isTable }" @click.stop.prevent>
         <v-icon size="small">mdi-table</v-icon>
-        <base-wysiwsg-editor-tiptap-toolbar-table
+        <base-wysiwyg-editor-tiptap-toolbar-table
           :is-table="isTable"
           @table:add="onAddTable"
           @table:delete="onDeleteTable"
@@ -365,7 +365,7 @@ const onClearNodesAndMarks = () => {
         </button>
         <button :class="{ 'is-active': isYoutube }" @click.stop.prevent>
           <v-icon size="small">mdi-youtube</v-icon>
-          <base-wysiwsg-editor-tiptap-toolbar-youtube
+          <base-wysiwyg-editor-tiptap-toolbar-youtube
             @update:url="onYoutubeInputted"
           />
         </button>

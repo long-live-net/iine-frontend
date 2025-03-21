@@ -54,7 +54,7 @@ const route = useRoute()
           <h5 class="title">
             {{ item.title }}
           </h5>
-          <CommonWysiwsgViewer :value="item.caption" class="caption" />
+          <CommonWysiwygViewer :value="item.caption" class="caption" />
           <p class="see-detail">
             <v-btn variant="outlined" size="small">{{
               seeDetailActionLabel

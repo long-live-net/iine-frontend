@@ -97,7 +97,7 @@ const bodyPlainString = computed(
       <slot name="body">
         <div v-if="item">
           <div v-if="bodyPlainString">
-            <CommonWysiwsgViewer :value="item?.body" />
+            <CommonWysiwygViewer :value="item?.body" />
           </div>
           <div v-else class="no-items">
             <p>データがありません</p>

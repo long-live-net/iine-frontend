@@ -2,12 +2,12 @@ import { Extension } from '@tiptap/core'
 import '@tiptap/extension-text-style'
 
 /**
- * Wysiwsg Editor Header Level
+ * Wysiwyg Editor Header Level
  */
 export type HeaderLebel = 1 | 2 | 3 | 4 | 5 | null
 
 /**
- * Wysiwsg Editor Font Size
+ * Wysiwyg Editor Font Size
  */
 export type FontSize = number | null
 

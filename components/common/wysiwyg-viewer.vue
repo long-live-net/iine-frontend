@@ -4,7 +4,7 @@ withDefaults(defineProps<{ value?: string | null }>(), {
 })
 </script>
 <template>
-  <BaseWysiwsgEditorTiptapViewer
+  <BaseWysiwygEditorTiptapViewer
     :value="value"
     class="g-theme-wysiwyg-contents"
   />

@@ -31,7 +31,7 @@ const onClickEyecatch = (item: MenuDetailType) => {
 
     <div v-if="captionPlainString || item.image" class="detail-body">
       <div class="caption-col">
-        <CommonWysiwsgViewer
+        <CommonWysiwygViewer
           v-if="captionPlainString"
           :value="item.caption"
           class="caption"

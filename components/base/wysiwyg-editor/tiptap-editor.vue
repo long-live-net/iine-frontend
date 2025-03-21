@@ -8,7 +8,7 @@ import TextStyle from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import Placeholder from '@tiptap/extension-placeholder'
 import ImageResize from 'tiptap-extension-resize-image'
-import { FontSize } from '@/utils/wysiwsg-editor/tip-tap'
+import { FontSize } from '~/utils/wysiwyg-editor/tip-tap'
 import Table from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
@@ -124,34 +124,34 @@ defineExpose({ clearContent })
 </script>
 
 <template>
-  <div class="wysiwsg-editor-container">
-    <base-wysiwsg-editor-tiptap-toolbar
+  <div class="wysiwyg-editor-container">
+    <base-wysiwyg-editor-tiptap-toolbar
       v-if="editor"
       :editor="editor"
       :no-image="noImage"
-      class="wysiwsg-editor-tiptap-toolbar"
+      class="wysiwyg-editor-tiptap-toolbar"
       @image-setting="frameWithInputImage?.clickFileInput()"
     />
-    <base-wysiwsg-editor-tiptap-frame-with-input-image
+    <base-wysiwyg-editor-tiptap-frame-with-input-image
       v-if="editor"
       ref="frameWithInputImage"
-      class="wysiwsg-editor-tiptap-editor"
+      class="wysiwyg-editor-tiptap-editor"
       @input-image="onInputImage"
     >
       <editor-content :editor="editor" />
-    </base-wysiwsg-editor-tiptap-frame-with-input-image>
+    </base-wysiwyg-editor-tiptap-frame-with-input-image>
   </div>
 </template>
 
 <style scoped lang="scss">
-.wysiwsg-editor-container {
-  .wysiwsg-editor-tiptap-toolbar {
+.wysiwyg-editor-container {
+  .wysiwyg-editor-tiptap-toolbar {
     position: sticky;
     top: 0;
     z-index: 1000;
   }
 
-  .wysiwsg-editor-tiptap-editor {
+  .wysiwyg-editor-tiptap-editor {
     overflow-x: hidden;
   }
 

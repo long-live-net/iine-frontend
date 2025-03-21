@@ -56,7 +56,7 @@ const route = useRoute()
         :disabled="route.name !== 'index'"
       >
         <div class="caption-base">
-          <CommonWysiwsgViewer :value="item.caption" class="caption" />
+          <CommonWysiwygViewer :value="item.caption" class="caption" />
           <p class="see-detail">
             <v-btn variant="outlined" size="small">{{
               seeDetailActionLabel
