@@ -10,7 +10,7 @@ const props = withDefaults(
     guideLine?: boolean
   }>(),
   {
-    group: 'contentItem',
+    group: undefined,
     dense: false,
     guideLine: false,
   }
@@ -40,8 +40,11 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
       <draggable
         v-model="draggableContents"
         item-key="id"
-        :group="group"
         handle=".draggable"
+        :group="group"
+        :fallback-tolerance="1"
+        :force-fallback="true"
+        :scroll-sensitivity="220"
         class="content-grid-row"
         :class="{
           dense,

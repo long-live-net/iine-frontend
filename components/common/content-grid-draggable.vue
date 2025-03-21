@@ -36,6 +36,9 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
         v-model="draggableContents"
         item-key="id"
         handle=".draggable"
+        :fallback-tolerance="1"
+        :force-fallback="true"
+        :scroll-sensitivity="220"
         class="content-grid-base"
         :class="{ 'content-grid': useGrid, 'content-grid-flex': !useGrid }"
         @start="isDragging = true"
@@ -77,7 +80,6 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
 .content-grid-base {
   .column-draggable {
     position: relative;
-    width: 92% !important;
     border-radius: 6px;
 
     .edit-position-top {
