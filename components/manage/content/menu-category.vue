@@ -1,8 +1,21 @@
 <script setup lang="ts">
-import type { MenuCategoryType, MenuCategoryForm } from '@/types/content'
+import type {
+  MenuCategoryType,
+  MenuCategoryForm,
+  ContentEditMode,
+} from '@/types/content'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{ menuCategoryData?: MenuCategoryType | null }>()
+const props = withDefaults(
+  defineProps<{
+    contentTitle: string
+    editMode: ContentEditMode
+    menuCategoryData?: MenuCategoryType | null
+  }>(),
+  {
+    menuCategoryData: null,
+  }
+)
 const emit = defineEmits<{
   create: [inputData: MenuCategoryForm]
   update: [{ id: string; formData: MenuCategoryForm }]
@@ -51,7 +64,8 @@ const onCancel = () => {
 <template>
   <CommonContentEditDialog
     v-model:modal="modal"
-    :is-update="!!menuCategoryData?.id"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
   >
     <v-form class="menu-detail-form">
       <div class="mt-3">

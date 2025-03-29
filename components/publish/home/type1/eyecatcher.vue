@@ -2,6 +2,7 @@
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 const {
+  contentTitle,
   eyecatchRef,
   onLoad,
   onCreate,
@@ -11,6 +12,9 @@ const {
   onUpdateImageSetting,
   loading,
 } = useEyecatchActions(customerId)
+
+const editModal = ref(false)
+
 await onLoad()
 </script>
 
@@ -51,7 +55,7 @@ await onLoad()
                 />
               </CommonContentItemAnimation>
             </template>
-            <template #sideSettings>
+            <template v-if="eyecatchRef?.titleSettings" #sideSettings>
               <CommonEyecatchTitleSetting
                 :settings="eyecatchRef?.titleSettings"
                 @update="onUpdateTitleSetting"
@@ -65,29 +69,37 @@ await onLoad()
             </template>
           </CommonEyecatchTitleSettingPositionEyecatcher>
         </template>
-        <template v-if="canEdit && eyecatchRef" #settings>
-          <CommonEyecatchImageSetting
-            :settings="eyecatchRef.imageSettings"
-            @update="onUpdateImageSetting"
-          />
-        </template>
       </CommonEyecatchImage>
     </CommonContentItemAnimation>
     <div v-if="canEdit" class="edit-activator">
-      <ManageContentEyecatcher
-        v-if="eyecatchRef?.id"
-        :eyecatch-data="eyecatchRef"
-        @update="onUpdate"
-        @remove="onRemove"
-      />
-      <ManageContentEyecatcher
+      <div v-if="eyecatchRef?.id" class="activators">
+        <CommonContentEditActivator
+          v-model:modal="editModal"
+          icon
+          edit-mode="image"
+          :content-title="contentTitle"
+        />
+        <CommonEyecatchImageSetting
+          :settings="eyecatchRef.imageSettings"
+          @update="onUpdateImageSetting"
+        />
+      </div>
+      <CommonContentEditActivator
         v-else
-        :eyecatch-data="eyecatchRef"
-        activator-label="トップ画像を登録してください"
-        @create="onCreate"
+        v-model:modal="editModal"
+        edit-mode="new"
+        :content-title="contentTitle"
       />
     </div>
   </CommonContentWrap>
+  <ManageContentEyecatcher
+    v-model:modal="editModal"
+    :eyecatch-data="eyecatchRef"
+    :content-title="contentTitle"
+    @update="onUpdate"
+    @remove="onRemove"
+    @create="onCreate"
+  />
 </template>
 
 <style lang="scss" scoped>
@@ -101,6 +113,11 @@ await onLoad()
 
     @media only screen and (max-width: $grid-breakpoint-md) {
       top: 0.5rem;
+    }
+
+    .activators {
+      display: flex;
+      column-gap: 0.5rem;
     }
   }
 }

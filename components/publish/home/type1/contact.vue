@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import type { ContactType } from '@/types/content'
+import type { ContactType, ContentEditMode } from '@/types/content'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 
 const {
+  contentTitle,
   contactRef,
   onLoad,
   onCreate,
@@ -17,6 +18,15 @@ const {
 
 const editModal = ref(false)
 const updatingData = ref<ContactType | null>(null)
+const editMode = ref<ContentEditMode>('update')
+const onEditMode = (mode: ContentEditMode) => {
+  if (mode === 'new') {
+    updatingData.value = null
+  } else {
+    updatingData.value = contactRef.value
+  }
+  editMode.value = mode
+}
 
 await onLoad()
 </script>
@@ -27,9 +37,9 @@ await onLoad()
       <PublishContentDetailItem
         v-model:modal="editModal"
         :item="contactRef"
+        :content-title="contentTitle"
         :can-edit="canEdit"
-        @update="updatingData = $event"
-        @create="updatingData = null"
+        @edit-mode="onEditMode"
         @update-title-setting="onUpdateTitleSetting"
         @update-image-setting="onUpdateImageSetting"
       >
@@ -38,17 +48,13 @@ await onLoad()
             <PublishCustomerServiceLinks class="service-links" />
           </div>
         </template>
-
-        <template #footernavi>
-          <div class="inquire-activator">
-            <PublishInquire />
-          </div>
-        </template>
       </PublishContentDetailItem>
     </CommonContentCard>
   </CommonContentWrap>
   <ManageContentContact
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :contact-data="updatingData"
     @create="onCreate"
     @update="onUpdate"

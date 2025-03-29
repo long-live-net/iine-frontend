@@ -10,8 +10,16 @@ const contentId = Array.isArray(route.params.id)
   : route.params.id
 
 const { customerId } = useCustomer()
-const { filter, sort, pager, menuListRef, loading, onLoad, onGetList } =
-  useMenuListActions(customerId)
+const {
+  contentTitle,
+  filter,
+  sort,
+  pager,
+  menuListRef,
+  loading,
+  onLoad,
+  onGetList,
+} = useMenuListActions(customerId)
 
 defineExpose({ onGetList })
 
@@ -31,6 +39,7 @@ await onLoad()
     <PublishContentGridTable
       v-model:modal="editModal"
       :items="menuListRef"
+      :content-title="contentTitle"
       :can-edit="false"
       small-if-possible
     >

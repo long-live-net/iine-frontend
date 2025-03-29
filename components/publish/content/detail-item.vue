@@ -1,10 +1,16 @@
 <script setup lang="ts" generic="T extends ContentType">
-import type { ContentType, TitleSettings, ImageSettings } from '@/types/content'
+import type {
+  ContentType,
+  TitleSettings,
+  ImageSettings,
+  ContentEditMode,
+} from '@/types/content'
 
-const editModal = defineModel<boolean>('modal', { required: true })
+const modal = defineModel<boolean>('modal', { required: true })
 const props = withDefaults(
   defineProps<{
     item: T | null
+    contentTitle: string
     canEdit?: boolean
     noImageParallax?: boolean
   }>(),
@@ -14,8 +20,7 @@ const props = withDefaults(
   }
 )
 defineEmits<{
-  create: []
-  update: [item: T]
+  editMode: [mode: ContentEditMode]
   updateTitleSetting: [settings: Partial<TitleSettings>]
   updateImageSetting: [settings: Partial<ImageSettings>]
 }>()
@@ -35,7 +40,7 @@ const bodyPlainString = computed(
     >
       <CommonContentCardTitle :title="item?.title ?? ''" class="g-block-sm" />
     </CommonContentItemAnimation>
-    <template v-if="item?.image">
+    <div v-if="item?.image" class="image-item">
       <CommonContentItemAnimation
         :thresholds="[0.5]"
         animation-name="gFadeIn"
@@ -62,6 +67,7 @@ const bodyPlainString = computed(
                   <CommonEyecatchTitle
                     place="section"
                     :title="item?.title"
+                    :subtitle="item?.subtitle"
                     :settings="item?.titleSettings"
                     text-no-wrap
                   />
@@ -73,18 +79,34 @@ const bodyPlainString = computed(
                   @update="$emit('updateTitleSetting', $event)"
                 />
               </template>
+              <template v-if="item?.subtitle" #topSettings>
+                <CommonEyecatchTitleSettingAlign
+                  :settings="item?.titleSettings"
+                  @update="$emit('updateTitleSetting', $event)"
+                />
+              </template>
             </CommonEyecatchTitleSettingPosition>
-          </template>
-          <template v-if="canEdit && item" #settings>
-            <CommonEyecatchImageSetting
-              :settings="item.imageSettings"
-              :no-parallax="noImageParallax"
-              @update="$emit('updateImageSetting', $event)"
-            />
           </template>
         </CommonEyecatchImage>
       </CommonContentItemAnimation>
-    </template>
+
+      <div v-if="canEdit && item?.id" class="edit-activator">
+        <div class="activators">
+          <CommonContentEditActivator
+            v-model:modal="modal"
+            edit-mode="image"
+            content-title="画像"
+            icon
+            @update:modal="$emit('editMode', 'image')"
+          />
+          <CommonEyecatchImageSetting
+            :settings="item.imageSettings"
+            :no-parallax="noImageParallax"
+            @update="$emit('updateImageSetting', $event)"
+          />
+        </div>
+      </div>
+    </div>
     <CommonContentCardTitle
       v-else
       :title="item?.title ?? ''"
@@ -93,49 +115,52 @@ const bodyPlainString = computed(
 
     <slot name="middlenavi" />
 
-    <CommonContentCardBody>
-      <slot name="body">
-        <div v-if="item">
-          <div v-if="bodyPlainString">
-            <CommonWysiwygViewer :value="item?.body" />
+    <div class="body-item">
+      <CommonContentCardBody>
+        <div v-if="canEdit && item?.id" class="edit-body-activator">
+          <CommonContentEditActivator
+            v-model:modal="modal"
+            edit-mode="body"
+            content-title="本文"
+            icon
+            @update:modal="$emit('editMode', 'body')"
+          />
+        </div>
+
+        <slot name="body">
+          <div v-if="item">
+            <div v-if="bodyPlainString">
+              <CommonWysiwygViewer :value="item?.body" />
+            </div>
+            <div v-else class="no-items">
+              <p>データがありません</p>
+              <div v-if="canEdit">
+                <CommonContentEditActivator
+                  v-if="item"
+                  v-model:modal="modal"
+                  edit-mode="body"
+                  :content-title="`${contentTitle}本文`"
+                  @update:modal="$emit('editMode', 'body')"
+                />
+              </div>
+            </div>
           </div>
           <div v-else class="no-items">
             <p>データがありません</p>
-            <div v-if="canEdit">
+            <div v-if="canEdit && $route.name === 'index'">
               <CommonContentEditActivator
-                v-if="item"
-                v-model:modal="editModal"
-                is-update
-                activator-label="本文を登録してください"
-                @update:modal="$emit('update', item)"
+                v-model:modal="modal"
+                edit-mode="new"
+                :content-title="contentTitle"
+                @update:modal="$emit('editMode', 'new')"
               />
             </div>
+            <p v-else class="mt-9">
+              <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
+            </p>
           </div>
-        </div>
-        <div v-else class="no-items">
-          <p>データがありません</p>
-          <div v-if="canEdit && $route.name === 'index'">
-            <CommonContentEditActivator
-              v-model:modal="editModal"
-              activator-label="コンテンツを登録してください"
-              @update:modal="$emit('create')"
-            />
-          </div>
-          <p v-else class="mt-9">
-            <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
-          </p>
-        </div>
-      </slot>
-    </CommonContentCardBody>
-
-    <slot name="footernavi" />
-
-    <div v-if="canEdit && item?.id" class="edit-activator">
-      <CommonContentEditActivator
-        v-model:modal="editModal"
-        is-update
-        @update:modal="$emit('update', item)"
-      />
+        </slot>
+      </CommonContentCardBody>
     </div>
   </div>
 </template>
@@ -143,16 +168,6 @@ const bodyPlainString = computed(
 <style scoped lang="scss">
 .content-detail-item {
   position: relative;
-
-  .edit-activator {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-
-    @media only screen and (max-width: $grid-breakpoint-md) {
-      top: 6rem;
-    }
-  }
 
   .no-items {
     display: flex;
@@ -165,6 +180,30 @@ const bodyPlainString = computed(
       color: $accent;
     }
   }
+}
+
+.image-item {
+  position: relative;
+
+  .edit-activator {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      top: 0.25rem;
+      left: 0.25rem;
+    }
+
+    .activators {
+      display: flex;
+      column-gap: 0.5rem;
+    }
+  }
+}
+
+.edit-body-activator {
+  margin: -1.5rem 0 1rem 25px;
 }
 
 $eyecatcher-height: 480px;

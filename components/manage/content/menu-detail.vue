@@ -1,9 +1,22 @@
 <script setup lang="ts">
-import type { MenuDetailType, MenuDetailForm } from '@/types/content'
+import type {
+  MenuDetailType,
+  MenuDetailForm,
+  ContentEditMode,
+} from '@/types/content'
 import { getMenuDetailKind } from '@/composables/use-content/use-menu-detail'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{ menuDetailData?: MenuDetailType | null }>()
+const props = withDefaults(
+  defineProps<{
+    contentTitle: string
+    editMode: ContentEditMode
+    menuDetailData?: MenuDetailType | null
+  }>(),
+  {
+    menuDetailData: null,
+  }
+)
 const emit = defineEmits<{
   create: [inputData: MenuDetailForm]
   update: [{ id: string; formData: MenuDetailForm }]
@@ -54,7 +67,8 @@ const onCancel = () => {
 <template>
   <CommonContentEditDialog
     v-model:modal="modal"
-    :is-update="!!menuDetailData?.id"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
   >
     <v-form class="menu-detail-form">
       <div>

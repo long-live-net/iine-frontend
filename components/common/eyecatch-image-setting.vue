@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { mergeProps } from 'vue'
 import type { ImageSettings } from '@/types/content'
 
 const props = withDefaults(
-  defineProps<{ settings?: ImageSettings; noParallax?: boolean }>(),
+  defineProps<{
+    settings?: ImageSettings
+    tooltipLabel?: string
+    noParallax?: boolean
+  }>(),
   {
     settings: () => ({
       lgSize: 'cover',
@@ -12,6 +17,7 @@ const props = withDefaults(
       lgParallax: 'scroll',
       smParallax: 'scroll',
     }),
+    tooltipLabel: '画像表示設定',
     noParallax: false,
   }
 )
@@ -173,16 +179,21 @@ const settingMenu = ref(false)
     :close-on-content-click="false"
   >
     <template #activator="{ props: menuProps }">
-      <v-btn
-        v-bind="menuProps"
-        color="success"
-        prepend-icon="mdi-image"
-        class="activator"
-        @click.stop
-      >
-        画像設定
-      </v-btn>
+      <v-tooltip :text="tooltipLabel" location="top">
+        <template #activator="{ props: tooltipProps }">
+          <v-btn
+            v-bind="mergeProps(menuProps, tooltipProps)"
+            color="success"
+            icon
+            elevation="8"
+            @click.stop
+          >
+            <v-icon icon="mdi-image-filter-vintage" size="x-large" />
+          </v-btn>
+        </template>
+      </v-tooltip>
     </template>
+
     <div class="image-setting">
       <!-- Large画面 -->
       <BaseImagePlacer

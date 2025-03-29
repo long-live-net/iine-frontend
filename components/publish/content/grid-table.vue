@@ -1,24 +1,23 @@
 <script setup lang="ts" generic="T extends ContentType">
-import type { ContentType } from '@/types/content'
+import type { ContentType, ContentEditMode } from '@/types/content'
 
 const editModal = defineModel<boolean>('modal', { required: true })
 withDefaults(
   defineProps<{
-    items?: T[] | null
+    items: T[] | null
+    contentTitle: string
     canEdit?: boolean
     small?: boolean
     smallIfPossible?: boolean
   }>(),
   {
-    items: null,
     canEdit: false,
     small: false,
     smallIfPossible: false,
   }
 )
 defineEmits<{
-  create: []
-  update: [item: T]
+  editTarget: [target: { item: T | null; mode: ContentEditMode }]
   updatePositions: [items: T[]]
 }>()
 </script>
@@ -37,9 +36,13 @@ defineEmits<{
           <div class="edit-activator">
             <CommonContentEditActivator
               v-model:modal="editModal"
-              is-update
-              activator-size="x-small"
-              @update:modal="$emit('update', content)"
+              :content-title="contentTitle"
+              edit-mode="update"
+              size="x-small"
+              icon
+              @update:modal="
+                $emit('editTarget', { item: content, mode: 'update' })
+              "
             />
           </div>
         </div>
@@ -50,15 +53,19 @@ defineEmits<{
       <div>
         <CommonContentEditActivator
           v-model:modal="editModal"
-          activator-label="コンテンツを登録してください"
-          @update:modal="$emit('create')"
+          :content-title="contentTitle"
+          edit-mode="new"
+          @update:modal="$emit('editTarget', { item: null, mode: 'new' })"
         />
       </div>
     </div>
     <div v-if="items?.length" class="create-activator">
       <CommonContentEditActivator
         v-model:modal="editModal"
-        @update:modal="$emit('create')"
+        :content-title="contentTitle"
+        edit-mode="new"
+        icon
+        @update:modal="$emit('editTarget', { item: null, mode: 'new' })"
       />
     </div>
   </div>

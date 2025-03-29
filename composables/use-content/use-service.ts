@@ -79,6 +79,7 @@ export const useServiceListActions = (customerId: Ref<string | null>) => {
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
   return {
+    contentTitle,
     filter,
     sort,
     pager,
@@ -118,6 +119,7 @@ export const useServiceActions = (customerId: Ref<string | null>) => {
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
   return {
+    contentTitle,
     serviceRef: contentRef,
     servicePreNextIdRefRef: contentPreNextIdRefRef,
     loading,

@@ -3,6 +3,7 @@ import type {
   MenuCategoryType,
   MenuDetailType,
   MenuDetailForm,
+  ContentEditMode,
 } from '@/types/content'
 import type { MenuItem } from '@/components/base/dropdown.vue'
 const emit = defineEmits<{ 'update:data': [] }>()
@@ -51,6 +52,7 @@ const nextUrl = computed(() =>
 const editCategoryModal = ref(false)
 const editCategoryPositionModal = ref(false)
 const updatingCategory = ref<MenuCategoryType | null>(null)
+const editModeCategory = ref<ContentEditMode>('update')
 const {
   filter: filterCategory,
   sort: sortCategory,
@@ -86,6 +88,7 @@ const onSelectMenuCategory = (value: number | string) => {
     case 'addMenuCategory':
       updatingCategory.value = null
       editCategoryModal.value = true
+      editModeCategory.value = 'new'
       break
     case 'orderMenuCategory':
       editCategoryPositionModal.value = true
@@ -99,6 +102,7 @@ const onSelectMenuCategory = (value: number | string) => {
 const editDetailModal = ref(false)
 const updatingDetail = ref<MenuDetailType | null>(null)
 const targetCategory = ref<MenuCategoryType | null>(null)
+const editModeDetail = ref<ContentEditMode>('update')
 const {
   filter: filterDetail,
   sort: sortDetail,
@@ -175,7 +179,9 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
               activator-icon="mdi-plus"
               activator-size="small"
               activator-color="info"
-              @update:modal="updatingCategory = null"
+              @update:modal="
+                ((updatingCategory = null), (editModeCategory = 'new'))
+              "
             />
             <BaseActivator
               v-model:modal="editCategoryPositionModal"
@@ -242,7 +248,9 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
                     activator-size="small"
                     activator-color="info"
                     @update:modal="
-                      ((updatingDetail = null), (targetCategory = category))
+                      ((editModeDetail = 'new'),
+                      (updatingDetail = null),
+                      (targetCategory = category))
                     "
                   />
                 </div>
@@ -258,11 +266,14 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
                       <PublishMenuDetailsItemGridRow :item="content" />
                       <CommonContentEditActivator
                         v-model:modal="editDetailModal"
+                        content-title="メニュー項目"
+                        edit-mode="update"
                         activator-size="x-small"
-                        is-update
+                        icon
                         class="edit-detail-activator"
                         @update:modal="
-                          ((updatingDetail = content),
+                          ((editModeDetail = 'update'),
+                          (updatingDetail = content),
                           (targetCategory = category))
                         "
                       />
@@ -272,9 +283,14 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
                 <div class="edit-category-activator">
                   <CommonContentEditActivator
                     v-model:modal="editCategoryModal"
-                    activator-size="default"
-                    is-update
-                    @update:modal="updatingCategory = category"
+                    content-title="メニューカテゴリ"
+                    edit-mode="update"
+                    activator-size="small"
+                    icon
+                    @update:modal="
+                      ((updatingCategory = category),
+                      (editModeCategory = 'update'))
+                    "
                   />
                 </div>
               </template>
@@ -328,6 +344,8 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
   />
   <ManageContentMenuCategory
     v-model:modal="editCategoryModal"
+    content-title="メニューカテゴリ"
+    :edit-mode="editModeCategory"
     :menu-category-data="updatingCategory"
     @create="onCreateCategory(menuId, $event)"
     @update="onUpdateCategory({ menuId, ...$event })"
@@ -335,6 +353,8 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
   />
   <ManageContentMenuDetail
     v-model:modal="editDetailModal"
+    content-title="メニュー項目"
+    :edit-mode="editModeDetail"
     :menu-detail-data="updatingDetail"
     @create="onCreateDetail"
     @update="onUpdateDetail"
@@ -383,14 +403,20 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
           position: absolute;
           top: 0.5rem;
           left: 0.5rem;
+
+          @media only screen and (max-width: $grid-breakpoint-md) {
+            top: 3.5rem;
+            left: 2rem;
+          }
         }
 
         .menu-category-actions {
           display: flex;
-          justify-content: center;
+          justify-content: end;
           align-items: center;
           gap: 0.5rem;
-          margin-bottom: 2rem;
+          margin-right: 2rem;
+          margin-bottom: 1rem;
         }
 
         .menu-detail-container {

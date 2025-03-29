@@ -79,6 +79,7 @@ export const useFeatureListActions = (customerId: Ref<string | null>) => {
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
   return {
+    contentTitle,
     filter,
     sort,
     pager,
@@ -118,6 +119,7 @@ export const useFeatureActions = (customerId: Ref<string | null>) => {
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
   return {
+    contentTitle,
     featureRef: contentRef,
     featurePreNextIdRefRef: contentPreNextIdRefRef,
     loading,

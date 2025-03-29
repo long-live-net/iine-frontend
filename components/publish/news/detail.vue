@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ContentEditMode } from '@/types/content'
 import { formatLocalDate } from '@/utils/misc'
 
 const { customerId } = useCustomer()
@@ -9,9 +10,8 @@ const contentId = Array.isArray(route.params.id)
   ? route.params.id[0]
   : route.params.id
 
-const editModal = ref(false)
-
 const {
+  contentTitle,
   newsRef,
   newsPreNextIdRefRef,
   loading,
@@ -34,6 +34,9 @@ const nextUrl = computed(() =>
     : null
 )
 
+const editModal = ref(false)
+const editMode = ref<ContentEditMode>('update')
+
 await onLoad(contentId)
 </script>
 
@@ -44,8 +47,10 @@ await onLoad(contentId)
         <PublishContentDetailItem
           v-model:modal="editModal"
           :item="newsRef"
+          :content-title="contentTitle"
           :can-edit="canEdit"
           no-image-parallax
+          @edit-mode="editMode = $event"
           @update-title-setting="onUpdateTitleSetting"
           @update-image-setting="onUpdateImageSetting"
         >
@@ -67,8 +72,9 @@ await onLoad(contentId)
                 <div v-if="canEdit">
                   <CommonContentEditActivator
                     v-model:modal="editModal"
-                    activator-label="コンテンツを登録してください"
-                    @create="onCreate"
+                    edit-mode="body"
+                    :content-title="`${contentTitle}本文`"
+                    @update:modal="editMode = 'body'"
                   />
                 </div>
                 <p v-else class="mt-9">
@@ -89,6 +95,8 @@ await onLoad(contentId)
   </CommonContentWrap>
   <ManageContentNews
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :news-data="newsRef"
     @create="onCreate"
     @update="onUpdate"

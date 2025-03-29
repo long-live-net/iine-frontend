@@ -89,6 +89,7 @@ export const useMenuImageListActions = (customerId: Ref<string | null>) => {
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
   return {
+    contentTitle,
     filter,
     sort,
     pager,

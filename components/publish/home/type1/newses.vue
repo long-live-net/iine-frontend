@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import type { NewsType } from '@/types/content'
+import type { NewsType, ContentEditMode } from '@/types/content'
 import { formatLocalDate } from '@/utils/misc'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 
-const editModal = ref(false)
-const updatingData = ref<NewsType | null>(null)
-
 const {
+  contentTitle,
   filter,
   sort,
   pager,
@@ -20,6 +18,10 @@ const {
   onRemove,
   loading,
 } = useNewsListActions(customerId)
+
+const editModal = ref(false)
+const updatingData = ref<NewsType | null>(null)
+const editMode = ref<ContentEditMode>('update')
 
 const isWholeData = ref(false)
 filter.value = { publishOn: true }
@@ -93,9 +95,14 @@ await onLoad()
               <div v-if="canEdit" class="edit-activator">
                 <CommonContentEditActivator
                   v-model:modal="editModal"
-                  is-update
-                  activator-size="x-small"
-                  @update:modal="updatingData = content"
+                  :content-title="contentTitle"
+                  edit-mode="caption"
+                  size="x-small"
+                  icon
+                  no-tooltip
+                  @update:modal="
+                    ((updatingData = content), (editMode = 'caption'))
+                  "
                 />
               </div>
             </div>
@@ -106,8 +113,9 @@ await onLoad()
           <div v-if="canEdit">
             <CommonContentEditActivator
               v-model:modal="editModal"
-              activator-label="ニュースを登録してください"
-              @update:modal="updatingData = null"
+              :content-title="contentTitle"
+              edit-mode="new"
+              @update:modal="((updatingData = null), (editMode = 'new'))"
             />
           </div>
         </div>
@@ -121,13 +129,18 @@ await onLoad()
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
         <CommonContentEditActivator
           v-model:modal="editModal"
-          @update:modal="updatingData = null"
+          :content-title="contentTitle"
+          edit-mode="new"
+          icon
+          @update:modal="((updatingData = null), (editMode = 'new'))"
         />
       </div>
     </CommonContentCard>
   </CommonContentWrap>
   <ManageContentNews
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :news-data="updatingData"
     @create="onCreate"
     @update="onUpdate"

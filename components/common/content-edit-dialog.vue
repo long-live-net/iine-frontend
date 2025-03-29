@@ -1,17 +1,26 @@
 <script setup lang="ts">
+import type { ContentEditMode } from '@/types/content'
+
 const modal = defineModel<boolean>('modal', { required: true })
 const props = defineProps<{
-  isUpdate?: boolean
+  editMode: ContentEditMode
+  contentTitle: string
   loading?: boolean
 }>()
 
-const titleLabel = computed(() =>
-  props.isUpdate ? 'コンテンツの更新' : 'コンテンツの追加'
+const titleLabel = computed(
+  () => `${props.contentTitle}を${props.editMode === 'new' ? '追加' : '変更'}`
 )
 const titleIcon = computed(() =>
-  props.isUpdate ? 'mdi-pencil-circle' : 'mdi-plus-circle'
+  props.editMode === 'new'
+    ? 'mdi-plus'
+    : props.editMode === 'image'
+      ? 'mdi-image'
+      : 'mdi-pencil'
 )
-const titleColor = computed(() => (props.isUpdate ? 'success' : 'info'))
+const titleColor = computed(() =>
+  props.editMode === 'new' ? 'info' : 'success'
+)
 </script>
 
 <template>

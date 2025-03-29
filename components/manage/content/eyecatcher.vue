@@ -2,10 +2,16 @@
 import type { EyecatchType, EyecatchForm } from '@/types/content'
 import { getEyecatchKind } from '@/composables/use-content/use-eyecatch'
 
-const props = defineProps<{
-  eyecatchData?: EyecatchType | null
-  activatorLabel?: string
-}>()
+const modal = defineModel<boolean>('modal', { required: true })
+const props = withDefaults(
+  defineProps<{
+    eyecatchData?: EyecatchType | null
+    contentTitle: string
+  }>(),
+  {
+    eyecatchData: null,
+  }
+)
 
 const emit = defineEmits<{
   create: [inputData: EyecatchForm]
@@ -16,7 +22,6 @@ const emit = defineEmits<{
 const { customerId } = useCustomer()
 const apiKind = getEyecatchKind()
 
-const modal = ref(false)
 const { handleSubmit, handleReset, formData, resetEyeCatchForm } =
   useEyecatchForm()
 
@@ -57,14 +62,10 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditActivator
-    v-model:modal="modal"
-    :is-update="!!eyecatchData?.id"
-    :activator-label="activatorLabel"
-  />
   <CommonContentEditDialog
     v-model:modal="modal"
-    :is-update="!!eyecatchData?.id"
+    :content-title="contentTitle"
+    :edit-mode="eyecatchData?.id ? 'image' : 'new'"
   >
     <v-form>
       <div>
@@ -74,7 +75,7 @@ const onCancel = () => {
           v-model:type="formData.imageType.value.value"
           v-model:settings="formData.imageSettings.value.value"
           :error-messages="formData.image.errorMessage.value"
-          label="トップ画像"
+          :label="contentTitle"
           :customer-id="customerId"
           :api-kind="apiKind"
         />
@@ -84,8 +85,8 @@ const onCancel = () => {
           v-model="formData.title.value.value"
           :error-messages="formData.title.errorMessage.value"
           clearable
-          label="トップタイトル"
-          placeholder="トップタイトルを入力してください"
+          label="タイトル"
+          placeholder="タイトルを入力してください"
         />
       </div>
       <div class="mt-3">
