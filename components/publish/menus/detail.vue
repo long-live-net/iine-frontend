@@ -269,7 +269,6 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
                         content-title="メニュー項目"
                         edit-mode="update"
                         activator-size="x-small"
-                        icon
                         class="edit-detail-activator"
                         @update:modal="
                           ((editModeDetail = 'update'),
@@ -286,7 +285,6 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
                     content-title="メニューカテゴリ"
                     edit-mode="update"
                     activator-size="small"
-                    icon
                     @update:modal="
                       ((updatingCategory = category),
                       (editModeCategory = 'update'))
@@ -441,7 +439,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
     p {
       text-align: center;
       font-weight: bold;
-      color: $accent;
+      color: var(--warning-color);
     }
   }
 }

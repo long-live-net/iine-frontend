@@ -103,7 +103,6 @@ await onLoad()
                   :content-title="contentTitle"
                   edit-mode="caption"
                   size="x-small"
-                  icon
                   no-tooltip
                   @update:modal="
                     ((updatingData = content), (editMode = 'caption'))
@@ -133,7 +132,6 @@ await onLoad()
           v-model:modal="editModal"
           :content-title="contentTitle"
           edit-mode="new"
-          icon
           @update:modal="((updatingData = null), (editMode = 'new'))"
         />
       </div>
@@ -158,19 +156,23 @@ await onLoad()
     margin: 1.5rem 0;
     text-align: center;
   }
+
   .no-items {
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 1rem;
+
     p {
       font-weight: bold;
-      color: $accent;
+      color: var(--warning-color);
     }
   }
+
   .whole-switch {
     margin-top: 1rem;
   }
+
   .create-activator {
     position: absolute;
     top: 1rem;
@@ -198,17 +200,20 @@ await onLoad()
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
   .edit-activator {
     position: absolute;
     top: 3px;
     left: -25px;
   }
 }
+
 @media only screen and (max-width: $grid-breakpoint-md) {
   .news-item {
     flex-flow: column;
     align-items: stretch;
     padding: 0 0 0.6rem 1rem;
+
     .edit-activator {
       top: 0;
       left: -22px;

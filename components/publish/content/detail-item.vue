@@ -96,7 +96,6 @@ const bodyPlainString = computed(
             v-model:modal="modal"
             edit-mode="image"
             content-title="画像"
-            icon
             @update:modal="$emit('editMode', 'image')"
           />
           <CommonEyecatchImageSetting
@@ -122,7 +121,6 @@ const bodyPlainString = computed(
             v-model:modal="modal"
             edit-mode="body"
             content-title="本文"
-            icon
             @update:modal="$emit('editMode', 'body')"
           />
         </div>
@@ -133,27 +131,34 @@ const bodyPlainString = computed(
               <CommonWysiwygViewer :value="item?.body" />
             </div>
             <div v-else class="no-items">
-              <p>データがありません</p>
-              <div v-if="canEdit">
+              <p>本文がありません</p>
+              <div v-if="canEdit" class="d-flex align-center">
                 <CommonContentEditActivator
                   v-if="item"
                   v-model:modal="modal"
                   edit-mode="body"
-                  :content-title="`${contentTitle}本文`"
+                  content-title="本文"
                   @update:modal="$emit('editMode', 'body')"
                 />
+                <p class="ml-2">このボタンから本文を登録してください。</p>
               </div>
             </div>
           </div>
           <div v-else class="no-items">
             <p>データがありません</p>
-            <div v-if="canEdit && $route.name === 'index'">
+            <div
+              v-if="canEdit && $route.name === 'index'"
+              class="d-flex align-center"
+            >
               <CommonContentEditActivator
                 v-model:modal="modal"
-                edit-mode="new"
                 :content-title="contentTitle"
+                edit-mode="new"
                 @update:modal="$emit('editMode', 'new')"
               />
+              <p class="ml-2">
+                このボタンから{{ contentTitle }}を登録してください。
+              </p>
             </div>
             <p v-else class="mt-9">
               <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
@@ -173,11 +178,11 @@ const bodyPlainString = computed(
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: 1rem;
+    row-gap: 0.25rem;
 
     p {
       font-weight: bold;
-      color: $accent;
+      color: var(--warning-color);
     }
   }
 }

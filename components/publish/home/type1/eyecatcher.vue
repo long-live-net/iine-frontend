@@ -75,7 +75,6 @@ await onLoad()
       <div v-if="eyecatchRef?.id" class="activators">
         <CommonContentEditActivator
           v-model:modal="editModal"
-          icon
           edit-mode="image"
           :content-title="contentTitle"
         />
@@ -84,12 +83,14 @@ await onLoad()
           @update="onUpdateImageSetting"
         />
       </div>
-      <CommonContentEditActivator
-        v-else
-        v-model:modal="editModal"
-        edit-mode="new"
-        :content-title="contentTitle"
-      />
+      <div v-else class="activators">
+        <CommonContentEditActivator
+          v-model:modal="editModal"
+          :content-title="contentTitle"
+          edit-mode="new"
+        />
+        <p>このボタンから{{ contentTitle }}を登録してください。</p>
+      </div>
     </div>
   </CommonContentWrap>
   <ManageContentEyecatcher
@@ -117,7 +118,15 @@ await onLoad()
 
     .activators {
       display: flex;
+      align-items: center;
       column-gap: 0.5rem;
+
+      p {
+        font-weight: bold;
+        color: var(--warning-color);
+        background-color: white;
+        padding: 4px 10px;
+      }
     }
   }
 }

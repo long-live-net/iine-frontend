@@ -39,7 +39,6 @@ defineEmits<{
               :content-title="contentTitle"
               edit-mode="update"
               size="x-small"
-              icon
               @update:modal="
                 $emit('editTarget', { item: content, mode: 'update' })
               "
@@ -50,13 +49,14 @@ defineEmits<{
     </CommonContentGridDraggable>
     <div v-else class="no-items">
       <p>データがありません</p>
-      <div>
+      <div class="d-flex align-center">
         <CommonContentEditActivator
           v-model:modal="editModal"
           :content-title="contentTitle"
           edit-mode="new"
           @update:modal="$emit('editTarget', { item: null, mode: 'new' })"
         />
+        <p class="ml-2">このボタンから{{ contentTitle }}を登録してください。</p>
       </div>
     </div>
     <div v-if="items?.length" class="create-activator">
@@ -64,7 +64,6 @@ defineEmits<{
         v-model:modal="editModal"
         :content-title="contentTitle"
         edit-mode="new"
-        icon
         @update:modal="$emit('editTarget', { item: null, mode: 'new' })"
       />
     </div>
@@ -120,7 +119,7 @@ defineEmits<{
 
   p {
     font-weight: bold;
-    color: $accent;
+    color: var(--warning-color);
   }
 }
 </style>

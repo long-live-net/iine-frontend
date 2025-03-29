@@ -69,13 +69,14 @@ await onLoad(contentId)
               </div>
               <div v-else class="no-items">
                 <p>データがありません</p>
-                <div v-if="canEdit">
+                <div v-if="canEdit" class="d-flex align-center">
                   <CommonContentEditActivator
                     v-model:modal="editModal"
                     edit-mode="body"
-                    :content-title="`${contentTitle}本文`"
+                    content-title="本文"
                     @update:modal="editMode = 'body'"
                   />
+                  <p class="ml-2">このボタンから本文を登録してください。</p>
                 </div>
                 <p v-else class="mt-9">
                   <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
@@ -128,7 +129,7 @@ await onLoad(contentId)
 
   p {
     font-weight: bold;
-    color: $accent;
+    color: var(--warning-color);
   }
 }
 </style>
