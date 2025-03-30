@@ -57,6 +57,7 @@ const titleAlign = computed(() => props.settings?.align ?? 'left')
   background-color: v-bind('titleBgColor');
   font-family: v-bind('fontFamily');
   border-radius: 0.75rem;
+  user-select: none;
 
   h2,
   p {

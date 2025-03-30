@@ -85,6 +85,16 @@ const bodyPlainString = computed(
                   @update="$emit('updateTitleSetting', $event)"
                 />
               </template>
+              <template #editActions>
+                <CommonContentEditActivator
+                  v-model:modal="modal"
+                  edit-mode="title"
+                  content-title="タイトル"
+                  size="small"
+                  no-tooltip
+                  @update:modal="$emit('editMode', 'title')"
+                />
+              </template>
             </CommonEyecatchTitleSettingPosition>
           </template>
         </CommonEyecatchImage>

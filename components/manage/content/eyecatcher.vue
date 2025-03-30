@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import type { EyecatchType, EyecatchForm } from '@/types/content'
+import type {
+  EyecatchType,
+  EyecatchForm,
+  ContentEditMode,
+} from '@/types/content'
 import { getEyecatchKind } from '@/composables/use-content/use-eyecatch'
 
 const modal = defineModel<boolean>('modal', { required: true })
 const props = withDefaults(
   defineProps<{
     eyecatchData?: EyecatchType | null
+    editMode: ContentEditMode
     contentTitle: string
   }>(),
   {
@@ -65,10 +70,10 @@ const onCancel = () => {
   <CommonContentEditDialog
     v-model:modal="modal"
     :content-title="contentTitle"
-    :edit-mode="eyecatchData?.id ? 'image' : 'new'"
+    :edit-mode="editMode"
   >
     <v-form>
-      <div>
+      <div v-if="['new', 'update', 'image'].includes(editMode)" class="mt-3">
         <CommonContentInputImage
           v-model:url="formData.image.value.value"
           v-model:name="formData.imageName.value.value"
@@ -80,7 +85,10 @@ const onCancel = () => {
           :api-kind="apiKind"
         />
       </div>
-      <div class="mt-3">
+      <div
+        v-if="['new', 'update', 'image', 'title'].includes(editMode)"
+        class="mt-3"
+      >
         <v-text-field
           v-model="formData.title.value.value"
           :error-messages="formData.title.errorMessage.value"
@@ -89,7 +97,10 @@ const onCancel = () => {
           placeholder="タイトルを入力してください"
         />
       </div>
-      <div class="mt-3">
+      <div
+        v-if="['new', 'update', 'image', 'title'].includes(editMode)"
+        class="mt-3"
+      >
         <v-text-field
           v-model="formData.subtitle.value.value"
           :error-messages="formData.subtitle.errorMessage.value"

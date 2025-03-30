@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ContentEditMode } from '@/types/content'
+
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 const {
@@ -14,6 +16,7 @@ const {
 } = useEyecatchActions(customerId)
 
 const editModal = ref(false)
+const editMode = ref<ContentEditMode>('update')
 
 await onLoad()
 </script>
@@ -67,6 +70,16 @@ await onLoad()
                 @update="onUpdateTitleSetting"
               />
             </template>
+            <template #editActions>
+              <CommonContentEditActivator
+                v-model:modal="editModal"
+                edit-mode="title"
+                content-title="タイトル"
+                size="small"
+                no-tooltip
+                @update:modal="editMode = 'title'"
+              />
+            </template>
           </CommonEyecatchTitleSettingPositionEyecatcher>
         </template>
       </CommonEyecatchImage>
@@ -77,6 +90,7 @@ await onLoad()
           v-model:modal="editModal"
           edit-mode="image"
           :content-title="contentTitle"
+          @update:modal="editMode = 'image'"
         />
         <CommonEyecatchImageSetting
           :settings="eyecatchRef.imageSettings"
@@ -88,6 +102,7 @@ await onLoad()
           v-model:modal="editModal"
           :content-title="contentTitle"
           edit-mode="new"
+          @update="editMode = 'new'"
         />
         <p>このボタンから{{ contentTitle }}を登録してください。</p>
       </div>
@@ -97,6 +112,7 @@ await onLoad()
     v-model:modal="editModal"
     :eyecatch-data="eyecatchRef"
     :content-title="contentTitle"
+    :edit-mode="editMode"
     @update="onUpdate"
     @remove="onRemove"
     @create="onCreate"
