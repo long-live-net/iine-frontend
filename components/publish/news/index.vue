@@ -82,7 +82,7 @@ await onLoad()
       <CommonContentCardBody>
         <CommonContentList v-if="newsListRef?.length" :contents="newsListRef">
           <template #default="{ content }">
-            <div class="news-item">
+            <div class="news-item" :class="{ 'news-item-can-edit': canEdit }">
               <div class="news-item__header g-theme-contents-item__header">
                 <span>
                   {{ formatLocalDate(content.publishOn, 'YYYY/MM/DD') }}
@@ -98,16 +98,28 @@ await onLoad()
                 </nuxt-link>
               </div>
               <div v-if="canEdit" class="edit-activator">
-                <CommonContentEditActivator
-                  v-model:modal="editModal"
-                  :content-title="contentTitle"
-                  edit-mode="caption"
-                  size="x-small"
-                  no-tooltip
-                  @update:modal="
-                    ((updatingData = content), (editMode = 'caption'))
-                  "
-                />
+                <div class="activators">
+                  <CommonContentEditActivator
+                    v-model:modal="editModal"
+                    :content-title="contentTitle"
+                    edit-mode="caption"
+                    size="x-small"
+                    no-tooltip
+                    @update:modal="
+                      ((updatingData = content), (editMode = 'caption'))
+                    "
+                  />
+                  <CommonContentEditActivator
+                    v-model:modal="editModal"
+                    :content-title="contentTitle"
+                    edit-mode="delete"
+                    size="x-small"
+                    no-tooltip
+                    @update:modal="
+                      ((updatingData = content), (editMode = 'delete'))
+                    "
+                  />
+                </div>
               </div>
             </div>
           </template>
@@ -201,22 +213,38 @@ await onLoad()
     text-overflow: ellipsis;
   }
 
-  .edit-activator {
-    position: absolute;
-    top: 3px;
-    left: -25px;
-  }
-}
-
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .news-item {
+  @media only screen and (max-width: $grid-breakpoint-md) {
     flex-flow: column;
     align-items: stretch;
     padding: 0 0 0.6rem 1rem;
+  }
+}
+
+.news-item-can-edit {
+  padding-left: 2.5rem;
+
+  .edit-activator {
+    position: absolute;
+    top: 3px;
+    left: -30px;
+
+    .activators {
+      display: flex;
+      gap: 1px;
+    }
+  }
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    padding-left: 2rem;
 
     .edit-activator {
       top: 0;
-      left: -22px;
+      left: -8px;
+
+      .activators {
+        flex-direction: column;
+        gap: 4px;
+      }
     }
   }
 }

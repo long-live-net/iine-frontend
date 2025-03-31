@@ -53,6 +53,7 @@ const bodyPlainString = computed(
         >
           <template #default>
             <CommonEyecatchTitleSettingPosition
+              v-if="item?.id"
               :settings="item?.titleSettings"
               :can-edit="canEdit"
               class="g-block-lg"
@@ -112,6 +113,12 @@ const bodyPlainString = computed(
             :settings="item.imageSettings"
             :no-parallax="noImageParallax"
             @update="$emit('updateImageSetting', $event)"
+          />
+          <CommonContentEditActivator
+            v-model:modal="modal"
+            edit-mode="delete"
+            :content-title="contentTitle"
+            @update:modal="$emit('editMode', 'delete')"
           />
         </div>
       </div>

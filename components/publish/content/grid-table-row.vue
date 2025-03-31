@@ -31,15 +31,26 @@ defineEmits<{
           <slot :content="content" :index="index" />
 
           <div class="edit-activator">
-            <CommonContentEditActivator
-              v-model:modal="editModal"
-              :content-title="contentTitle"
-              edit-mode="update"
-              activator-size="small"
-              @update:modal="
-                $emit('editTarget', { item: content, mode: 'update' })
-              "
-            />
+            <div class="activators">
+              <CommonContentEditActivator
+                v-model:modal="editModal"
+                :content-title="contentTitle"
+                edit-mode="update"
+                activator-size="small"
+                @update:modal="
+                  $emit('editTarget', { item: content, mode: 'update' })
+                "
+              />
+              <CommonContentEditActivator
+                v-model:modal="editModal"
+                :content-title="contentTitle"
+                edit-mode="delete"
+                size="small"
+                @update:modal="
+                  $emit('editTarget', { item: content, mode: 'delete' })
+                "
+              />
+            </div>
           </div>
         </div>
       </template>
@@ -98,12 +109,17 @@ defineEmits<{
 
   .edit-activator {
     position: absolute;
-    top: 8px;
-    left: 8px;
+    top: 4px;
+    left: 4px;
 
     @media only screen and (max-width: $grid-breakpoint-md) {
-      top: 0;
+      top: -4px;
       left: -4px;
+    }
+
+    .activators {
+      display: flex;
+      column-gap: 0.25rem;
     }
   }
 }

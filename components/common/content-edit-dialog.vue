@@ -8,18 +8,29 @@ const props = defineProps<{
   loading?: boolean
 }>()
 
-const titleLabel = computed(
-  () => `${props.contentTitle}を${props.editMode === 'new' ? '追加' : '変更'}`
+const titleText = computed(() =>
+  props.editMode === 'new'
+    ? '追加'
+    : props.editMode === 'delete'
+      ? '削除'
+      : '変更'
 )
+const titleLabel = computed(() => `${props.contentTitle}を${titleText.value}`)
 const titleIcon = computed(() =>
   props.editMode === 'new'
     ? 'mdi-plus'
-    : props.editMode === 'image'
-      ? 'mdi-image'
-      : 'mdi-pencil'
+    : props.editMode === 'delete'
+      ? 'mdi-delete'
+      : props.editMode === 'image'
+        ? 'mdi-image'
+        : 'mdi-pencil'
 )
 const titleColor = computed(() =>
-  props.editMode === 'new' ? 'info' : 'success'
+  props.editMode === 'new'
+    ? 'info'
+    : props.editMode === 'delete'
+      ? 'grey-darken-1'
+      : 'success'
 )
 </script>
 
@@ -31,17 +42,8 @@ const titleColor = computed(() =>
     :title-icon-color="titleColor"
     persistent
   >
-    <div class="content-edit-dialog">
-      <CommonContentWrap :loading="loading">
-        <slot />
-      </CommonContentWrap>
-    </div>
+    <CommonContentWrap :loading="loading">
+      <slot />
+    </CommonContentWrap>
   </CommonModalDialog>
 </template>
-
-<style lang="scss" scoped>
-.content-edit-dialog {
-  min-width: 60dvw;
-  max-width: 840px;
-}
-</style>

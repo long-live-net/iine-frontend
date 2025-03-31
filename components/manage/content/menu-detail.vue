@@ -141,6 +141,10 @@ const onCancel = () => {
 
 <style scoped lang="scss">
 .menu-detail-form {
+  width: 60dvw;
+  min-width: 300px;
+  max-width: 840px;
+
   .row-wrapper {
     display: flex;
     flex-flow: row nowrap;
@@ -149,8 +153,14 @@ const onCancel = () => {
     .row-field {
       flex: 1 1 50%;
     }
+  }
+}
 
-    @media only screen and (max-width: $grid-breakpoint-sm) {
+@media only screen and (max-width: $grid-breakpoint-sm) {
+  .menu-detail-form {
+    width: 75dvw;
+
+    .row-wrapper {
       flex-flow: column;
       align-items: stretch;
       column-gap: normal;

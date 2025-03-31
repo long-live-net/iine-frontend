@@ -15,18 +15,31 @@ const props = withDefaults(
   }
 )
 
-const titleText = computed(
-  () => `${props.contentTitle}を${props.editMode === 'new' ? '追加' : '変更'}`
+const titleText = computed(() =>
+  props.editMode === 'new'
+    ? '追加'
+    : props.editMode === 'delete'
+      ? '削除'
+      : '変更'
+)
+const activatorText = computed(
+  () => `${props.contentTitle}を${titleText.value}`
 )
 const activatorIcon = computed(() =>
   props.editMode === 'new'
     ? 'mdi-plus'
-    : props.editMode === 'image'
-      ? 'mdi-image'
-      : 'mdi-pencil'
+    : props.editMode === 'delete'
+      ? 'mdi-delete'
+      : props.editMode === 'image'
+        ? 'mdi-image'
+        : 'mdi-pencil'
 )
 const activatorColor = computed(() =>
-  props.editMode === 'new' ? 'info' : 'success'
+  props.editMode === 'new'
+    ? 'info'
+    : props.editMode === 'delete'
+      ? 'grey-darken-1'
+      : 'success'
 )
 </script>
 
@@ -37,7 +50,7 @@ const activatorColor = computed(() =>
     :no-tooltip="noTooltip"
     :activator-icon="activatorIcon"
     :activator-color="activatorColor"
-    :activator-text="titleText"
+    :activator-text="activatorText"
     :activator-size="size"
   />
 </template>

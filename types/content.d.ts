@@ -223,6 +223,7 @@ export type PositionObj = { [key: number]: number }
  */
 export type ContentEditMode =
   | 'new'
+  | 'delete'
   | 'update'
   | 'image'
   | 'title'

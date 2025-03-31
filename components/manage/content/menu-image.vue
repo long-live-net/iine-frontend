@@ -71,12 +71,21 @@ const onCancel = () => {
 </script>
 
 <template>
+  <BaseConfirm
+    v-if="editMode === 'delete'"
+    v-model:comfirm="modal"
+    message="本当に削除しますか？"
+    exec-text="削除する"
+    @cancel="modal = false"
+    @confirm="onRemove"
+  />
   <CommonContentEditDialog
+    v-else
     v-model:modal="modal"
     :content-title="contentTitle"
     :edit-mode="editMode"
   >
-    <v-form>
+    <v-form class="content-form">
       <div>
         <CommonContentInputImage
           v-model:url="formData.image.value.value"
@@ -152,3 +161,15 @@ const onCancel = () => {
     </v-form>
   </CommonContentEditDialog>
 </template>
+
+<style lang="scss" scoped>
+.content-form {
+  width: 60dvw;
+  min-width: 300px;
+  max-width: 840px;
+
+  @media only screen and (max-width: $grid-breakpoint-sm) {
+    width: 75dvw;
+  }
+}
+</style>

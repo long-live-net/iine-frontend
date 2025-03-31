@@ -39,6 +39,7 @@ await onLoad()
       >
         <template #default>
           <CommonEyecatchTitleSettingPositionEyecatcher
+            v-if="eyecatchRef?.id"
             :settings="eyecatchRef?.titleSettings"
             :can-edit="canEdit"
             @update="onUpdateTitleSetting"
@@ -96,13 +97,19 @@ await onLoad()
           :settings="eyecatchRef.imageSettings"
           @update="onUpdateImageSetting"
         />
+        <CommonContentEditActivator
+          v-model:modal="editModal"
+          edit-mode="delete"
+          :content-title="contentTitle"
+          @update:modal="editMode = 'delete'"
+        />
       </div>
       <div v-else class="activators">
         <CommonContentEditActivator
           v-model:modal="editModal"
           :content-title="contentTitle"
           edit-mode="new"
-          @update="editMode = 'new'"
+          @update:modal="editMode = 'new'"
         />
         <p>このボタンから{{ contentTitle }}を登録してください。</p>
       </div>
@@ -141,6 +148,7 @@ await onLoad()
         font-weight: bold;
         color: var(--warning-color);
         background-color: white;
+        margin-right: 0.5rem;
         padding: 4px 10px;
       }
     }

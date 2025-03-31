@@ -171,7 +171,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
               activator-text="ページ削除"
               activator-icon="mdi-delete"
               activator-size="small"
-              activator-color="error"
+              activator-color="grey-darken-1"
             />
             <BaseActivator
               v-model:modal="editCategoryModal"

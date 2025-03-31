@@ -62,7 +62,16 @@ const onCancel = () => {
 </script>
 
 <template>
+  <BaseConfirm
+    v-if="editMode === 'delete'"
+    v-model:comfirm="modal"
+    message="本当に削除しますか？"
+    exec-text="削除する"
+    @cancel="modal = false"
+    @confirm="onRemove"
+  />
   <CommonContentEditDialog
+    v-else
     v-model:modal="modal"
     :content-title="contentTitle"
     :edit-mode="editMode"
@@ -132,7 +141,6 @@ const onCancel = () => {
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"
-        @remove="onRemove"
         @cancel="onCancel"
       />
     </v-form>
@@ -141,21 +149,30 @@ const onCancel = () => {
 
 <style scoped lang="scss">
 .news-form {
+  width: 60dvw;
+  min-width: 300px;
+  max-width: 840px;
+
   .row-wrapper {
     display: flex;
     flex-flow: row nowrap;
     column-gap: 1rem;
+
     .row-field {
       width: calc(50% - 0.5rem);
     }
   }
 }
+
 @media only screen and (max-width: $grid-breakpoint-sm) {
   .news-form {
+    width: 75dvw;
+
     .row-wrapper {
       flex-flow: column;
       align-items: stretch;
       column-gap: normal;
+
       .row-field {
         width: auto;
       }
