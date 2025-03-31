@@ -262,34 +262,63 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
                   @update="onUpdatePositionsDetail($event, category)"
                 >
                   <template #default="{ content }">
-                    <div class="menu-detail-container">
+                    <div
+                      class="menu-detail-container"
+                      :class="{ 'menu-detail-can-edit': canEdit }"
+                    >
                       <PublishMenuDetailsItemGridRow :item="content" />
-                      <CommonContentEditActivator
-                        v-model:modal="editDetailModal"
-                        content-title="メニュー項目"
-                        edit-mode="update"
-                        activator-size="x-small"
-                        class="edit-detail-activator"
-                        @update:modal="
-                          ((editModeDetail = 'update'),
-                          (updatingDetail = content),
-                          (targetCategory = category))
-                        "
-                      />
+                      <div class="edit-detail-activator">
+                        <div class="activators">
+                          <CommonContentEditActivator
+                            v-model:modal="editDetailModal"
+                            content-title="メニュー項目"
+                            edit-mode="update"
+                            activator-size="x-small"
+                            @update:modal="
+                              ((editModeDetail = 'update'),
+                              (updatingDetail = content),
+                              (targetCategory = category))
+                            "
+                          />
+                          <CommonContentEditActivator
+                            v-model:modal="editDetailModal"
+                            content-title="メニュー項目"
+                            edit-mode="delete"
+                            activator-size="x-small"
+                            @update:modal="
+                              ((editModeDetail = 'delete'),
+                              (updatingDetail = content),
+                              (targetCategory = category))
+                            "
+                          />
+                        </div>
+                      </div>
                     </div>
                   </template>
                 </CommonContentGridRowDraggable>
                 <div class="edit-category-activator">
-                  <CommonContentEditActivator
-                    v-model:modal="editCategoryModal"
-                    content-title="メニューカテゴリ"
-                    edit-mode="update"
-                    activator-size="small"
-                    @update:modal="
-                      ((updatingCategory = category),
-                      (editModeCategory = 'update'))
-                    "
-                  />
+                  <div class="activators">
+                    <CommonContentEditActivator
+                      v-model:modal="editCategoryModal"
+                      content-title="メニューカテゴリ"
+                      edit-mode="update"
+                      activator-size="small"
+                      @update:modal="
+                        ((updatingCategory = category),
+                        (editModeCategory = 'update'))
+                      "
+                    />
+                    <CommonContentEditActivator
+                      v-model:modal="editCategoryModal"
+                      edit-mode="delete"
+                      content-title="メニューカテゴリ"
+                      activator-size="small"
+                      @update:modal="
+                        ((updatingCategory = category),
+                        (editModeCategory = 'delete'))
+                      "
+                    />
+                  </div>
                 </div>
               </template>
               <template v-else>
@@ -406,6 +435,11 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
             top: 3.5rem;
             left: 2rem;
           }
+
+          .activators {
+            display: flex;
+            column-gap: 0.5rem;
+          }
         }
 
         .menu-category-actions {
@@ -418,12 +452,23 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
         }
 
         .menu-detail-container {
+          padding-left: 0;
+        }
+
+        .menu-detail-can-edit {
           position: relative;
+          min-height: 7rem;
+          padding-left: 2rem;
 
           .edit-detail-activator {
             position: absolute;
-            top: -0.5rem;
-            left: -0.5rem;
+            top: -8px;
+            left: -8px;
+
+            .activators {
+              display: flex;
+              gap: 0.25rem;
+            }
           }
         }
       }
