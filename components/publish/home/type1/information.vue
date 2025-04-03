@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { InformationType } from '@/types/content'
+import type { InformationType, ContentEditMode } from '@/types/content'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 const {
+  contentTitle,
   informationRef,
   onLoad,
   onCreate,
@@ -16,6 +17,15 @@ const {
 
 const editModal = ref(false)
 const updatingData = ref<InformationType | null>(null)
+const editMode = ref<ContentEditMode>('update')
+const onEditMode = (mode: ContentEditMode) => {
+  if (mode === 'new') {
+    updatingData.value = null
+  } else {
+    updatingData.value = informationRef.value
+  }
+  editMode.value = mode
+}
 
 await onLoad()
 </script>
@@ -26,20 +36,19 @@ await onLoad()
       <PublishContentDetailItem
         v-model:modal="editModal"
         :item="informationRef"
+        :content-title="contentTitle"
         :can-edit="canEdit"
-        @update="updatingData = $event"
-        @create="updatingData = null"
+        @edit-mode="onEditMode"
         @update-title-setting="onUpdateTitleSetting"
         @update-image-setting="onUpdateImageSetting"
       >
-        <template #footernavi>
-          <PublishInquire />
-        </template>
       </PublishContentDetailItem>
     </CommonContentCard>
   </CommonContentWrap>
   <ManageContentInformation
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :information-data="updatingData"
     @create="onCreate"
     @update="onUpdate"

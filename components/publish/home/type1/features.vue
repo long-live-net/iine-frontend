@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import type { FeatureType } from '@/types/content'
+import type { FeatureType, ContentEditMode } from '@/types/content'
 import { useFeatureListActions } from '~/composables/use-content/use-features'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 const {
+  contentTitle,
   filter,
   sort,
   pager,
@@ -17,12 +18,23 @@ const {
   loading,
 } = useFeatureListActions(customerId)
 
-const editModal = ref(false)
-const updatingData = ref<FeatureType | null>(null)
-
 const router = useRouter()
 const onMovingDetailPage = (feature: FeatureType) => {
   router.push(`/features/${feature.id}`)
+}
+
+const editModal = ref(false)
+const updatingData = ref<FeatureType | null>(null)
+const editMode = ref<ContentEditMode>('update')
+const onEditTarget = ({
+  item,
+  mode,
+}: {
+  item: FeatureType | null
+  mode: ContentEditMode
+}) => {
+  updatingData.value = item ?? null
+  editMode.value = mode
 }
 
 filter.value = {}
@@ -36,9 +48,9 @@ await onLoad()
     <PublishContentGridTableRow
       v-model:modal="editModal"
       :items="featureListRef"
+      :content-title="contentTitle"
       :can-edit="canEdit"
-      @update="updatingData = $event"
-      @create="updatingData = null"
+      @edit-target="onEditTarget"
       @update-positions="onUpdatePositions"
     >
       <template #default="{ content, index }">
@@ -50,9 +62,11 @@ await onLoad()
       </template>
     </PublishContentGridTableRow>
   </CommonContentWrap>
-  <ManageContentMenu
+  <ManageContentFeature
     v-model:modal="editModal"
-    :menu-data="updatingData"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
+    :feature-data="updatingData"
     @create="onCreate"
     @update="onUpdate"
     @remove="onRemove"

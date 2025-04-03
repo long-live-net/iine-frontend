@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import type { NewsType } from '@/types/content'
+import type { NewsType, ContentEditMode } from '@/types/content'
 import { formatLocalDate } from '@/utils/misc'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 
-const editModal = ref(false)
-const updatingData = ref<NewsType | null>(null)
-
 const {
+  contentTitle,
   filter,
   sort,
   pager,
@@ -21,6 +19,10 @@ const {
   onUpdate,
   onRemove,
 } = useNewsListActions(customerId)
+
+const editModal = ref(false)
+const updatingData = ref<NewsType | null>(null)
+const editMode = ref<ContentEditMode>('update')
 
 const page = ref(1)
 const pageLimit = ref(20)
@@ -80,7 +82,7 @@ await onLoad()
       <CommonContentCardBody>
         <CommonContentList v-if="newsListRef?.length" :contents="newsListRef">
           <template #default="{ content }">
-            <div class="news-item">
+            <div class="news-item" :class="{ 'news-item-can-edit': canEdit }">
               <div class="news-item__header g-theme-contents-item__header">
                 <span>
                   {{ formatLocalDate(content.publishOn, 'YYYY/MM/DD') }}
@@ -96,12 +98,28 @@ await onLoad()
                 </nuxt-link>
               </div>
               <div v-if="canEdit" class="edit-activator">
-                <CommonContentEditActivator
-                  v-model:modal="editModal"
-                  is-update
-                  activator-size="x-small"
-                  @update:modal="updatingData = content"
-                />
+                <div class="activators">
+                  <CommonContentEditActivator
+                    v-model:modal="editModal"
+                    :content-title="contentTitle"
+                    edit-mode="caption"
+                    size="x-small"
+                    no-tooltip
+                    @update:modal="
+                      ((updatingData = content), (editMode = 'caption'))
+                    "
+                  />
+                  <CommonContentEditActivator
+                    v-model:modal="editModal"
+                    :content-title="contentTitle"
+                    edit-mode="delete"
+                    size="x-small"
+                    no-tooltip
+                    @update:modal="
+                      ((updatingData = content), (editMode = 'delete'))
+                    "
+                  />
+                </div>
               </div>
             </div>
           </template>
@@ -124,13 +142,17 @@ await onLoad()
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
         <CommonContentEditActivator
           v-model:modal="editModal"
-          @update:modal="updatingData = null"
+          :content-title="contentTitle"
+          edit-mode="new"
+          @update:modal="((updatingData = null), (editMode = 'new'))"
         />
       </div>
     </CommonContentCard>
   </CommonContentWrap>
   <ManageContentNews
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :news-data="updatingData"
     @create="onCreate"
     @update="onUpdate"
@@ -146,19 +168,23 @@ await onLoad()
     margin: 1.5rem 0;
     text-align: center;
   }
+
   .no-items {
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 1rem;
+
     p {
       font-weight: bold;
-      color: $accent;
+      color: var(--warning-color);
     }
   }
+
   .whole-switch {
     margin-top: 1rem;
   }
+
   .create-activator {
     position: absolute;
     top: 1rem;
@@ -186,20 +212,39 @@ await onLoad()
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .edit-activator {
-    position: absolute;
-    top: 3px;
-    left: -25px;
-  }
-}
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .news-item {
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
     flex-flow: column;
     align-items: stretch;
     padding: 0 0 0.6rem 1rem;
+  }
+}
+
+.news-item-can-edit {
+  padding-left: 2.5rem;
+
+  .edit-activator {
+    position: absolute;
+    top: 3px;
+    left: -30px;
+
+    .activators {
+      display: flex;
+      gap: 1px;
+    }
+  }
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    padding-left: 2rem;
+
     .edit-activator {
       top: 0;
-      left: -22px;
+      left: -8px;
+
+      .activators {
+        flex-direction: column;
+        gap: 4px;
+      }
     }
   }
 }

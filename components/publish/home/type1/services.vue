@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { ServiceType } from '@/types/content'
+import type { ServiceType, ContentEditMode } from '@/types/content'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 const {
+  contentTitle,
   filter,
   sort,
   pager,
@@ -16,12 +17,23 @@ const {
   loading,
 } = useServiceListActions(customerId)
 
-const editModal = ref(false)
-const updatingData = ref<ServiceType | null>(null)
-
 const router = useRouter()
 const onMovingDetailPage = (service: ServiceType) => {
   router.push(`/services/${service.id}`)
+}
+
+const editModal = ref(false)
+const updatingData = ref<ServiceType | null>(null)
+const editMode = ref<ContentEditMode>('update')
+const onEditTarget = ({
+  item,
+  mode,
+}: {
+  item: ServiceType | null
+  mode: ContentEditMode
+}) => {
+  updatingData.value = item ?? null
+  editMode.value = mode
 }
 
 filter.value = {}
@@ -35,9 +47,9 @@ await onLoad()
     <PublishContentGridTable
       v-model:modal="editModal"
       :items="serviceListRef"
+      :content-title="contentTitle"
       :can-edit="canEdit"
-      @update="updatingData = $event"
-      @create="updatingData = null"
+      @edit-target="onEditTarget"
       @update-positions="onUpdatePositions"
     >
       <template #default="{ content }">
@@ -51,6 +63,8 @@ await onLoad()
   </CommonContentWrap>
   <ManageContentService
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :service-data="updatingData"
     @create="onCreate"
     @update="onUpdate"

@@ -95,6 +95,7 @@ export const useInformationActions = (customerId: Ref<string | null>) => {
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
   return {
+    contentTitle,
     informationRef: contentRef,
     loading,
     onLoad,

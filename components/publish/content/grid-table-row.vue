@@ -1,10 +1,11 @@
 <script setup lang="ts" generic="T extends ContentType">
-import type { ContentType } from '@/types/content'
+import type { ContentType, ContentEditMode } from '@/types/content'
 
 const editModal = defineModel<boolean>('modal', { required: true })
 withDefaults(
   defineProps<{
     items?: T[] | null
+    contentTitle: string
     canEdit?: boolean
   }>(),
   {
@@ -13,8 +14,7 @@ withDefaults(
   }
 )
 defineEmits<{
-  create: []
-  update: [item: T]
+  editTarget: [target: { item: T | null; mode: ContentEditMode }]
   updatePositions: [items: T[]]
 }>()
 </script>
@@ -31,30 +31,48 @@ defineEmits<{
           <slot :content="content" :index="index" />
 
           <div class="edit-activator">
-            <CommonContentEditActivator
-              v-model:modal="editModal"
-              is-update
-              activator-size="x-small"
-              @update:modal="$emit('update', content)"
-            />
+            <div class="activators">
+              <CommonContentEditActivator
+                v-model:modal="editModal"
+                :content-title="contentTitle"
+                edit-mode="update"
+                activator-size="small"
+                @update:modal="
+                  $emit('editTarget', { item: content, mode: 'update' })
+                "
+              />
+              <CommonContentEditActivator
+                v-model:modal="editModal"
+                :content-title="contentTitle"
+                edit-mode="delete"
+                size="small"
+                @update:modal="
+                  $emit('editTarget', { item: content, mode: 'delete' })
+                "
+              />
+            </div>
           </div>
         </div>
       </template>
     </CommonContentGridRowDraggable>
     <div v-else class="no-items">
       <p>データがありません</p>
-      <div>
+      <div class="d-flex align-center">
         <CommonContentEditActivator
           v-model:modal="editModal"
-          activator-label="コンテンツを登録してください"
-          @update:modal="$emit('create')"
+          :content-title="contentTitle"
+          edit-mode="new"
+          @update:modal="$emit('editTarget', { item: null, mode: 'new' })"
         />
       </div>
+      <p class="ml-2">このボタンから{{ contentTitle }}を登録してください。</p>
     </div>
     <div v-if="items?.length" class="create-activator">
       <CommonContentEditActivator
         v-model:modal="editModal"
-        @update:modal="$emit('create')"
+        :content-title="contentTitle"
+        edit-mode="new"
+        @update:modal="$emit('editTarget', { item: null, mode: 'new' })"
       />
     </div>
   </div>
@@ -91,8 +109,18 @@ defineEmits<{
 
   .edit-activator {
     position: absolute;
-    top: -8px;
+    top: 4px;
     left: 4px;
+
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      top: -4px;
+      left: -4px;
+    }
+
+    .activators {
+      display: flex;
+      column-gap: 0.25rem;
+    }
   }
 }
 
@@ -104,7 +132,7 @@ defineEmits<{
 
   p {
     font-weight: bold;
-    color: $accent;
+    color: var(--warning-color);
   }
 }
 </style>

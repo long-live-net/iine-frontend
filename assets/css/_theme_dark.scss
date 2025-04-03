@@ -5,6 +5,7 @@
   --text-color: #{variables.$white};
   --link-color: #{variables.$blue-lighten3};
   --link-active-color: #{variables.$link-active};
+  --warning-color: #{variables.$accent};
 
   background-color: var(--background-color);
   color: var(--text-color);

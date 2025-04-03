@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { MenuImageType } from '@/types/content'
+import type { MenuImageType, ContentEditMode } from '@/types/content'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 const {
+  contentTitle,
   filter,
   sort,
   pager,
@@ -15,9 +16,6 @@ const {
   onUpdatePositions,
   loading,
 } = useMenuImageListActions(customerId)
-
-const editModal = ref(false)
-const updatingData = ref<MenuImageType | null>(null)
 
 const imageViewModal = ref(false)
 const imageViewTitle = ref('')
@@ -34,6 +32,20 @@ const onClickEyecatch = (menuImage: MenuImageType) => {
   }
 }
 
+const editModal = ref(false)
+const updatingData = ref<MenuImageType | null>(null)
+const editMode = ref<ContentEditMode>('update')
+const onEditTarget = ({
+  item,
+  mode,
+}: {
+  item: MenuImageType | null
+  mode: ContentEditMode
+}) => {
+  updatingData.value = item ?? null
+  editMode.value = mode
+}
+
 filter.value = {}
 sort.value = { position: 1 }
 pager.value = { page: 1, limit: 24 }
@@ -45,9 +57,9 @@ await onLoad()
     <PublishContentGridTable
       v-model:modal="editModal"
       :items="menuImageListRef"
+      :content-title="contentTitle"
       :can-edit="canEdit"
-      @update="updatingData = $event"
-      @create="updatingData = null"
+      @edit-target="onEditTarget"
       @update-positions="onUpdatePositions"
     >
       <template #default="{ content }">
@@ -62,6 +74,8 @@ await onLoad()
   </CommonContentWrap>
   <ManageContentMenuImage
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :menu-image-data="updatingData"
     @create="onCreate"
     @update="onUpdate"

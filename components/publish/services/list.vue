@@ -10,8 +10,16 @@ const contentId = Array.isArray(route.params.id)
   : route.params.id
 
 const { customerId } = useCustomer()
-const { filter, sort, pager, serviceListRef, loading, onLoad, onGetList } =
-  useServiceListActions(customerId)
+const {
+  contentTitle,
+  filter,
+  sort,
+  pager,
+  serviceListRef,
+  loading,
+  onLoad,
+  onGetList,
+} = useServiceListActions(customerId)
 
 defineExpose({ onGetList })
 
@@ -30,6 +38,7 @@ await onLoad()
   <CommonContentWrap :loading="loading">
     <PublishContentGridTable
       v-model:modal="editModal"
+      :content-title="contentTitle"
       :items="serviceListRef"
       :can-edit="false"
       small-if-possible

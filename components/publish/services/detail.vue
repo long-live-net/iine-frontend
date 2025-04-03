@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ServiceForm } from '@/types/content'
+import type { ServiceForm, ContentEditMode } from '@/types/content'
 const emit = defineEmits<{ 'update:data': [] }>()
 
 const { customerId } = useCustomer()
@@ -9,9 +9,9 @@ const route = useRoute()
 const contentId = Array.isArray(route.params.id)
   ? route.params.id[0]
   : route.params.id
-const editModal = ref(false)
 
 const {
+  contentTitle,
   serviceRef,
   servicePreNextIdRefRef,
   loading,
@@ -42,6 +42,9 @@ const nextUrl = computed(() =>
     : null
 )
 
+const editModal = ref(false)
+const editMode = ref<ContentEditMode>('update')
+
 await onLoad(contentId)
 </script>
 
@@ -51,8 +54,10 @@ await onLoad(contentId)
       <PublishContentDetailItem
         v-model:modal="editModal"
         :item="serviceRef"
+        :content-title="contentTitle"
         :can-edit="canEdit"
         no-image-parallax
+        @edit-mode="editMode = $event"
         @update-title-setting="onUpdateTitleSetting"
         @update-image-setting="onUpdateImageSetting"
       >
@@ -65,8 +70,10 @@ await onLoad(contentId)
       </PublishContentDetailItem>
     </CommonContentCard>
   </CommonContentWrap>
-  <ManageContentServiceBody
+  <ManageContentService
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :service-data="serviceRef"
     @update="onUpdateData"
     @remove="onRemoveData"

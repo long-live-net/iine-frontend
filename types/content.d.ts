@@ -217,3 +217,15 @@ export interface ContentPosition {
 }
 
 export type PositionObj = { [key: number]: number }
+
+/**
+ * Content edit mode
+ */
+export type ContentEditMode =
+  | 'new'
+  | 'delete'
+  | 'update'
+  | 'image'
+  | 'title'
+  | 'body'
+  | 'caption'

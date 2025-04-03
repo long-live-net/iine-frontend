@@ -90,6 +90,7 @@ export const useContactActions = (customerId: Ref<string | null>) => {
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
   return {
+    contentTitle,
     contactRef: contentRef,
     contactPreNextIdRefRef: contentPreNextIdRefRef,
     loading,

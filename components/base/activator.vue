@@ -1,20 +1,23 @@
 <script setup lang="ts">
+const modal = defineModel<boolean>('modal', { required: true })
 const props = withDefaults(
   defineProps<{
-    modal: boolean
+    icon?: boolean
+    noTooltip?: boolean
     activatorIcon?: string
     activatorSize?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
     activatorColor?: string
     activatorText?: string
   }>(),
   {
+    icon: false,
+    noTooltip: false,
     activatorIcon: 'mdi-pencil',
-    activatorSize: 'large',
+    activatorSize: 'default',
     activatorColor: 'success',
-    activatorText: '',
+    activatorText: 'tooltip',
   }
 )
-defineEmits<{ 'update:modal': [modal: boolean] }>()
 
 const iconSize = computed(() => {
   switch (props.activatorSize) {
@@ -32,25 +35,40 @@ const iconSize = computed(() => {
 </script>
 
 <template>
-  <div>
+  <div v-if="icon">
     <v-btn
-      v-if="activatorText?.length"
+      v-if="noTooltip"
+      :icon="true"
+      :color="activatorColor"
+      :size="activatorSize"
+      elevation="4"
+      @click="modal = true"
+    >
+      <v-icon :icon="activatorIcon" :size="iconSize" />
+    </v-btn>
+    <v-tooltip v-else :text="activatorText" location="top">
+      <template #activator="{ props: bindProps }">
+        <v-btn
+          v-bind="bindProps"
+          :icon="true"
+          :color="activatorColor"
+          :size="activatorSize"
+          elevation="4"
+          @click="modal = true"
+        >
+          <v-icon :icon="activatorIcon" :size="iconSize" />
+        </v-btn>
+      </template>
+    </v-tooltip>
+  </div>
+  <div v-else>
+    <v-btn
       :prepend-icon="activatorIcon"
       :color="activatorColor"
       :size="activatorSize"
-      @click="$emit('update:modal', true)"
+      @click="modal = true"
     >
       {{ activatorText }}
-    </v-btn>
-    <v-btn
-      v-else
-      icon
-      :color="activatorColor"
-      :size="activatorSize"
-      elevation="8"
-      @click="$emit('update:modal', true)"
-    >
-      <v-icon color="white" :icon="activatorIcon" :size="iconSize" />
     </v-btn>
   </div>
 </template>

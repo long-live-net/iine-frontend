@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import type { FeatureType, FeatureForm } from '@/types/content'
+import type { FeatureType, FeatureForm, ContentEditMode } from '@/types/content'
 import { getFeatureKind } from '@/composables/use-content/use-features'
 import { useFeatureForm } from '~/composables/use-content/use-feature-form'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{ featureData?: FeatureType | null }>()
+const props = withDefaults(
+  defineProps<{
+    contentTitle: string
+    editMode: ContentEditMode
+    featureData?: FeatureType | null
+  }>(),
+  {
+    featureData: null,
+  }
+)
 const emit = defineEmits<{
   create: [inputData: FeatureForm]
   update: [{ id: string; formData: FeatureForm }]
@@ -54,9 +63,24 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditDialog v-model:modal="modal" :is-update="!!featureData?.id">
-    <v-form>
-      <div>
+  <CommonContentDeleteConfirm
+    v-if="editMode === 'delete'"
+    v-model:comfirm="modal"
+    :content-title="contentTitle"
+    @cancel="modal = false"
+    @confirm="onRemove"
+  />
+  <CommonContentEditDialog
+    v-else
+    v-model:modal="modal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
+  >
+    <v-form class="content-form">
+      <div
+        v-if="['new', 'update', 'image', 'caption'].includes(editMode)"
+        class="mt-3"
+      >
         <CommonContentInputImage
           v-model:url="formData.image.value.value"
           v-model:name="formData.imageName.value.value"
@@ -68,7 +92,10 @@ const onCancel = () => {
           :api-kind="apiKind"
         />
       </div>
-      <div class="mt-3">
+      <div
+        v-if="['new', 'update', 'image', 'title', 'caption'].includes(editMode)"
+        class="mt-3"
+      >
         <v-text-field
           v-model="formData.title.value.value"
           :error-messages="formData.title.errorMessage.value"
@@ -77,7 +104,7 @@ const onCancel = () => {
           placeholder="タイトルを入力してください"
         />
       </div>
-      <div class="mt-3">
+      <div v-if="['new', 'update', 'caption'].includes(editMode)" class="mt-3">
         <CommonWysiwygEditor
           v-model="formData.caption.value.value"
           :error-messages="formData.caption.errorMessage.value"
@@ -90,14 +117,36 @@ const onCancel = () => {
           :api-kind="apiKind"
         />
       </div>
+      <div v-if="['body'].includes(editMode)" class="mt-3">
+        <CommonWysiwygEditor
+          v-model="formData.body.value.value"
+          :error-messages="formData.body.errorMessage.value"
+          clearable
+          label="本文"
+          placeholder="本文を入力してください"
+          :customer-id="customerId"
+          :api-kind="apiKind"
+        />
+      </div>
       <ManageContentFormActions
         :content-id="featureData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"
-        @remove="onRemove"
         @cancel="onCancel"
       />
     </v-form>
   </CommonContentEditDialog>
 </template>
+
+<style lang="scss" scoped>
+.content-form {
+  width: 60dvw;
+  min-width: 300px;
+  max-width: 840px;
+
+  @media only screen and (max-width: $grid-breakpoint-sm) {
+    width: 75dvw;
+  }
+}
+</style>

@@ -1,9 +1,22 @@
 <script setup lang="ts">
-import type { MenuDetailType, MenuDetailForm } from '@/types/content'
+import type {
+  MenuDetailType,
+  MenuDetailForm,
+  ContentEditMode,
+} from '@/types/content'
 import { getMenuDetailKind } from '@/composables/use-content/use-menu-detail'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{ menuDetailData?: MenuDetailType | null }>()
+const props = withDefaults(
+  defineProps<{
+    contentTitle: string
+    editMode: ContentEditMode
+    menuDetailData?: MenuDetailType | null
+  }>(),
+  {
+    menuDetailData: null,
+  }
+)
 const emit = defineEmits<{
   create: [inputData: MenuDetailForm]
   update: [{ id: string; formData: MenuDetailForm }]
@@ -52,9 +65,18 @@ const onCancel = () => {
 </script>
 
 <template>
+  <CommonContentDeleteConfirm
+    v-if="editMode === 'delete'"
+    v-model:comfirm="modal"
+    :content-title="contentTitle"
+    @cancel="modal = false"
+    @confirm="onRemove"
+  />
   <CommonContentEditDialog
+    v-else
     v-model:modal="modal"
-    :is-update="!!menuDetailData?.id"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
   >
     <v-form class="menu-detail-form">
       <div>
@@ -127,6 +149,10 @@ const onCancel = () => {
 
 <style scoped lang="scss">
 .menu-detail-form {
+  width: 60dvw;
+  min-width: 300px;
+  max-width: 840px;
+
   .row-wrapper {
     display: flex;
     flex-flow: row nowrap;
@@ -135,8 +161,14 @@ const onCancel = () => {
     .row-field {
       flex: 1 1 50%;
     }
+  }
+}
 
-    @media only screen and (max-width: $grid-breakpoint-sm) {
+@media only screen and (max-width: $grid-breakpoint-sm) {
+  .menu-detail-form {
+    width: 75dvw;
+
+    .row-wrapper {
       flex-flow: column;
       align-items: stretch;
       column-gap: normal;

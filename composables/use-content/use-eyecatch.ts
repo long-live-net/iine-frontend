@@ -86,6 +86,7 @@ export const useEyecatchActions = (customerId: Ref<string | null>) => {
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
   return {
+    contentTitle,
     eyecatchRef: contentRef,
     loading,
     onLoad,

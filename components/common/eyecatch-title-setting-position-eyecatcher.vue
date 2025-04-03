@@ -65,5 +65,8 @@ const onUpdateSettings = (setting: Partial<EyecatchTitleSettings>) => {
     <template v-if="$slots.sideSettings" #sideSettings>
       <slot name="sideSettings" />
     </template>
+    <template v-if="$slots.editActions" #editActions>
+      <slot name="editActions" />
+    </template>
   </CommonEyecatchTitleSettingPosition>
 </template>

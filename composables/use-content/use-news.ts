@@ -96,6 +96,7 @@ export const useNewsListActions = (customerId: Ref<string | null>) => {
   )
 
   return {
+    contentTitle,
     filter,
     sort,
     pager,
@@ -137,6 +138,7 @@ export const useNewsActions = (customerId: Ref<string | null>) => {
   )
 
   return {
+    contentTitle,
     newsRef: contentRef,
     newsPreNextIdRefRef: contentPreNextIdRefRef,
     loading,

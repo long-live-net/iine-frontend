@@ -19,8 +19,16 @@ const contentId = Array.isArray(route.params.id)
   : route.params.id
 
 const { customerId } = useCustomer()
-const { filter, sort, pager, featureListRef, loading, onLoad, onGetList } =
-  useFeatureListActions(customerId)
+const {
+  contentTitle,
+  filter,
+  sort,
+  pager,
+  featureListRef,
+  loading,
+  onLoad,
+  onGetList,
+} = useFeatureListActions(customerId)
 
 const router = useRouter()
 const onMovingDetailPage = (feature: ContentType) => {
@@ -40,6 +48,7 @@ await onLoad()
     <PublishContentGridTable
       v-if="featureListRef?.length"
       v-model:modal="editModal"
+      :content-title="contentTitle"
       :items="featureListRef"
       small-if-possible
     >

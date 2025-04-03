@@ -78,6 +78,7 @@ export const useMenuListActions = (customerId: Ref<string | null>) => {
   )
 
   return {
+    contentTitle,
     filter,
     sort,
     pager,
@@ -118,6 +119,7 @@ export const useMenuActions = (customerId: Ref<string | null>) => {
   )
 
   return {
+    contentTitle,
     menuRef: contentRef,
     menuPreNextIdRefRef: contentPreNextIdRefRef,
     loading,

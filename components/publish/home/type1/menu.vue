@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { MenuType } from '@/types/content'
+import type { MenuType, ContentEditMode } from '@/types/content'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 const {
+  contentTitle,
   filter,
   sort,
   pager,
@@ -16,12 +17,23 @@ const {
   loading,
 } = useMenuListActions(customerId)
 
-const editModal = ref(false)
-const updatingData = ref<MenuType | null>(null)
-
 const router = useRouter()
 const onMovingDetailPage = (item: MenuType) => {
   router.push(`/menus/${item.id}`)
+}
+
+const editModal = ref(false)
+const updatingData = ref<MenuType | null>(null)
+const editMode = ref<ContentEditMode>('update')
+const onEditTarget = ({
+  item,
+  mode,
+}: {
+  item: MenuType | null
+  mode: ContentEditMode
+}) => {
+  updatingData.value = item ?? null
+  editMode.value = mode
 }
 
 filter.value = {}
@@ -35,9 +47,9 @@ await onLoad()
     <PublishContentGridTable
       v-model:modal="editModal"
       :items="menuListRef"
+      :content-title="contentTitle"
       :can-edit="canEdit"
-      @update="updatingData = $event"
-      @create="updatingData = null"
+      @edit-target="onEditTarget"
       @update-positions="onUpdatePositions"
     >
       <template #default="{ content }">
@@ -52,6 +64,8 @@ await onLoad()
   </CommonContentWrap>
   <ManageContentMenu
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :menu-data="updatingData"
     @create="onCreate"
     @update="onUpdate"

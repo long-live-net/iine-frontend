@@ -1,9 +1,22 @@
 <script setup lang="ts">
-import type { MenuImageType, MenuImageForm } from '@/types/content'
+import type {
+  MenuImageType,
+  MenuImageForm,
+  ContentEditMode,
+} from '@/types/content'
 import { getMenuImageKind } from '@/composables/use-content/use-menu-image'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{ menuImageData?: MenuImageType | null }>()
+const props = withDefaults(
+  defineProps<{
+    contentTitle: string
+    editMode: ContentEditMode
+    menuImageData?: MenuImageType | null
+  }>(),
+  {
+    menuImageData: null,
+  }
+)
 const emit = defineEmits<{
   create: [inputData: MenuImageForm]
   update: [{ id: string; formData: MenuImageForm }]
@@ -58,11 +71,20 @@ const onCancel = () => {
 </script>
 
 <template>
+  <CommonContentDeleteConfirm
+    v-if="editMode === 'delete'"
+    v-model:comfirm="modal"
+    :content-title="contentTitle"
+    @cancel="modal = false"
+    @confirm="onRemove"
+  />
   <CommonContentEditDialog
+    v-else
     v-model:modal="modal"
-    :is-update="!!menuImageData?.id"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
   >
-    <v-form>
+    <v-form class="content-form">
       <div>
         <CommonContentInputImage
           v-model:url="formData.image.value.value"
@@ -138,3 +160,15 @@ const onCancel = () => {
     </v-form>
   </CommonContentEditDialog>
 </template>
+
+<style lang="scss" scoped>
+.content-form {
+  width: 60dvw;
+  min-width: 300px;
+  max-width: 840px;
+
+  @media only screen and (max-width: $grid-breakpoint-sm) {
+    width: 75dvw;
+  }
+}
+</style>

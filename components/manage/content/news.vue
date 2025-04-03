@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import type { NewsType, NewsForm } from '@/types/content'
+import type { NewsType, NewsForm, ContentEditMode } from '@/types/content'
 import { getNewsKind } from '@/composables/use-content/use-news'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{ newsData?: NewsType | null }>()
+const props = withDefaults(
+  defineProps<{
+    contentTitle: string
+    editMode: ContentEditMode
+    newsData?: NewsType | null
+  }>(),
+  {
+    newsData: null,
+  }
+)
 const emit = defineEmits<{
   create: [inputData: NewsForm]
   update: [{ id: string; formData: NewsForm }]
@@ -53,9 +62,24 @@ const onCancel = () => {
 </script>
 
 <template>
-  <CommonContentEditDialog v-model:modal="modal" :is-update="!!newsData?.id">
+  <CommonContentDeleteConfirm
+    v-if="editMode === 'delete'"
+    v-model:comfirm="modal"
+    :content-title="contentTitle"
+    @cancel="modal = false"
+    @confirm="onRemove"
+  />
+  <CommonContentEditDialog
+    v-else
+    v-model:modal="modal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
+  >
     <v-form class="news-form">
-      <div>
+      <div
+        v-if="['new', 'update', 'image', 'caption'].includes(editMode)"
+        class="mt-3"
+      >
         <CommonContentInputImage
           v-model:url="formData.image.value.value"
           v-model:name="formData.imageName.value.value"
@@ -67,7 +91,10 @@ const onCancel = () => {
           :api-kind="apiKind"
         />
       </div>
-      <div class="mt-3">
+      <div
+        v-if="['new', 'update', 'image', 'title', 'caption'].includes(editMode)"
+        class="mt-3"
+      >
         <v-text-field
           v-model="formData.title.value.value"
           :error-messages="formData.title.errorMessage.value"
@@ -76,42 +103,43 @@ const onCancel = () => {
           placeholder="タイトルを入力してください"
         />
       </div>
-      <div class="row-wrapper mt-3">
-        <div class="row-field">
-          <v-select
-            v-model="formData.category.value.value"
-            :error-messages="formData.category.errorMessage.value"
-            :items="categoryItems"
-            label="カテゴリ"
+      <template v-if="['new', 'update', 'body', 'caption'].includes(editMode)">
+        <div class="row-wrapper mt-3">
+          <div class="row-field">
+            <v-select
+              v-model="formData.category.value.value"
+              :error-messages="formData.category.errorMessage.value"
+              :items="categoryItems"
+              label="カテゴリ"
+            />
+          </div>
+          <div class="row-field">
+            <BaseDatePicker
+              v-model="formData.publishOn.value.value"
+              :error-messages="formData.publishOn.errorMessage.value"
+              label="公開日"
+              placeholder="公開日を選択してください"
+              picker-title="公開日を選択してください"
+            />
+          </div>
+        </div>
+        <div v-if="['new', 'update', 'body'].includes(editMode)" class="mt-3">
+          <CommonWysiwygEditor
+            v-model="formData.body.value.value"
+            :error-messages="formData.body.errorMessage.value"
+            clearable
+            label="本文"
+            placeholder="本文を入力してください"
+            :customer-id="customerId"
+            :api-kind="apiKind"
           />
         </div>
-        <div class="row-field">
-          <BaseDatePicker
-            v-model="formData.publishOn.value.value"
-            :error-messages="formData.publishOn.errorMessage.value"
-            label="公開日"
-            placeholder="公開日を選択してください"
-            picker-title="公開日を選択してください"
-          />
-        </div>
-      </div>
-      <div class="mt-3">
-        <CommonWysiwygEditor
-          v-model="formData.body.value.value"
-          :error-messages="formData.body.errorMessage.value"
-          clearable
-          label="本文"
-          placeholder="本文を入力してください"
-          :customer-id="customerId"
-          :api-kind="apiKind"
-        />
-      </div>
+      </template>
       <ManageContentFormActions
         :content-id="newsData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"
-        @remove="onRemove"
         @cancel="onCancel"
       />
     </v-form>
@@ -120,21 +148,30 @@ const onCancel = () => {
 
 <style scoped lang="scss">
 .news-form {
+  width: 60dvw;
+  min-width: 300px;
+  max-width: 840px;
+
   .row-wrapper {
     display: flex;
     flex-flow: row nowrap;
     column-gap: 1rem;
+
     .row-field {
       width: calc(50% - 0.5rem);
     }
   }
 }
+
 @media only screen and (max-width: $grid-breakpoint-sm) {
   .news-form {
+    width: 75dvw;
+
     .row-wrapper {
       flex-flow: column;
       align-items: stretch;
       column-gap: normal;
+
       .row-field {
         width: auto;
       }

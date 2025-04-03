@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FeatureForm } from '@/types/content'
+import type { FeatureForm, ContentEditMode } from '@/types/content'
 import { useFeatureActions } from '~/composables/use-content/use-features'
 const emit = defineEmits<{ 'update:data': [] }>()
 
@@ -10,9 +10,9 @@ const route = useRoute()
 const contentId = Array.isArray(route.params.id)
   ? route.params.id[0]
   : route.params.id
-const editModal = ref(false)
 
 const {
+  contentTitle,
   featureRef,
   featurePreNextIdRefRef,
   loading,
@@ -43,6 +43,9 @@ const nextUrl = computed(() =>
     : null
 )
 
+const editModal = ref(false)
+const editMode = ref<ContentEditMode>('update')
+
 await onLoad(contentId)
 </script>
 
@@ -52,8 +55,10 @@ await onLoad(contentId)
       <PublishContentDetailItem
         v-model:modal="editModal"
         :item="featureRef"
+        :content-title="contentTitle"
         :can-edit="canEdit"
         no-image-parallax
+        @edit-mode="editMode = $event"
         @update-title-setting="onUpdateTitleSetting"
         @update-image-setting="onUpdateImageSetting"
       >
@@ -66,9 +71,11 @@ await onLoad(contentId)
       </PublishContentDetailItem>
     </CommonContentCard>
   </CommonContentWrap>
-  <ManageContentServiceBody
+  <ManageContentFeature
     v-model:modal="editModal"
-    :service-data="featureRef"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
+    :feature-data="featureRef"
     @update="onUpdateData"
     @remove="onRemoveData"
   />

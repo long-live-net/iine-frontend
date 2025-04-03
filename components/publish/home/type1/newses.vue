@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import type { NewsType } from '@/types/content'
+import type { NewsType, ContentEditMode } from '@/types/content'
 import { formatLocalDate } from '@/utils/misc'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 
-const editModal = ref(false)
-const updatingData = ref<NewsType | null>(null)
-
 const {
+  contentTitle,
   filter,
   sort,
   pager,
@@ -20,6 +18,10 @@ const {
   onRemove,
   loading,
 } = useNewsListActions(customerId)
+
+const editModal = ref(false)
+const updatingData = ref<NewsType | null>(null)
+const editMode = ref<ContentEditMode>('update')
 
 const isWholeData = ref(false)
 filter.value = { publishOn: true }
@@ -58,7 +60,7 @@ await onLoad()
           :contents="newsListRef"
         >
           <template #default="{ content, index }">
-            <div class="news-item">
+            <div class="news-item" :class="{ 'news-item-can-edit': canEdit }">
               <div
                 class="news-item__header g-theme-contents-item__header"
                 :class="{ 'g-animation-initial-effect': !canEdit }"
@@ -91,24 +93,44 @@ await onLoad()
                 </nuxt-link>
               </div>
               <div v-if="canEdit" class="edit-activator">
-                <CommonContentEditActivator
-                  v-model:modal="editModal"
-                  is-update
-                  activator-size="x-small"
-                  @update:modal="updatingData = content"
-                />
+                <div class="activators">
+                  <CommonContentEditActivator
+                    v-model:modal="editModal"
+                    :content-title="contentTitle"
+                    edit-mode="caption"
+                    size="x-small"
+                    no-tooltip
+                    @update:modal="
+                      ((updatingData = content), (editMode = 'caption'))
+                    "
+                  />
+                  <CommonContentEditActivator
+                    v-model:modal="editModal"
+                    :content-title="contentTitle"
+                    edit-mode="delete"
+                    size="x-small"
+                    no-tooltip
+                    @update:modal="
+                      ((updatingData = content), (editMode = 'delete'))
+                    "
+                  />
+                </div>
               </div>
             </div>
           </template>
         </CommonContentList>
         <div v-else class="no-items">
           <p>データがありません</p>
-          <div v-if="canEdit">
+          <div v-if="canEdit" class="d-flex align-center">
             <CommonContentEditActivator
               v-model:modal="editModal"
-              activator-label="ニュースを登録してください"
-              @update:modal="updatingData = null"
+              :content-title="contentTitle"
+              edit-mode="new"
+              @update:modal="((updatingData = null), (editMode = 'new'))"
             />
+            <p class="ml-2">
+              このボタンから{{ contentTitle }}を登録してください。
+            </p>
           </div>
         </div>
         <div v-if="canEdit" class="whole-switch">
@@ -121,13 +143,17 @@ await onLoad()
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
         <CommonContentEditActivator
           v-model:modal="editModal"
-          @update:modal="updatingData = null"
+          :content-title="contentTitle"
+          edit-mode="new"
+          @update:modal="((updatingData = null), (editMode = 'new'))"
         />
       </div>
     </CommonContentCard>
   </CommonContentWrap>
   <ManageContentNews
     v-model:modal="editModal"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
     :news-data="updatingData"
     @create="onCreate"
     @update="onUpdate"
@@ -143,19 +169,23 @@ await onLoad()
     margin-bottom: 1.25rem;
     text-align: center;
   }
+
   .no-items {
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: 1rem;
+    row-gap: 0.25rem;
+
     p {
       font-weight: bold;
-      color: $accent;
+      color: var(--warning-color);
     }
   }
+
   .whole-switch {
     margin-top: 1rem;
   }
+
   .create-activator {
     position: absolute;
     top: 1rem;
@@ -183,20 +213,39 @@ await onLoad()
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .edit-activator {
-    position: absolute;
-    top: 3px;
-    left: -25px;
-  }
-}
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .news-item {
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
     flex-flow: column;
     align-items: stretch;
     padding: 0 0 0.6rem 1rem;
+  }
+}
+
+.news-item-can-edit {
+  padding-left: 2.5rem;
+
+  .edit-activator {
+    position: absolute;
+    top: 3px;
+    left: -30px;
+
+    .activators {
+      display: flex;
+      gap: 1px;
+    }
+  }
+
+  @media only screen and (max-width: $grid-breakpoint-md) {
+    padding-left: 2rem;
+
     .edit-activator {
       top: 0;
-      left: -22px;
+      left: -8px;
+
+      .activators {
+        flex-direction: column;
+        gap: 4px;
+      }
     }
   }
 }

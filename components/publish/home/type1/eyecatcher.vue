@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import type { ContentEditMode } from '@/types/content'
+
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 const {
+  contentTitle,
   eyecatchRef,
   onLoad,
   onCreate,
@@ -11,6 +14,10 @@ const {
   onUpdateImageSetting,
   loading,
 } = useEyecatchActions(customerId)
+
+const editModal = ref(false)
+const editMode = ref<ContentEditMode>('update')
+
 await onLoad()
 </script>
 
@@ -32,6 +39,7 @@ await onLoad()
       >
         <template #default>
           <CommonEyecatchTitleSettingPositionEyecatcher
+            v-if="eyecatchRef?.id"
             :settings="eyecatchRef?.titleSettings"
             :can-edit="canEdit"
             @update="onUpdateTitleSetting"
@@ -51,7 +59,7 @@ await onLoad()
                 />
               </CommonContentItemAnimation>
             </template>
-            <template #sideSettings>
+            <template v-if="eyecatchRef?.titleSettings" #sideSettings>
               <CommonEyecatchTitleSetting
                 :settings="eyecatchRef?.titleSettings"
                 @update="onUpdateTitleSetting"
@@ -63,31 +71,59 @@ await onLoad()
                 @update="onUpdateTitleSetting"
               />
             </template>
+            <template #editActions>
+              <CommonContentEditActivator
+                v-model:modal="editModal"
+                edit-mode="title"
+                content-title="タイトル"
+                size="small"
+                no-tooltip
+                @update:modal="editMode = 'title'"
+              />
+            </template>
           </CommonEyecatchTitleSettingPositionEyecatcher>
-        </template>
-        <template v-if="canEdit && eyecatchRef" #settings>
-          <CommonEyecatchImageSetting
-            :settings="eyecatchRef.imageSettings"
-            @update="onUpdateImageSetting"
-          />
         </template>
       </CommonEyecatchImage>
     </CommonContentItemAnimation>
     <div v-if="canEdit" class="edit-activator">
-      <ManageContentEyecatcher
-        v-if="eyecatchRef?.id"
-        :eyecatch-data="eyecatchRef"
-        @update="onUpdate"
-        @remove="onRemove"
-      />
-      <ManageContentEyecatcher
-        v-else
-        :eyecatch-data="eyecatchRef"
-        activator-label="トップ画像を登録してください"
-        @create="onCreate"
-      />
+      <div v-if="eyecatchRef?.id" class="activators">
+        <CommonContentEditActivator
+          v-model:modal="editModal"
+          edit-mode="image"
+          :content-title="contentTitle"
+          @update:modal="editMode = 'image'"
+        />
+        <CommonEyecatchImageSetting
+          :settings="eyecatchRef.imageSettings"
+          @update="onUpdateImageSetting"
+        />
+        <CommonContentEditActivator
+          v-model:modal="editModal"
+          edit-mode="delete"
+          :content-title="contentTitle"
+          @update:modal="editMode = 'delete'"
+        />
+      </div>
+      <div v-else class="activators">
+        <CommonContentEditActivator
+          v-model:modal="editModal"
+          :content-title="contentTitle"
+          edit-mode="new"
+          @update:modal="editMode = 'new'"
+        />
+        <p>このボタンから{{ contentTitle }}を登録してください。</p>
+      </div>
     </div>
   </CommonContentWrap>
+  <ManageContentEyecatcher
+    v-model:modal="editModal"
+    :eyecatch-data="eyecatchRef"
+    :content-title="contentTitle"
+    :edit-mode="editMode"
+    @update="onUpdate"
+    @remove="onRemove"
+    @create="onCreate"
+  />
 </template>
 
 <style lang="scss" scoped>
@@ -101,6 +137,20 @@ await onLoad()
 
     @media only screen and (max-width: $grid-breakpoint-md) {
       top: 0.5rem;
+    }
+
+    .activators {
+      display: flex;
+      align-items: center;
+      column-gap: 0.5rem;
+
+      p {
+        font-weight: bold;
+        color: var(--warning-color);
+        background-color: white;
+        margin-right: 0.5rem;
+        padding: 4px 10px;
+      }
     }
   }
 }

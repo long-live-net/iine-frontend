@@ -3,6 +3,7 @@ import type {
   MenuCategoryType,
   MenuDetailType,
   MenuDetailForm,
+  ContentEditMode,
 } from '@/types/content'
 import type { MenuItem } from '@/components/base/dropdown.vue'
 const emit = defineEmits<{ 'update:data': [] }>()
@@ -12,7 +13,9 @@ const DETAILS_LINIT = 128
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
+const { domidPrefix } = useCustomerSetting()
 
+const router = useRouter()
 const route = useRoute()
 const menuId = Array.isArray(route.params.id)
   ? route.params.id[0]
@@ -33,6 +36,12 @@ const {
 const onRemoveMenu = async (id: string) => {
   await removeMenu(id)
   emit('update:data')
+  removeMenuModal.value = false
+
+  await router.push({
+    name: 'index',
+    hash: `#${domidPrefix}-menu`,
+  })
 }
 const preUrl = computed(() =>
   menuPreNextIdRefRef.value?.preId
@@ -51,6 +60,7 @@ const nextUrl = computed(() =>
 const editCategoryModal = ref(false)
 const editCategoryPositionModal = ref(false)
 const updatingCategory = ref<MenuCategoryType | null>(null)
+const editModeCategory = ref<ContentEditMode>('update')
 const {
   filter: filterCategory,
   sort: sortCategory,
@@ -86,6 +96,7 @@ const onSelectMenuCategory = (value: number | string) => {
     case 'addMenuCategory':
       updatingCategory.value = null
       editCategoryModal.value = true
+      editModeCategory.value = 'new'
       break
     case 'orderMenuCategory':
       editCategoryPositionModal.value = true
@@ -99,6 +110,7 @@ const onSelectMenuCategory = (value: number | string) => {
 const editDetailModal = ref(false)
 const updatingDetail = ref<MenuDetailType | null>(null)
 const targetCategory = ref<MenuCategoryType | null>(null)
+const editModeDetail = ref<ContentEditMode>('update')
 const {
   filter: filterDetail,
   sort: sortDetail,
@@ -145,7 +157,7 @@ const onUpdatePositionsDetail = async (
   await updatePositionsDetail(menuDetails, category.id)
 }
 
-filterDetail.value = { menuId: menuId }
+filterDetail.value = { menuId }
 sortDetail.value = { position: 1 }
 pagerDetail.value = { page: 1, limit: DETAILS_LINIT }
 
@@ -167,7 +179,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
               activator-text="ページ削除"
               activator-icon="mdi-delete"
               activator-size="small"
-              activator-color="error"
+              activator-color="grey-darken-1"
             />
             <BaseActivator
               v-model:modal="editCategoryModal"
@@ -175,7 +187,9 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
               activator-icon="mdi-plus"
               activator-size="small"
               activator-color="info"
-              @update:modal="updatingCategory = null"
+              @update:modal="
+                ((updatingCategory = null), (editModeCategory = 'new'))
+              "
             />
             <BaseActivator
               v-model:modal="editCategoryPositionModal"
@@ -193,7 +207,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
               activator-text="ページ削除"
               activator-icon="mdi-delete"
               activator-size="small"
-              activator-color="error"
+              activator-color="grey-darken-1"
             />
             <BaseDropdown
               :items="menuCategoryItems"
@@ -242,7 +256,9 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
                     activator-size="small"
                     activator-color="info"
                     @update:modal="
-                      ((updatingDetail = null), (targetCategory = category))
+                      ((editModeDetail = 'new'),
+                      (updatingDetail = null),
+                      (targetCategory = category))
                     "
                   />
                 </div>
@@ -254,28 +270,63 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
                   @update="onUpdatePositionsDetail($event, category)"
                 >
                   <template #default="{ content }">
-                    <div class="menu-detail-container">
+                    <div
+                      class="menu-detail-container"
+                      :class="{ 'menu-detail-can-edit': canEdit }"
+                    >
                       <PublishMenuDetailsItemGridRow :item="content" />
-                      <CommonContentEditActivator
-                        v-model:modal="editDetailModal"
-                        activator-size="x-small"
-                        is-update
-                        class="edit-detail-activator"
-                        @update:modal="
-                          ((updatingDetail = content),
-                          (targetCategory = category))
-                        "
-                      />
+                      <div class="edit-detail-activator">
+                        <div class="activators">
+                          <CommonContentEditActivator
+                            v-model:modal="editDetailModal"
+                            content-title="メニュー項目"
+                            edit-mode="update"
+                            activator-size="x-small"
+                            @update:modal="
+                              ((editModeDetail = 'update'),
+                              (updatingDetail = content),
+                              (targetCategory = category))
+                            "
+                          />
+                          <CommonContentEditActivator
+                            v-model:modal="editDetailModal"
+                            content-title="メニュー項目"
+                            edit-mode="delete"
+                            activator-size="x-small"
+                            @update:modal="
+                              ((editModeDetail = 'delete'),
+                              (updatingDetail = content),
+                              (targetCategory = category))
+                            "
+                          />
+                        </div>
+                      </div>
                     </div>
                   </template>
                 </CommonContentGridRowDraggable>
                 <div class="edit-category-activator">
-                  <CommonContentEditActivator
-                    v-model:modal="editCategoryModal"
-                    activator-size="default"
-                    is-update
-                    @update:modal="updatingCategory = category"
-                  />
+                  <div class="activators">
+                    <CommonContentEditActivator
+                      v-model:modal="editCategoryModal"
+                      content-title="メニューカテゴリ"
+                      edit-mode="update"
+                      activator-size="small"
+                      @update:modal="
+                        ((updatingCategory = category),
+                        (editModeCategory = 'update'))
+                      "
+                    />
+                    <CommonContentEditActivator
+                      v-model:modal="editCategoryModal"
+                      edit-mode="delete"
+                      content-title="メニューカテゴリ"
+                      activator-size="small"
+                      @update:modal="
+                        ((updatingCategory = category),
+                        (editModeCategory = 'delete'))
+                      "
+                    />
+                  </div>
                 </div>
               </template>
               <template v-else>
@@ -318,16 +369,17 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
       </div>
     </div>
   </CommonContentWrap>
-  <BaseConfirm
+  <CommonContentDeleteConfirm
     v-if="menuRef"
     v-model:comfirm="removeMenuModal"
-    message="本当に削除しますか？"
-    exec-text="削除する"
+    content-title="メニュー"
     @cancel="removeMenuModal = false"
     @confirm="onRemoveMenu(menuRef.id)"
   />
   <ManageContentMenuCategory
     v-model:modal="editCategoryModal"
+    content-title="メニューカテゴリ"
+    :edit-mode="editModeCategory"
     :menu-category-data="updatingCategory"
     @create="onCreateCategory(menuId, $event)"
     @update="onUpdateCategory({ menuId, ...$event })"
@@ -335,6 +387,8 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
   />
   <ManageContentMenuDetail
     v-model:modal="editDetailModal"
+    content-title="メニュー項目"
+    :edit-mode="editModeDetail"
     :menu-detail-data="updatingDetail"
     @create="onCreateDetail"
     @update="onUpdateDetail"
@@ -383,23 +437,45 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
           position: absolute;
           top: 0.5rem;
           left: 0.5rem;
+
+          @media only screen and (max-width: $grid-breakpoint-md) {
+            top: 3.5rem;
+            left: 2rem;
+          }
+
+          .activators {
+            display: flex;
+            column-gap: 0.5rem;
+          }
         }
 
         .menu-category-actions {
           display: flex;
-          justify-content: center;
+          justify-content: end;
           align-items: center;
           gap: 0.5rem;
-          margin-bottom: 2rem;
+          margin-right: 2rem;
+          margin-bottom: 1rem;
         }
 
         .menu-detail-container {
+          padding-left: 0;
+        }
+
+        .menu-detail-can-edit {
           position: relative;
+          min-height: 7rem;
+          padding-left: 2rem;
 
           .edit-detail-activator {
             position: absolute;
-            top: -0.5rem;
-            left: -0.5rem;
+            top: -8px;
+            left: -8px;
+
+            .activators {
+              display: flex;
+              gap: 0.25rem;
+            }
           }
         }
       }
@@ -415,7 +491,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
     p {
       text-align: center;
       font-weight: bold;
-      color: $accent;
+      color: var(--warning-color);
     }
   }
 }
