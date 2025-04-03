@@ -65,11 +65,10 @@ const onCancel = () => {
 </script>
 
 <template>
-  <BaseConfirm
+  <CommonContentDeleteConfirm
     v-if="editMode === 'delete'"
     v-model:comfirm="modal"
-    message="本当に削除しますか？"
-    exec-text="削除する"
+    :content-title="contentTitle"
     @cancel="modal = false"
     @confirm="onRemove"
   />

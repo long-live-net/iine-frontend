@@ -13,7 +13,9 @@ const DETAILS_LINIT = 128
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
+const { domidPrefix } = useCustomerSetting()
 
+const router = useRouter()
 const route = useRoute()
 const menuId = Array.isArray(route.params.id)
   ? route.params.id[0]
@@ -34,6 +36,12 @@ const {
 const onRemoveMenu = async (id: string) => {
   await removeMenu(id)
   emit('update:data')
+  removeMenuModal.value = false
+
+  await router.push({
+    name: 'index',
+    hash: `#${domidPrefix}-menu`,
+  })
 }
 const preUrl = computed(() =>
   menuPreNextIdRefRef.value?.preId
@@ -149,7 +157,7 @@ const onUpdatePositionsDetail = async (
   await updatePositionsDetail(menuDetails, category.id)
 }
 
-filterDetail.value = { menuId: menuId }
+filterDetail.value = { menuId }
 sortDetail.value = { position: 1 }
 pagerDetail.value = { page: 1, limit: DETAILS_LINIT }
 
@@ -199,7 +207,7 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
               activator-text="ページ削除"
               activator-icon="mdi-delete"
               activator-size="small"
-              activator-color="error"
+              activator-color="grey-darken-1"
             />
             <BaseDropdown
               :items="menuCategoryItems"
@@ -361,11 +369,10 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
       </div>
     </div>
   </CommonContentWrap>
-  <BaseConfirm
+  <CommonContentDeleteConfirm
     v-if="menuRef"
     v-model:comfirm="removeMenuModal"
-    message="本当に削除しますか？"
-    exec-text="削除する"
+    content-title="メニュー"
     @cancel="removeMenuModal = false"
     @confirm="onRemoveMenu(menuRef.id)"
   />

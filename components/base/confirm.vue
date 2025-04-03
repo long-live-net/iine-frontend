@@ -1,35 +1,48 @@
 <script setup lang="ts">
-const props = withDefaults(
+const comfirm = defineModel<boolean>('comfirm', { required: true })
+withDefaults(
   defineProps<{
-    comfirm: boolean
+    title?: string
+    titleIcon?: string
+    titleColor?: string
     message: string
     execText?: string
     cancelText?: string
     loading?: boolean
+    width?: string
+    maxWidth?: string
+    minWidth?: string
   }>(),
   {
+    title: undefined,
+    titleIcon: undefined,
+    titleColor: 'info',
     execText: '実行する',
     cancelText: 'キャンセル',
     loading: false,
+    width: '80%',
+    maxWidth: '480px',
+    minWidth: 'auto',
   }
 )
-const emit = defineEmits<{
-  'update:comfirm': [comfirm: boolean]
+defineEmits<{
   confirm: []
   cancel: []
 }>()
-
-const confirmDialog = computed({
-  get: () => props.comfirm,
-  set: (modal: boolean) => {
-    emit('update:comfirm', modal)
-  },
-})
 </script>
 
 <template>
-  <BaseDialog v-model:modal="confirmDialog" :max-width="400">
+  <BaseDialog
+    v-model:modal="comfirm"
+    :width="width"
+    :max-width="maxWidth"
+    min-width="minWidth"
+  >
     <v-card>
+      <v-card-title v-if="title && titleIcon" class="confirm-title">
+        <v-icon :icon="titleIcon" :color="titleColor" />
+        <p>{{ title }}</p>
+      </v-card-title>
       <v-card-text>
         <p>{{ message }}</p>
         <div class="mt-4 mb-2 p-3 text-right">
@@ -53,6 +66,15 @@ const confirmDialog = computed({
 </template>
 
 <style scoped lang="scss">
+.confirm-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1rem;
+  border-bottom: 1px solid lightgrey;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
 .action-button {
   min-width: 6rem;
 }

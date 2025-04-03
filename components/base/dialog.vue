@@ -4,11 +4,13 @@ withDefaults(
   defineProps<{
     width?: number | string
     maxWidth?: number | string
+    minWidth?: number | string
     persistent?: boolean
   }>(),
   {
     width: 'auto',
     maxWidth: 'auto',
+    minWidth: 'auto',
     persistent: false,
   }
 )
@@ -19,6 +21,7 @@ withDefaults(
     v-model="modal"
     :width="width"
     :max-width="maxWidth"
+    :min-width="minWidth"
     :persistent="persistent"
     scrollable
   >
