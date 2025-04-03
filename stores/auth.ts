@@ -108,7 +108,7 @@ export const useAuthStore = defineStore(
   {
     persist: {
       pick: ['userRef', 'tokenRef'],
-      storage: persistedState.sessionStorage,
+      storage: piniaPluginPersistedstate.sessionStorage(),
     },
   }
 )

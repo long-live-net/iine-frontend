@@ -49,6 +49,6 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt'],
+  modules: ['@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt'],
   compatibilityDate: '2024-07-07',
 })
