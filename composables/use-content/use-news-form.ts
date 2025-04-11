@@ -4,7 +4,7 @@ import type { NewsType, NewsForm } from '@/types/content'
 
 export const useNewsForm = () => {
   const { getDefaultTitleSettings } = useContentInit()
-  const { required, noBlank, maxLength, noBlankForWysiwyg } = useValidateRules()
+  const { required, noBlank, maxLength } = useValidateRules()
 
   const newsFormSchema = {
     title: (v: string | undefined) => {
@@ -15,10 +15,7 @@ export const useNewsForm = () => {
     titleSettings: () => true,
     category: (v: string | null) => noBlank(v) || 'カテゴリを入力してください',
     publishOn: (v: Date | null) => required(v) || '公開日を入力してください',
-    body: (v: string | undefined) => {
-      if (!noBlankForWysiwyg(v)) return '本文を入力してください'
-      return true
-    },
+    body: () => true,
     image: () => true,
     imageName: () => true,
     imageType: () => true,

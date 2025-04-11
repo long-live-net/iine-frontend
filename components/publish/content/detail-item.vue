@@ -92,7 +92,6 @@ const bodyPlainString = computed(
                   edit-mode="title"
                   content-title="タイトル"
                   size="small"
-                  no-tooltip
                   @update:modal="$emit('editMode', 'title')"
                 />
               </template>
@@ -134,16 +133,17 @@ const bodyPlainString = computed(
     <div class="body-item">
       <CommonContentCardBody>
         <div v-if="canEdit && item?.id" class="edit-body-activator">
-          <CommonContentEditActivator
-            v-model:modal="modal"
-            edit-mode="body"
-            content-title="本文"
-            @update:modal="$emit('editMode', 'body')"
-          />
+          <slot name="bodyEditActivator">
+            <CommonContentEditActivator
+              v-model:modal="modal"
+              edit-mode="body"
+              content-title="本文"
+              @update:modal="$emit('editMode', 'body')"
+            />
+          </slot>
         </div>
-
-        <slot name="body">
-          <div v-if="item">
+        <div v-if="item">
+          <slot name="body">
             <div v-if="bodyPlainString">
               <CommonWysiwygViewer :value="item?.body" />
             </div>
@@ -160,28 +160,28 @@ const bodyPlainString = computed(
                 <p class="ml-2">このボタンから本文を登録してください。</p>
               </div>
             </div>
-          </div>
-          <div v-else class="no-items">
-            <p>データがありません</p>
-            <div
-              v-if="canEdit && $route.name === 'index'"
-              class="d-flex align-center"
-            >
-              <CommonContentEditActivator
-                v-model:modal="modal"
-                :content-title="contentTitle"
-                edit-mode="new"
-                @update:modal="$emit('editMode', 'new')"
-              />
-              <p class="ml-2">
-                このボタンから{{ contentTitle }}を登録してください。
-              </p>
-            </div>
-            <p v-else class="mt-9">
-              <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
+          </slot>
+        </div>
+        <div v-else class="no-items">
+          <p>データがありません</p>
+          <div
+            v-if="canEdit && $route.name === 'index'"
+            class="d-flex align-center"
+          >
+            <CommonContentEditActivator
+              v-model:modal="modal"
+              :content-title="contentTitle"
+              edit-mode="new"
+              @update:modal="$emit('editMode', 'new')"
+            />
+            <p class="ml-2">
+              このボタンから{{ contentTitle }}を登録してください。
             </p>
           </div>
-        </slot>
+          <p v-else class="mt-9">
+            <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
+          </p>
+        </div>
       </CommonContentCardBody>
     </div>
   </div>

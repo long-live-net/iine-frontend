@@ -136,10 +136,12 @@ await onLoad()
         <div v-if="canEdit" class="whole-switch">
           <ManageContentNewsWholeSwitch v-model="isWholeData" />
         </div>
+        <div v-if="newsListRef?.length" class="mt-6 text-center">
+          <v-btn variant="outlined" color="primary" width="14rem" to="/news"
+            >さらに見る</v-btn
+          >
+        </div>
       </CommonContentCardBody>
-      <div class="type1-news-list__action">
-        <NuxtLink to="/news">もっと見る ...</NuxtLink>
-      </div>
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
         <CommonContentEditActivator
           v-model:modal="editModal"
@@ -165,10 +167,6 @@ await onLoad()
 .type1-news-list {
   position: relative;
   min-height: 16rem;
-  &__action {
-    margin-bottom: 1.25rem;
-    text-align: center;
-  }
 
   .no-items {
     display: flex;

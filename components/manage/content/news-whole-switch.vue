@@ -15,5 +15,7 @@ const wholeValue = computed({
     v-model="wholeValue"
     label="公開日が未来のデータを含む"
     color="primary"
+    density="compact"
+    hide-details
   />
 </template>

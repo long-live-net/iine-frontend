@@ -36,6 +36,9 @@ const nextUrl = computed(() =>
 
 const editModal = ref(false)
 const editMode = ref<ContentEditMode>('update')
+const bodyPlainString = computed(
+  () => newsRef.value?.body?.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') ?? ''
+)
 
 await onLoad(contentId)
 </script>
@@ -64,11 +67,11 @@ await onLoad(contentId)
                   }}</small>
                 </p>
               </div>
-              <div v-if="newsRef?.body" class="body">
+              <div v-if="bodyPlainString" class="body">
                 <CommonWysiwygViewer :value="newsRef?.body" />
               </div>
               <div v-else class="no-items">
-                <p>データがありません</p>
+                <p>本文がありません</p>
                 <div v-if="canEdit" class="d-flex align-center">
                   <CommonContentEditActivator
                     v-model:modal="editModal"
@@ -78,9 +81,6 @@ await onLoad(contentId)
                   />
                   <p class="ml-2">このボタンから本文を登録してください。</p>
                 </div>
-                <p v-else class="mt-9">
-                  <nuxt-link :to="{ name: 'index' }">HOMEに戻る</nuxt-link>
-                </p>
               </div>
             </div>
           </template>

@@ -31,6 +31,9 @@ export interface EyecatchGetApi extends ContentGetApi {
 export interface InformationGetApi extends ContentGetApi {
   body: string
 }
+export interface ProfileGetApi extends ContentGetApi {
+  captionBody: string
+}
 export interface ServiceGetApi extends ContentGetApi {
   caption: string
   image: ImageData
@@ -44,7 +47,6 @@ export interface FeatureGetApi extends ContentGetApi {
   position: number
 }
 export interface NewsGetApi extends ContentGetApi {
-  body: string
   category: string
   publishOn: Date
 }
@@ -103,6 +105,9 @@ export interface EyecatchSaveApi extends ContentSaveApi {
 export interface InformationSaveApi extends ContentSaveApi {
   body: string
 }
+export interface ProfileSaveApi extends ContentSaveApi {
+  captionBody: string
+}
 export interface ServiceSaveApi extends ContentSaveApi {
   caption: string
   image: ImageData
@@ -116,7 +121,6 @@ export interface FeatureSaveApi extends ContentSaveApi {
   position: number
 }
 export interface NewsSaveApi extends ContentSaveApi {
-  body: string
   category: string
   publishOn: Date
 }

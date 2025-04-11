@@ -29,6 +29,9 @@ export { useServiceForm } from './use-content/use-service-form'
 export { useInformationActions } from './use-content/use-information'
 export { useInformationForm } from './use-content/use-information-form'
 
+export { useProfileActions } from './use-content/use-profile'
+export { useProfileForm } from './use-content/use-profile-form'
+
 export { useContactActions } from './use-content/use-contact'
 export { useContactForm } from './use-content/use-contact-form'
 

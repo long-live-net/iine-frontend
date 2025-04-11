@@ -9,11 +9,12 @@ export type PageTitle = {
 export type SectionKind =
   | 'top'
   | 'information'
+  | 'profile'
+  | 'contact'
+  | 'access'
   | 'news'
   | 'service'
   | 'feature'
-  | 'contact'
-  | 'access'
   | 'menu'
   | 'menu-image'
 
