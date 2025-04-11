@@ -20,7 +20,11 @@ const isSmall = computed(
 const gridColumnMinDivide = computed(() => (isSmall.value ? 5.6 : 4.4))
 const gridColumnMaxDivide = computed(() => (isSmall.value ? 4.8 : 3.6))
 const flexColumnDivide = computed(() =>
-  isSmall.value ? 3 : props.contents.length < 2 ? 1.5 : props.contents.length
+  isSmall.value
+    ? 3.5
+    : props.contents.length <= 1
+      ? 1.75
+      : props.contents.length * 1.25
 )
 </script>
 
