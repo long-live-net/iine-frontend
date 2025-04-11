@@ -61,8 +61,11 @@ export interface InformationType extends ContentType {
   body: string
 }
 
+export interface ProfileType extends ContentType {
+  captionBody: string
+}
+
 export interface NewsType extends ContentType {
-  body: string
   category: string
   publishOn: Date
 }
@@ -141,9 +144,11 @@ export interface EyecatchForm extends ContentForm {
 export interface InformationForm extends ContentForm {
   body: string
 }
+export interface ProfileForm extends ContentForm {
+  captionBody: string
+}
 
 export interface NewsForm extends ContentForm {
-  body: string
   category: string | null
   publishOn: Date | null
 }
@@ -229,3 +234,4 @@ export type ContentEditMode =
   | 'title'
   | 'body'
   | 'caption'
+  | 'captionBody'

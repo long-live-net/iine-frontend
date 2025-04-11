@@ -77,7 +77,6 @@ await onLoad()
                 edit-mode="title"
                 content-title="タイトル"
                 size="small"
-                no-tooltip
                 @update:modal="editMode = 'title'"
               />
             </template>

@@ -10,7 +10,7 @@
  * og:description: 'This is my amazing site, let me tell you all about it.',
  * og:image: 'https://example.com/image.png',
 
-   og:type: 'website', (news 等の記事は 'article' で良いかも https://qiita.com/rksk/items/4dd46738a6d62f39389b)
+   og:type: 'website', (news 等の本文は 'article' で良いかも https://qiita.com/rksk/items/4dd46738a6d62f39389b)
    og:locale: 'ja_JP',
    twitterCard: 'summary_large_image', --> https://qiita.com/sysi_otsuka/items/92aa2e4d80b0c389a632
   

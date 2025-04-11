@@ -3,6 +3,17 @@ import type { SectionKind } from '@/types/customer-setting'
 import type { BreadCrumbsItem } from '@/components/base/bread-crumb.vue'
 
 const { domidPrefix, customerSetting } = useCustomerSetting()
+
+const profileItem = computed(() => {
+  const kind: SectionKind = 'profile'
+  const profileSection = customerSetting.value?.homeLayout?.find(
+    (s) => s.kind === kind
+  )
+  return {
+    title: profileSection?.menuTitle ?? profileSection?.title ?? 'Profile',
+    hash: `#${domidPrefix}-${kind}`,
+  }
+})
 const newsItem = computed(() => {
   const kind: SectionKind = 'news'
   const newsSection = customerSetting.value?.homeLayout?.find(
@@ -49,9 +60,27 @@ const detailTitle = computed(() => 'Detail')
 const route = useRoute()
 const items = ref<BreadCrumbsItem[]>([])
 watch(
-  [() => route, newsItem, serviceItem],
+  [() => route, profileItem, newsItem, serviceItem, featureItem, menuItem],
   () => {
     switch (route.name) {
+      case 'profiles-detail':
+        items.value = [
+          {
+            title: 'HOME',
+            to: { name: 'index' },
+            disabled: false,
+          },
+          {
+            title: profileItem.value.title,
+            to: { name: 'index', hash: profileItem.value.hash },
+            disabled: false,
+          },
+          {
+            title: detailTitle.value,
+            disabled: true,
+          },
+        ]
+        return
       case 'news':
         items.value = [
           {

@@ -29,11 +29,12 @@ const sectionTitle = (section: PageLayout): string =>
           :title="sectionTitle(section)"
         />
         <PublishHomeType1Information v-if="section.kind === 'information'" />
+        <PublishHomeType1Contact v-if="section.kind === 'contact'" />
+        <PublishHomeType1Access v-if="section.kind === 'access'" />
+        <PublishHomeType1Profile v-if="section.kind === 'profile'" />
         <PublishHomeType1Newses v-if="section.kind === 'news'" />
         <PublishHomeType1Services v-if="section.kind === 'service'" />
         <PublishHomeType1Features v-if="section.kind === 'feature'" />
-        <PublishHomeType1Contact v-if="section.kind === 'contact'" />
-        <PublishHomeType1Access v-if="section.kind === 'access'" />
         <PublishHomeType1Menu v-if="section.kind === 'menu'" />
         <PublishHomeType1MenuImage v-if="section.kind === 'menu-image'" />
       </template>

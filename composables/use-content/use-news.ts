@@ -19,7 +19,7 @@ const useNewsConverters = (customerId: Ref<string | null>) => {
           },
           category: apiData.category,
           publishOn: apiData.publishOn,
-          body: apiData.body,
+          body: apiData.body ?? '',
           ...(apiData.image
             ? {
                 image: {
@@ -48,7 +48,7 @@ const useNewsConverters = (customerId: Ref<string | null>) => {
     titleSettings: { ...formData.titleSettings },
     category: formData.category ?? 'I',
     publishOn: formData.publishOn ?? localDate(),
-    body: formData.body,
+    body: formData.body ?? '',
     ...(formData.image && formData.imageName && formData.imageType
       ? {
           image: {

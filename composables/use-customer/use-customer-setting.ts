@@ -185,6 +185,7 @@ export const useHomeLayoutTitleEdit = () => {
  */
 const baseLayoutsOrder: PageLayout[] = [
   { kind: 'information', title: 'information' },
+  { kind: 'profile', title: 'profile' },
   { kind: 'news', title: 'news' },
   { kind: 'service', title: 'service' },
   { kind: 'feature', title: 'feature' },
@@ -390,11 +391,11 @@ export const useThemeSettingsEdit = () => {
  */
 const sectionKind2ApiKind = [
   { kind: 'information', apiKind: 'informations' },
+  { kind: 'profile', apiKind: 'profiles' },
   { kind: 'news', apiKind: 'newses' },
   { kind: 'service', apiKind: 'services' },
   { kind: 'feature', apiKind: 'features' },
   { kind: 'contact', apiKind: 'contacts' },
-  // { kind: 'access', apiKind: 'access' },
   { kind: 'menu', apiKind: 'menus' },
   { kind: 'menu-image', apiKind: 'menu-images' },
 ]
