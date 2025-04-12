@@ -44,8 +44,13 @@ await onLoad()
         @update-image-setting="onUpdateImageSetting"
       >
         <template #middlenavi>
-          <div class="service-links-wrap">
-            <PublishCustomerServiceLinks class="service-links" />
+          <div class="contact-middle-navi">
+            <div class="contact-middle-navi__actions">
+              <div class="d-flex">
+                <PublishInquire />
+                <PublishCustomerServiceLinks />
+              </div>
+            </div>
           </div>
         </template>
       </PublishContentDetailItem>
@@ -63,19 +68,14 @@ await onLoad()
 </template>
 
 <style lang="scss" scoped>
-.service-links-wrap {
+.contact-middle-navi {
   position: relative;
   min-height: 0.5rem;
 
-  .service-links {
+  &__actions {
     position: absolute;
     top: 0.25rem;
     right: 1rem;
   }
-}
-
-.inquire-activator {
-  width: fit-content;
-  margin: 0 0 0 auto;
 }
 </style>
