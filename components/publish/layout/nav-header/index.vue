@@ -101,6 +101,13 @@ const headerItems = computed(
                 :color="item.color"
                 :hover-color="item.hoverColor"
               />
+              <div v-if="customerSetting?.reservationUrl">
+                <CommonReservationChip
+                  :url="customerSetting.reservationUrl"
+                  class="reservation-button"
+                  >予約する</CommonReservationChip
+                >
+              </div>
             </div>
           </BaseDrawer>
         </teleport>
@@ -134,6 +141,7 @@ const headerItems = computed(
   align-items: center;
   column-gap: 14px;
 }
+
 .column-direction {
   display: flex;
   flex-direction: column;
@@ -143,5 +151,11 @@ const headerItems = computed(
   p:first-child {
     margin-top: 0.5rem;
   }
+}
+
+.reservation-button {
+  width: 200px;
+  padding: 6px 0;
+  margin-top: 1rem;
 }
 </style>

@@ -4,8 +4,6 @@ defineOptions({
 })
 
 const { customerSetting } = useCustomerSetting()
-const { isLoggedIn } = useCustomerPageContext()
-
 const initializing = useState<boolean>('initializing', () => true)
 onMounted(() => {
   if (initializing.value)
@@ -35,7 +33,7 @@ const topHashName = 'default-layout-main-top'
     </div>
     <client-only>
       <CommonReservasionSideChip
-        v-if="customerSetting?.reservationUrl && !isLoggedIn"
+        v-if="customerSetting?.reservationUrl"
         :reservation-url="customerSetting.reservationUrl"
       />
       <CommonTopToButton :top-hash-name="topHashName" />
