@@ -51,7 +51,7 @@ const topHashName = 'default-layout-main-top'
 
     header {
       position: fixed;
-      top: 0px;
+      top: 0;
       width: 100%;
       z-index: 999;
     }
@@ -59,13 +59,20 @@ const topHashName = 'default-layout-main-top'
     main {
       flex-grow: 1;
       position: relative;
-      margin: 0;
-      padding: 0;
+      padding-bottom: 6rem;
+
+      @media only screen and (max-width: $grid-breakpoint-md) {
+        padding-bottom: 9rem;
+      }
     }
 
     footer {
-      padding: 0;
-      margin: 0;
+      @media only screen and (max-width: $grid-breakpoint-md) {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        z-index: 999;
+      }
     }
   }
 

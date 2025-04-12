@@ -49,14 +49,14 @@ const isScrollOverTheWindow = computed(
   }
 
   @media only screen and (max-width: $grid-breakpoint-md) {
-    right: 1rem;
-    bottom: 1.8rem;
+    right: 6px;
+    bottom: 64px;
     &__avatar {
       width: 3rem;
       height: 3rem;
     }
     &::after {
-      font-size: small;
+      display: none;
     }
   }
 }

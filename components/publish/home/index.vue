@@ -44,17 +44,6 @@ const sectionTitle = (section: PageLayout): string =>
 
 <style lang="scss" scoped>
 article {
-  padding: 0;
-  padding-bottom: 4rem;
-
-  .section-margin-top {
-    padding-top: 0;
-
-    @media only screen and (max-width: $grid-breakpoint-md) {
-      padding-top: $nav-header-height;
-    }
-  }
-
   .section-margin {
     padding-top: calc($nav-header-height + 1rem);
     margin-top: -10px;
