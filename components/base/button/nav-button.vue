@@ -1,36 +1,24 @@
 <script setup lang="ts">
-const props = withDefaults(
+withDefaults(
   defineProps<{
-    to?: string | null
+    to: string
     width?: string
   }>(),
   {
-    to: null,
     width: 'auto',
   }
 )
-const emit = defineEmits<{ click: [] }>()
-
-const router = useRouter()
-
-const onClick = () => {
-  if (props.to) {
-    router.push(props.to)
-    return
-  }
-  emit('click')
-}
 </script>
 
 <template>
-  <button class="btn btn-nav" @click.prevent.stop="onClick">
+  <nuxt-link :to="to" class="nav-button">
     <span class="caret" />
     <span><slot /></span>
-  </button>
+  </nuxt-link>
 </template>
 
 <style lang="scss" scoped>
-button.btn {
+.nav-button {
   position: relative;
   display: inline-block;
   width: v-bind('width');
