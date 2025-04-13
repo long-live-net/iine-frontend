@@ -76,12 +76,8 @@ await onLoad()
             </div>
           </div>
           <div v-if="bodyPlainString" class="mt-6 text-center">
-            <v-btn
-              variant="outlined"
-              color="primary"
-              width="14rem"
-              to="/profiles/detail"
-              >詳しく見る</v-btn
+            <BaseButtonNavButton width="14rem" to="/profiles/detail"
+              >詳しく見る</BaseButtonNavButton
             >
           </div>
         </template>
