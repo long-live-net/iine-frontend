@@ -17,11 +17,6 @@ const {
   loading,
 } = useMenuListActions(customerId)
 
-const router = useRouter()
-const onMovingDetailPage = (item: MenuType) => {
-  router.push(`/menus/${item.id}`)
-}
-
 const editModal = ref(false)
 const updatingData = ref<MenuType | null>(null)
 const editMode = ref<ContentEditMode>('update')
@@ -55,9 +50,9 @@ await onLoad()
       <template #default="{ content }">
         <PublishContentGridItem
           :item="content"
-          eyecatch-shape="round"
+          :see-detail-path="`/menus/${content.id}`"
           see-detail-action-label="メニューを見る"
-          @select="onMovingDetailPage"
+          eyecatch-shape="round"
         />
       </template>
     </PublishContentGridTable>

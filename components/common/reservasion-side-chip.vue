@@ -17,9 +17,9 @@ defineProps<{ reservationUrl: string | null }>()
   top: calc(50% + $nav-header-height / 2);
   right: 0;
   transform: translate3d(0, -50%, 0);
+  writing-mode: vertical-rl;
 
   .reservation-button {
-    writing-mode: vertical-rl;
     letter-spacing: 4px;
     padding: 0 6px;
     height: 10rem;

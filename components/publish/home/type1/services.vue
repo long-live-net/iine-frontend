@@ -17,11 +17,6 @@ const {
   loading,
 } = useServiceListActions(customerId)
 
-const router = useRouter()
-const onMovingDetailPage = (service: ServiceType) => {
-  router.push(`/services/${service.id}`)
-}
-
 const editModal = ref(false)
 const updatingData = ref<ServiceType | null>(null)
 const editMode = ref<ContentEditMode>('update')
@@ -55,8 +50,8 @@ await onLoad()
       <template #default="{ content }">
         <PublishContentGridItem
           :item="content"
+          :see-detail-path="`/services/${content.id}`"
           eyecatch-shape="circle"
-          @select="onMovingDetailPage"
         />
       </template>
     </PublishContentGridTable>

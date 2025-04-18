@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { MenuType } from '@/types/content'
-
 withDefaults(defineProps<{ noCaption?: boolean }>(), { noCaption: false })
 
 const editModal = ref(false)
@@ -23,11 +21,6 @@ const {
 
 defineExpose({ onGetList })
 
-const router = useRouter()
-const onMovingDetailPage = (menu: MenuType) => {
-  router.push(`/menus/${menu.id}`)
-}
-
 filter.value = {}
 sort.value = { position: 1 }
 pager.value = { page: 1, limit: 24 }
@@ -46,10 +39,10 @@ await onLoad()
       <template #default="{ content }">
         <PublishContentGridItem
           :item="content"
-          eyecatch-shape="round"
+          :see-detail-path="`/menus/${content.id}`"
           :is-current="content.id === contentId"
+          eyecatch-shape="round"
           no-caption
-          @select="onMovingDetailPage"
         />
       </template>
     </PublishContentGridTable>

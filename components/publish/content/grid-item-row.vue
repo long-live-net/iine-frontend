@@ -4,21 +4,21 @@ import type { ContentType } from '@/types/content'
 withDefaults(
   defineProps<{
     item: T
-    reverse?: boolean
+    seeDetailPath?: string | null
     seeDetailActionLabel?: string
+    reverse?: boolean
     isCurrent?: boolean
     noCaption?: boolean
   }>(),
   {
-    reverse: false,
+    seeDetailPath: null,
     seeDetailActionLabel: '詳しく見る',
-    eyecatchShape: null,
+    reverse: false,
     isCurrent: false,
     noCaption: false,
   }
 )
 defineEmits<{ select: [item: T] }>()
-const route = useRoute()
 </script>
 
 <template>
@@ -26,40 +26,42 @@ const route = useRoute()
     <section
       class="eyecatcher-col"
       :class="[isCurrent ? 'current-item' : 'item-link']"
-      @click="$emit('select', item)"
+      @click="
+        seeDetailPath ? $router.push(seeDetailPath) : $emit('select', item)
+      "
     >
       <template v-if="item.image">
         <CommonContentItemAnimation
           animation-name="gFadeInUp"
           :thresholds="[0.3]"
-          :disabled="route.name !== 'index'"
+          :disabled="$route.name !== 'index'"
         >
           <CommonEyecatchImage :url="item.image.url" class="eyecatcher" round />
         </CommonContentItemAnimation>
       </template>
     </section>
-    <section
-      v-if="!noCaption"
-      class="caption-col"
-      :class="[isCurrent ? 'current-item' : 'item-link']"
-      @click="$emit('select', item)"
-    >
+    <section v-if="!noCaption" class="caption-col">
       <CommonContentItemAnimation
         animation-name="gFadeIn"
         animation-duration="3s"
         :thresholds="[0.5]"
-        :disabled="route.name !== 'index'"
+        :disabled="$route.name !== 'index'"
       >
         <div class="caption-base g-theme-contents-grid-row-caption">
           <h5 class="title">
             {{ item.title }}
           </h5>
           <CommonWysiwygViewer :value="item.caption" class="caption" />
-          <p class="see-detail">
-            <v-btn variant="outlined" size="small">{{
-              seeDetailActionLabel
-            }}</v-btn>
-          </p>
+          <div class="see-detail">
+            <BaseButtonNavButton
+              small
+              color="inherit"
+              width="160px"
+              :to="seeDetailPath"
+              @click="$emit('select', item)"
+              >{{ seeDetailActionLabel }}</BaseButtonNavButton
+            >
+          </div>
         </div>
       </CommonContentItemAnimation>
     </section>

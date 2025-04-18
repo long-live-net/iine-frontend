@@ -3,13 +3,13 @@ defineProps<{ url?: string | null }>()
 </script>
 
 <template>
-  <a
-    :href="url ?? ''"
+  <nuxt-link
+    :to="url ?? ''"
     target="_blank"
-    rel="noopener noreferrer"
+    rel="nofollow noopener noreferrer"
     class="reservation-chip"
     ><slot
-  /></a>
+  /></nuxt-link>
 </template>
 
 <style lang="scss" scoped>
@@ -22,7 +22,8 @@ defineProps<{ url?: string | null }>()
   white-space: nowrap;
   transition: background-color 0.25s linear;
   &:hover {
-    background-color: $link-normal2;
+    background-color: var(--link-active-color);
+    text-decoration: none;
   }
 }
 </style>

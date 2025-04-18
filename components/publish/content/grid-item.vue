@@ -4,12 +4,14 @@ import type { ContentType } from '@/types/content'
 withDefaults(
   defineProps<{
     item: T
+    seeDetailPath?: string | null
     seeDetailActionLabel?: string
     eyecatchShape?: 'circle' | 'round' | null
     isCurrent?: boolean
     noCaption?: boolean
   }>(),
   {
+    seeDetailPath: null,
     seeDetailActionLabel: '詳しく見る',
     eyecatchShape: null,
     isCurrent: false,
@@ -17,14 +19,15 @@ withDefaults(
   }
 )
 defineEmits<{ select: [item: T] }>()
-const route = useRoute()
 </script>
 
 <template>
   <div class="content-grid-item">
     <section
       :class="[isCurrent ? 'current-item' : 'item-link']"
-      @click="$emit('select', item)"
+      @click="
+        seeDetailPath ? $router.push(seeDetailPath) : $emit('select', item)
+      "
     >
       <h5 class="title">
         {{ item.title }}
@@ -33,7 +36,7 @@ const route = useRoute()
         <CommonContentItemAnimation
           animation-name="gFadeInUp"
           :thresholds="[0.3]"
-          :disabled="route.name !== 'index'"
+          :disabled="$route.name !== 'index'"
         >
           <CommonEyecatchImage
             :url="item.image.url"
@@ -47,21 +50,25 @@ const route = useRoute()
     <section
       v-if="!noCaption"
       :class="[isCurrent ? 'current-item' : 'item-link']"
-      @click="$emit('select', item)"
     >
       <CommonContentItemAnimation
         animation-name="gFadeIn"
         animation-duration="2s"
         :thresholds="[0.5]"
-        :disabled="route.name !== 'index'"
+        :disabled="$route.name !== 'index'"
       >
         <div class="caption-base">
           <CommonWysiwygViewer :value="item.caption" class="caption" />
-          <p class="see-detail">
-            <v-btn variant="outlined" size="small">{{
-              seeDetailActionLabel
-            }}</v-btn>
-          </p>
+          <div class="see-detail">
+            <BaseButtonNavButton
+              small
+              color="inherit"
+              width="160px"
+              :to="seeDetailPath"
+              @click="$emit('select', item)"
+              >{{ seeDetailActionLabel }}</BaseButtonNavButton
+            >
+          </div>
         </div>
       </CommonContentItemAnimation>
     </section>
@@ -100,15 +107,8 @@ const route = useRoute()
   }
 
   section.item-link {
-    cursor: pointer;
-
-    .caption-base {
-      &:hover {
-        color: var(--link-active-color);
-      }
-    }
-
     .eyecatcher {
+      cursor: pointer;
       transition: transform 0.4s;
       &:hover {
         background-color: rgba(255 255 255 / 0.25);

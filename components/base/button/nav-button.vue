@@ -1,46 +1,76 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    to: string
+    to?: string | null
     width?: string
+    small?: boolean
+    noCaret?: boolean
+    color?: string | null
   }>(),
   {
+    to: null,
     width: 'auto',
+    small: false,
+    noCaret: false,
+    color: null,
   }
 )
+defineEmits<{ click: [] }>()
 </script>
 
 <template>
-  <nuxt-link :to="to" class="nav-button">
-    <span class="caret" />
-    <span><slot /></span>
-  </nuxt-link>
+  <p
+    class="nav-button"
+    :class="{
+      small,
+      'color-inherit': color === 'inherit',
+      'color-bind': !!color && color !== 'inherit',
+    }"
+  >
+    <nuxt-link v-if="to?.length" :to="to" class="nav-link"
+      ><slot /><span v-if="!noCaret && !small" class="caret"
+    /></nuxt-link>
+    <button v-else class="nav-link" @click.prevent.stop="$emit('click')">
+      <slot /><span v-if="!noCaret && !small" class="caret" />
+    </button>
+  </p>
 </template>
 
 <style lang="scss" scoped>
 .nav-button {
-  position: relative;
   display: inline-block;
+  position: relative;
   width: v-bind('width');
-  color: var(--link-color);
+  text-align: center;
   border: solid 1px var(--link-color);
   border-radius: 4px;
-  padding: 6px 1rem;
-  user-select: none;
-  transition: all 0.3s;
+  margin: 0;
+  padding: 0;
   z-index: 0;
+  cursor: pointer;
 
-  .caret {
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    width: 8px;
-    height: 8px;
-    border-top: 2px solid var(--link-color);
-    border-right: 2px solid var(--link-color);
-    transform: rotate(45deg) translateY(-50%);
-    border-radius: 1px;
-    transition: all 0.75s;
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    line-height: 36px;
+    font-size: 15px;
+    user-select: none;
+    transition: all 0.3s;
+
+    .caret {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      width: 8px;
+      height: 8px;
+      border-top: 2px solid var(--link-color);
+      border-right: 2px solid var(--link-color);
+      transform: rotate(45deg) translateY(-50%);
+      border-radius: 1px;
+      transition: all 0.75s;
+    }
   }
 
   &:before {
@@ -51,20 +81,24 @@ withDefaults(
     left: 0;
     width: 0;
     display: inline-block;
-    background-color: var(--link-color);
-    transition: 0.3s;
+    background-color: var(--link-active-color);
+    transition: all 0.3s;
   }
 
   &:hover {
-    font-weight: bold;
-    color: var(--link-text-color);
-    // border-color: var(--link-active-color);
+    border-color: var(--link-active-color);
 
-    .caret {
-      width: 15px;
-      height: 15px;
-      border-width: 5px;
-      border-color: var(--link-text-color);
+    .nav-link {
+      color: var(--link-text-color);
+      font-weight: bold;
+      text-decoration: none;
+
+      .caret {
+        width: 15px;
+        height: 15px;
+        border-width: 5px;
+        border-color: var(--link-text-color);
+      }
     }
 
     &:before {
@@ -72,9 +106,28 @@ withDefaults(
       z-index: -1;
     }
   }
+}
 
-  span {
-    font-size: 0.9rem;
+.small {
+  .nav-link {
+    font-size: 13px;
+    line-height: 28px;
+  }
+}
+
+.color-inherit {
+  border-color: inherit;
+
+  .nav-link {
+    color: inherit;
+  }
+}
+
+.color-bind {
+  border-color: v-bind('color');
+
+  .nav-link {
+    color: v-bind('color');
   }
 }
 </style>
