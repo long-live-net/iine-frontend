@@ -18,7 +18,7 @@ const useGrid = computed(() => props.contents.length > 2)
 const gridColumnMinDivide = 4.2
 const gridColumnMaxDivide = 3.4
 const flexColumnDivide = computed(() =>
-  props.contents.length < 2 ? 1.5 : props.contents.length
+  props.contents.length <= 1 ? 1.75 : props.contents.length * 1.25
 )
 
 const isDragging = ref(false)

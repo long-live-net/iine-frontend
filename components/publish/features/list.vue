@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ContentType, FeatureType } from '@/types/content'
+import type { FeatureType } from '@/types/content'
 import { useFeatureListActions } from '~/composables/use-content/use-features'
 
 withDefaults(
@@ -30,11 +30,6 @@ const {
   onGetList,
 } = useFeatureListActions(customerId)
 
-const router = useRouter()
-const onMovingDetailPage = (feature: ContentType) => {
-  router.push(`/features/${feature.id}`)
-}
-
 defineExpose({ onGetList })
 
 filter.value = {}
@@ -55,10 +50,10 @@ await onLoad()
       <template #default="{ content }">
         <PublishContentGridItem
           :item="content"
-          eyecatch-shape="circle"
+          :see-detail-path="`/features/${content.id}`"
           :is-current="content.id === contentId"
           :no-caption="noCaption"
-          @select="onMovingDetailPage"
+          eyecatch-shape="circle"
         />
       </template>
     </PublishContentGridTable>

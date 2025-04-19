@@ -3,12 +3,6 @@ const { customerSetting } = useCustomerSetting()
 
 const inquireDialog = ref(false)
 const accessDialog = ref(false)
-
-const onClickLink = (reservationUrl: string) => {
-  if (import.meta.client) {
-    window.open(reservationUrl, '_blank')
-  }
-}
 </script>
 
 <template>
@@ -18,13 +12,12 @@ const onClickLink = (reservationUrl: string) => {
     </div>
     <div class="g-block-lg">
       <div class="nav-footer__menu">
-        <p
+        <CommonReservationChip
           v-if="customerSetting?.reservationUrl"
+          :url="customerSetting.reservationUrl"
           class="reservation-button"
-          @click="onClickLink(customerSetting.reservationUrl)"
+          >予約する</CommonReservationChip
         >
-          ご予約
-        </p>
         <v-btn
           prepend-icon="mdi-email"
           variant="text"
@@ -45,13 +38,12 @@ const onClickLink = (reservationUrl: string) => {
     </div>
     <div class="g-block-sm">
       <div class="nav-footer__menu">
-        <p
+        <CommonReservationChip
           v-if="customerSetting?.reservationUrl"
-          class="reservation-button"
-          @click="onClickLink(customerSetting.reservationUrl)"
+          :url="customerSetting.reservationUrl"
+          class="reservation-button reservation-button-small"
+          >予約する</CommonReservationChip
         >
-          ご予約
-        </p>
         <v-btn icon variant="text" @click="inquireDialog = true">
           <v-icon>mdi-email</v-icon>
         </v-btn>
@@ -96,17 +88,11 @@ const onClickLink = (reservationUrl: string) => {
 }
 
 .reservation-button {
-  text-align: center;
-  padding: 12px 14px;
   margin-right: 0.5rem;
-  background-color: lightseagreen;
-  color: white;
-  font-weight: bold;
-  white-space: nowrap;
-  transition: background-color 0.25s linear;
-  cursor: pointer;
-  &:hover {
-    background-color: $link-normal2;
-  }
+  padding: 8px 10px;
+}
+
+.reservation-button-small {
+  font-size: small;
 }
 </style>

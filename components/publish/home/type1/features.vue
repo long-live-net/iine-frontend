@@ -18,11 +18,6 @@ const {
   loading,
 } = useFeatureListActions(customerId)
 
-const router = useRouter()
-const onMovingDetailPage = (feature: FeatureType) => {
-  router.push(`/features/${feature.id}`)
-}
-
 const editModal = ref(false)
 const updatingData = ref<FeatureType | null>(null)
 const editMode = ref<ContentEditMode>('update')
@@ -56,8 +51,8 @@ await onLoad()
       <template #default="{ content, index }">
         <PublishContentGridItemRow
           :item="content"
+          :see-detail-path="`/features/${content.id}`"
           :reverse="index % 2 === 1"
-          @select="onMovingDetailPage"
         />
       </template>
     </PublishContentGridTableRow>

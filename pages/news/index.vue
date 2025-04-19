@@ -8,15 +8,12 @@
 <style lang="scss" scoped>
 #news-index-top {
   padding-top: calc($nav-header-height);
-  padding-bottom: 4rem;
 }
 
 .nav-bread-crumbs {
   margin-bottom: 2.5rem;
-}
 
-@media only screen and (max-width: $grid-breakpoint-md) {
-  .nav-bread-crumbs {
+  @media only screen and (max-width: $grid-breakpoint-md) {
     margin-bottom: 0;
   }
 }

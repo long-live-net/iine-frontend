@@ -4,8 +4,6 @@ defineOptions({
 })
 
 const { customerSetting } = useCustomerSetting()
-const { isLoggedIn } = useCustomerPageContext()
-
 const initializing = useState<boolean>('initializing', () => true)
 onMounted(() => {
   if (initializing.value)
@@ -19,9 +17,7 @@ const topHashName = 'default-layout-main-top'
 
 <template>
   <div id="default-layout">
-    <div v-if="initializing" class="initializing">
-      <div class="loading">loading ...</div>
-    </div>
+    <PublishLayoutAppLoading v-if="initializing" />
     <div v-show="!initializing" id="default-layout-container">
       <header>
         <PublishLayoutNavHeader />
@@ -35,7 +31,7 @@ const topHashName = 'default-layout-main-top'
     </div>
     <client-only>
       <CommonReservasionSideChip
-        v-if="customerSetting?.reservationUrl && !isLoggedIn"
+        v-if="customerSetting?.reservationUrl"
         :reservation-url="customerSetting.reservationUrl"
       />
       <CommonTopToButton :top-hash-name="topHashName" />
@@ -53,7 +49,7 @@ const topHashName = 'default-layout-main-top'
 
     header {
       position: fixed;
-      top: 0px;
+      top: 0;
       width: 100%;
       z-index: 999;
     }
@@ -61,41 +57,19 @@ const topHashName = 'default-layout-main-top'
     main {
       flex-grow: 1;
       position: relative;
-      margin: 0;
-      padding: 0;
+      padding-bottom: 6rem;
+
+      @media only screen and (max-width: $grid-breakpoint-md) {
+        padding-bottom: 9rem;
+      }
     }
 
     footer {
-      padding: 0;
-      margin: 0;
-    }
-  }
-
-  .initializing {
-    min-height: 100dvh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .loading {
-      // TODO:
-      // 取り急ぎアニメーションは適当なので後日かっこいいものに変更したい
-      font-family: sans-serif;
-      font-size: 3rem;
-      font-weight: bold;
-      animation: ini-scaleout 1.5s infinite linear;
-
       @media only screen and (max-width: $grid-breakpoint-md) {
-        font-size: 2rem;
-      }
-    }
-    @keyframes ini-scaleout {
-      0% {
-        transform: scale(0.25);
-      }
-      100% {
-        transform: scale(1);
-        opacity: 0.25;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        z-index: 999;
       }
     }
   }

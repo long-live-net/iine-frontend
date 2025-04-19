@@ -1,10 +1,11 @@
 @use 'variables.scss';
 
 .g-theme-default {
-  --background-color: #{variables.$gray-lighten25};
+  --background-color: #{variables.$gray-lighten3};
   --text-color: #{variables.$gray-darken3};
   --link-color: #{variables.$link-normal2};
   --link-active-color: #{variables.$cyan};
+  --link-text-color: #{variables.$white};
   --warning-color: #{variables.$sienna};
 
   background-color: var(--background-color);

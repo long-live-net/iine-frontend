@@ -14,11 +14,6 @@ const menuListRef = ref<InstanceType<typeof MenuList> | null>(null)
 <style lang="scss" scoped>
 #menu-detail-top {
   padding-top: calc($nav-header-height);
-  padding-bottom: 6rem;
-
-  @media only screen and (max-width: $grid-breakpoint-md) {
-    padding-bottom: 4.25rem;
-  }
 }
 
 .nav-bread-crumbs {

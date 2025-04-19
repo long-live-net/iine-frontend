@@ -137,8 +137,8 @@ await onLoad()
           <ManageContentNewsWholeSwitch v-model="isWholeData" />
         </div>
         <div v-if="newsListRef?.length" class="mt-6 text-center">
-          <v-btn variant="outlined" color="primary" width="14rem" to="/news"
-            >さらに見る</v-btn
+          <BaseButtonNavButton width="14rem" to="/news"
+            >さらに見る</BaseButtonNavButton
           >
         </div>
       </CommonContentCardBody>
