@@ -17,14 +17,14 @@ const useGrid = computed(() => props.contents.length > 2)
 const isSmall = computed(
   () => props.small || (props.smallIfPossible && props.contents.length !== 3)
 )
-const gridColumnMinDivide = computed(() => (isSmall.value ? 5.6 : 4.4))
-const gridColumnMaxDivide = computed(() => (isSmall.value ? 4.8 : 3.6))
+const gridColumnMinDivide = computed(() => (isSmall.value ? 6 : 4.4))
+const gridColumnMaxDivide = computed(() => (isSmall.value ? 5 : 3.4))
 const flexColumnDivide = computed(() =>
   isSmall.value
-    ? 3.5
+    ? 3.8
     : props.contents.length <= 1
-      ? 1.75
-      : props.contents.length * 1.25
+      ? 2
+      : props.contents.length * 1.4
 )
 </script>
 
@@ -39,13 +39,15 @@ const flexColumnDivide = computed(() =>
 </template>
 
 <style lang="scss" scoped>
+$grid-max-width: $contents-card-max-width;
+
 .content-grid {
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
     minmax(
-      calc($contents-card-max-width / v-bind('gridColumnMinDivide')),
-      calc($contents-card-max-width / v-bind('gridColumnMaxDivide'))
+      calc($grid-max-width / v-bind('gridColumnMinDivide')),
+      calc($grid-max-width / v-bind('gridColumnMaxDivide'))
     )
   );
   justify-items: center;
@@ -53,7 +55,7 @@ const flexColumnDivide = computed(() =>
   column-gap: 3rem;
   row-gap: 3rem;
   width: 90%;
-  max-width: $contents-card-max-width;
+  max-width: $grid-max-width;
   min-height: 18rem;
   margin: 0 auto;
 
@@ -70,13 +72,12 @@ const flexColumnDivide = computed(() =>
   justify-content: center;
   gap: 2.5rem;
   width: 90%;
-  max-width: $contents-card-max-width;
+  max-width: $grid-max-width;
   min-height: 18rem;
   margin: 0 auto;
 
   .column {
-    flex: 0 1
-      calc($contents-card-max-width / v-bind('flexColumnDivide') - 1.25rem);
+    flex: 0 1 calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
     padding: 0;
   }
 }

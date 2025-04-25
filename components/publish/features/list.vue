@@ -53,7 +53,7 @@ await onLoad()
           :see-detail-path="`/features/${content.id}`"
           :is-current="content.id === contentId"
           :no-caption="noCaption"
-          eyecatch-shape="circle"
+          item-shape="circle"
         />
       </template>
     </PublishContentGridTable>

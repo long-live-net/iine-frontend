@@ -65,7 +65,7 @@ await onLoad()
       <template #default="{ content }">
         <PublishContentGridItem
           :item="content"
-          eyecatch-shape="round"
+          item-shape="round"
           see-detail-action-label="メニューを見る"
           @select="onClickEyecatch"
         />

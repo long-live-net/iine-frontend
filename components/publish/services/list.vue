@@ -41,7 +41,7 @@ await onLoad()
           :item="content"
           :see-detail-path="`/services/${content.id}`"
           :is-current="content.id === contentId"
-          eyecatch-shape="circle"
+          item-shape="circle"
           no-caption
         />
       </template>

@@ -43,6 +43,10 @@
     background-color: variables.$gray-darken5;
     box-shadow: 2px 2px 16px variables.$black;
   }
+  .g-theme-contents-card2 {
+    background-color: variables.$gray-darken35;
+    // box-shadow: 2px 2px 16px variables.$black;
+  }
 
   .g-theme-contents-item {
     &__header {

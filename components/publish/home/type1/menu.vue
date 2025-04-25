@@ -52,7 +52,7 @@ await onLoad()
           :item="content"
           :see-detail-path="`/menus/${content.id}`"
           see-detail-action-label="メニューを見る"
-          eyecatch-shape="round"
+          item-shape="round"
         />
       </template>
     </PublishContentGridTable>

@@ -42,6 +42,10 @@
     background-color: variables.$white;
     box-shadow: 2px 2px 16px rgba(variables.$gray-lighten1, 0.75);
   }
+  .g-theme-contents-card2 {
+    background-color: variables.$gray-lighten5;
+    // box-shadow: 2px 2px 16px rgba(variables.$gray-lighten1, 0.75);
+  }
 
   .g-theme-contents-item {
     &__header {

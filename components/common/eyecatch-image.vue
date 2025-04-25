@@ -1,25 +1,23 @@
 <script setup lang="ts">
 import type { ImageSettings } from '@/types/content'
 
-type EyeCatchImageProps = {
-  url?: string
-  settings?: ImageSettings
-  circle?: boolean
-  round?: boolean
-}
-const props = withDefaults(defineProps<EyeCatchImageProps>(), {
-  url: '',
-  settings: () => ({
-    lgSize: 'cover',
-    smSize: 'cover',
-    lgPosition: 'center',
-    smPosition: 'center',
-    lgParallax: 'scroll',
-    smParallax: 'scroll',
-  }),
-  circle: false,
-  round: false,
-})
+const props = withDefaults(
+  defineProps<{
+    url?: string
+    settings?: ImageSettings
+  }>(),
+  {
+    url: '',
+    settings: () => ({
+      lgSize: 'cover',
+      smSize: 'cover',
+      lgPosition: 'center',
+      smPosition: 'center',
+      lgParallax: 'scroll',
+      smParallax: 'scroll',
+    }),
+  }
+)
 
 const noImage = '/images/no-image-g.png'
 const { isSmall, isJudged } = useMediaQueryIsSmall()
@@ -53,8 +51,6 @@ const isParallax = computed(() => imageOptions.value.parallax === 'fixed')
     :class="{
       parallax: isParallax,
       normal: !isParallax,
-      circle: circle,
-      round: round,
     }"
   >
     <slot />
@@ -98,13 +94,5 @@ const isParallax = computed(() => imageOptions.value.parallax === 'fixed')
     background-size: v-bind('imageOptions.size');
     background-position: v-bind('imageOptions.position');
   }
-}
-
-.circle {
-  clip-path: inset(0 round 50%) !important;
-}
-
-.round {
-  clip-path: inset(0 round 12px) !important;
 }
 </style>

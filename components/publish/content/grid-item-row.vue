@@ -24,7 +24,7 @@ defineEmits<{ select: [item: T] }>()
 <template>
   <div class="content-list-item" :class="{ reverse: reverse }">
     <section
-      class="eyecatcher-col"
+      class="eyecatcher-part"
       :class="[isCurrent ? 'current-item' : 'item-link']"
       @click="
         seeDetailPath ? $router.push(seeDetailPath) : $emit('select', item)
@@ -40,27 +40,29 @@ defineEmits<{ select: [item: T] }>()
         </CommonContentItemAnimation>
       </template>
     </section>
-    <section v-if="!noCaption" class="caption-col">
+    <section v-if="!noCaption" class="caption-part">
       <CommonContentItemAnimation
         animation-name="gFadeIn"
         animation-duration="3s"
         :thresholds="[0.5]"
         :disabled="$route.name !== 'index'"
       >
-        <div class="caption-base g-theme-contents-grid-row-caption">
-          <h5 class="title">
-            {{ item.title }}
-          </h5>
-          <CommonWysiwygViewer :value="item.caption" class="caption" />
-          <div class="see-detail">
-            <BaseButtonNavButton
-              small
-              color="inherit"
-              width="160px"
-              :to="seeDetailPath"
-              @click="$emit('select', item)"
-              >{{ seeDetailActionLabel }}</BaseButtonNavButton
-            >
+        <div class="caption-base">
+          <div class="caption g-theme-contents-grid-row-caption">
+            <h5 class="title">
+              {{ item.title }}
+            </h5>
+            <CommonWysiwygViewer :value="item.caption" class="caption-text" />
+            <div class="see-detail">
+              <BaseButtonNavButton
+                small
+                color="inherit"
+                width="160px"
+                :to="seeDetailPath"
+                @click="$emit('select', item)"
+                >{{ seeDetailActionLabel }}</BaseButtonNavButton
+              >
+            </div>
           </div>
         </div>
       </CommonContentItemAnimation>
@@ -74,18 +76,19 @@ defineEmits<{ select: [item: T] }>()
   justify-content: center;
   margin: 0 auto;
 
-  .eyecatcher-col {
+  .eyecatcher-part {
     flex: 1 0 auto;
     width: 50%;
-    min-width: 600px;
+    min-width: 626px;
 
     .eyecatcher {
       width: 100%;
       aspect-ratio: 21 / 10;
+      clip-path: inset(0 round 12px);
     }
   }
 
-  .caption-col {
+  .caption-part {
     position: relative;
     flex: 1 1 auto;
     width: 50%;
@@ -94,37 +97,37 @@ defineEmits<{ select: [item: T] }>()
       position: absolute;
       bottom: 5%;
       right: 0;
-      min-width: 600px;
-      padding: 1.5rem;
-      border-radius: 12px;
-
-      .title {
-        text-align: center;
-        font-weight: bold;
-        font-size: 1.1rem;
-        margin: 0;
-      }
 
       .caption {
-        text-align: left;
-        margin-top: 1rem;
-      }
+        position: relative;
+        min-width: 626px;
+        min-height: 180px;
+        padding: 1.5rem;
+        padding-bottom: 62px;
+        border-radius: 12px;
 
-      .see-detail {
-        margin-top: 0.3rem;
-        text-align: right;
+        .title {
+          text-align: center;
+          font-weight: bold;
+          font-size: 1.1rem;
+          margin-bottom: 1rem;
+        }
+
+        .caption-text {
+          text-align: left;
+        }
+
+        .see-detail {
+          position: absolute;
+          bottom: 1.25rem;
+          right: 1.5rem;
+        }
       }
     }
   }
 
   .item-link {
     cursor: pointer;
-
-    .caption-base {
-      &:hover {
-        color: var(--link-active-color);
-      }
-    }
 
     .eyecatcher {
       transition: transform 0.4s;
@@ -160,7 +163,7 @@ defineEmits<{ select: [item: T] }>()
     display: block;
     padding: 0 1rem;
 
-    .eyecatcher-col {
+    .eyecatcher-part {
       width: 100%;
       min-width: auto;
 
@@ -169,7 +172,7 @@ defineEmits<{ select: [item: T] }>()
       }
     }
 
-    .caption-col {
+    .caption-part {
       position: relative;
       width: 100%;
 
@@ -179,9 +182,12 @@ defineEmits<{ select: [item: T] }>()
         bottom: auto !important;
         left: auto !important;
         right: auto !important;
-        width: 90%;
-        min-width: auto;
-        margin: 0 0 0 auto;
+
+        .caption {
+          width: 90%;
+          min-width: auto;
+          margin: 0 0 0 auto;
+        }
       }
     }
   }

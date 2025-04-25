@@ -95,10 +95,10 @@ defineEmits<{
 
   .create-activator {
     position: absolute;
-    top: -1rem;
-    right: 5rem;
+    top: 0rem;
+    right: 6rem;
 
-    @media only screen and (max-width: $grid-breakpoint-md) {
+    @media only screen and (max-width: $grid-breakpoint-lg) {
       right: 1rem;
     }
   }
