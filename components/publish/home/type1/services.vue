@@ -52,7 +52,9 @@ await onLoad()
           :item="content"
           :see-detail-path="`/services/${content.id}`"
           item-shape="circle"
-          caption-height="320px"
+          :caption-height="
+            serviceListRef && serviceListRef.length > 2 ? '320px' : '260px'
+          "
         />
       </template>
     </PublishContentGridTable>

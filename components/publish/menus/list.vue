@@ -34,7 +34,7 @@ await onLoad()
       :items="menuListRef"
       :content-title="contentTitle"
       :can-edit="false"
-      small-if-possible
+      small
     >
       <template #default="{ content }">
         <PublishContentGridItem

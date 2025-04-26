@@ -5,23 +5,21 @@ const props = withDefaults(
   defineProps<{
     contents: Readonly<T[]>
     small?: boolean
-    smallIfPossible?: boolean
   }>(),
   {
     small: false,
-    smallIfPossible: false,
   }
 )
 
-const useGrid = computed(() => props.contents.length > 2)
-const isSmall = computed(
-  () => props.small || (props.smallIfPossible && props.contents.length !== 3)
+const isSmall = toRef(props, 'small')
+const useGrid = computed(() =>
+  isSmall.value ? props.contents.length >= 4 : props.contents.length >= 3
 )
 const gridColumnMinDivide = computed(() => (isSmall.value ? 6 : 4.4))
 const gridColumnMaxDivide = computed(() => (isSmall.value ? 5 : 3.4))
 const flexColumnDivide = computed(() =>
   isSmall.value
-    ? 3.8
+    ? 4.2
     : props.contents.length <= 1
       ? 2
       : props.contents.length * 1.4

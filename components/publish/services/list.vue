@@ -34,7 +34,7 @@ await onLoad()
       :content-title="contentTitle"
       :items="serviceListRef"
       :can-edit="false"
-      small-if-possible
+      small
     >
       <template #default="{ content }">
         <PublishContentGridItem

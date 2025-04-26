@@ -65,8 +65,11 @@ await onLoad()
       <template #default="{ content }">
         <PublishContentGridItem
           :item="content"
-          item-shape="round"
           see-detail-action-label="メニューを見る"
+          item-shape="round"
+          :caption-height="
+            menuImageListRef && menuImageListRef.length > 2 ? '320px' : '260px'
+          "
           @select="onClickEyecatch"
         />
       </template>

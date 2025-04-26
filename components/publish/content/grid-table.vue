@@ -8,12 +8,10 @@ withDefaults(
     contentTitle: string
     canEdit?: boolean
     small?: boolean
-    smallIfPossible?: boolean
   }>(),
   {
     canEdit: false,
     small: false,
-    smallIfPossible: false,
   }
 )
 defineEmits<{
@@ -83,12 +81,7 @@ defineEmits<{
       </div>
     </div>
     <div v-else>
-      <CommonContentGrid
-        v-if="items?.length"
-        :contents="items"
-        :small="small"
-        :small-if-possible="smallIfPossible"
-      >
+      <CommonContentGrid v-if="items?.length" :contents="items" :small="small">
         <template #default="{ content }">
           <slot :content="content" />
         </template>

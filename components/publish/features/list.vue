@@ -45,7 +45,7 @@ await onLoad()
       v-model:modal="editModal"
       :content-title="contentTitle"
       :items="featureListRef"
-      small-if-possible
+      small
     >
       <template #default="{ content }">
         <PublishContentGridItem
