@@ -17,7 +17,7 @@ export const useMenuForm = () => {
     },
     titleSettings: () => true,
     caption: (v: string | undefined) => {
-      if (!noBlankForWysiwyg(v)) return '紹介文を入力してください'
+      if (!noBlankForWysiwyg(v)) return '概要を入力してください'
       if (!maxLength(v, 400)) return '400文字以内で入力してください'
       return true
     },

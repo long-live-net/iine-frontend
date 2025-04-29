@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { FeatureType } from '@/types/content'
-import { useFeatureListActions } from '~/composables/use-content/use-features'
 
 withDefaults(
   defineProps<{

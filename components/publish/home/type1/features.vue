@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { FeatureType, ContentEditMode } from '@/types/content'
-import { useFeatureListActions } from '~/composables/use-content/use-features'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()

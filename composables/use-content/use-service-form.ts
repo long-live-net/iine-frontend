@@ -17,7 +17,7 @@ export const useServiceForm = () => {
     },
     titleSettings: () => true,
     caption: (v: string | undefined) => {
-      if (!noBlankForWysiwyg(v)) return '紹介文を入力してください'
+      if (!noBlankForWysiwyg(v)) return '概要を入力してください'
       if (!maxLength(v, 400)) return '400文字以内で入力してください'
       return true
     },
@@ -67,9 +67,7 @@ export const useServiceForm = () => {
     formData.image.value.value = serviceData?.image?.url ?? ''
     formData.imageName.value.value = serviceData?.image?.name ?? ''
     formData.imageType.value.value = serviceData?.image?.type ?? ''
-    formData.imageSettings.value.value = serviceData.imageSettings
-      ? cloneDeep(serviceData.imageSettings)
-      : null
+    formData.imageSettings.value.value = cloneDeep(serviceData.imageSettings)
     formData.position.value.value = serviceData?.position ?? 0
   }
 

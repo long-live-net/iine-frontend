@@ -4,25 +4,34 @@ import type { ContentType } from '@/types/content'
 const props = withDefaults(
   defineProps<{
     contents: Readonly<T[]>
+    narrow?: boolean
     small?: boolean
   }>(),
   {
+    narrow: false,
     small: false,
   }
 )
 
+const isNarrow = toRef(props, 'narrow')
 const isSmall = toRef(props, 'small')
 const useGrid = computed(() =>
   isSmall.value ? props.contents.length >= 4 : props.contents.length >= 3
 )
-const gridColumnMinDivide = computed(() => (isSmall.value ? 6 : 4.4))
-const gridColumnMaxDivide = computed(() => (isSmall.value ? 5 : 3.4))
+const gridColumnMinDivide = computed(() =>
+  isSmall.value ? 6 : isNarrow.value ? 4.8 : 4.4
+)
+const gridColumnMaxDivide = computed(() =>
+  isSmall.value ? 5 : isNarrow.value ? 3.8 : 3.4
+)
 const flexColumnDivide = computed(() =>
   isSmall.value
     ? 4.2
-    : props.contents.length <= 1
-      ? 2
-      : props.contents.length * 1.4
+    : isNarrow.value
+      ? 3.0
+      : props.contents.length <= 1
+        ? 2
+        : props.contents.length * 1.4
 )
 </script>
 

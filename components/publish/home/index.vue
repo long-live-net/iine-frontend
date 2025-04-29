@@ -28,15 +28,16 @@ const sectionTitle = (section: PageLayout): string =>
           v-if="sectionTitle(section).length"
           :title="sectionTitle(section)"
         />
-        <PublishHomeType1Information v-if="section.kind === 'information'" />
         <PublishHomeType1Contact v-if="section.kind === 'contact'" />
-        <PublishHomeType1Access v-if="section.kind === 'access'" />
-        <PublishHomeType1Profile v-if="section.kind === 'profile'" />
-        <PublishHomeType1Newses v-if="section.kind === 'news'" />
-        <PublishHomeType1Services v-if="section.kind === 'service'" />
+        <PublishHomeType1Information v-if="section.kind === 'information'" />
         <PublishHomeType1Features v-if="section.kind === 'feature'" />
+        <PublishHomeType1Newses v-if="section.kind === 'news'" />
         <PublishHomeType1Menu v-if="section.kind === 'menu'" />
         <PublishHomeType1MenuImage v-if="section.kind === 'menu-image'" />
+        <PublishHomeType1Services v-if="section.kind === 'service'" />
+        <PublishHomeType1Shops v-if="section.kind === 'shop'" />
+        <PublishHomeType1Profiles v-if="section.kind === 'profile'" />
+        <PublishHomeType1Access v-if="section.kind === 'access'" />
       </template>
     </section>
   </article>

@@ -2,7 +2,15 @@
 import draggable from 'vuedraggable'
 import type { ContentType } from '@/types/content'
 
-const props = defineProps<{ contents: T[] }>()
+const props = withDefaults(
+  defineProps<{
+    contents: T[]
+    narrow?: boolean
+  }>(),
+  {
+    narrow: false,
+  }
+)
 const emit = defineEmits<{
   update: [contents: T[]]
 }>()
@@ -14,11 +22,16 @@ const draggableContents = computed({
   },
 })
 
+const isNarrow = toRef(props, 'narrow')
 const useGrid = computed(() => props.contents.length > 2)
-const gridColumnMinDivide = 4.4
-const gridColumnMaxDivide = 3.4
+const gridColumnMinDivide = isNarrow.value ? 4.8 : 4.4
+const gridColumnMaxDivide = isNarrow.value ? 3.8 : 3.4
 const flexColumnDivide = computed(() =>
-  props.contents.length <= 1 ? 2 : props.contents.length * 1.4
+  isNarrow.value
+    ? 3.0
+    : props.contents.length <= 1
+      ? 2
+      : props.contents.length * 1.4
 )
 
 const isDragging = ref(false)

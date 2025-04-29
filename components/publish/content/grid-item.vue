@@ -32,6 +32,9 @@ defineEmits<{ select: [item: T] }>()
         seeDetailPath ? $router.push(seeDetailPath) : $emit('select', item)
       "
     >
+      <h5 v-if="noCaption" class="title">
+        {{ item.title }}
+      </h5>
       <template v-if="item.image">
         <CommonContentItemAnimation
           animation-name="gFadeInUp"
@@ -93,6 +96,13 @@ defineEmits<{ select: [item: T] }>()
   width: 90%;
   margin: 0 auto;
 
+  .title {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
   .eyecatch-part {
     .eyecatcher {
       margin-top: 1rem;
@@ -124,8 +134,6 @@ defineEmits<{ select: [item: T] }>()
       min-height: v-bind('captionHeight');
 
       .title {
-        text-align: center;
-        font-weight: bold;
         font-size: 1.1rem;
         margin-bottom: 1rem;
       }

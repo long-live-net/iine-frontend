@@ -44,8 +44,11 @@
     box-shadow: 2px 2px 16px variables.$black;
   }
   .g-theme-contents-card2 {
-    background-color: variables.$gray-darken35;
-    // box-shadow: 2px 2px 16px variables.$black;
+    background-color: variables.$gray-darken2;
+  }
+  .g-theme-contents-tabs {
+    --tab-selected-background-color: #{variables.$black};
+    --tab-button-icon-color: #{variables.$white};
   }
 
   .g-theme-contents-item {

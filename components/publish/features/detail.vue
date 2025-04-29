@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { FeatureForm, ContentEditMode } from '@/types/content'
-import { useFeatureActions } from '~/composables/use-content/use-features'
 const emit = defineEmits<{ 'update:data': [] }>()
 
 const { customerId } = useCustomer()

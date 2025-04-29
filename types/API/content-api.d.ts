@@ -23,6 +23,14 @@ export interface ContentGetApi {
   imageSettings?: ImageSettings
 }
 
+export interface ContentCategoryGetApi {
+  _id?: string
+  id: string
+  customerId: string
+  category: string
+  position?: number
+}
+
 export interface EyecatchGetApi extends ContentGetApi {
   titleSettings?: EyecatchTitleSettings
   image: ImageData
@@ -60,12 +68,8 @@ export interface MenuGetApi extends ContentGetApi {
   position: number
 }
 
-export interface MenuCategoryGetApi {
-  _id?: string
-  id: string
-  customerId: string
+export interface MenuCategoryGetApi extends ContentCategoryGetApi {
   menuId: string
-  category: string
   position: number
 }
 
@@ -83,6 +87,17 @@ export interface MenuImageGetApi extends ContentGetApi {
   position: number
   menuImage: MenuImageData
 }
+export interface ShopCategoryGetApi extends ContentCategoryGetApi {
+  position: number
+}
+
+export interface ShopGetApi extends ContentGetApi {
+  categoryId: string
+  caption: string
+  image: ImageData
+  imageSettings: ImageSettings
+  position: number
+}
 
 /**
  * POST, PUT API で保存するデータ型
@@ -95,6 +110,11 @@ export type ContentSaveApi = {
   body?: string
   image?: ImageData
   imageSettings?: ImageSettings
+}
+export interface ContentCategorySaveApi {
+  customerId: string
+  category: string
+  position?: number
 }
 
 export interface EyecatchSaveApi extends ContentSaveApi {
@@ -133,10 +153,8 @@ export interface MenuSaveApi extends ContentSaveApi {
   imageSettings: ImageSettings
   position: number
 }
-export interface MenuCategorySaveApi {
-  customerId: string
+export interface MenuCategorySaveApi extends ContentCategorySaveApi {
   menuId: string
-  category: string
   position: number
 }
 export interface MenuDetailSaveApi extends ContentSaveApi {
@@ -152,6 +170,16 @@ export interface MenuImageSaveApi extends ContentSaveApi {
   image: ImageData
   position: number
   menuImage: MenuImageData
+}
+export interface ShopCategorySaveApi extends ContentCategorySaveApi {
+  position: number
+}
+export interface ShopSaveApi extends ContentSaveApi {
+  categoryId: string
+  caption: string
+  image: ImageData
+  imageSettings: ImageSettings
+  position: number
 }
 
 /**

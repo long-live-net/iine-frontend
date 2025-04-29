@@ -128,6 +128,8 @@ defineEmits<{
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  height: 150px;
   row-gap: 1rem;
 
   p {

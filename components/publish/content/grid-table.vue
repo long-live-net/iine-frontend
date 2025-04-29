@@ -7,10 +7,12 @@ withDefaults(
     items: T[] | null
     contentTitle: string
     canEdit?: boolean
+    narrow?: boolean
     small?: boolean
   }>(),
   {
     canEdit: false,
+    narrow: false,
     small: false,
   }
 )
@@ -26,6 +28,7 @@ defineEmits<{
       <CommonContentGridDraggable
         v-if="items?.length"
         :contents="items"
+        :narrow="narrow"
         @update="$emit('updatePositions', $event)"
       >
         <template #default="{ content }">
@@ -81,7 +84,12 @@ defineEmits<{
       </div>
     </div>
     <div v-else>
-      <CommonContentGrid v-if="items?.length" :contents="items" :small="small">
+      <CommonContentGrid
+        v-if="items?.length"
+        :contents="items"
+        :narrow="narrow"
+        :small="small"
+      >
         <template #default="{ content }">
           <slot :content="content" />
         </template>
@@ -104,9 +112,13 @@ defineEmits<{
     .create-activator {
       position: absolute;
       top: 0;
-      right: 6rem;
+      right: 30%;
 
       @media only screen and (max-width: $grid-breakpoint-lg) {
+        right: 18%;
+      }
+
+      @media only screen and (max-width: $grid-breakpoint-sm) {
         right: 1rem;
       }
     }
@@ -131,6 +143,8 @@ defineEmits<{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    height: 150px;
     row-gap: 1rem;
 
     p {
