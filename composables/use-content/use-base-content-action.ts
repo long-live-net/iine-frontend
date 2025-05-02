@@ -275,9 +275,9 @@ export const useContentActions = <
     formToSaveapi
   )
 
-  const onLoad = async (id?: string) => {
+  const onLoad = async (id?: string, usePreNext: boolean = false) => {
     await loadContent(id)
-    if (contentRef.value) {
+    if (usePreNext && contentRef.value) {
       await getContentPreNextId(contentRef.value.id, filter.value, sort.value)
     }
   }

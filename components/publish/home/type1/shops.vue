@@ -28,7 +28,6 @@ const {
   pager: pagerCategory,
   shopCategoryListRef: categoryListRef,
   onLoad: onLoadCategoryList,
-  // onGetList: onLoadGerList,
   onCreate: onCreateCategory,
   onUpdate: onUpdateCategory,
   onRemove: onRemoveCategory,
@@ -87,14 +86,8 @@ const onUpdateShopData = async ({
   }
   await onUpdateShop(id, currentTabCategoryId.value, formData)
 }
-const shopListByCategory = computed(
-  () =>
-    shopListRef.value?.filter(
-      (s) => currentTabCategoryId.value === s.categoryId
-    ) ?? []
-)
 filterShop.value = {}
-sortShop.value = { position: 1 }
+sortShop.value = { categoryId: 1, position: 1 }
 pagerShop.value = { page: 1, limit: SHOPS_LINIT }
 
 const loading = computed(
@@ -105,6 +98,12 @@ await Promise.all([onLoadCategoryList(), onLoadShopList()])
 /**
  * Shop Category Tabs
  */
+const shopListByCategory = computed(
+  () =>
+    shopListRef.value?.filter(
+      (s) => currentTabCategoryId.value === s.categoryId
+    ) ?? []
+)
 const tabItems = computed<UiTabItem[]>(() =>
   categoryListRef.value.map((c) => ({
     key: c.id,
@@ -168,7 +167,6 @@ watch(
         :tab-items="tabItems"
         :can-edit="canEdit"
         content-title="カテゴリ"
-        show-arrows
         @edit="onClickTabEdit"
         @delete="onClickTabDelete"
       >

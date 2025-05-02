@@ -13,25 +13,38 @@ const props = withDefaults(
   }
 )
 
+const { isSmall: isSmallWindow, isJudged } = useMediaQueryIsSmall()
 const isNarrow = toRef(props, 'narrow')
 const isSmall = toRef(props, 'small')
+const isXSmall = computed(
+  () => isJudged.value && isSmallWindow.value && isSmall.value
+)
 const useGrid = computed(() =>
-  isSmall.value ? props.contents.length >= 4 : props.contents.length >= 3
+  isXSmall.value
+    ? true
+    : isSmall.value
+      ? props.contents.length >= 4
+      : props.contents.length >= 3
 )
 const gridColumnMinDivide = computed(() =>
-  isSmall.value ? 6 : isNarrow.value ? 4.8 : 4.4
+  isXSmall.value ? 8.5 : isSmall.value ? 6 : isNarrow.value ? 4.6 : 4.4
 )
 const gridColumnMaxDivide = computed(() =>
-  isSmall.value ? 5 : isNarrow.value ? 3.8 : 3.4
+  isXSmall.value ? 7.5 : isSmall.value ? 5 : isNarrow.value ? 3.6 : 3.4
 )
 const flexColumnDivide = computed(() =>
-  isSmall.value
-    ? 4.2
-    : isNarrow.value
-      ? 3.0
-      : props.contents.length <= 1
-        ? 2
-        : props.contents.length * 1.4
+  isXSmall.value
+    ? 6.8
+    : isSmall.value
+      ? 4.2
+      : isNarrow.value
+        ? 3.0
+        : props.contents.length <= 1
+          ? 2
+          : props.contents.length * 1.4
+)
+const columnGap = computed(() =>
+  isJudged.value && isSmallWindow.value ? '1rem' : '2rem'
 )
 </script>
 
@@ -59,8 +72,8 @@ $grid-max-width: $contents-card-max-width;
   );
   justify-items: center;
   justify-content: space-around;
-  column-gap: 3rem;
-  row-gap: 3rem;
+  column-gap: v-bind('columnGap');
+  row-gap: 2rem;
   width: 90%;
   max-width: $grid-max-width;
   min-height: 18rem;
@@ -77,7 +90,8 @@ $grid-max-width: $contents-card-max-width;
   flex-wrap: wrap;
   justify-items: center;
   justify-content: center;
-  gap: 2.5rem;
+  column-gap: v-bind('columnGap');
+  row-gap: 2rem;
   width: 90%;
   max-width: $grid-max-width;
   min-height: 18rem;

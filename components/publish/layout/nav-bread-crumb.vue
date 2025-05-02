@@ -54,6 +54,16 @@ const menuItem = computed(() => {
     hash: `#${domidPrefix}-${kind}`,
   }
 })
+const shopItem = computed(() => {
+  const kind: SectionKind = 'shop'
+  const shopSection = customerSetting.value?.homeLayout?.find(
+    (s) => s.kind === kind
+  )
+  return {
+    title: shopSection?.menuTitle ?? shopSection?.title ?? 'Shop',
+    hash: `#${domidPrefix}-${kind}`,
+  }
+})
 
 const detailTitle = computed(() => 'Detail')
 
@@ -168,6 +178,24 @@ watch(
           {
             title: menuItem.value.title,
             to: { name: 'index', hash: menuItem.value.hash },
+            disabled: false,
+          },
+          {
+            title: detailTitle.value,
+            disabled: true,
+          },
+        ]
+        return
+      case 'shops-id':
+        items.value = [
+          {
+            title: 'HOME',
+            to: { name: 'index' },
+            disabled: false,
+          },
+          {
+            title: shopItem.value.title,
+            to: { name: 'index', hash: shopItem.value.hash },
             disabled: false,
           },
           {

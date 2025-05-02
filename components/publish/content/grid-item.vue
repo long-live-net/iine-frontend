@@ -101,6 +101,12 @@ defineEmits<{ select: [item: T] }>()
     font-size: 1rem;
     font-weight: bold;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @media only screen and (max-width: $grid-breakpoint-md) {
+      font-size: 0.9rem;
+    }
   }
 
   .eyecatch-part {

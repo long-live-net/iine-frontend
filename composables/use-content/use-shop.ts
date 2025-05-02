@@ -131,7 +131,6 @@ export const useShopActions = (customerId: Ref<string | null>) => {
     useShopConverters(customerId)
   const {
     contentRef,
-    contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,
@@ -164,7 +163,6 @@ export const useShopActions = (customerId: Ref<string | null>) => {
   return {
     contentTitle,
     shopRef: contentRef,
-    shopPreNextIdRefRef: contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreateShop,

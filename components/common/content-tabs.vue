@@ -27,6 +27,7 @@ defineEmits<{
     v-model="tab"
     :align-tabs="alignTabs"
     :show-arrows="showArrows"
+    center-active
     selected-class="content-tabs-selected"
     class="content-tabs g-theme-contents-tabs"
   >
