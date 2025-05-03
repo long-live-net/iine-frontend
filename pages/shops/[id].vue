@@ -17,8 +17,4 @@
     margin-bottom: 0;
   }
 }
-
-.shop-list-gap {
-  margin-top: 6rem;
-}
 </style>

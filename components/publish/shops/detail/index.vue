@@ -166,7 +166,6 @@ const nextUrl = computed<string | null>(() => {
       </CommonContentTabs>
     </CommonContentCard2>
   </CommonContentWrap>
-
   <ManageContentShop
     v-model:modal="editModal"
     :content-title="contentTitle"

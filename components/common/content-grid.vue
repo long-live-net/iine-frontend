@@ -27,24 +27,22 @@ const useGrid = computed(() =>
       : props.contents.length >= 3
 )
 const gridColumnMinDivide = computed(() =>
-  isXSmall.value ? 8.5 : isSmall.value ? 6 : isNarrow.value ? 4.6 : 4.4
+  isXSmall.value ? 8.2 : isSmall.value ? 6 : isNarrow.value ? 4.6 : 4.4
 )
 const gridColumnMaxDivide = computed(() =>
-  isXSmall.value ? 7.5 : isSmall.value ? 5 : isNarrow.value ? 3.6 : 3.4
+  isXSmall.value ? 7.2 : isSmall.value ? 5 : isNarrow.value ? 3.6 : 3.4
 )
 const flexColumnDivide = computed(() =>
-  isXSmall.value
-    ? 6.8
-    : isSmall.value
-      ? 4.2
-      : isNarrow.value
-        ? 3.0
-        : props.contents.length <= 1
-          ? 2
-          : props.contents.length * 1.4
+  isSmall.value
+    ? 4.2
+    : isNarrow.value
+      ? 3.0
+      : props.contents.length <= 1
+        ? 2
+        : props.contents.length * 1.4
 )
 const columnGap = computed(() =>
-  isJudged.value && isSmallWindow.value ? '1rem' : '2rem'
+  isJudged.value && isSmallWindow.value ? '0.5rem' : '2rem'
 )
 </script>
 
