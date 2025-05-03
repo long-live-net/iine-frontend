@@ -4,27 +4,45 @@ import type { ContentType } from '@/types/content'
 const props = withDefaults(
   defineProps<{
     contents: Readonly<T[]>
+    narrow?: boolean
     small?: boolean
-    smallIfPossible?: boolean
   }>(),
   {
+    narrow: false,
     small: false,
-    smallIfPossible: false,
   }
 )
 
-const useGrid = computed(() => props.contents.length > 2)
-const isSmall = computed(
-  () => props.small || (props.smallIfPossible && props.contents.length !== 3)
+const { isSmall: isSmallWindow, isJudged } = useMediaQueryIsSmall()
+const isNarrow = toRef(props, 'narrow')
+const isSmall = toRef(props, 'small')
+const isXSmall = computed(
+  () => isJudged.value && isSmallWindow.value && isSmall.value
 )
-const gridColumnMinDivide = computed(() => (isSmall.value ? 5.6 : 4.4))
-const gridColumnMaxDivide = computed(() => (isSmall.value ? 4.8 : 3.6))
+const useGrid = computed(() =>
+  isXSmall.value
+    ? true
+    : isSmall.value
+      ? props.contents.length >= 4
+      : props.contents.length >= 3
+)
+const gridColumnMinDivide = computed(() =>
+  isXSmall.value ? 8.2 : isSmall.value ? 6 : isNarrow.value ? 4.6 : 4.4
+)
+const gridColumnMaxDivide = computed(() =>
+  isXSmall.value ? 7.2 : isSmall.value ? 5 : isNarrow.value ? 3.6 : 3.4
+)
 const flexColumnDivide = computed(() =>
   isSmall.value
-    ? 3.5
-    : props.contents.length <= 1
-      ? 1.75
-      : props.contents.length * 1.25
+    ? 4.2
+    : isNarrow.value
+      ? 3.0
+      : props.contents.length <= 1
+        ? 2
+        : props.contents.length * 1.4
+)
+const columnGap = computed(() =>
+  isJudged.value && isSmallWindow.value ? '0.5rem' : '2rem'
 )
 </script>
 
@@ -39,21 +57,23 @@ const flexColumnDivide = computed(() =>
 </template>
 
 <style lang="scss" scoped>
+$grid-max-width: $contents-card-max-width;
+
 .content-grid {
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
     minmax(
-      calc($contents-card-max-width / v-bind('gridColumnMinDivide')),
-      calc($contents-card-max-width / v-bind('gridColumnMaxDivide'))
+      calc($grid-max-width / v-bind('gridColumnMinDivide')),
+      calc($grid-max-width / v-bind('gridColumnMaxDivide'))
     )
   );
   justify-items: center;
   justify-content: space-around;
-  column-gap: 3rem;
-  row-gap: 3rem;
+  column-gap: v-bind('columnGap');
+  row-gap: 2rem;
   width: 90%;
-  max-width: $contents-card-max-width;
+  max-width: $grid-max-width;
   min-height: 18rem;
   margin: 0 auto;
 
@@ -68,15 +88,15 @@ const flexColumnDivide = computed(() =>
   flex-wrap: wrap;
   justify-items: center;
   justify-content: center;
-  gap: 2.5rem;
+  column-gap: v-bind('columnGap');
+  row-gap: 2rem;
   width: 90%;
-  max-width: $contents-card-max-width;
+  max-width: $grid-max-width;
   min-height: 18rem;
   margin: 0 auto;
 
   .column {
-    flex: 0 1
-      calc($contents-card-max-width / v-bind('flexColumnDivide') - 1.25rem);
+    flex: 0 1 calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
     padding: 0;
   }
 }

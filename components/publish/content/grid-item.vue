@@ -6,16 +6,18 @@ withDefaults(
     item: T
     seeDetailPath?: string | null
     seeDetailActionLabel?: string
-    eyecatchShape?: 'circle' | 'round' | null
+    itemShape?: 'circle' | 'round' | null
     isCurrent?: boolean
     noCaption?: boolean
+    captionHeight?: string
   }>(),
   {
     seeDetailPath: null,
     seeDetailActionLabel: '詳しく見る',
-    eyecatchShape: null,
+    itemShape: null,
     isCurrent: false,
     noCaption: false,
+    captionHeight: '260px',
   }
 )
 defineEmits<{ select: [item: T] }>()
@@ -24,12 +26,13 @@ defineEmits<{ select: [item: T] }>()
 <template>
   <div class="content-grid-item">
     <section
+      class="eyecatch-part"
       :class="[isCurrent ? 'current-item' : 'item-link']"
       @click="
         seeDetailPath ? $router.push(seeDetailPath) : $emit('select', item)
       "
     >
-      <h5 class="title">
+      <h5 v-if="noCaption" class="title">
         {{ item.title }}
       </h5>
       <template v-if="item.image">
@@ -40,15 +43,19 @@ defineEmits<{ select: [item: T] }>()
         >
           <CommonEyecatchImage
             :url="item.image.url"
-            :circle="eyecatchShape === 'circle'"
-            :round="eyecatchShape === 'round'"
             class="eyecatcher"
+            :class="{
+              circle: itemShape === 'circle',
+              round: itemShape === 'round' && !noCaption,
+              'round-nocaption': itemShape === 'round' && noCaption,
+            }"
           />
         </CommonContentItemAnimation>
       </template>
     </section>
     <section
       v-if="!noCaption"
+      class="caption-part"
       :class="[isCurrent ? 'current-item' : 'item-link']"
     >
       <CommonContentItemAnimation
@@ -57,8 +64,17 @@ defineEmits<{ select: [item: T] }>()
         :thresholds="[0.5]"
         :disabled="$route.name !== 'index'"
       >
-        <div class="caption-base">
-          <CommonWysiwygViewer :value="item.caption" class="caption" />
+        <div
+          class="caption g-theme-contents-grid-row-caption"
+          :class="{
+            circle: itemShape === 'circle',
+            round: itemShape === 'round',
+          }"
+        >
+          <h5 class="title">
+            {{ item.title }}
+          </h5>
+          <CommonWysiwygViewer :value="item.caption" class="caption-text" />
           <div class="see-detail">
             <BaseButtonNavButton
               small
@@ -82,28 +98,71 @@ defineEmits<{ select: [item: T] }>()
 
   .title {
     text-align: center;
+    font-size: 1rem;
     font-weight: bold;
-    font-size: 1.1rem;
     margin: 0;
-  }
-
-  .eyecatcher {
-    margin-top: 1rem;
-    aspect-ratio: 5 / 4;
-
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     @media only screen and (max-width: $grid-breakpoint-md) {
-      aspect-ratio: 4 / 3;
+      font-size: 0.9rem;
     }
   }
 
-  .see-detail {
-    margin-top: 0.4rem;
-    text-align: right;
+  .eyecatch-part {
+    .eyecatcher {
+      margin-top: 1rem;
+      aspect-ratio: 5 / 4;
+
+      @media only screen and (max-width: $grid-breakpoint-md) {
+        aspect-ratio: 4 / 3;
+      }
+    }
+
+    .circle {
+      clip-path: inset(0 round 50%);
+    }
+
+    .round {
+      clip-path: inset(0 round 12px 12px 0 0);
+    }
+
+    .round-nocaption {
+      clip-path: inset(0 round 12px);
+    }
   }
 
-  .caption {
-    text-align: left;
-    margin-top: 1rem;
+  .caption-part {
+    .caption {
+      position: relative;
+      padding: 1.5rem;
+      padding-bottom: 62px;
+      min-height: v-bind('captionHeight');
+
+      .title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+      }
+
+      .caption-text {
+        text-align: left;
+      }
+
+      .see-detail {
+        position: absolute;
+        bottom: 1.25rem;
+        right: 1.5rem;
+      }
+    }
+
+    .circle {
+      border-radius: 12px;
+      transform: translate3d(0, -1rem, 0);
+    }
+
+    .round {
+      border-radius: 0 0 12px 12px;
+    }
   }
 
   section.item-link {
@@ -114,6 +173,12 @@ defineEmits<{ select: [item: T] }>()
         background-color: rgba(255 255 255 / 0.25);
         background-blend-mode: overlay;
         transform: scale(1.1);
+      }
+    }
+
+    .round {
+      &:hover {
+        clip-path: inset(0 round 12px);
       }
     }
   }

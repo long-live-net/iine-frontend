@@ -27,8 +27,11 @@ $skyblue: skyblue;
 $skyblue-lighten1: lightskyblue;
 $indigo-lighten4: #e8eaf6;
 
+$gray-darken6: #0e0e0e;
 $gray-darken5: #181818;
+$gray-darken45: #242424;
 $gray-darken4: #303030;
+$gray-darken35: #323232;
 $gray-darken3: #383838;
 $gray-darken2: #545454;
 $gray-darken15: #606060;
@@ -80,5 +83,6 @@ $grid-breakpoint-xl: map.get($grid-breakpoints, xl);
 $nav-header-height: 120px;
 $nav-footer-height: 60px;
 
-$contents-card-max-width: 1140px;
+// $contents-card-max-width: 1140px;
+$contents-card-max-width: 1180px;
 $contents-card-min-height: 240px;

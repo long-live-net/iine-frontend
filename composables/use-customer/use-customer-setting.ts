@@ -184,15 +184,16 @@ export const useHomeLayoutTitleEdit = () => {
  * ホームレイアウト変更
  */
 const baseLayoutsOrder: PageLayout[] = [
-  { kind: 'information', title: 'information' },
-  { kind: 'profile', title: 'profile' },
-  { kind: 'news', title: 'news' },
-  { kind: 'service', title: 'service' },
-  { kind: 'feature', title: 'feature' },
   { kind: 'contact', title: 'contact' },
-  { kind: 'access', title: 'access' },
+  { kind: 'feature', title: 'feature' },
+  { kind: 'information', title: 'information' },
+  { kind: 'news', title: 'news' },
   { kind: 'menu', title: 'menu' },
   { kind: 'menu-image', title: 'menu by image' },
+  { kind: 'service', title: 'service' },
+  { kind: 'shop', title: 'shop' },
+  { kind: 'profile', title: 'profile' },
+  { kind: 'access', title: 'access' },
 ] as const
 export const useHomeLayoutEdit = () => {
   const {
@@ -398,6 +399,7 @@ const sectionKind2ApiKind = [
   { kind: 'contact', apiKind: 'contacts' },
   { kind: 'menu', apiKind: 'menus' },
   { kind: 'menu-image', apiKind: 'menu-images' },
+  { kind: 'shop', apiKind: 'shops' },
 ]
 export const useGetMenuTitle = (apiKind: string): string | null => {
   const { customerSetting } = useCustomerSetting()

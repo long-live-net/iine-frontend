@@ -2,7 +2,15 @@
 import draggable from 'vuedraggable'
 import type { ContentType } from '@/types/content'
 
-const props = defineProps<{ contents: T[] }>()
+const props = withDefaults(
+  defineProps<{
+    contents: T[]
+    narrow?: boolean
+  }>(),
+  {
+    narrow: false,
+  }
+)
 const emit = defineEmits<{
   update: [contents: T[]]
 }>()
@@ -14,11 +22,16 @@ const draggableContents = computed({
   },
 })
 
+const isNarrow = toRef(props, 'narrow')
 const useGrid = computed(() => props.contents.length > 2)
-const gridColumnMinDivide = 4.2
-const gridColumnMaxDivide = 3.4
+const gridColumnMinDivide = isNarrow.value ? 4.8 : 4.4
+const gridColumnMaxDivide = isNarrow.value ? 3.8 : 3.4
 const flexColumnDivide = computed(() =>
-  props.contents.length <= 1 ? 1.75 : props.contents.length * 1.25
+  isNarrow.value
+    ? 3.0
+    : props.contents.length <= 1
+      ? 2
+      : props.contents.length * 1.4
 )
 
 const isDragging = ref(false)
@@ -29,7 +42,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   <div>
     <p class="draggable-notion g-theme-contents-item__draggable--notion">
       <v-icon icon="mdi-apps" size="x-large" />
-      ドラッグドロップして位置を変更できます
+      ドラッグして位置を変更できます
     </p>
     <ClientOnly>
       <draggable
@@ -74,7 +87,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   text-align: center;
   font-size: small;
   font-weight: bold;
-  margin-bottom: 2rem;
+  margin: 1rem 0;
 }
 
 .content-grid-base {
@@ -107,13 +120,15 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   }
 }
 
+$grid-max-width: $contents-card-max-width;
+
 .content-grid {
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
     minmax(
-      calc($contents-card-max-width / v-bind('gridColumnMinDivide')),
-      calc($contents-card-max-width / v-bind('gridColumnMaxDivide'))
+      calc($grid-max-width / v-bind('gridColumnMinDivide')),
+      calc($grid-max-width / v-bind('gridColumnMaxDivide'))
     )
   );
   justify-items: center;
@@ -121,7 +136,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   column-gap: 3rem;
   row-gap: 3rem;
   width: 90%;
-  max-width: $contents-card-max-width;
+  max-width: $grid-max-width;
   min-height: 18rem;
   margin: 0 auto;
 
@@ -138,13 +153,12 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   justify-content: center;
   gap: 2.5rem;
   width: 90%;
-  max-width: $contents-card-max-width;
+  max-width: $grid-max-width;
   min-height: 18rem;
   margin: 0 auto;
 
   .column {
-    flex: 0 1
-      calc($contents-card-max-width / v-bind('flexColumnDivide') - 1.25rem);
+    flex: 0 1 calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
     padding: 1.5rem 0.75rem 2.5rem 0.75rem;
   }
 }

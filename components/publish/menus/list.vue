@@ -34,14 +34,14 @@ await onLoad()
       :items="menuListRef"
       :content-title="contentTitle"
       :can-edit="false"
-      small-if-possible
+      small
     >
       <template #default="{ content }">
         <PublishContentGridItem
           :item="content"
           :see-detail-path="`/menus/${content.id}`"
           :is-current="content.id === contentId"
-          eyecatch-shape="round"
+          item-shape="round"
           no-caption
         />
       </template>

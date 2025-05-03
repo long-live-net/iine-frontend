@@ -51,7 +51,10 @@ await onLoad()
         <PublishContentGridItem
           :item="content"
           :see-detail-path="`/services/${content.id}`"
-          eyecatch-shape="circle"
+          item-shape="circle"
+          :caption-height="
+            serviceListRef && serviceListRef.length > 2 ? '320px' : '260px'
+          "
         />
       </template>
     </PublishContentGridTable>

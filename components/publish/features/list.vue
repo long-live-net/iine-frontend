@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { FeatureType } from '@/types/content'
-import { useFeatureListActions } from '~/composables/use-content/use-features'
 
 withDefaults(
   defineProps<{
@@ -45,7 +44,7 @@ await onLoad()
       v-model:modal="editModal"
       :content-title="contentTitle"
       :items="featureListRef"
-      small-if-possible
+      small
     >
       <template #default="{ content }">
         <PublishContentGridItem
@@ -53,7 +52,7 @@ await onLoad()
           :see-detail-path="`/features/${content.id}`"
           :is-current="content.id === contentId"
           :no-caption="noCaption"
-          eyecatch-shape="circle"
+          item-shape="circle"
         />
       </template>
     </PublishContentGridTable>

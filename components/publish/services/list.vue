@@ -34,14 +34,14 @@ await onLoad()
       :content-title="contentTitle"
       :items="serviceListRef"
       :can-edit="false"
-      small-if-possible
+      small
     >
       <template #default="{ content }">
         <PublishContentGridItem
           :item="content"
           :see-detail-path="`/services/${content.id}`"
           :is-current="content.id === contentId"
-          eyecatch-shape="circle"
+          item-shape="circle"
           no-caption
         />
       </template>

@@ -2,6 +2,15 @@ import type { NuxtError } from '#app'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const handleNuxtError = async (nuxtError: NuxtError) => {
+    if (!nuxtError) {
+      console.error('--- nuxtError is null or undefined ---')
+      showError({
+        statusCode: 500,
+        statusMessage: 'unkown Error',
+        message: 'nuxtError is null or undefined',
+      })
+      return
+    }
     console.error('--- nuxtError.statusCode ---', nuxtError.statusCode)
     console.error('--- nuxtError.statusMessage ---', nuxtError.statusMessage)
     console.error('--- nuxtError.message ---', nuxtError.message)

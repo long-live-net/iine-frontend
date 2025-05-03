@@ -34,7 +34,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   <div>
     <p class="draggable-notion g-theme-contents-item__draggable--notion">
       <v-icon icon="mdi-apps" size="x-large" />
-      ドラッグドロップして位置を変更できます
+      ドラッグして位置を変更できます
     </p>
     <ClientOnly>
       <draggable
@@ -86,7 +86,7 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
   text-align: center;
   font-size: small;
   font-weight: bold;
-  margin-bottom: 2rem;
+  margin: 1rem 0;
 }
 
 .content-grid-row {

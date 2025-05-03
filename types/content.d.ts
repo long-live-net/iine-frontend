@@ -46,6 +46,12 @@ export interface ContentType {
   imageSettings?: ImageSettings
   tags?: string[]
 }
+export interface ContentCategoryType {
+  id: string
+  customerId: string
+  category: string
+  position?: number
+}
 
 export interface EyecatchTitleSettings extends TitleSettings {
   positionSm: string
@@ -95,11 +101,8 @@ export interface MenuType extends ContentType {
   position: number
 }
 
-export interface MenuCategoryType {
-  id: string
-  customerId: string
+export interface MenuCategoryType extends ContentCategoryType {
   menuId: string
-  category: string
   position: number
 }
 
@@ -119,6 +122,18 @@ export interface MenuImageType extends ContentType {
   menuImage: MenuImageData
 }
 
+export interface ShopCategoryType extends ContentCategoryType {
+  position: number
+}
+
+export interface ShopType extends ContentType {
+  categoryId: string
+  caption: string
+  image: ImageData
+  imageSettings: ImageSettings
+  position: number
+}
+
 /**
  * Content Form Data Types
  */
@@ -132,6 +147,10 @@ export interface ContentForm {
   imageName?: string
   imageType?: string
   imageSettings?: ImageSettings | null
+}
+export interface ContentCategoryForm {
+  category: string
+  position: number
 }
 
 export interface EyecatchForm extends ContentForm {
@@ -181,10 +200,7 @@ export interface MenuForm extends ContentForm {
   position: number
 }
 
-export interface MenuCategoryForm {
-  category: string
-  position: number
-}
+export type MenuCategoryForm = ContentCategoryForm
 
 export interface MenuDetailForm extends ContentForm {
   isHilight?: boolean
@@ -202,6 +218,16 @@ export interface MenuImageForm extends ContentForm {
   menuImageUrl: string
   menuImageName: string
   menuImageType: string
+}
+
+export type ShopCategoryForm = ContentCategoryForm
+
+export interface ShopForm extends ContentForm {
+  image: string
+  imageName: string
+  imageType: string
+  caption: string
+  position: number
 }
 
 /*

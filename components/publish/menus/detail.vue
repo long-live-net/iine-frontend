@@ -67,8 +67,8 @@ const {
   pager: pagerCategory,
   menuCategoryListRef,
   onLoad: onLoadCategory,
-  onCreate: onCreateCategory,
-  onUpdate: onUpdateCategory,
+  onCreateCategory,
+  onUpdateCategory,
   onRemove: onDeleteCategory,
   onUpdatePositions: onUpdatePositionsCategory,
   loading: loadingCategory,
@@ -86,9 +86,9 @@ const menuCategoryItems: MenuItem[] = [
   },
   { type: 'divider' },
   {
-    title: 'メニューカテゴリ並び替え',
+    title: 'メニューカテゴリ並替え',
     value: 'orderMenuCategory',
-    props: { prependIcon: 'mdi-swap-vertical' },
+    props: { prependIcon: 'mdi-sort-reverse-variant' },
   },
 ]
 const onSelectMenuCategory = (value: number | string) => {
@@ -165,7 +165,8 @@ const loading = computed(
   () =>
     loadingMenu.value || loadingCategory.value || loadingMenuDetailList.value
 )
-await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
+await onLoadMenu(menuId)
+await Promise.all([onLoadCategory(), onLoadDetail()])
 </script>
 
 <template>
@@ -193,8 +194,8 @@ await Promise.all([onLoadMenu(menuId), onLoadCategory(), onLoadDetail()])
             />
             <BaseActivator
               v-model:modal="editCategoryPositionModal"
-              activator-text="メニューカテゴリ並び替え"
-              activator-icon="mdi-arrow-up-down"
+              activator-text="メニューカテゴリ並替え"
+              activator-icon="mdi-sort-reverse-variant"
               activator-size="small"
               activator-color="info"
             />

@@ -8,15 +8,16 @@ export type PageTitle = {
 
 export type SectionKind =
   | 'top'
-  | 'information'
-  | 'profile'
   | 'contact'
-  | 'access'
-  | 'news'
-  | 'service'
   | 'feature'
+  | 'information'
+  | 'news'
   | 'menu'
   | 'menu-image'
+  | 'service'
+  | 'shop'
+  | 'profile'
+  | 'access'
 
 export type PageLayout = {
   kind: SectionKind

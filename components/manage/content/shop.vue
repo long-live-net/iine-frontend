@@ -1,58 +1,57 @@
 <script setup lang="ts">
-import type { FeatureType, FeatureForm, ContentEditMode } from '@/types/content'
-import { getFeatureKind } from '@/composables/use-content/use-feature'
+import type { ShopType, ShopForm, ContentEditMode } from '@/types/content'
+import { getShopKind } from '@/composables/use-content/use-shop'
 
 const modal = defineModel<boolean>('modal', { required: true })
 const props = withDefaults(
   defineProps<{
     contentTitle: string
     editMode: ContentEditMode
-    featureData?: FeatureType | null
+    shopData?: ShopType | null
   }>(),
   {
-    featureData: null,
+    shopData: null,
   }
 )
 const emit = defineEmits<{
-  create: [inputData: FeatureForm]
-  update: [{ id: string; formData: FeatureForm }]
+  create: [inputData: ShopForm]
+  update: [{ id: string; formData: ShopForm }]
   remove: [id: string]
 }>()
 
 const { customerId } = useCustomer()
-const apiKind = getFeatureKind()
+const apiKind = getShopKind()
 
-const { handleSubmit, handleReset, formData, resetFeatureForm } =
-  useFeatureForm()
+const { handleSubmit, handleReset, formData, resetShopForm } = useShopForm()
 
 watch(modal, (current) => {
   if (current) {
     handleReset()
-    resetFeatureForm(props.featureData)
+    resetShopForm(props.shopData)
   }
 })
 
-const onCreate = handleSubmit((featureForm) => {
-  emit('create', featureForm)
+const onCreate = handleSubmit((shopForm) => {
+  emit('create', shopForm)
   modal.value = false
 })
 
-const onUpdate = handleSubmit((featureForm) => {
-  if (!props.featureData?.id) {
+const onUpdate = handleSubmit((shopForm) => {
+  if (!props.shopData?.id) {
     return
   }
   emit('update', {
-    id: props.featureData?.id,
-    formData: featureForm,
+    id: props.shopData?.id,
+    formData: shopForm,
   })
   modal.value = false
 })
 
 const onRemove = () => {
-  if (!props.featureData?.id) {
+  if (!props.shopData?.id) {
     return
   }
-  emit('remove', props.featureData.id)
+  emit('remove', props.shopData.id)
   modal.value = false
 }
 
@@ -128,7 +127,7 @@ const onCancel = () => {
         />
       </div>
       <ManageContentFormActions
-        :content-id="featureData?.id"
+        :content-id="shopData?.id"
         class="mt-4 mb-2"
         @create="onCreate"
         @update="onUpdate"
