@@ -102,7 +102,6 @@ export const useMenuActions = (customerId: Ref<string | null>) => {
   const { apiToContent, formToSaveapi } = useMenuConverters(customerId)
   const {
     contentRef,
-    contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,
@@ -121,7 +120,6 @@ export const useMenuActions = (customerId: Ref<string | null>) => {
   return {
     contentTitle,
     menuRef: contentRef,
-    menuPreNextIdRefRef: contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,

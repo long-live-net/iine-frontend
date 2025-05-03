@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type MenuList from '@/components/publish/menus/list.vue'
+import type MenuList from '@/components/publish/menus/detail/list.vue'
 const menuListRef = ref<InstanceType<typeof MenuList> | null>(null)
 </script>
 
@@ -7,7 +7,11 @@ const menuListRef = ref<InstanceType<typeof MenuList> | null>(null)
   <div id="menu-detail-top">
     <PublishLayoutNavBreadCrumb class="nav-bread-crumbs" />
     <PublishMenusDetail @update:data="menuListRef?.onGetList" />
-    <PublishMenusList ref="menuListRef" no-caption class="menu-list-gap" />
+    <PublishMenusDetailList
+      ref="menuListRef"
+      no-caption
+      class="menu-list-gap"
+    />
   </div>
 </template>
 
@@ -21,6 +25,6 @@ const menuListRef = ref<InstanceType<typeof MenuList> | null>(null)
 }
 
 .menu-list-gap {
-  margin-top: 6rem;
+  margin-top: 5rem;
 }
 </style>

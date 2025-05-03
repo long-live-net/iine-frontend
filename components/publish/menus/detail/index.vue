@@ -27,7 +27,6 @@ const menuId = Array.isArray(route.params.id)
 const removeMenuModal = ref(false)
 const {
   menuRef,
-  menuPreNextIdRefRef,
   loading: loadingMenu,
   onLoad: onLoadMenu,
   onRemove: removeMenu,
@@ -43,16 +42,6 @@ const onRemoveMenu = async (id: string) => {
     hash: `#${domidPrefix}-menu`,
   })
 }
-const preUrl = computed(() =>
-  menuPreNextIdRefRef.value?.preId
-    ? `/menus/${menuPreNextIdRefRef.value.preId}`
-    : null
-)
-const nextUrl = computed(() =>
-  menuPreNextIdRefRef.value?.nextId
-    ? `/menus/${menuPreNextIdRefRef.value.nextId}`
-    : null
-)
 
 /**
  * Menu Category データ
@@ -232,14 +221,6 @@ await Promise.all([onLoadCategory(), onLoadDetail()])
 
       <div class="menu-detail-screen-container g-theme-contents-menu-detail">
         <template v-if="menuRef">
-          <CommonContentPreNextNagivation
-            v-if="preUrl?.length || nextUrl?.length"
-            :pre-url="preUrl"
-            :next-url="nextUrl"
-            class="pre-next-navi"
-          />
-          <div v-else><br /></div>
-
           <div class="menu-detail-screen-body">
             <div
               v-for="category in menuCategoryListRef ?? []"
@@ -351,15 +332,6 @@ await Promise.all([onLoadCategory(), onLoadDetail()])
               class="menu-category-dummy"
             />
           </div>
-          <CommonContentPreNextNagivation
-            v-if="
-              menuCategoryListRef.length && (preUrl?.length || nextUrl?.length)
-            "
-            :pre-url="preUrl"
-            :next-url="nextUrl"
-            class="pre-next-navi"
-          />
-          <div v-else><br /></div>
         </template>
         <div v-else class="no-items">
           <p>データがありません</p>
@@ -409,30 +381,26 @@ await Promise.all([onLoadCategory(), onLoadDetail()])
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .menu-detail-screen-container {
-    padding: 0 0 3rem;
-
-    .pre-next-navi {
-      margin: 0 1rem;
-    }
+    padding: 4rem 0;
 
     .menu-detail-screen-body {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 80px;
+      gap: 20px;
       width: 96%;
       max-width: 1500px;
-      margin: 3rem auto 0;
+      margin: 0 auto;
 
       .menu-category {
         position: relative;
         width: 90%;
         max-width: 680px;
-        padding: 0 0 4.5rem;
+        padding: 0 0 4rem;
 
         .edit-category-activator {
           position: absolute;

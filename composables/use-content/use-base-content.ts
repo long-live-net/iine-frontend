@@ -7,7 +7,6 @@ import type {
   ListSort,
   ListPager,
   ContentListResponse,
-  ContentPreNextIdApi,
   ContentPositionApi,
 } from '@/types/API/content-api'
 
@@ -76,7 +75,6 @@ export const useContentRead = <T extends ContentGetApi>(
 ) => {
   const contentDataRef: Ref<T | null> = ref(null)
   const contentListRef: Ref<ContentListResponse<T> | null> = ref(null)
-  const preNextIdRef: Ref<ContentPreNextIdApi | null> = ref(null)
   const loading = ref(false)
   const keyExt = ref(1)
 
@@ -227,37 +225,6 @@ export const useContentRead = <T extends ContentGetApi>(
   }
 
   /**
-   * get Pre and Next ContentId
-   * @param currentId 現在の ContentId
-   * @param filter 検索フィルタ
-   * @param sort ソートキー
-   */
-  const getPreNextId = async (
-    currentId: string,
-    filter: ListFilter = {},
-    sort: ListSort = {}
-  ) => {
-    const url = `/${apiPath}/${currentId}/pre-next-id`
-    try {
-      loading.value = true
-      const data = await $fetch<ContentPreNextIdApi>(url, {
-        baseURL: backendBaseUrl,
-        method: 'GET',
-        params: {
-          customerId: customerId.value,
-          filter: JSON.stringify(filter),
-          sort: JSON.stringify(sort),
-        },
-      })
-      preNextIdRef.value = data ?? null
-    } catch (e) {
-      throw createError(e as Error)
-    } finally {
-      loading.value = false
-    }
-  }
-
-  /**
    * contents list 配列の並び順を引数のIDリストに合わせて更新
    * @param list
    */
@@ -313,13 +280,11 @@ export const useContentRead = <T extends ContentGetApi>(
     set,
     get,
     getList,
-    getPreNextId,
     setListPositions,
     setTitleSettings,
     setImageSettings,
     contentDataRef,
     contentListRef,
-    preNextIdRef,
     loadingRef: loading,
   }
 }

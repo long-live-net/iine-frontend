@@ -121,7 +121,6 @@ export const useNewsActions = (customerId: Ref<string | null>) => {
   const { apiToContent, formToSaveapi } = useNewsConverters(customerId)
   const {
     contentRef,
-    contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,
@@ -140,7 +139,6 @@ export const useNewsActions = (customerId: Ref<string | null>) => {
   return {
     contentTitle,
     newsRef: contentRef,
-    newsPreNextIdRefRef: contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,
