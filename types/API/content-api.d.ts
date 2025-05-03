@@ -4,7 +4,6 @@ import type {
   ImageData,
   ImageSettings,
   MenuImageData,
-  ContentPreNextId,
   ContentPosition,
 } from '@/types/content'
 
@@ -193,11 +192,6 @@ export type ListPager = { page: number; limit: number }
  * リストデータ取得時のレスポンスデータ
  */
 export type ContentListResponse<T> = { list: T[]; total: number }
-
-/*
- * Pre Next ID 取得時のレスポンスデータ
- */
-export type ContentPreNextIdApi = ContentPreNextId
 
 /**
  * リストポジション更新時で使用するPositionデータ

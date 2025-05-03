@@ -230,14 +230,6 @@ export interface ShopForm extends ContentForm {
   position: number
 }
 
-/*
- * Pre Next ID 取得時のレスポンスデータ
- */
-export interface ContentPreNextId {
-  preId: string | null
-  nextId: string | null
-}
-
 /**
  * トップ画面表示位置 (position)
  */

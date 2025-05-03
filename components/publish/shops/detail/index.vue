@@ -136,7 +136,7 @@ const nextUrl = computed<string | null>(() => {
       </PublishContentDetailItem>
     </CommonContentCard>
   </CommonContentWrap>
-  <CommonContentWrap v-if="!loading" :loading="loading" class="shop-list-gap">
+  <CommonContentWrap :loading="loading" class="shop-list-gap">
     <CommonContentCard2>
       <CommonContentTabs
         v-if="categoryListRef.length"

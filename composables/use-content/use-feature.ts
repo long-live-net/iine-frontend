@@ -103,7 +103,6 @@ export const useFeatureActions = (customerId: Ref<string | null>) => {
   const { apiToContent, formToSaveapi } = useFeatureConverters(customerId)
   const {
     contentRef,
-    contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,
@@ -121,7 +120,6 @@ export const useFeatureActions = (customerId: Ref<string | null>) => {
   return {
     contentTitle,
     featureRef: contentRef,
-    featurePreNextIdRefRef: contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,

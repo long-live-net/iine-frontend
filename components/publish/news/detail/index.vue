@@ -13,9 +13,8 @@ const contentId = Array.isArray(route.params.id)
 const {
   contentTitle,
   newsRef,
-  newsPreNextIdRefRef,
-  loading,
-  onLoad,
+  loading: detailLoading,
+  onLoad: onDetailLoad,
   onCreate,
   onUpdate,
   onRemove,
@@ -23,24 +22,37 @@ const {
   onUpdateImageSetting,
 } = useNewsActions(customerId)
 
-const preUrl = computed(() =>
-  newsPreNextIdRefRef.value?.preId
-    ? `/news/${newsPreNextIdRefRef.value.preId}`
-    : null
-)
-const nextUrl = computed(() =>
-  newsPreNextIdRefRef.value?.nextId
-    ? `/news/${newsPreNextIdRefRef.value.nextId}`
-    : null
-)
+const {
+  filter,
+  sort,
+  pager,
+  newsListRef,
+  loading: listLoading,
+  onLoad: onListLoad,
+} = useNewsListActions(customerId)
 
 const editModal = ref(false)
 const editMode = ref<ContentEditMode>('update')
+
 const bodyPlainString = computed(
   () => newsRef.value?.body?.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') ?? ''
 )
+const loading = computed(() => detailLoading.value || listLoading.value)
+const preUrl = computed<string | null>(() => {
+  const curIndex = newsListRef.value?.findIndex((c) => c.id === contentId) ?? -1
+  const preId = newsListRef.value?.[curIndex + 1]?.id
+  return preId ? `/news/${preId}` : null
+})
+const nextUrl = computed<string | null>(() => {
+  const curIndex = newsListRef.value?.findIndex((c) => c.id === contentId) ?? -1
+  const nextId = newsListRef.value?.[curIndex - 1]?.id
+  return nextId ? `/news/${nextId}` : null
+})
 
-await onLoad(contentId)
+filter.value = { publishOn: true }
+sort.value = { publishOn: -1 }
+pager.value = { page: 1, limit: 1024 }
+await Promise.all([onDetailLoad(contentId), onListLoad()])
 </script>
 
 <template>

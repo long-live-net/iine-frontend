@@ -103,7 +103,6 @@ export const useServiceActions = (customerId: Ref<string | null>) => {
   const { apiToContent, formToSaveapi } = useServiceConverters(customerId)
   const {
     contentRef,
-    contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,
@@ -121,7 +120,6 @@ export const useServiceActions = (customerId: Ref<string | null>) => {
   return {
     contentTitle,
     serviceRef: contentRef,
-    servicePreNextIdRefRef: contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,

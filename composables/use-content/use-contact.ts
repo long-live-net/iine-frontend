@@ -74,7 +74,6 @@ export const useContactActions = (customerId: Ref<string | null>) => {
   const { apiToContent, formToSaveapi } = useContactConverters(customerId)
   const {
     contentRef,
-    contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,
@@ -92,7 +91,6 @@ export const useContactActions = (customerId: Ref<string | null>) => {
   return {
     contentTitle,
     contactRef: contentRef,
-    contactPreNextIdRefRef: contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,

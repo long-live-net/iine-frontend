@@ -1,7 +1,7 @@
 <template>
   <div id="news-index-top">
     <PublishLayoutNavBreadCrumb class="nav-bread-crumbs" />
-    <PublishNews />
+    <PublishNewsList />
   </div>
 </template>
 

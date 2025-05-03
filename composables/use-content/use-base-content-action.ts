@@ -35,10 +35,8 @@ const useContentContent = <
     setTitleSettings,
     setImageSettings,
     setListPositions,
-    getPreNextId,
     contentDataRef,
     contentListRef,
-    preNextIdRef,
     loadingRef: readLoading,
   } = useContentRead<G>(customerId, apiKind)
   const {
@@ -128,25 +126,13 @@ const useContentContent = <
     setContentTitleSettings,
     setContentImageSettings,
     updateContentListPositions: updatePositions,
-    getContentPreNextId: getPreNextId,
     updateContentTitleSettings: updateTitleSettingsWithDebounced,
     updateContentImageSettings: updateImageSettingsWithDebounced,
     contentRef,
     listRef,
     contentTotalRef,
-    contentPreNextIdRefRef: preNextIdRef,
     loading,
   }
-}
-
-const useContentListQueriesStore = (apiKind: string) => {
-  const filter = useState<ListFilter>(`${apiKind}Filter`, () => ({}))
-  const sort = useState<ListSort>(`${apiKind}Sort`, () => ({ position: 1 }))
-  const pager = useState<ListPager>(`${apiKind}Pager`, () => ({
-    page: 1,
-    limit: 20,
-  }))
-  return { filter, sort, pager }
 }
 
 export const useContentListActions = <
@@ -166,7 +152,6 @@ export const useContentListActions = <
   const pager = ref<ListPager>({ page: 1, limit: 20 })
 
   const { addSnackber } = useSnackbars()
-  const listQueries = useContentListQueriesStore(apiKind)
   const {
     loadContentList,
     getContentList,
@@ -187,15 +172,9 @@ export const useContentListActions = <
 
   const onLoad = async () => {
     await loadContentList(filter.value, sort.value, pager.value)
-    listQueries.filter.value = filter.value
-    listQueries.sort.value = sort.value
-    listQueries.pager.value = pager.value
   }
   const onGetList = async () => {
     await getContentList(filter.value, sort.value, pager.value)
-    listQueries.filter.value = filter.value
-    listQueries.sort.value = sort.value
-    listQueries.pager.value = pager.value
   }
 
   const onCreate = async (formData: F) => {
@@ -253,7 +232,6 @@ export const useContentActions = <
   formToSaveapi: (formData: F) => S
 ) => {
   const { addSnackber } = useSnackbars()
-  const { filter, sort } = useContentListQueriesStore(apiKind)
   const {
     loadContent,
     getContent,
@@ -264,9 +242,7 @@ export const useContentActions = <
     updateContentTitleSettings,
     setContentImageSettings,
     updateContentImageSettings,
-    getContentPreNextId,
     contentRef,
-    contentPreNextIdRefRef,
     loading,
   } = useContentContent<T, F, G, S>(
     apiKind,
@@ -275,11 +251,8 @@ export const useContentActions = <
     formToSaveapi
   )
 
-  const onLoad = async (id?: string, usePreNext: boolean = false) => {
+  const onLoad = async (id?: string) => {
     await loadContent(id)
-    if (usePreNext && contentRef.value) {
-      await getContentPreNextId(contentRef.value.id, filter.value, sort.value)
-    }
   }
 
   const onCreate = async (formData: F) => {
@@ -326,7 +299,6 @@ export const useContentActions = <
 
   return {
     contentRef,
-    contentPreNextIdRefRef,
     loading,
     onLoad,
     onCreate,

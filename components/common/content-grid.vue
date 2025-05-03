@@ -74,7 +74,6 @@ $grid-max-width: $contents-card-max-width;
   row-gap: 2rem;
   width: 90%;
   max-width: $grid-max-width;
-  min-height: 18rem;
   margin: 0 auto;
 
   .column {

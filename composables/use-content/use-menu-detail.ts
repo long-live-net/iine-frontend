@@ -28,10 +28,8 @@ const useMenuDetailContent = (customerId: Ref<string | null>) => {
     setTitleSettings,
     setImageSettings,
     setListPositions,
-    getPreNextId,
     contentDataRef,
     contentListRef,
-    preNextIdRef,
     loadingRef: readLoading,
   } = useContentRead<MenuDetailGetApi>(customerId, apiKind)
   const {
@@ -211,25 +209,13 @@ const useMenuDetailContent = (customerId: Ref<string | null>) => {
     setMenuDetailTitleSettings,
     setMenuDetailImageSettings,
     updateMenuDetailListPositions: updatePositions,
-    getMenuDetailPreNextId: getPreNextId,
     updateMenuDetailTitleSettings: updateTitleSettingsWithDebounced,
     updateMenuDetailImageSettings: updateImageSettingsWithDebounced,
     menuDetailRef,
     menuDetailListRef,
     menuDetailTotalRef,
-    menuDetailPreNextIdRefRef: preNextIdRef,
     loading,
   }
-}
-
-const useMenuDetailListQueriesStore = () => {
-  const filter = useState<ListFilter>('menuDetailListFilter', () => ({}))
-  const sort = useState<ListSort>('menuDetailListSort', () => ({ position: 1 }))
-  const pager = useState<ListPager>('menuDetailListPager', () => ({
-    page: 1,
-    limit: 20,
-  }))
-  return { filter, sort, pager }
 }
 
 /**
@@ -243,7 +229,6 @@ export const useMenuDetailListActions = (customerId: Ref<string | null>) => {
 
   const contentTitle = 'メニュー項目'
   const { addSnackber } = useSnackbars()
-  const listQueries = useMenuDetailListQueriesStore()
   const {
     loadMenuDetailList,
     getMenuDetailList,
@@ -258,15 +243,9 @@ export const useMenuDetailListActions = (customerId: Ref<string | null>) => {
 
   const onLoad = async () => {
     await loadMenuDetailList(filter.value, sort.value, pager.value)
-    listQueries.filter.value = filter.value
-    listQueries.sort.value = sort.value
-    listQueries.pager.value = pager.value
   }
   const onGetList = async () => {
     await getMenuDetailList(filter.value, sort.value, pager.value)
-    listQueries.filter.value = filter.value
-    listQueries.sort.value = sort.value
-    listQueries.pager.value = pager.value
   }
 
   const onCreate = async (

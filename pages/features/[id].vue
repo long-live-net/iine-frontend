@@ -1,17 +1,7 @@
-<script setup lang="ts">
-import type FeaturesList from '@/components/publish/features/list.vue'
-const featuresListRef = ref<InstanceType<typeof FeaturesList> | null>(null)
-</script>
-
 <template>
   <div id="feature-detail-top">
     <PublishLayoutNavBreadCrumb class="nav-bread-crumbs" />
-    <PublishFeaturesDetail @update:data="featuresListRef?.onGetList" />
-    <PublishFeaturesList
-      ref="featuresListRef"
-      no-caption
-      class="feature-list-gap"
-    />
+    <PublishFeaturesDetail />
   </div>
 </template>
 
@@ -26,9 +16,5 @@ const featuresListRef = ref<InstanceType<typeof FeaturesList> | null>(null)
   @media only screen and (max-width: $grid-breakpoint-md) {
     margin-bottom: 0;
   }
-}
-
-.feature-list-gap {
-  margin-top: 6rem;
 }
 </style>
