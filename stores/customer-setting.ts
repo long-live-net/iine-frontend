@@ -6,7 +6,6 @@ import type { CustomerSetting } from '@/types/customer-setting'
 
 const useCustomerSettingApi = (token: Ref<string | null>) => {
   const endpoint = '/customer-settings'
-  const keyExt = ref(1)
   const api2Appdata = (
     apiData?: CustomerSettingApi | null
   ): CustomerSetting | null => {
@@ -91,7 +90,7 @@ const useCustomerSettingApi = (token: Ref<string | null>) => {
   })
 
   const load = async (customerId: string): Promise<CustomerSetting | null> => {
-    const key = `fetch_customer_setting_${endpoint}_${keyExt.value++}`
+    const key = `fetch_customer_setting_${endpoint}_${customerId}`
     const { data, error } = await useAsyncData<CustomerSettingApi>(key, () =>
       $fetch(`${endpoint}/${customerId}`, {
         baseURL: backendBaseUrl,

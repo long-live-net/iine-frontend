@@ -5,7 +5,6 @@ import type { Customer } from '@/types/customer'
 
 const useCustomerApi = (token: Ref<string | null>) => {
   const endpoint = '/customers'
-  const keyExt = ref(1)
   const api2Appdata = (apiData?: CustomerApi | null): Customer | null => {
     if (!apiData) {
       return null
@@ -33,7 +32,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
   })
 
   const loadByUrl = async (hostname: string): Promise<Customer | null> => {
-    const key = `fetch_customer_${endpoint}_${keyExt.value++}`
+    const key = `fetch_customer_${endpoint}_${hostname}`
     const { data, error } = await useAsyncData<CustomerApi>(key, () =>
       $fetch(`${endpoint}/customer-url`, {
         baseURL: backendBaseUrl,

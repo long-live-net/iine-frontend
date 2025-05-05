@@ -76,7 +76,6 @@ export const useContentRead = <T extends ContentGetApi>(
   const contentDataRef: Ref<T | null> = ref(null)
   const contentListRef: Ref<ContentListResponse<T> | null> = ref(null)
   const loading = ref(false)
-  const keyExt = ref(1)
 
   /**
    * load content data
@@ -93,10 +92,11 @@ export const useContentRead = <T extends ContentGetApi>(
    */
   const loadData = async (contentId?: string | null) => {
     contentDataRef.value = null
-    const key = `get_content_${apiPath}_${keyExt.value++}`
+    const recent = 'recent'
+    const key = `get_content_${apiPath}_${contentId ?? recent}`
     const url =
       contentId === undefined || contentId === null
-        ? `/${apiPath}/recent`
+        ? `/${apiPath}/${recent}`
         : `/${apiPath}/${contentId}`
 
     try {
@@ -138,7 +138,7 @@ export const useContentRead = <T extends ContentGetApi>(
     pager: ListPager = { page: 1, limit: 20 }
   ) => {
     contentListRef.value = null
-    const key = `get_list_content_${apiPath}_${keyExt.value++}`
+    const key = `get_list_content_${apiPath}_${JSON.stringify({ filter, sort, pager })}`
     try {
       loading.value = true
       const { data, error } = await useAsyncData(key, () =>

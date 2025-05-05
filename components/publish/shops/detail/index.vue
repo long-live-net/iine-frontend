@@ -11,9 +11,6 @@ const route = useRoute()
 const contentId = Array.isArray(route.params.id)
   ? route.params.id[0]
   : route.params.id
-const categoryId = Array.isArray(route.query.categoryId)
-  ? route.query.categoryId[0]
-  : route.query.categoryId
 
 const {
   contentTitle,
@@ -55,17 +52,6 @@ filterShop.value = {}
 sortShop.value = { categoryId: 1, position: 1 }
 pagerShop.value = { page: 1, limit: SHOPS_LINIT }
 
-const onUpdateData = async (params: { id: string; formData: ShopForm }) => {
-  if (!categoryId) {
-    return
-  }
-  await onUpdateShop(params.id, categoryId, params.formData)
-  onGetShopList()
-}
-const onRemoveData = async (id: string) => {
-  await onRemove(id)
-  onGetShopList()
-}
 const loading = computed(
   () => loadingShop.value || loadingCategoryList.value || loadingShopList.value
 )
@@ -112,6 +98,18 @@ const nextUrl = computed<string | null>(() => {
   const nextId = allShops.value[curIndex + 1]?.id
   return nextId ? `/shops/${nextId}` : null
 })
+
+const onUpdateData = async (params: { id: string; formData: ShopForm }) => {
+  if (!currentTabCategoryId.value) {
+    return
+  }
+  await onUpdateShop(params.id, currentTabCategoryId.value, params.formData)
+  onGetShopList()
+}
+const onRemoveData = async (id: string) => {
+  await onRemove(id)
+  onGetShopList()
+}
 </script>
 
 <template>
