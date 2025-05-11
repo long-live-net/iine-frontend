@@ -97,7 +97,6 @@ export const useContentRead = <T extends ContentGetApi>(
     const key = computed(
       () => `get_content_${apiPath}_${routeKeyId.value}_${contentId ?? recent}`
     )
-    console.log('loadData key', unref(key))
     const url =
       contentId === undefined || contentId === null
         ? `/${apiPath}/${recent}`
@@ -146,7 +145,6 @@ export const useContentRead = <T extends ContentGetApi>(
       () =>
         `get_list_content_${apiPath}_${routeKeyId.value}_${JSON.stringify({ filter, sort, pager })}`
     )
-    console.log('loadData key', unref(key))
     try {
       loading.value = true
       const { data, error } = await useAsyncData(key, () =>
