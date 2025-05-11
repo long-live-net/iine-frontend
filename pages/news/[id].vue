@@ -1,3 +1,10 @@
+<script setup lang="ts">
+const { changeRouteKeyId } = useRouteKey()
+onBeforeRouteLeave(() => {
+  changeRouteKeyId()
+})
+</script>
+
 <template>
   <div id="news-detail-top">
     <PublishLayoutNavBreadCrumb class="nav-bread-crumbs" />

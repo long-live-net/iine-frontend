@@ -17,6 +17,7 @@ const useContentCategory = <
   apiKind: string
 ) => {
   const { authorizationHeader } = useAuth()
+  const { routeKeyId } = useRouteKey()
 
   const ContentCategoryListRef: Ref<ContentListResponse<T> | null> = ref(null)
   const loading = ref(false)
@@ -27,7 +28,7 @@ const useContentCategory = <
     pager: ListPager = { page: 1, limit: 20 }
   ) => {
     ContentCategoryListRef.value = null
-    const key = `get_list_content_${apiKind}_${JSON.stringify({ filter, sort, pager })}`
+    const key = `get_list_content_${apiKind}_${routeKeyId.value}_${JSON.stringify({ filter, sort, pager })}`
     try {
       loading.value = true
       const { data, error } = await useAsyncData(key, () =>

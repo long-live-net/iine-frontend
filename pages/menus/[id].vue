@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type MenuList from '@/components/publish/menus/detail/list.vue'
 const menuListRef = ref<InstanceType<typeof MenuList> | null>(null)
+
+const { changeRouteKeyId } = useRouteKey()
+onBeforeRouteLeave(() => {
+  changeRouteKeyId()
+})
 </script>
 
 <template>

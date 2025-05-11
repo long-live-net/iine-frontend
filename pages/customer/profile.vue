@@ -85,6 +85,11 @@ onMounted(() => {
     }
   )
 })
+
+const { changeRouteKeyId } = useRouteKey()
+onBeforeRouteLeave(() => {
+  changeRouteKeyId()
+})
 </script>
 
 <template>
