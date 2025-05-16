@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { UiSelectItem } from '~/types/ui'
 import type { ShopType, ShopForm, ContentEditMode } from '@/types/content'
 import { getShopKind } from '@/composables/use-content/use-shop'
 
@@ -8,9 +9,13 @@ const props = withDefaults(
     contentTitle: string
     editMode: ContentEditMode
     shopData?: ShopType | null
+    currentCategoryId?: string | null
+    categorySelectItems?: UiSelectItem[]
   }>(),
   {
     shopData: null,
+    currentCategoryId: '',
+    categorySelectItems: () => [],
   }
 )
 const emit = defineEmits<{
@@ -27,7 +32,7 @@ const { handleSubmit, handleReset, formData, resetShopForm } = useShopForm()
 watch(modal, (current) => {
   if (current) {
     handleReset()
-    resetShopForm(props.shopData)
+    resetShopForm(props.shopData, props.currentCategoryId)
   }
 })
 
@@ -41,7 +46,7 @@ const onUpdate = handleSubmit((shopForm) => {
     return
   }
   emit('update', {
-    id: props.shopData?.id,
+    id: props.shopData.id,
     formData: shopForm,
   })
   modal.value = false
@@ -90,18 +95,40 @@ const onCancel = () => {
           :api-kind="apiKind"
         />
       </div>
-      <div
-        v-if="['new', 'update', 'image', 'title', 'caption'].includes(editMode)"
-        class="mt-3"
-      >
-        <v-text-field
-          v-model="formData.title.value.value"
-          :error-messages="formData.title.errorMessage.value"
-          clearable
-          label="タイトル"
-          placeholder="タイトルを入力してください"
-        />
-      </div>
+      <template v-if="['new', 'update', 'image', 'caption'].includes(editMode)">
+        <div class="row-wrapper mt-3">
+          <div class="row-field">
+            <v-text-field
+              v-model="formData.title.value.value"
+              :error-messages="formData.title.errorMessage.value"
+              clearable
+              label="タイトル"
+              placeholder="タイトルを入力してください"
+            />
+          </div>
+          <div class="row-field">
+            <v-select
+              v-model="formData.categoryId.value.value"
+              :error-messages="formData.categoryId.errorMessage.value"
+              :items="categorySelectItems"
+              item-title="label"
+              item-value="value"
+              label="カテゴリ"
+            />
+          </div>
+        </div>
+      </template>
+      <template v-else-if="editMode === 'title'">
+        <div class="mt-3">
+          <v-text-field
+            v-model="formData.title.value.value"
+            :error-messages="formData.title.errorMessage.value"
+            clearable
+            label="タイトル"
+            placeholder="タイトルを入力してください"
+          />
+        </div>
+      </template>
       <div v-if="['new', 'update', 'caption'].includes(editMode)" class="mt-3">
         <CommonWysiwygEditor
           v-model="formData.caption.value.value"
@@ -143,8 +170,28 @@ const onCancel = () => {
   min-width: 300px;
   max-width: 840px;
 
+  .row-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    column-gap: 1rem;
+
+    .row-field {
+      width: calc(50% - 0.5rem);
+    }
+  }
+
   @media only screen and (max-width: $grid-breakpoint-sm) {
     width: 75dvw;
+
+    .row-wrapper {
+      flex-flow: column;
+      align-items: stretch;
+      column-gap: normal;
+
+      .row-field {
+        width: auto;
+      }
+    }
   }
 }
 </style>

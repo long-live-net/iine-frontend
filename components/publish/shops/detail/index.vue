@@ -48,6 +48,7 @@ const {
   onGetList: onGetShopList,
   loading: loadingShopList,
 } = useShopListActions(customerId)
+
 filterShop.value = {}
 sortShop.value = { categoryId: 1, position: 1 }
 pagerShop.value = { page: 1, limit: SHOPS_LINIT }
@@ -68,7 +69,7 @@ watch(
     immediate: true,
   }
 )
-const tabItems = computed<UiTabItem[]>(() =>
+const uiCategoryItems = computed<UiTabItem[]>(() =>
   categoryListRef.value.map((c) => ({
     key: c.id,
     label: c.category,
@@ -100,10 +101,7 @@ const nextUrl = computed<string | null>(() => {
 })
 
 const onUpdateData = async (params: { id: string; formData: ShopForm }) => {
-  if (!currentTabCategoryId.value) {
-    return
-  }
-  await onUpdateShop(params.id, currentTabCategoryId.value, params.formData)
+  await onUpdateShop(params)
   onGetShopList()
 }
 const onRemoveData = async (id: string) => {
@@ -139,7 +137,7 @@ const onRemoveData = async (id: string) => {
       <CommonContentTabs
         v-if="categoryListRef.length"
         v-model:tab="currentTabCategoryId"
-        :tab-items="tabItems"
+        :tab-items="uiCategoryItems"
         :can-edit="false"
         :content-title="contentTitleCategory"
       >
@@ -169,6 +167,8 @@ const onRemoveData = async (id: string) => {
     :content-title="contentTitle"
     :edit-mode="editMode"
     :shop-data="shopRef"
+    :current-category-id="currentTabCategoryId"
+    :category-select-items="uiCategoryItems"
     @update="onUpdateData"
     @remove="onRemoveData"
   />

@@ -5,11 +5,6 @@ const apiKind = 'shops'
 export const getShopKind = () => apiKind
 
 const useShopConverters = (customerId: Ref<string | null>) => {
-  const currentCategoryId = ref<string>('')
-  const setCurrentCategoryId = (categoryId: string) => {
-    currentCategoryId.value = categoryId
-  }
-
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
 
   const apiToContent = (apiData?: ShopGetApi | null): ShopType | null =>
@@ -42,7 +37,7 @@ const useShopConverters = (customerId: Ref<string | null>) => {
 
   const formToSaveapi = (formData: ShopForm): ShopSaveApi => ({
     customerId: customerId.value ?? '',
-    categoryId: currentCategoryId.value,
+    categoryId: formData.categoryId,
     title: formData.title,
     titleSettings: { ...formData.titleSettings },
     caption: formData.caption,
@@ -57,7 +52,6 @@ const useShopConverters = (customerId: Ref<string | null>) => {
   })
 
   return {
-    setCurrentCategoryId,
     apiToContent,
     formToSaveapi,
   }
@@ -69,8 +63,7 @@ const useShopConverters = (customerId: Ref<string | null>) => {
  */
 export const useShopListActions = (customerId: Ref<string | null>) => {
   const contentTitle = useGetMenuTitle(apiKind) ?? apiKind
-  const { setCurrentCategoryId, apiToContent, formToSaveapi } =
-    useShopConverters(customerId)
+  const { apiToContent, formToSaveapi } = useShopConverters(customerId)
   const {
     filter,
     sort,
@@ -91,17 +84,17 @@ export const useShopListActions = (customerId: Ref<string | null>) => {
     formToSaveapi
   )
 
-  const onCreateShop = async (categoryId: string, formData: ShopForm) => {
-    setCurrentCategoryId(categoryId)
+  const onCreateShop = async (formData: ShopForm) => {
     await onCreate(formData)
   }
 
-  const onUpdateShop = async (
-    id: string,
-    categoryId: string,
+  const onUpdateShop = async ({
+    id,
+    formData,
+  }: {
+    id: string
     formData: ShopForm
-  ) => {
-    setCurrentCategoryId(categoryId)
+  }) => {
     await onUpdate({ id, formData })
   }
 
@@ -127,8 +120,7 @@ export const useShopListActions = (customerId: Ref<string | null>) => {
  */
 export const useShopActions = (customerId: Ref<string | null>) => {
   const contentTitle = useGetMenuTitle(apiKind) ?? apiKind
-  const { setCurrentCategoryId, apiToContent, formToSaveapi } =
-    useShopConverters(customerId)
+  const { apiToContent, formToSaveapi } = useShopConverters(customerId)
   const {
     contentRef,
     loading,
@@ -146,17 +138,17 @@ export const useShopActions = (customerId: Ref<string | null>) => {
     formToSaveapi
   )
 
-  const onCreateShop = async (categoryId: string, formData: ShopForm) => {
-    setCurrentCategoryId(categoryId)
+  const onCreateShop = async (formData: ShopForm) => {
     await onCreate(formData)
   }
 
-  const onUpdateShop = async (
-    id: string,
-    categoryId: string,
+  const onUpdateShop = async ({
+    id,
+    formData,
+  }: {
+    id: string
     formData: ShopForm
-  ) => {
-    setCurrentCategoryId(categoryId)
+  }) => {
     await onUpdate({ id, formData })
   }
 

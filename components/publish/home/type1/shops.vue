@@ -3,7 +3,6 @@ import type { UiTabItem } from '~/types/ui'
 import type {
   ShopCategoryType,
   ShopType,
-  ShopForm,
   ContentEditMode,
 } from '@/types/content'
 
@@ -68,24 +67,7 @@ const onEditTargetShop = ({
   updatingShop.value = item ?? null
   editModeShop.value = mode
 }
-const onCreateShopData = async (shopForm: ShopForm) => {
-  if (!currentTabCategoryId.value.length) {
-    return
-  }
-  await onCreateShop(currentTabCategoryId.value, shopForm)
-}
-const onUpdateShopData = async ({
-  id,
-  formData,
-}: {
-  id: string
-  formData: ShopForm
-}) => {
-  if (!currentTabCategoryId.value.length) {
-    return
-  }
-  await onUpdateShop(id, currentTabCategoryId.value, formData)
-}
+
 filterShop.value = {}
 sortShop.value = { categoryId: 1, position: 1 }
 pagerShop.value = { page: 1, limit: SHOPS_LINIT }
@@ -104,7 +86,7 @@ const shopListByCategory = computed(
       (s) => currentTabCategoryId.value === s.categoryId
     ) ?? []
 )
-const tabItems = computed<UiTabItem[]>(() =>
+const uiCategoryItems = computed<UiTabItem[]>(() =>
   categoryListRef.value.map((c) => ({
     key: c.id,
     label: c.category,
@@ -164,7 +146,7 @@ watch(
       <CommonContentTabs
         v-if="categoryListRef.length"
         v-model:tab="currentTabCategoryId"
-        :tab-items="tabItems"
+        :tab-items="uiCategoryItems"
         :can-edit="canEdit"
         show-bottom-navi
         content-title="カテゴリ"
@@ -220,8 +202,10 @@ watch(
     :content-title="contentTitleShop"
     :edit-mode="editModeShop"
     :shop-data="updatingShop"
-    @create="onCreateShopData"
-    @update="onUpdateShopData"
+    :current-category-id="currentTabCategoryId"
+    :category-select-items="uiCategoryItems"
+    @create="onCreateShop"
+    @update="onUpdateShop"
     @remove="onRemoveShop"
   />
   <ManageContentShopCategoryPositionSetting

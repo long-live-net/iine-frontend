@@ -223,6 +223,7 @@ export interface MenuImageForm extends ContentForm {
 export type ShopCategoryForm = ContentCategoryForm
 
 export interface ShopForm extends ContentForm {
+  categoryId: string
   image: string
   imageName: string
   imageType: string

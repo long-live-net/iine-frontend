@@ -21,6 +21,8 @@ export const useShopForm = () => {
       if (!maxLength(v, 400)) return '400文字以内で入力してください'
       return true
     },
+    categoryId: (v: string | undefined) =>
+      noBlank(v) || 'カテゴリを設定してください',
     image: (v: string | undefined) =>
       noBlank(v) || 'タイトル画像ファイルを設定してください',
     imageName: () => true,
@@ -34,6 +36,7 @@ export const useShopForm = () => {
     titleSettings: getDefaultTitleSettings(),
     caption: '',
     body: '',
+    categoryId: '',
     image: '',
     imageName: '',
     imageType: '',
@@ -51,6 +54,7 @@ export const useShopForm = () => {
     titleSettings: useField<ShopForm['titleSettings']>('titleSettings'),
     caption: useField<ShopForm['caption']>('caption'),
     body: useField<ShopForm['body']>('body'),
+    categoryId: useField<ShopForm['categoryId']>('categoryId'),
     image: useField<ShopForm['image']>('image'),
     imageName: useField<ShopForm['imageName']>('imageName'),
     imageType: useField<ShopForm['imageType']>('imageType'),
@@ -58,17 +62,26 @@ export const useShopForm = () => {
     position: useField<ShopForm['position']>('position'),
   }
 
-  const resetShopForm = (shopData?: ShopType | null) => {
-    if (!shopData) return
-    formData.title.value.value = shopData?.title ?? ''
+  const resetShopForm = (
+    shopData?: ShopType | null,
+    categoryId?: string | null
+  ) => {
+    if (categoryId) {
+      formData.categoryId.value.value = categoryId
+    }
+    if (!shopData) {
+      return
+    }
+    formData.title.value.value = shopData.title
     formData.titleSettings.value.value = cloneDeep(shopData.titleSettings)
-    formData.caption.value.value = shopData?.caption ?? ''
-    formData.body.value.value = shopData?.body ?? ''
-    formData.image.value.value = shopData?.image?.url ?? ''
-    formData.imageName.value.value = shopData?.image?.name ?? ''
-    formData.imageType.value.value = shopData?.image?.type ?? ''
+    formData.caption.value.value = shopData.caption
+    formData.body.value.value = shopData.body ?? ''
+    formData.categoryId.value.value = categoryId ?? shopData.categoryId
+    formData.image.value.value = shopData.image.url
+    formData.imageName.value.value = shopData.image.name
+    formData.imageType.value.value = shopData.image.type
     formData.imageSettings.value.value = cloneDeep(shopData.imageSettings)
-    formData.position.value.value = shopData?.position ?? 0
+    formData.position.value.value = shopData.position
   }
 
   return {
