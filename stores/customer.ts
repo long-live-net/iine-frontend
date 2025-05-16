@@ -37,7 +37,7 @@ const useCustomerApi = (token: Ref<string | null>) => {
       $fetch(`${endpoint}/customer-url`, {
         baseURL: backendBaseUrl,
         method: 'GET',
-        params: { url: hostname },
+        params: { customerurl: hostname },
       })
     )
     if (error.value) {
