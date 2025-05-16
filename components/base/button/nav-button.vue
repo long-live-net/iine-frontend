@@ -38,6 +38,7 @@ defineEmits<{ click: [] }>()
 
 <style lang="scss" scoped>
 .nav-button {
+  appearance: none;
   display: inline-block;
   position: relative;
   width: v-bind('width');

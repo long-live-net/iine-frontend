@@ -48,6 +48,8 @@
   .g-theme-contents-tabs {
     --tab-selected-background-color: #{variables.$white};
     --tab-button-icon-color: #{variables.$white};
+    --bottom-navi-input: #{variables.$gray-lighten1};
+    --bottom-navi-input-selected: #{variables.$white};
   }
 
   .g-theme-contents-item {

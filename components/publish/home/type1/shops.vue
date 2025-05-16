@@ -166,6 +166,7 @@ watch(
         v-model:tab="currentTabCategoryId"
         :tab-items="tabItems"
         :can-edit="canEdit"
+        show-bottom-navi
         content-title="カテゴリ"
         @edit="onClickTabEdit"
         @delete="onClickTabDelete"
