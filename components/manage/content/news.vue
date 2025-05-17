@@ -23,7 +23,7 @@ const { customerId } = useCustomer()
 const apiKind = getNewsKind()
 
 const { handleSubmit, handleReset, formData, resetNewsForm } = useNewsForm()
-const { categoryItems } = useNewsCategory()
+const categoryItems = ['test', 'nagazumi']
 
 watch(modal, (current) => {
   if (current) {

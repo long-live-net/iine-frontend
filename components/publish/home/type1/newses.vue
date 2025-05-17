@@ -70,9 +70,9 @@ await onLoad()
                   'animation-delay': `${index * 0.1}s`,
                 }"
               >
-                <span>
+                <p>
                   {{ formatLocalDate(content.publishOn, 'YYYY/MM/DD') }}
-                </span>
+                </p>
                 <PublishNewsCategoryBadge
                   :category="content.category"
                   class="ml-2"
@@ -199,10 +199,12 @@ await onLoad()
   padding-left: 1rem;
   gap: 0.5rem;
   &__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0.2rem;
-    text-align: center;
-    width: 14rem;
-    min-width: 14rem;
+    width: 14.5rem;
+    min-width: 14.5rem;
   }
   &__title {
     padding: 0.5rem;

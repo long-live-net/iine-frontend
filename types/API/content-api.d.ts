@@ -5,6 +5,7 @@ import type {
   ImageSettings,
   MenuImageData,
   ContentPosition,
+  NewsCategory,
 } from '@/types/content'
 
 /**
@@ -54,7 +55,7 @@ export interface FeatureGetApi extends ContentGetApi {
   position: number
 }
 export interface NewsGetApi extends ContentGetApi {
-  category: string
+  category: NewsCategory | string
   publishOn: Date
 }
 export interface ContactGetApi extends ContentGetApi {
@@ -140,7 +141,7 @@ export interface FeatureSaveApi extends ContentSaveApi {
   position: number
 }
 export interface NewsSaveApi extends ContentSaveApi {
-  category: string
+  category: NewsCategory
   publishOn: Date
 }
 export interface ContactSaveApi extends ContentSaveApi {

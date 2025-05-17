@@ -25,11 +25,7 @@ export { useFeatureForm } from './use-content/use-feature-form'
 export { useInformationActions } from './use-content/use-information'
 export { useInformationForm } from './use-content/use-information-form'
 
-export {
-  useNewsListActions,
-  useNewsActions,
-  useNewsCategory,
-} from './use-content/use-news'
+export { useNewsListActions, useNewsActions } from './use-content/use-news'
 export { useNewsForm } from './use-content/use-news-form'
 
 export { useMenuListActions, useMenuActions } from './use-content/use-menu'

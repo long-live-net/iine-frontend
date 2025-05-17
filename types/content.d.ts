@@ -71,8 +71,12 @@ export interface ProfileType extends ContentType {
   captionBody: string
 }
 
+export type NewsCategory = {
+  name: string
+  color: string
+}
 export interface NewsType extends ContentType {
-  category: string
+  category: NewsCategory
   publishOn: Date
 }
 
@@ -168,8 +172,9 @@ export interface ProfileForm extends ContentForm {
 }
 
 export interface NewsForm extends ContentForm {
-  category: string | null
-  publishOn: Date | null
+  categoryName: string
+  categoryColor: string
+  publishOn: Date
 }
 
 export interface ServiceForm extends ContentForm {

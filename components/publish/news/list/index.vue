@@ -84,12 +84,12 @@ await onLoad()
           <template #default="{ content }">
             <div class="news-item" :class="{ 'news-item-can-edit': canEdit }">
               <div class="news-item__header g-theme-contents-item__header">
-                <span>
+                <p>
                   {{ formatLocalDate(content.publishOn, 'YYYY/MM/DD') }}
-                </span>
+                </p>
                 <PublishNewsCategoryBadge
                   :category="content.category"
-                  style="margin-left: 0.5rem"
+                  class="ml-2"
                 />
               </div>
               <div class="news-item__title">
@@ -200,10 +200,13 @@ await onLoad()
   padding-left: 1rem;
   gap: 0.5rem;
   &__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0.2rem;
     text-align: center;
-    width: 14rem;
-    min-width: 14rem;
+    width: 14.5rem;
+    min-width: 14.5rem;
   }
   &__title {
     padding: 0.5rem;
