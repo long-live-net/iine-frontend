@@ -150,11 +150,7 @@ export const useNewsActions = (customerId: Ref<string | null>) => {
 }
 
 export const useNewsCategory = () => {
-  const { customerSetting } = useCustomerSetting()
-
-  const categoryItems = computed(
-    () => customerSetting.value?.newsCategories ?? []
-  )
+  const categoryItems = computed(() => [])
   const category2BkColor = [
     '#2962FF',
     '#4CAF50',
