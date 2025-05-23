@@ -54,6 +54,10 @@ export interface FeatureGetApi extends ContentGetApi {
   imageSettings: ImageSettings
   position: number
 }
+
+export interface NewsCategoryGetApi extends ContentCategoryGetApi {
+  color: string
+}
 export interface NewsGetApi extends ContentGetApi {
   category: NewsCategory | string
   publishOn: Date
@@ -139,6 +143,9 @@ export interface FeatureSaveApi extends ContentSaveApi {
   image: ImageData
   imageSettings: ImageSettings
   position: number
+}
+export interface NewsCategorySaveApi extends ContentCategorySaveApi {
+  color: string
 }
 export interface NewsSaveApi extends ContentSaveApi {
   category: NewsCategory

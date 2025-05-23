@@ -24,7 +24,7 @@ const categoryColor = computed(() => getTextColor(props.category.color))
 
 <style lang="scss" scoped>
 .news-badge {
-  width: 6rem;
+  width: 7rem;
   font-size: small;
   font-weight: bold;
   text-align: center;

@@ -75,6 +75,9 @@ export type NewsCategory = {
   name: string
   color: string
 }
+export interface NewsCategoryType extends ContentCategoryType {
+  color: string
+}
 export interface NewsType extends ContentType {
   category: NewsCategory
   publishOn: Date
@@ -154,7 +157,7 @@ export interface ContentForm {
 }
 export interface ContentCategoryForm {
   category: string
-  position: number
+  position?: number
 }
 
 export interface EyecatchForm extends ContentForm {
@@ -171,10 +174,13 @@ export interface ProfileForm extends ContentForm {
   captionBody: string
 }
 
+export interface NewsCategoryForm extends ContentCategoryForm {
+  color: string
+}
 export interface NewsForm extends ContentForm {
   categoryName: string
   categoryColor: string
-  publishOn: Date
+  publishOn: Date | null
 }
 
 export interface ServiceForm extends ContentForm {
@@ -205,7 +211,9 @@ export interface MenuForm extends ContentForm {
   position: number
 }
 
-export type MenuCategoryForm = ContentCategoryForm
+export interface MenuCategoryForm extends ContentCategoryForm {
+  position: number
+}
 
 export interface MenuDetailForm extends ContentForm {
   isHilight?: boolean
@@ -225,7 +233,9 @@ export interface MenuImageForm extends ContentForm {
   menuImageType: string
 }
 
-export type ShopCategoryForm = ContentCategoryForm
+export interface ShopCategoryForm extends ContentCategoryForm {
+  position: number
+}
 
 export interface ShopForm extends ContentForm {
   categoryId: string

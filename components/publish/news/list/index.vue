@@ -89,7 +89,7 @@ await onLoad()
                 </p>
                 <PublishNewsCategoryBadge
                   :category="content.category"
-                  class="ml-2"
+                  class="ml-3"
                 />
               </div>
               <div class="news-item__title">

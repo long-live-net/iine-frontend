@@ -13,7 +13,10 @@ export const useNewsForm = () => {
       return true
     },
     titleSettings: () => true,
-    category: (v: string | null) => noBlank(v) || 'カテゴリを入力してください',
+    categoryName: (v: string | null) =>
+      noBlank(v) || 'カテゴリを入力してください',
+    categoryColor: (v: string | null) =>
+      noBlank(v) || 'カテゴリを入力してください',
     publishOn: (v: Date | null) => required(v) || '公開日を入力してください',
     body: () => true,
     image: () => true,
@@ -24,7 +27,8 @@ export const useNewsForm = () => {
   const newsFormInitial: NewsForm = {
     title: '',
     titleSettings: getDefaultTitleSettings(),
-    category: null,
+    categoryName: '',
+    categoryColor: '',
     publishOn: null,
     body: '',
     image: '',
@@ -41,7 +45,8 @@ export const useNewsForm = () => {
   const formData = {
     title: useField<NewsForm['title']>('title'),
     titleSettings: useField<NewsForm['titleSettings']>('titleSettings'),
-    category: useField<NewsForm['category']>('category'),
+    categoryName: useField<NewsForm['categoryName']>('categoryName'),
+    categoryColor: useField<NewsForm['categoryColor']>('categoryColor'),
     publishOn: useField<NewsForm['publishOn']>('publishOn'),
     body: useField<NewsForm['body']>('body'),
     image: useField<NewsForm['image']>('image'),
@@ -51,11 +56,14 @@ export const useNewsForm = () => {
   }
 
   const resetNewsForm = (newsData?: NewsType | null) => {
-    if (!newsData) return
-    formData.title.value.value = newsData.title ?? ''
+    if (!newsData) {
+      return
+    }
+    formData.title.value.value = newsData.title
     formData.titleSettings.value.value = cloneDeep(newsData.titleSettings)
-    formData.category.value.value = newsData.category ?? null
-    formData.publishOn.value.value = newsData.publishOn ?? null
+    formData.categoryName.value.value = newsData.category.name
+    formData.categoryColor.value.value = newsData.category.color
+    formData.publishOn.value.value = newsData.publishOn
     formData.body.value.value = newsData.body ?? ''
     formData.image.value.value = newsData.image?.url ?? ''
     formData.imageName.value.value = newsData.image?.name ?? ''

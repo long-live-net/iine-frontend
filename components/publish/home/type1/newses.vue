@@ -1,22 +1,55 @@
 <script setup lang="ts">
-import type { NewsType, ContentEditMode } from '@/types/content'
+import type {
+  NewsType,
+  NewsCategoryType,
+  ContentEditMode,
+} from '@/types/content'
 import { formatLocalDate } from '@/utils/misc'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 
+const CATEGORIES_LIMIT = 8 // category は 8 個までに制限
+const NEWSES_LINIT_PER_PAGE = 6 // NEWS はトップページに 6 個まで表示
+
+/**
+ * news category list
+ */
+const editCategoryModal = ref(false)
+const updatingCategory = ref<NewsCategoryType | null>(null)
+const editModeCategory = ref<ContentEditMode>('update')
+const editCategoryManager = ref(false)
 const {
-  contentTitle,
-  filter,
-  sort,
-  pager,
+  contentTitle: contentTitleCategory,
+  filter: fIlterCategory,
+  sort: sortCategory,
+  pager: pagerCategory,
+  newsCategoryListRef: categoryListRef,
+  onLoad: onLoadCategoryList,
+  onCreate: onCreateCategory,
+  onUpdate: onUpdateCategory,
+  onRemove: onRemoveCategory,
+  loading: loadingCategoryList,
+} = useNewsCategoryListActions(customerId)
+fIlterCategory.value = {}
+sortCategory.value = { position: 1 }
+pagerCategory.value = { page: 1, limit: CATEGORIES_LIMIT }
+
+/**
+ * News List
+ */
+const {
+  contentTitle: contentTitleNews,
+  filter: filterNews,
+  sort: sortNews,
+  pager: pagerNews,
   newsListRef,
-  onLoad,
-  onGetList,
-  onCreate,
-  onUpdate,
-  onRemove,
-  loading,
+  onLoad: onLoadNews,
+  onGetList: onGetNews,
+  onCreate: onCeateNews,
+  onUpdate: onUpdateNews,
+  onRemove: onRemoveNews,
+  loading: loadingNewsList,
 } = useNewsListActions(customerId)
 
 const editModal = ref(false)
@@ -24,13 +57,13 @@ const updatingData = ref<NewsType | null>(null)
 const editMode = ref<ContentEditMode>('update')
 
 const isWholeData = ref(false)
-filter.value = { publishOn: true }
-sort.value = { publishOn: -1 }
-pager.value = { page: 1, limit: 6 }
+filterNews.value = { publishOn: true }
+sortNews.value = { publishOn: -1 }
+pagerNews.value = { page: 1, limit: NEWSES_LINIT_PER_PAGE }
 
 const getNewses = async () => {
-  filter.value = { publishOn: !isWholeData.value }
-  await onGetList()
+  filterNews.value = { publishOn: !isWholeData.value }
+  await onGetNews()
 }
 watch(isWholeData, async () => {
   await getNewses()
@@ -42,11 +75,32 @@ const onIntersectImage = async (isIntersecting: boolean) => {
     isAppear.value = isIntersecting
   }
 }
-await onLoad()
+
+const loading = computed(
+  () => loadingCategoryList.value || loadingNewsList.value
+)
+await Promise.all([onLoadCategoryList(), onLoadNews()])
 </script>
 
 <template>
   <CommonContentWrap :loading="loading">
+    <div v-if="canEdit" class="news-category-actions">
+      <BaseActivator
+        v-model:modal="editCategoryModal"
+        activator-text="カテゴリ追加"
+        activator-icon="mdi-plus"
+        activator-size="small"
+        activator-color="info"
+        @update:modal="((updatingCategory = null), (editModeCategory = 'new'))"
+      />
+      <BaseActivator
+        v-model:modal="editCategoryManager"
+        activator-text="カテゴリ管理"
+        activator-icon="mdi-pencil"
+        activator-size="small"
+        activator-color="info"
+      />
+    </div>
     <CommonContentCard class="type1-news-list">
       <CommonContentCardBody>
         <CommonContentList
@@ -75,7 +129,7 @@ await onLoad()
                 </p>
                 <PublishNewsCategoryBadge
                   :category="content.category"
-                  class="ml-2"
+                  class="ml-3"
                 />
               </div>
               <div
@@ -96,7 +150,7 @@ await onLoad()
                 <div class="activators">
                   <CommonContentEditActivator
                     v-model:modal="editModal"
-                    :content-title="contentTitle"
+                    :content-title="contentTitleNews"
                     edit-mode="caption"
                     size="x-small"
                     no-tooltip
@@ -106,7 +160,7 @@ await onLoad()
                   />
                   <CommonContentEditActivator
                     v-model:modal="editModal"
-                    :content-title="contentTitle"
+                    :content-title="contentTitleNews"
                     edit-mode="delete"
                     size="x-small"
                     no-tooltip
@@ -124,12 +178,12 @@ await onLoad()
           <div v-if="canEdit" class="d-flex align-center">
             <CommonContentEditActivator
               v-model:modal="editModal"
-              :content-title="contentTitle"
+              :content-title="contentTitleNews"
               edit-mode="new"
               @update:modal="((updatingData = null), (editMode = 'new'))"
             />
             <p class="ml-2">
-              このボタンから{{ contentTitle }}を登録してください。
+              このボタンから{{ contentTitleNews }}を登録してください。
             </p>
           </div>
         </div>
@@ -145,25 +199,58 @@ await onLoad()
       <div v-if="canEdit && newsListRef?.length" class="create-activator">
         <CommonContentEditActivator
           v-model:modal="editModal"
-          :content-title="contentTitle"
+          :content-title="contentTitleNews"
           edit-mode="new"
           @update:modal="((updatingData = null), (editMode = 'new'))"
         />
       </div>
     </CommonContentCard>
   </CommonContentWrap>
+  <ManageContentNewsCategoryManager
+    v-model:modal="editCategoryManager"
+    :content-title="contentTitleCategory"
+    :news-categories="categoryListRef"
+    @update="
+      ((updatingCategory = $event),
+      (editModeCategory = 'update'),
+      (editCategoryModal = true))
+    "
+    @delete="
+      ((updatingCategory = $event),
+      (editModeCategory = 'delete'),
+      (editCategoryModal = true))
+    "
+  />
+  <ManageContentNewsCategory
+    v-model:modal="editCategoryModal"
+    :content-title="contentTitleCategory"
+    :edit-mode="editModeCategory"
+    :news-category-data="updatingCategory"
+    @create="onCreateCategory"
+    @update="onUpdateCategory"
+    @remove="onRemoveCategory"
+  />
   <ManageContentNews
     v-model:modal="editModal"
-    :content-title="contentTitle"
+    :content-title="contentTitleNews"
     :edit-mode="editMode"
     :news-data="updatingData"
-    @create="onCreate"
-    @update="onUpdate"
-    @remove="onRemove"
+    :news-categories="categoryListRef"
+    @create="onCeateNews"
+    @update="onUpdateNews"
+    @remove="onRemoveNews"
   />
 </template>
 
 <style lang="scss" scoped>
+.news-category-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0;
+}
+
 .type1-news-list {
   position: relative;
   min-height: 16rem;

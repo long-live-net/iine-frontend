@@ -1,5 +1,14 @@
 <script setup lang="ts">
 const color = defineModel<string>('color', { required: true })
+withDefaults(
+  defineProps<{
+    swatches?: string[][]
+  }>(),
+  {
+    swatches: undefined,
+  }
+)
+
 const pickerColor = computed<string>({
   get: () => (color.value === 'transparent' ? '#FFFFFF00' : color.value),
   set: (col: string) => {
@@ -15,7 +24,8 @@ const pickerColor = computed<string>({
       hide-canvas
       hide-inputs
       show-swatches
-      :swatches-max-height="120"
+      :swatches="swatches"
+      :swatches-max-height="188"
     />
   </div>
 </template>
