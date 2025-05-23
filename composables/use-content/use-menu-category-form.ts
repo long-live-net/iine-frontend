@@ -10,7 +10,7 @@ export const useMenuCategoryForm = () => {
   const menuCategoryFormSchema = {
     category: (v: string | undefined) => {
       if (!noBlank(v)) return 'メニューカテゴリ名を入力してください'
-      if (!maxLength(v, 40)) return '40文字以内で入力してください'
+      if (!maxLength(v, 30)) return '30文字以内で入力してください'
       return true
     },
     position: () => true,

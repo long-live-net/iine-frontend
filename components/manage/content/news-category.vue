@@ -81,6 +81,7 @@ const sampleCategory = computed<NewsCategory>(() => ({
     v-model:modal="modal"
     :content-title="contentTitle"
     :edit-mode="editMode"
+    :persistent="false"
   >
     <v-form class="news-detail-form">
       <div class="mt-6">
