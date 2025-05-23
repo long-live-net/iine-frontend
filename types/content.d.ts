@@ -269,3 +269,4 @@ export type ContentEditMode =
   | 'body'
   | 'caption'
   | 'captionBody'
+  | 'maximumLimit' // new しようとしたが登録数上限に達している場合

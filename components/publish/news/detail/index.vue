@@ -1,10 +1,30 @@
 <script setup lang="ts">
 import type { ContentEditMode } from '@/types/content'
 import { formatLocalDate } from '@/utils/misc'
+import { getNewsCategoryMaximumLimit } from '~/composables/use-content/use-news-category'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
+const CATEGORIES_LIMIT = getNewsCategoryMaximumLimit()
 
+/**
+ * news category list
+ */
+const {
+  filter: fIlterCategory,
+  sort: sortCategory,
+  pager: pagerCategory,
+  newsCategoryListRef: categoryListRef,
+  onLoad: onLoadCategoryList,
+  loading: loadingCategoryList,
+} = useNewsCategoryListActions(customerId)
+fIlterCategory.value = {}
+sortCategory.value = { position: 1 }
+pagerCategory.value = { page: 1, limit: CATEGORIES_LIMIT }
+
+/**
+ * News Detail
+ */
 const route = useRoute()
 const contentId = Array.isArray(route.params.id)
   ? route.params.id[0]
@@ -37,7 +57,10 @@ const editMode = ref<ContentEditMode>('update')
 const bodyPlainString = computed(
   () => newsRef.value?.body?.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '') ?? ''
 )
-const loading = computed(() => detailLoading.value || listLoading.value)
+const loading = computed(
+  () => detailLoading.value || listLoading.value || loadingCategoryList.value
+)
+
 const preUrl = computed<string | null>(() => {
   const curIndex = newsListRef.value?.findIndex((c) => c.id === contentId) ?? -1
   const preId = newsListRef.value?.[curIndex + 1]?.id
@@ -52,7 +75,7 @@ const nextUrl = computed<string | null>(() => {
 filter.value = { publishOn: true }
 sort.value = { publishOn: -1 }
 pager.value = { page: 1, limit: 1024 }
-await Promise.all([onDetailLoad(contentId), onListLoad()])
+await Promise.all([onDetailLoad(contentId), onListLoad(), onLoadCategoryList()])
 </script>
 
 <template>
@@ -111,6 +134,7 @@ await Promise.all([onDetailLoad(contentId), onListLoad()])
     :content-title="contentTitle"
     :edit-mode="editMode"
     :news-data="newsRef"
+    :news-categories="categoryListRef"
     @create="onCreate"
     @update="onUpdate"
     @remove="onRemove"

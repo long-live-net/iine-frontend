@@ -7,6 +7,9 @@ import type {
 const apiKind = 'news-categories'
 export const getNewsCategoryKind = () => apiKind
 
+const MAXIMUM_LIMIT_OF_CONTENTS = 20 // News Category の登録上限数
+export const getNewsCategoryMaximumLimit = () => MAXIMUM_LIMIT_OF_CONTENTS
+
 const useNewsCategoryConverters = (customerId: Ref<string | null>) => {
   const apiToContent = (
     apiData?: NewsCategoryGetApi | null
@@ -58,6 +61,10 @@ export const useNewsCategoryListActions = (customerId: Ref<string | null>) => {
     NewsCategorySaveApi
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
+  const isMaximumLimit = computed(
+    () => (listRef.value?.length ?? 0) >= MAXIMUM_LIMIT_OF_CONTENTS
+  )
+
   return {
     contentTitle,
     filter,
@@ -72,5 +79,6 @@ export const useNewsCategoryListActions = (customerId: Ref<string | null>) => {
     onRemove,
     onUpdatePositions,
     loading,
+    isMaximumLimit,
   }
 }

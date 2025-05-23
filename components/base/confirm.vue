@@ -8,6 +8,7 @@ withDefaults(
     message: string
     execText?: string
     cancelText?: string
+    noCancel?: boolean
     loading?: boolean
     width?: string
     maxWidth?: string
@@ -19,6 +20,7 @@ withDefaults(
     titleColor: 'info',
     execText: '実行する',
     cancelText: 'キャンセル',
+    noCancel: false,
     loading: false,
     width: '80%',
     maxWidth: '480px',
@@ -54,6 +56,7 @@ defineEmits<{
             >{{ execText }}</v-btn
           >
           <v-btn
+            v-if="!noCancel"
             color="secondary"
             class="action-button"
             @click="$emit('cancel')"

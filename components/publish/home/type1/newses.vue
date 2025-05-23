@@ -5,11 +5,11 @@ import type {
   ContentEditMode,
 } from '@/types/content'
 import { formatLocalDate } from '@/utils/misc'
+import { getNewsCategoryMaximumLimit } from '~/composables/use-content/use-news-category'
 
 const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
-
-const CATEGORIES_LIMIT = 8 // category は 8 個までに制限
+const CATEGORIES_LIMIT = getNewsCategoryMaximumLimit()
 const NEWSES_LINIT_PER_PAGE = 6 // NEWS はトップページに 6 個まで表示
 
 /**
@@ -30,10 +30,20 @@ const {
   onUpdate: onUpdateCategory,
   onRemove: onRemoveCategory,
   loading: loadingCategoryList,
+  isMaximumLimit: isMaximumLimitCategoryList,
 } = useNewsCategoryListActions(customerId)
 fIlterCategory.value = {}
 sortCategory.value = { position: 1 }
 pagerCategory.value = { page: 1, limit: CATEGORIES_LIMIT }
+
+const onCreatingNewsCategory = () => {
+  updatingCategory.value = null
+  if (isMaximumLimitCategoryList.value) {
+    editModeCategory.value = 'maximumLimit'
+  } else {
+    editModeCategory.value = 'new'
+  }
+}
 
 /**
  * News List
@@ -91,7 +101,7 @@ await Promise.all([onLoadCategoryList(), onLoadNews()])
         activator-icon="mdi-plus"
         activator-size="small"
         activator-color="info"
-        @update:modal="((updatingCategory = null), (editModeCategory = 'new'))"
+        @update:modal="onCreatingNewsCategory"
       />
       <BaseActivator
         v-model:modal="editCategoryManager"

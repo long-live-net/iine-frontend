@@ -32,7 +32,6 @@ watch(modal, (current) => {
     resetNewsCategoryForm(props.newsCategoryData)
   }
 })
-// const pickerMenu = ref(false)
 
 const onCreate = handleSubmit((NewsCategoryForm) => {
   emit('create', NewsCategoryForm)
@@ -75,6 +74,13 @@ const sampleCategory = computed<NewsCategory>(() => ({
     :content-title="contentTitle"
     @cancel="modal = false"
     @confirm="onRemove"
+  />
+  <CommonContentAlertConfirm
+    v-else-if="editMode === 'maximumLimit'"
+    v-model:comfirm="modal"
+    title="これ以上登録できません"
+    message="news カテゴリの登録上限数に達しています。"
+    @confirm="modal = false"
   />
   <CommonContentEditDialog
     v-else
