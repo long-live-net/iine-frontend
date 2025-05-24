@@ -95,7 +95,7 @@ const onCancel = () => {
           :api-kind="apiKind"
         />
       </div>
-      <template v-if="['new', 'update', 'image', 'caption'].includes(editMode)">
+      <template v-if="['new', 'update', 'caption'].includes(editMode)">
         <div class="row-wrapper mt-3">
           <div class="row-field">
             <v-text-field
@@ -118,7 +118,7 @@ const onCancel = () => {
           </div>
         </div>
       </template>
-      <template v-else-if="editMode === 'title'">
+      <template v-else-if="['title', 'image'].includes(editMode)">
         <div class="mt-3">
           <v-text-field
             v-model="formData.title.value.value"
@@ -126,6 +126,18 @@ const onCancel = () => {
             clearable
             label="タイトル"
             placeholder="タイトルを入力してください"
+          />
+        </div>
+      </template>
+      <template v-else-if="['body'].includes(editMode)">
+        <div class="mt-3">
+          <v-select
+            v-model="formData.categoryId.value.value"
+            :error-messages="formData.categoryId.errorMessage.value"
+            :items="categorySelectItems"
+            item-title="label"
+            item-value="value"
+            label="カテゴリ"
           />
         </div>
       </template>

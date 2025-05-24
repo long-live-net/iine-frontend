@@ -10,7 +10,7 @@ export const useShopCategoryForm = () => {
   const shopCategoryFormSchema = {
     category: (v: string | undefined) => {
       if (!noBlank(v)) return 'カテゴリ名を入力してください'
-      if (!maxLength(v, 40)) return '40文字以内で入力してください'
+      if (!maxLength(v, 15)) return '15文字以内で入力してください'
       return true
     },
     position: () => true,

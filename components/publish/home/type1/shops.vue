@@ -10,7 +10,7 @@ const { customerId } = useCustomer()
 const { canEdit } = useCustomerPageContext()
 
 const CATEGORIES_LIMIT = 8 // category は 8 個までに制限
-const SHOPS_LINIT = 128 // 店舗は 128 個までに制限
+const SHOPS_LINIT = 256 // 店舗は 256 個までに制限
 
 /**
  * shop category list

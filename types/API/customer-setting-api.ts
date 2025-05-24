@@ -12,7 +12,6 @@ export type CustomerSettingApi = {
   id: string
   customerId: string
   availContentsKind: string[]
-  newsCategories: string[]
   pageTitle: PageTitle
   fontFamily?: string | null
   textColor?: string | null

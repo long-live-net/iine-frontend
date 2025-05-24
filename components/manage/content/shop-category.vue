@@ -74,6 +74,7 @@ const onCancel = () => {
     v-model:modal="modal"
     :content-title="contentTitle"
     :edit-mode="editMode"
+    :persistent="false"
   >
     <v-form class="shop-detail-form">
       <div class="mt-3">
@@ -81,6 +82,7 @@ const onCancel = () => {
           v-model="formData.category.value.value"
           :error-messages="formData.category.errorMessage.value"
           clearable
+          counter
           label="カテゴリ名"
           placeholder="カテゴリ名を入力してください"
         />
@@ -98,12 +100,7 @@ const onCancel = () => {
 
 <style lang="scss" scoped>
 .shop-detail-form {
-  width: 60dvw;
-  min-width: 300px;
-  max-width: 840px;
-
-  @media only screen and (max-width: $grid-breakpoint-sm) {
-    width: 75dvw;
-  }
+  width: 480px;
+  max-width: 98%;
 }
 </style>

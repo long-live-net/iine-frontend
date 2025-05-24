@@ -21,6 +21,7 @@ onMounted(() => {
 })
 watch(datepickerValue, () => {
   emit('update:modelValue', datepickerValue.value)
+  datepickerMenu.value = false
 })
 
 const formattedDate = computed(() =>

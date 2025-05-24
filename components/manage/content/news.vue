@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import type { NewsType, NewsForm, ContentEditMode } from '@/types/content'
+import type {
+  NewsType,
+  NewsCategoryType,
+  NewsForm,
+  ContentEditMode,
+} from '@/types/content'
 import { getNewsKind } from '@/composables/use-content/use-news'
 
 const modal = defineModel<boolean>('modal', { required: true })
@@ -8,9 +13,11 @@ const props = withDefaults(
     contentTitle: string
     editMode: ContentEditMode
     newsData?: NewsType | null
+    newsCategories?: NewsCategoryType[]
   }>(),
   {
     newsData: null,
+    newsCategories: () => [],
   }
 )
 const emit = defineEmits<{
@@ -21,9 +28,19 @@ const emit = defineEmits<{
 
 const { customerId } = useCustomer()
 const apiKind = getNewsKind()
-
 const { handleSubmit, handleReset, formData, resetNewsForm } = useNewsForm()
-const { categoryItems } = useNewsCategory()
+const selectedCategory = computed<NewsCategoryType | null>({
+  get: () =>
+    props.newsCategories.find(
+      (c) =>
+        formData.categoryName.value.value === c.category &&
+        formData.categoryColor.value.value === c.color
+    ) ?? null,
+  set: (category) => {
+    formData.categoryName.value.value = category?.category ?? ''
+    formData.categoryColor.value.value = category?.color ?? ''
+  },
+})
 
 watch(modal, (current) => {
   if (current) {
@@ -107,10 +124,13 @@ const onCancel = () => {
         <div class="row-wrapper mt-3">
           <div class="row-field">
             <v-select
-              v-model="formData.category.value.value"
-              :error-messages="formData.category.errorMessage.value"
-              :items="categoryItems"
+              v-model="selectedCategory"
+              :error-messages="formData.categoryName.errorMessage.value"
+              :items="newsCategories"
+              item-title="category"
+              item-value="id"
               label="カテゴリ"
+              return-object
             />
           </div>
           <div class="row-field">

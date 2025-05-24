@@ -81,6 +81,7 @@ const onCancel = () => {
           v-model="formData.category.value.value"
           :error-messages="formData.category.errorMessage.value"
           clearable
+          counter
           label="メニューカテゴリー名"
           placeholder="カテゴリー名を入力してください"
         />
@@ -98,12 +99,7 @@ const onCancel = () => {
 
 <style lang="scss" scoped>
 .menu-detail-form {
-  width: 60dvw;
-  min-width: 300px;
-  max-width: 840px;
-
-  @media only screen and (max-width: $grid-breakpoint-sm) {
-    width: 75dvw;
-  }
+  width: 580px;
+  max-width: 98%;
 }
 </style>

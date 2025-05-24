@@ -1,4 +1,4 @@
-import type { NewsType, NewsForm } from '@/types/content'
+import type { NewsType, NewsForm, NewsCategory } from '@/types/content'
 import type { NewsGetApi, NewsSaveApi } from '@/types/API/content-api'
 
 const apiKind = 'newses'
@@ -6,6 +6,11 @@ export const getNewsKind = () => apiKind
 
 const useNewsConverters = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
+
+  // category が元々 string だったので、元データを取り扱えるようにする
+  const isCategoryString = (
+    category: NewsCategory | string
+  ): category is string => typeof category === 'string'
 
   const apiToContent = (apiData?: NewsGetApi | null): NewsType | null =>
     apiData
@@ -17,7 +22,14 @@ const useNewsConverters = (customerId: Ref<string | null>) => {
             ...getDefaultTitleSettings(),
             ...(apiData.titleSettings ? apiData.titleSettings : {}),
           },
-          category: apiData.category,
+          // category が元々 string だったので、元データを取り扱えるようにする
+          category: isCategoryString(apiData.category)
+            ? {
+                name: apiData.category,
+                // name: 'aaaaあいあいあいあいあ',
+                color: '#EF3038',
+              }
+            : apiData.category,
           publishOn: apiData.publishOn,
           body: apiData.body ?? '',
           ...(apiData.image
@@ -46,7 +58,10 @@ const useNewsConverters = (customerId: Ref<string | null>) => {
     customerId: customerId.value ?? '',
     title: formData.title,
     titleSettings: { ...formData.titleSettings },
-    category: formData.category ?? 'I',
+    category: {
+      name: formData.categoryName,
+      color: formData.categoryColor,
+    },
     publishOn: formData.publishOn ?? localDate(),
     body: formData.body ?? '',
     ...(formData.image && formData.imageName && formData.imageType
@@ -146,44 +161,5 @@ export const useNewsActions = (customerId: Ref<string | null>) => {
     onRemove,
     onUpdateTitleSetting,
     onUpdateImageSetting,
-  }
-}
-
-export const useNewsCategory = () => {
-  const { customerSetting } = useCustomerSetting()
-
-  const categoryItems = computed(
-    () => customerSetting.value?.newsCategories ?? []
-  )
-  const category2BkColor = [
-    '#2962FF',
-    '#4CAF50',
-    '#FFEA00',
-    '#E53935',
-    '#ECEFF1',
-    '#AA00FF',
-  ]
-  const category2Color = ['white', 'white', 'black', 'white', 'black', 'white']
-
-  const getCategory2BkColor = (category: string) => {
-    const index = Math.abs(
-      categoryItems.value.findIndex((c) => c === category) %
-        category2BkColor.length
-    )
-    return category2BkColor[index]
-  }
-
-  const getCategory2Color = (category: string) => {
-    const index = Math.abs(
-      categoryItems.value.findIndex((c) => c === category) %
-        category2Color.length
-    )
-    return category2Color[index]
-  }
-
-  return {
-    categoryItems,
-    getCategory2BkColor,
-    getCategory2Color,
   }
 }

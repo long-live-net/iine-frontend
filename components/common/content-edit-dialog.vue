@@ -2,11 +2,18 @@
 import type { ContentEditMode } from '@/types/content'
 
 const modal = defineModel<boolean>('modal', { required: true })
-const props = defineProps<{
-  editMode: ContentEditMode
-  contentTitle: string
-  loading?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    editMode: ContentEditMode
+    contentTitle: string
+    persistent?: boolean
+    loading?: boolean
+  }>(),
+  {
+    persistent: true,
+    loading: false,
+  }
+)
 
 const titleText = computed(() =>
   props.editMode === 'new'
@@ -40,7 +47,7 @@ const titleColor = computed(() =>
     :title="titleLabel"
     :title-icon="titleIcon"
     :title-icon-color="titleColor"
-    persistent
+    :persistent="persistent"
   >
     <CommonContentWrap :loading="loading">
       <slot />
