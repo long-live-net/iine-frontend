@@ -32,10 +32,20 @@ const {
   onRemove: onRemoveCategory,
   onUpdatePositions: onUpdatePositionsCategory,
   loading: loadingCategoryList,
+  isMaximumLimit: isMaximumLimitCategoryList,
 } = useShopCategoryListActions(customerId)
 fIlterCategory.value = {}
 sortCategory.value = { position: 1 }
 pagerCategory.value = { page: 1, limit: CATEGORIES_LIMIT }
+
+const onCreatingShopCategory = () => {
+  updatingCategory.value = null
+  if (isMaximumLimitCategoryList.value) {
+    editModeCategory.value = 'maximumLimit'
+  } else {
+    editModeCategory.value = 'new'
+  }
+}
 
 /**
  * shop list
@@ -132,7 +142,7 @@ watch(
         activator-icon="mdi-plus"
         activator-size="small"
         activator-color="info"
-        @update:modal="((updatingCategory = null), (editModeCategory = 'new'))"
+        @update:modal="onCreatingShopCategory"
       />
       <BaseActivator
         v-model:modal="editCategoryPositionModal"

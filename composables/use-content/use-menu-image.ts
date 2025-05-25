@@ -4,6 +4,9 @@ import type { MenuImageGetApi, MenuImageSaveApi } from '@/types/API/content-api'
 const apiKind = 'menu-images'
 export const getMenuImageKind = () => apiKind
 
+const MAXIMUM_LIMIT_OF_CONTENTS = 36 // Menu Image の登録上限数
+export const getMenuImageMaximumLimit = () => MAXIMUM_LIMIT_OF_CONTENTS
+
 const useMenuImageConverters = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
 
@@ -75,6 +78,7 @@ export const useMenuImageListActions = (customerId: Ref<string | null>) => {
     sort,
     pager,
     listRef,
+    totalRef,
     onLoad,
     onCreate,
     onUpdate,
@@ -88,6 +92,10 @@ export const useMenuImageListActions = (customerId: Ref<string | null>) => {
     MenuImageSaveApi
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
+  const isMaximumLimit = computed(
+    () => (totalRef.value ?? 0) >= MAXIMUM_LIMIT_OF_CONTENTS
+  )
+
   return {
     contentTitle,
     filter,
@@ -100,5 +108,6 @@ export const useMenuImageListActions = (customerId: Ref<string | null>) => {
     onRemove,
     onUpdatePositions,
     loading,
+    isMaximumLimit,
   }
 }

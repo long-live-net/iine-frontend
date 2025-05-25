@@ -61,6 +61,7 @@ const {
   onRemove: onDeleteCategory,
   onUpdatePositions: onUpdatePositionsCategory,
   loading: loadingCategory,
+  isMaximumLimit: isMaximumLimitCategory,
 } = useMenuCategoryListActions(customerId)
 
 filterCategory.value = { menuId }
@@ -90,6 +91,14 @@ const onSelectMenuCategory = (value: number | string) => {
     case 'orderMenuCategory':
       editCategoryPositionModal.value = true
       break
+  }
+}
+const onCreatingCategory = () => {
+  updatingCategory.value = null
+  if (isMaximumLimitCategory.value) {
+    editModeCategory.value = 'maximumLimit'
+  } else {
+    editModeCategory.value = 'new'
   }
 }
 
@@ -177,9 +186,7 @@ await Promise.all([onLoadCategory(), onLoadDetail()])
               activator-icon="mdi-plus"
               activator-size="small"
               activator-color="info"
-              @update:modal="
-                ((updatingCategory = null), (editModeCategory = 'new'))
-              "
+              @update:modal="onCreatingCategory"
             />
             <BaseActivator
               v-model:modal="editCategoryPositionModal"

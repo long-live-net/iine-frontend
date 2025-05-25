@@ -4,6 +4,9 @@ import type { ServiceGetApi, ServiceSaveApi } from '@/types/API/content-api'
 const apiKind = 'services'
 export const getServiceKind = () => apiKind
 
+const MAXIMUM_LIMIT_OF_CONTENTS = 36 // Service の登録上限数
+export const getServiceMaximumLimit = () => MAXIMUM_LIMIT_OF_CONTENTS
+
 const useServiceConverters = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
 
@@ -64,6 +67,7 @@ export const useServiceListActions = (customerId: Ref<string | null>) => {
     sort,
     pager,
     listRef,
+    totalRef,
     onLoad,
     onGetList,
     onCreate,
@@ -78,6 +82,10 @@ export const useServiceListActions = (customerId: Ref<string | null>) => {
     ServiceSaveApi
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
+  const isMaximumLimit = computed(
+    () => (totalRef.value ?? 0) >= MAXIMUM_LIMIT_OF_CONTENTS
+  )
+
   return {
     contentTitle,
     filter,
@@ -91,6 +99,7 @@ export const useServiceListActions = (customerId: Ref<string | null>) => {
     onRemove,
     onUpdatePositions,
     loading,
+    isMaximumLimit,
   }
 }
 

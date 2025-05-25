@@ -17,7 +17,7 @@ defineEmits<{ confirm: [] }>()
     exec-text="了解"
     no-cancel
     width="80%"
-    max-width="400px"
+    max-width="500px"
     @confirm="$emit('confirm')"
   />
 </template>

@@ -62,7 +62,7 @@ export const useNewsCategoryListActions = (customerId: Ref<string | null>) => {
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
   const isMaximumLimit = computed(
-    () => (listRef.value?.length ?? 0) >= MAXIMUM_LIMIT_OF_CONTENTS
+    () => (totalRef.value ?? 0) >= MAXIMUM_LIMIT_OF_CONTENTS
   )
 
   return {

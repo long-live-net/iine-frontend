@@ -78,6 +78,13 @@ const onCancel = () => {
     @cancel="modal = false"
     @confirm="onRemove"
   />
+  <CommonContentAlertConfirm
+    v-else-if="editMode === 'maximumLimit'"
+    v-model:comfirm="modal"
+    title="これ以上登録できません"
+    :message="`${contentTitle}の登録上限数に達しています。`"
+    @confirm="modal = false"
+  />
   <CommonContentEditDialog
     v-else
     v-model:modal="modal"
