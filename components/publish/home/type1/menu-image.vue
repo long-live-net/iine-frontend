@@ -15,6 +15,7 @@ const {
   onRemove,
   onUpdatePositions,
   loading,
+  isMaximumLimit,
 } = useMenuImageListActions(customerId)
 
 const imageViewModal = ref(false)
@@ -43,7 +44,8 @@ const onEditTarget = ({
   mode: ContentEditMode
 }) => {
   updatingData.value = item ?? null
-  editMode.value = mode
+  editMode.value =
+    mode === 'new' && isMaximumLimit.value ? 'maximumLimit' : mode
 }
 
 filter.value = {}

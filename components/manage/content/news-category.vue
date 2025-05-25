@@ -79,7 +79,7 @@ const sampleCategory = computed<NewsCategory>(() => ({
     v-else-if="editMode === 'maximumLimit'"
     v-model:comfirm="modal"
     title="これ以上登録できません"
-    message="news カテゴリの登録上限数に達しています。"
+    :message="`${contentTitle}の登録上限数に達しています。`"
     @confirm="modal = false"
   />
   <CommonContentEditDialog

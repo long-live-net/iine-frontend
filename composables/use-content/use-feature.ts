@@ -4,6 +4,9 @@ import type { FeatureGetApi, FeatureSaveApi } from '@/types/API/content-api'
 const apiKind = 'features'
 export const getFeatureKind = () => apiKind
 
+const MAXIMUM_LIMIT_OF_CONTENTS = 36 // Feature の登録上限数
+export const getFeatureMaximumLimit = () => MAXIMUM_LIMIT_OF_CONTENTS
+
 const useFeatureConverters = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
 
@@ -64,6 +67,7 @@ export const useFeatureListActions = (customerId: Ref<string | null>) => {
     sort,
     pager,
     listRef,
+    totalRef,
     onLoad,
     onGetList,
     onCreate,
@@ -78,6 +82,10 @@ export const useFeatureListActions = (customerId: Ref<string | null>) => {
     FeatureSaveApi
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
+  const isMaximumLimit = computed(
+    () => (totalRef.value ?? 0) >= MAXIMUM_LIMIT_OF_CONTENTS
+  )
+
   return {
     contentTitle,
     filter,
@@ -91,6 +99,7 @@ export const useFeatureListActions = (customerId: Ref<string | null>) => {
     onRemove,
     onUpdatePositions,
     loading,
+    isMaximumLimit,
   }
 }
 

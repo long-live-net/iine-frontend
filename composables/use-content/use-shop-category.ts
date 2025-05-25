@@ -7,6 +7,9 @@ import type {
 const apiKind = 'shop-categories'
 export const getShopCategoryKind = () => apiKind
 
+const MAXIMUM_LIMIT_OF_CONTENTS = 20 // Shop Category の登録上限数
+export const getShopCategoryMaximumLimit = () => MAXIMUM_LIMIT_OF_CONTENTS
+
 const useShopCategoryConverters = (customerId: Ref<string | null>) => {
   const apiToContent = (
     apiData?: ShopCategoryGetApi | null
@@ -56,6 +59,10 @@ export const useShopCategoryListActions = (customerId: Ref<string | null>) => {
     ShopCategorySaveApi
   >(apiKind, contentTitle, customerId, apiToContent, formToSaveapi)
 
+  const isMaximumLimit = computed(
+    () => (totalRef.value ?? 0) >= MAXIMUM_LIMIT_OF_CONTENTS
+  )
+
   return {
     contentTitle,
     filter,
@@ -70,5 +77,6 @@ export const useShopCategoryListActions = (customerId: Ref<string | null>) => {
     onRemove,
     onUpdatePositions,
     loading,
+    isMaximumLimit,
   }
 }

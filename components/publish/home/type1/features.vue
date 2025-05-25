@@ -15,6 +15,7 @@ const {
   onRemove,
   onUpdatePositions,
   loading,
+  isMaximumLimit,
 } = useFeatureListActions(customerId)
 
 const editModal = ref(false)
@@ -28,7 +29,8 @@ const onEditTarget = ({
   mode: ContentEditMode
 }) => {
   updatingData.value = item ?? null
-  editMode.value = mode
+  editMode.value =
+    mode === 'new' && isMaximumLimit.value ? 'maximumLimit' : mode
 }
 
 filter.value = {}

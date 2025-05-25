@@ -4,6 +4,9 @@ import type { MenuGetApi, MenuSaveApi } from '@/types/API/content-api'
 const apiKind = 'menus'
 export const getMenuKind = () => apiKind
 
+const MAXIMUM_LIMIT_OF_CONTENTS = 36 // Menu の登録上限数
+export const getMenuMaximumLimit = () => MAXIMUM_LIMIT_OF_CONTENTS
+
 const useMenuConverters = (customerId: Ref<string | null>) => {
   const { getDefaultTitleSettings, getDefaultImageSettings } = useContentInit()
 
@@ -62,6 +65,7 @@ export const useMenuListActions = (customerId: Ref<string | null>) => {
     sort,
     pager,
     listRef,
+    totalRef,
     onLoad,
     onGetList,
     onCreate,
@@ -77,6 +81,10 @@ export const useMenuListActions = (customerId: Ref<string | null>) => {
     formToSaveapi
   )
 
+  const isMaximumLimit = computed(
+    () => (totalRef.value ?? 0) >= MAXIMUM_LIMIT_OF_CONTENTS
+  )
+
   return {
     contentTitle,
     filter,
@@ -90,6 +98,7 @@ export const useMenuListActions = (customerId: Ref<string | null>) => {
     onRemove,
     onUpdatePositions,
     loading,
+    isMaximumLimit,
   }
 }
 

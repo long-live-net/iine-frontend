@@ -7,6 +7,9 @@ import type {
 const apiKind = 'menu-categories'
 export const getMenuCategoryKind = () => apiKind
 
+const MAXIMUM_LIMIT_OF_CONTENTS = 300 // MenuCategory の登録上限数
+export const getMenuCategoryMaximumLimit = () => MAXIMUM_LIMIT_OF_CONTENTS
+
 const useMenuCategoryConverters = (customerId: Ref<string | null>) => {
   const currentMenuId = ref<string>('')
   const setCurrentMenuId = (menuId: string) => {
@@ -85,6 +88,10 @@ export const useMenuCategoryListActions = (customerId: Ref<string | null>) => {
     return await onUpdate({ id, formData })
   }
 
+  const isMaximumLimit = computed(
+    () => (totalRef.value ?? 0) >= MAXIMUM_LIMIT_OF_CONTENTS
+  )
+
   return {
     contentTitle,
     filter,
@@ -99,5 +106,6 @@ export const useMenuCategoryListActions = (customerId: Ref<string | null>) => {
     onRemove,
     onUpdatePositions,
     loading,
+    isMaximumLimit,
   }
 }
