@@ -176,7 +176,7 @@ onBeforeRouteLeave(() => {
       <div v-if="seoTagsOperationMode === 'display'" class="customer-info">
         <div class="header">
           <p><v-icon icon="mdi-cog" /></p>
-          <h3>SEO タグ および Favicon icon 設定</h3>
+          <h3>SEO 設定</h3>
         </div>
         <ManageCustomerProfileSeoTagsDisplay
           :customer-setting="customerSetting"
@@ -187,7 +187,7 @@ onBeforeRouteLeave(() => {
       <div v-else-if="seoTagsOperationMode === 'edit'" class="customer-info">
         <div class="header">
           <p><v-icon icon="mdi-cog" /></p>
-          <h3>SEO タグ および Favicon icon 編集</h3>
+          <h3>SEO 設定</h3>
         </div>
         <ManageCustomerProfileSeoTagsForm
           :customer-setting="customerSetting"
