@@ -71,7 +71,7 @@ const { postImageData, loading: inputBodyImagePosting } = useFilePost(
   customerId,
   apiKind.value
 )
-const { compress } = useImageCompression()
+const { compressing, compress } = useImageCompression()
 const inputBodyImageFunction = async (
   imageFile: File
 ): Promise<string | undefined> => {
@@ -82,6 +82,9 @@ const inputBodyImageFunction = async (
   const response = await postImageData(compressedImageFile)
   return response.fileUrl
 }
+const isLoading = computed(
+  () => compressing.value || inputBodyImagePosting.value
+)
 </script>
 
 <template>
@@ -95,7 +98,7 @@ const inputBodyImageFunction = async (
       <p v-if="label?.length" class="wysiwyg-editor__label" :class="labelClass">
         {{ label }}
       </p>
-      <CommonContentWrap :loading="inputBodyImagePosting">
+      <CommonContentWrap :loading="isLoading">
         <BaseWysiwygEditorTiptapEditor
           ref="tiptapEditorRef"
           v-model:content="valueData"
