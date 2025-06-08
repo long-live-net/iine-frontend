@@ -59,7 +59,9 @@ const columnCursor = computed(() => (isDragging.value ? 'grabbing' : 'grab'))
       >
         <template #item="{ element }">
           <div class="column column-draggable g-theme-contents-item__draggable">
-            <slot :content="element" />
+            <div class="column-element">
+              <slot :content="element" />
+            </div>
             <div
               class="edit-position-top draggable g-theme-contents-item__draggable--notion"
             >
@@ -158,8 +160,13 @@ $grid-max-width: $contents-card-max-width;
   margin: 0 auto;
 
   .column {
-    flex: 0 1 calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
-    padding: 1.5rem 0.75rem 2.5rem 0.75rem;
+    flex: 0 0 calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
+
+    .column-element {
+      width: calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
+      max-width: calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
+      padding: 1.5rem 0.75rem 2.5rem 0.75rem;
+    }
   }
 }
 </style>

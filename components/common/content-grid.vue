@@ -50,7 +50,9 @@ const columnGap = computed(() =>
   <div>
     <div :class="{ 'content-grid': useGrid, 'content-grid-flex': !useGrid }">
       <div v-for="content in contents" :key="content.id" class="column">
-        <slot :content="content" />
+        <div class="column-element">
+          <slot :content="content" />
+        </div>
       </div>
     </div>
   </div>
@@ -95,8 +97,13 @@ $grid-max-width: $contents-card-max-width;
   margin: 0 auto;
 
   .column {
-    flex: 0 1 calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
-    padding: 0;
+    flex: 0 0 calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
+
+    .column-element {
+      width: calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
+      max-width: calc($grid-max-width / v-bind('flexColumnDivide') - 1.25rem);
+      padding: 0;
+    }
   }
 }
 </style>
