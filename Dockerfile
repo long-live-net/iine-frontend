@@ -1,4 +1,4 @@
-FROM node:iron-alpine
+FROM node:lts-alpine
 
 ARG VITE_BACKEND_BASEURL
 ENV LANG=C.UTF-8 \
@@ -34,4 +34,4 @@ RUN echo "force=true" >> .npmrc  && npm update npm && npm update yarn && yarn in
 RUN yarn build
 
 EXPOSE 3000
-CMD /sbin/tini -- node .output/server/index.mjs
+CMD ["/sbin/tini", "--",  "node",  ".output/server/index.mjs"]
